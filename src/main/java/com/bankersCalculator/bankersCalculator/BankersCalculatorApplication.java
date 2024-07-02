@@ -1,0 +1,13 @@
+package com.bankersCalculator.bankersCalculator;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class BankersCalculatorApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(BankersCalculatorApplication.class, args);
+	}
+
+}
