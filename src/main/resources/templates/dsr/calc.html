@@ -1,0 +1,48 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <link th:href="@{/css/bootstrap.min.css}"
+          href="css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="container" style="max-width: 600px">
+    <div class="py-5 text-center">
+        <h2>DSR계산기</h2>
+    </div>
+</div>
+
+<div>
+    <div>DSR 계산기</div>
+</div>
+
+
+<form th:action="@{/dsr/calc}" th:object="${dsrCalcRequest}" method="post">
+    <div>
+        <label for="testName">이름.</label>
+        <input type="text" id="testName" name="testName" class="form-control" placeholder="이름을 입력하세요">
+    </div>
+    <div>
+        <label for="firstValue">금액</label>
+        <input type="text" id="firstValue" name="firstValue" class="form-control" placeholder="금액 입력하세요">
+    </div>
+
+
+    <hr class="my-4">
+
+    <div class="row">
+        <div class="col">
+            <button class="w-100 btn btn-primary btn-lg" type="submit">산출</button>
+        </div>
+        <div class="col">
+            <button class="w-100 btn btn-secondary btn-lg"
+                    th:onclick="|location.href='@{/dsr}'|"
+                    type="button">취소
+            </button>
+        </div>
+    </div>
+
+</form>
+</body>
+</html>
