@@ -26,9 +26,9 @@ public class RepaymentCalcService {
 
         List<RepaymentSchedule> repaymentScheduleList = new ArrayList<>();
 
-        for (int i = 1; i < repaymentTermInMonths; i++) {
+        for (int i = 1; i <= repaymentTermInMonths; i++) {
 
-            boolean lastInstallment = i == repaymentTermInMonths - 1;
+            boolean lastInstallment = i == repaymentTermInMonths;
             double principalPayment = lastInstallment ? principalAmount : 0;
             principalAmount -= principalPayment;
 
