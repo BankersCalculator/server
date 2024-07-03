@@ -34,7 +34,7 @@ class RepaymentCalcServiceTest {
             .build();
 
         //when
-        List<RepaymentSchedule> repaymentScheduleList = repaymentCalcService.calculateBulletLoanRepament(repaymentCalcDto);
+        List<RepaymentSchedule> repaymentScheduleList = repaymentCalcService.calculateBulletLoanRepayment(repaymentCalcDto);
 
         //then
         double expectedMonthlyInterest = principal * interestRate / 12;
