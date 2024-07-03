@@ -44,4 +44,51 @@ public class RepaymentCalcService {
 
         return repaymentScheduleList;
     }
+
+    public List<RepaymentSchedule> calculateAmortizingLoanRepayment(RepaymentCalcDto repaymentCalcDto) {
+        double principalAmount = repaymentCalcDto.getPrincipal();
+        int repaymentTermInMonths = repaymentCalcDto.getTerm();
+        int gracePeriod = repaymentCalcDto.getGracePeriod();
+        double monthlyInterestRate = repaymentCalcDto.getInterestRate();
+
+
+        List<RepaymentSchedule> repaymentScheduleList = new ArrayList<>();
+        int numberOfPayments = repaymentTermInMonths - gracePeriod;
+        double monthlyPayment = calculateMonthlyPayment(principalAmount, monthlyInterestRate, numberOfPayments);
+
+        double remainingPrincipal = principalAmount;
+
+        for (int i = 1; i <= repaymentTermInMonths; i++) {
+            double interestPayment = remainingPrincipal * monthlyInterestRate;
+            double principalPayment;
+            double totalPayment;
+
+            if (i <= gracePeriod) {
+                principalPayment = 0;
+                totalPayment = interestPayment;
+            } else {
+                principalPayment = monthlyPayment - interestPayment;
+                totalPayment = monthlyPayment;
+            }
+
+            remainingPrincipal -= principalPayment;
+
+            RepaymentSchedule repaymentSchedule = RepaymentSchedule.builder()
+                .installmentNumber(i)
+                .principalPayment(principalPayment)
+                .interestPayment(interestPayment)
+                .totalPayment(totalPayment)
+                .remainingPrinciple(remainingPrincipal)
+                .build();
+
+            repaymentScheduleList.add(repaymentSchedule);
+        }
+
+        return repaymentScheduleList;
+    }
+
+    private double calculateMonthlyPayment(double principal, double monthlyInterestRate, int numberOfPayments) {
+        return principal * (monthlyInterestRate * Math.pow(1 + monthlyInterestRate, numberOfPayments))
+            / (Math.pow(1 + monthlyInterestRate, numberOfPayments) - 1);
+    }
 }

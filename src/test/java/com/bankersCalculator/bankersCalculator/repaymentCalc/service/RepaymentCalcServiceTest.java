@@ -17,7 +17,7 @@ class RepaymentCalcServiceTest {
     @Autowired
     RepaymentCalcService repaymentCalcService;
 
-    @DisplayName("정상 산출 테스트")
+    @DisplayName("일시상환 정상 산출 테스트")
     @Test
     void calculateBulletLoanRepayment() throws Exception {
         //given
