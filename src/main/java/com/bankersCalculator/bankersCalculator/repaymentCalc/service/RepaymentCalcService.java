@@ -49,7 +49,7 @@ public class RepaymentCalcService {
         double principalAmount = repaymentCalcDto.getPrincipal();
         int repaymentTermInMonths = repaymentCalcDto.getTerm();
         int gracePeriod = repaymentCalcDto.getGracePeriod();
-        double monthlyInterestRate = repaymentCalcDto.getInterestRate();
+        double monthlyInterestRate = repaymentCalcDto.getInterestRate() / 12;
 
 
         List<RepaymentSchedule> repaymentScheduleList = new ArrayList<>();
