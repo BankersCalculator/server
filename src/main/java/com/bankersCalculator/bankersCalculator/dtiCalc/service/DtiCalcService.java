@@ -1,8 +1,8 @@
 package com.bankersCalculator.bankersCalculator.dtiCalc.service;
 
 
-import com.example.dti.dto.DtiCalcRequest;
-import com.example.dti.dto.DtiCalcResponse;
+import com.bankersCalculator.bankersCalculator.dtiCalc.dto.DtiCalcRequest;
+import com.bankersCalculator.bankersCalculator.dtiCalc.dto.DtiCalcResponse;
 import org.springframework.stereotype.Service;
 
 @Service

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>DTI Calculator</title>
+</head>
+<body>
+    <h1>DTI Calculator</h1>
+    <form th:action="@{/calculate-dti}" th:object="${dtiCalcRequest}" method="post">
+        <label>Application Amount: <input type="number" th:field="*{applicationAmount}" /></label><br/>
+        <label>Maturity Repayment Amount: <input type="number" th:field="*{maturityRepaymentAmount}" /></label><br/>
+        <label>Repayment Method: <input type="text" th:field="*{repaymentMethod}" /></label><br/>
+        <label>Loan Period: <input type="number" th:field="*{loanPeriod}" /></label><br/>
+        <label>Grace Period: <input type="number" th:field="*{gracePeriod}" /></label><br/>
+        <label>Interest Rate: <input type="number" step="0.01" th:field="*{interestRate}" /></label><br/>
+        <label>Repayment Amount: <input type="number" th:field="*{repaymentAmount}" /></label><br/>
+        <label>Savings Loan Amount: <input type="number" th:field="*{savingsLoanAmount}" /></label><br/>
+        <label>Mortgage Loan Amount: <input type="number" th:field="*{mortgageLoanAmount}" /></label><br/>
+        <label>Other Debt Amount: <input type="number" th:field="*{otherDebtAmount}" /></label><br/>
+        <label>Annual Income: <input type="number" th:field="*{annualIncome}" /></label><br/>
+        <label>Base Date: <input type="date" th:field="*{baseDate}" /></label><br/>
+        <label>Current Annual Repayment Or Interest: <input type="number" th:field="*{currentAnnualRepaymentOrInterest}" /></label><br/>
+        <button type="submit">Calculate</button>
+    </form>
+</body>
+</html>
