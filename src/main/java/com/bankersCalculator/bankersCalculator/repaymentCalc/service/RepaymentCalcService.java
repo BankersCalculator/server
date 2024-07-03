@@ -14,7 +14,7 @@ import java.util.List;
 @Service
 public class RepaymentCalcService {
 
-    public List<RepaymentSchedule> calculateBulletLoanInterest(RepaymentCalcDto repaymentCalcDto) {
+    public List<RepaymentSchedule> calculateBulletLoanRepament(RepaymentCalcDto repaymentCalcDto) {
 
         double principalAmount = repaymentCalcDto.getPrincipal();
         int repaymentTermInMonths = repaymentCalcDto.getTerm();
@@ -26,9 +26,9 @@ public class RepaymentCalcService {
 
         List<RepaymentSchedule> repaymentScheduleList = new ArrayList<>();
 
-        for (int i = 1; i < repaymentTermInMonths; i++) {
+        for (int i = 1; i <= repaymentTermInMonths; i++) {
 
-            boolean lastInstallment = i == repaymentTermInMonths - 1;
+            boolean lastInstallment = i == repaymentTermInMonths;
             double principalPayment = lastInstallment ? principalAmount : 0;
             principalAmount -= principalPayment;
 
@@ -44,4 +44,5 @@ public class RepaymentCalcService {
 
         return repaymentScheduleList;
     }
+
 }
