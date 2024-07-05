@@ -1,7 +1,8 @@
 package com.bankersCalculator.bankersCalculator.repaymentCalc.service;
 
-import com.bankersCalculator.bankersCalculator.repaymentCalc.dto.RepaymentCalcDto;
-import com.bankersCalculator.bankersCalculator.repaymentCalc.dto.RepaymentSchedule;
+import com.bankersCalculator.bankersCalculator.repaymentCalc.domain.RepaymentSchedule;
+import com.bankersCalculator.bankersCalculator.repaymentCalc.dto.RepaymentCalcResponse;
+import com.bankersCalculator.bankersCalculator.repaymentCalc.dto.RepaymentCalcServiceRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -14,42 +15,48 @@ import java.util.List;
 @Service
 public class RepaymentCalcService {
 
-    public List<RepaymentSchedule> calculateBulletLoanRepayment(RepaymentCalcDto repaymentCalcDto) {
+    public RepaymentCalcResponse calculateBulletLoanRepayment(RepaymentCalcServiceRequest repaymentCalcServiceRequest) {
 
-        double principalAmount = repaymentCalcDto.getPrincipal();
-        int repaymentTermInMonths = repaymentCalcDto.getTerm();
-        double annualInterestRate = repaymentCalcDto.getInterestRate();
+        double principalAmount = repaymentCalcServiceRequest.getPrincipal();
+        int repaymentTermInMonths = repaymentCalcServiceRequest.getTerm();
+        double annualInterestRate = repaymentCalcServiceRequest.getInterestRate();
 
         double annualInterest = principalAmount * annualInterestRate;
         double monthlyInterest = annualInterest / 12;
         double totalInterest = monthlyInterest * repaymentTermInMonths;
 
         List<RepaymentSchedule> repaymentScheduleList = new ArrayList<>();
+        double remainingPrincipal = principalAmount;
 
         for (int i = 1; i <= repaymentTermInMonths; i++) {
 
             boolean lastInstallment = i == repaymentTermInMonths;
             double principalPayment = lastInstallment ? principalAmount : 0;
-            principalAmount -= principalPayment;
+            remainingPrincipal -= principalPayment;
 
             RepaymentSchedule repaymentSchedule = RepaymentSchedule.builder()
                 .installmentNumber(i)
                 .principalPayment(principalPayment)
                 .interestPayment(monthlyInterest)
                 .totalPayment(principalPayment + monthlyInterest)
-                .remainingPrinciple(principalAmount)
+                .remainingPrinciple(remainingPrincipal)
                 .build();
             repaymentScheduleList.add(repaymentSchedule);
         }
 
-        return repaymentScheduleList;
+        return RepaymentCalcResponse.builder()
+            .repaymentScheduleList(repaymentScheduleList)
+            .totalPrincipal(principalAmount)
+            .totalInterest(totalInterest)
+            .totalInstallments(repaymentScheduleList.size())
+            .build();
     }
 
-    public List<RepaymentSchedule> calculateAmortizingLoanRepayment(RepaymentCalcDto repaymentCalcDto) {
-        double principalAmount = repaymentCalcDto.getPrincipal();
-        int repaymentTermInMonths = repaymentCalcDto.getTerm();
-        int gracePeriod = repaymentCalcDto.getGracePeriod();
-        double monthlyInterestRate = repaymentCalcDto.getInterestRate() / 12;
+    public RepaymentCalcResponse calculateAmortizingLoanRepayment(RepaymentCalcServiceRequest repaymentCalcServiceRequest) {
+        double principalAmount = repaymentCalcServiceRequest.getPrincipal();
+        int repaymentTermInMonths = repaymentCalcServiceRequest.getTerm();
+        int gracePeriod = repaymentCalcServiceRequest.getGracePeriod();
+        double monthlyInterestRate = repaymentCalcServiceRequest.getInterestRate() / 12;
 
 
         List<RepaymentSchedule> repaymentScheduleList = new ArrayList<>();
@@ -57,6 +64,7 @@ public class RepaymentCalcService {
         double monthlyPayment = calculateMonthlyPayment(principalAmount, monthlyInterestRate, numberOfPayments);
 
         double remainingPrincipal = principalAmount;
+        double totalInterest = 0;
 
         for (int i = 1; i <= repaymentTermInMonths; i++) {
             double interestPayment = remainingPrincipal * monthlyInterestRate;
@@ -72,6 +80,7 @@ public class RepaymentCalcService {
             }
 
             remainingPrincipal -= principalPayment;
+            totalInterest += interestPayment;
 
             RepaymentSchedule repaymentSchedule = RepaymentSchedule.builder()
                 .installmentNumber(i)
@@ -84,7 +93,13 @@ public class RepaymentCalcService {
             repaymentScheduleList.add(repaymentSchedule);
         }
 
-        return repaymentScheduleList;
+        return RepaymentCalcResponse.builder()
+            .repaymentScheduleList(repaymentScheduleList)
+            .totalPrincipal(principalAmount)
+            .totalInterest(totalInterest)
+            .totalInstallments(repaymentScheduleList.size())
+            .build();
+
     }
 
     private double calculateMonthlyPayment(double principal, double monthlyInterestRate, int numberOfPayments) {

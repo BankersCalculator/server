@@ -1,4 +1,4 @@
-package com.bankersCalculator.bankersCalculator.repaymentCalc.dto;
+package com.bankersCalculator.bankersCalculator.repaymentCalc.domain;
 
 import lombok.Builder;
 import lombok.Getter;

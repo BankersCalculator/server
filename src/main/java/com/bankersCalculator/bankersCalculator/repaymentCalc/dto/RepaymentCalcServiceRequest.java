@@ -4,7 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-public class RepaymentCalcDto {
+public class RepaymentCalcServiceRequest {
 
     private double principal; // 원금
 
@@ -15,7 +15,7 @@ public class RepaymentCalcDto {
     private double interestRate; // 연이자율
 
     @Builder
-    public RepaymentCalcDto(double principal, int term, int gracePeriod, double interestRate) {
+    public RepaymentCalcServiceRequest(double principal, int term, int gracePeriod, double interestRate) {
         this.principal = principal;
         this.term = term;
         this.gracePeriod = gracePeriod;

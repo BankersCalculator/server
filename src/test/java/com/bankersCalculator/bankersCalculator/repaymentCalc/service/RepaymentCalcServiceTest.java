@@ -1,7 +1,8 @@
 package com.bankersCalculator.bankersCalculator.repaymentCalc.service;
 
-import com.bankersCalculator.bankersCalculator.repaymentCalc.dto.RepaymentCalcDto;
-import com.bankersCalculator.bankersCalculator.repaymentCalc.dto.RepaymentSchedule;
+import com.bankersCalculator.bankersCalculator.repaymentCalc.domain.RepaymentSchedule;
+import com.bankersCalculator.bankersCalculator.repaymentCalc.dto.RepaymentCalcResponse;
+import com.bankersCalculator.bankersCalculator.repaymentCalc.dto.RepaymentCalcServiceRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,7 @@ class RepaymentCalcServiceTest {
         int term = 36;
         int gracePeriod = 0;
         double interestRate = 0.036;
-        RepaymentCalcDto repaymentCalcDto = RepaymentCalcDto.builder()
+        RepaymentCalcServiceRequest repaymentCalcServiceRequest = RepaymentCalcServiceRequest.builder()
             .principal(principal)
             .term(term)
             .gracePeriod(gracePeriod)
@@ -34,24 +35,33 @@ class RepaymentCalcServiceTest {
             .build();
 
         //when
-        List<RepaymentSchedule> repaymentScheduleList = repaymentCalcService.calculateBulletLoanRepayment(repaymentCalcDto);
+        RepaymentCalcResponse repaymentCalcResponse = repaymentCalcService.calculateBulletLoanRepayment(repaymentCalcServiceRequest);
+        List<RepaymentSchedule> repaymentScheduleList = repaymentCalcResponse.getRepaymentScheduleList();
+        double totalPrincipal = repaymentCalcResponse.getTotalPrincipal();
+        double totalInterest = repaymentCalcResponse.getTotalInterest();
+        int totalInstallments = repaymentCalcResponse.getTotalInstallments();
 
         //then
         double expectedMonthlyInterest = principal * interestRate / 12;
 
         assertEquals(36, repaymentScheduleList.size());
+        assertEquals(36, totalInstallments);
+        assertEquals(principal, totalPrincipal, 0.01);
+        assertEquals(expectedMonthlyInterest * term, totalInterest, 0.01);
 
         for (int i = 0; i < repaymentScheduleList.size(); i++) {
             RepaymentSchedule schedule = repaymentScheduleList.get(i);
-
+            // 회차 및 월이자비용
             assertEquals(i + 1, schedule.getInstallmentNumber());
             assertEquals(expectedMonthlyInterest, schedule.getInterestPayment(), 0.01);
 
             if (i == 35) {
+                // 최종회차 상환금
                 assertEquals(principal, schedule.getPrincipalPayment(), 0.01);
                 assertEquals(expectedMonthlyInterest + principal, schedule.getTotalPayment(), 0.01);
                 assertEquals(0.0, schedule.getRemainingPrinciple(), 0.01);
             } else {
+                // 일반회차 상환금
                 assertEquals(0, schedule.getPrincipalPayment(), 0.01);
                 assertEquals(expectedMonthlyInterest, schedule.getTotalPayment(), 0.01);
                 assertEquals(principal, schedule.getRemainingPrinciple(), 0.01);
@@ -68,7 +78,7 @@ class RepaymentCalcServiceTest {
         int term = 12;
         int gracePeriod = 2;
         double interestRate = 0.12;
-        RepaymentCalcDto repaymentCalcDto = RepaymentCalcDto.builder()
+        RepaymentCalcServiceRequest repaymentCalcServiceRequest = RepaymentCalcServiceRequest.builder()
             .principal(principal)
             .term(term)
             .gracePeriod(gracePeriod)
@@ -76,10 +86,17 @@ class RepaymentCalcServiceTest {
             .build();
 
         //when
-        List<RepaymentSchedule> repaymentScheduleList = repaymentCalcService.calculateAmortizingLoanRepayment(repaymentCalcDto);
+        RepaymentCalcResponse repaymentCalcResponse = repaymentCalcService.calculateAmortizingLoanRepayment(repaymentCalcServiceRequest);
+        List<RepaymentSchedule> repaymentScheduleList = repaymentCalcResponse.getRepaymentScheduleList();
+
+        double totalPrincipal = repaymentCalcResponse.getTotalPrincipal();
+        double totalInterest = repaymentCalcResponse.getTotalInterest();
+        int totalInstallments = repaymentCalcResponse.getTotalInstallments();
 
         //then
         assertEquals(12, repaymentScheduleList.size());
+        assertEquals(12, totalInstallments);
+        assertEquals(principal, totalPrincipal, 0.01);
 
         // 거치기간 테스트
         assertEquals(0, repaymentScheduleList.get(0).getPrincipalPayment());
@@ -105,13 +122,13 @@ class RepaymentCalcServiceTest {
         double expectedTotal = (expectedMonthlyPayment * 10) + (10000 * 2); // 10개월 원리금 + 2개월 이자
 
         // 총 이자 테스트
-        double totalInterest = repaymentScheduleList.stream().mapToDouble(RepaymentSchedule::getInterestPayment).sum();
+        double sumInterest = repaymentScheduleList.stream().mapToDouble(RepaymentSchedule::getInterestPayment).sum();
         double expectedTotalInterest = expectedTotal - 1000000.0; // 총상환액 - 원금
+        assertEquals(expectedTotalInterest, sumInterest, 0.01);
         assertEquals(expectedTotalInterest, totalInterest, 0.01);
-
-
     }
 
+    // TODO: 이 함수는 테스트할 필요가 없나??
     private double calculateMonthlyPayment(double principal, double monthlyInterestRate, int numberOfPayments) {
         return principal * (monthlyInterestRate * Math.pow(1 + monthlyInterestRate, numberOfPayments))
             / (Math.pow(1 + monthlyInterestRate, numberOfPayments) - 1);
