@@ -15,7 +15,7 @@ public class DtiCalcService {
 
         response.setAnnnualPrincipalAndInterest(annualPrincipalAndInterest);
         response.setDtiRatio(dtiRatio);
-        
+
         return response;
     }
 }

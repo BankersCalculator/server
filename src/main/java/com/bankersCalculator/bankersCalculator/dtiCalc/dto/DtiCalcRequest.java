@@ -16,7 +16,6 @@ public class DtiCalcRequest {
     private double currentAnnualRepaymentOrInterest;
 
     // Getters and Setters
-
     public double getApplicationAmount() {
         return applicationAmount;
     }
@@ -123,7 +122,6 @@ public class DtiCalcRequest {
 
 	public double getOtherDebtsTotalAmount() {
 		return otherDebtAmount;
-		// TODO Auto-generated method stub
 	    
 	}
 }

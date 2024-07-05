@@ -14,19 +14,21 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 public class DtiCalcController {
 
-    @Autowired
+	@Autowired
     private DtiCalcService dtiCalcService;
 
     @GetMapping("/dti-calc")
     public String showCalcForm(Model model) {
         model.addAttribute("dtiCalcRequest", new DtiCalcRequest());
+        model.addAttribute("dtiCalcResponse", null); // 초기 상태에서는 결과가 없으므로 null로 설정
         return "DtiCalc";
     }
 
     @PostMapping("/calculate-dti")
     public String calculateDti(@ModelAttribute DtiCalcRequest request, Model model) {
         DtiCalcResponse response = dtiCalcService.calculateDti(request);
-        model.addAttribute("dtiCalcResponse", response);
-        return "DtiCalcResult";
+        model.addAttribute("dtiCalcRequest", request); // 폼 데이터를 유지
+        model.addAttribute("dtiCalcResponse", response); // 결과 데이터 설정
+        return "DtiCalc";
     }
 }

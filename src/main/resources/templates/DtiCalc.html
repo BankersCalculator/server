@@ -6,20 +6,29 @@
 <body>
     <h1>DTI Calculator</h1>
     <form th:action="@{/calculate-dti}" th:object="${dtiCalcRequest}" method="post">
-        <label>Application Amount: <input type="number" th:field="*{applicationAmount}" /></label><br/>
-        <label>Maturity Repayment Amount: <input type="number" th:field="*{maturityRepaymentAmount}" /></label><br/>
-        <label>Repayment Method: <input type="text" th:field="*{repaymentMethod}" /></label><br/>
-        <label>Loan Period: <input type="number" th:field="*{loanPeriod}" /></label><br/>
-        <label>Grace Period: <input type="number" th:field="*{gracePeriod}" /></label><br/>
-        <label>Interest Rate: <input type="number" step="0.01" th:field="*{interestRate}" /></label><br/>
-        <label>Repayment Amount: <input type="number" th:field="*{repaymentAmount}" /></label><br/>
-        <label>Savings Loan Amount: <input type="number" th:field="*{savingsLoanAmount}" /></label><br/>
-        <label>Mortgage Loan Amount: <input type="number" th:field="*{mortgageLoanAmount}" /></label><br/>
-        <label>Other Debt Amount: <input type="number" th:field="*{otherDebtAmount}" /></label><br/>
-        <label>Annual Income: <input type="number" th:field="*{annualIncome}" /></label><br/>
-        <label>Base Date: <input type="date" th:field="*{baseDate}" /></label><br/>
-        <label>Current Annual Repayment Or Interest: <input type="number" th:field="*{currentAnnualRepaymentOrInterest}" /></label><br/>
+        <label>주택 구매에 필요하신 금액을 입력해주세요: <input type="number" th:field="*{applicationAmount}" /></label><br/>
+        <label>대출 만기 때, 일정금액을 남기실건가요 ?: <input type="number" th:field="*{maturityRepaymentAmount}" /></label><br/>
+        <labe>매달 납부하실 방법을 선택해주세요: <input type="text" th:field="*{repaymentMethod}" /></label><br/>
+        <label>대출 기간을 입력해주세요: <input type="number" th:field="*{loanPeriod}" /></label><br/>
+        <label>일정 기간 이자만 납부하실건가요? : <input type="number" th:field="*{gracePeriod}" /></label><br/>
+        <label>이자율: <input type="number" step="0.01" th:field="*{interestRate}" /></label><br/>
+        <label>대출 당일, 상환하실 주택담보대출금액이 있으신가요?: <input type="number" th:field="*{repaymentAmount}" /></label><br/>
+        <label>예금이나 적금으로 받으신 대출이 있으신가요?: <input type="number" th:field="*{savingsLoanAmount}" /></label><br/>
+        <label>이미 받으신 주택담보대출이 있으신가요?: <input type="number" th:field="*{mortgageLoanAmount}" /></label><br/>
+        <label>다른 은행에서 받고계신 대출이 있으신가요? : <input type="number" th:field="*{otherDebtAmount}" /></label><br/>
+        <label>증빙가능한 세전 연소득을 입력해주세요 : <input type="number" th:field="*{annualIncome}" /></label><br/>
+        <label>기준일자: <input type="date" th:field="*{baseDate}" /></label><br/>
+        <label>현재 납부중인 연 원리금 /연이자를 입력해주세요: <input type="number" th:field="*{currentAnnualRepaymentOrInterest}" /></label><br/>
         <button type="submit">Calculate</button>
     </form>
+	
+	<div th:if="${dtiCalcResponse != null}">
+	        <h2>결과</h2>
+	        <p>연 원리금 합계: <span th:text="${dtiCalcResponse.annualPrincipalAndInterest}"></span></p>
+	        <p>DTI 비율: <span th:text="${dtiCalcResponse.dtiRatio}"></span>%</p>
+	 </div>
+	
+
+	
 </body>
 </html>

@@ -4,16 +4,23 @@ import org.springframework.stereotype.Repository;
 
 
 public class DtiCalcResponse {
-    private double annualPrincipalAndInterest;
+	private double annualPrincipalAndInterest;
     private double dtiRatio;
-	public void setAnnnualPrincipalAndInterest(double annualPrincipalAndInterest2) {
-		// TODO Auto-generated method stub
-		
-	}
-	public void setDtiRatio(double dtiRatio2) {
-		// TODO Auto-generated method stub
-		
-	}
 
     // Getters and Setters
+    public double getAnnualPrincipalAndInterest() {
+        return annualPrincipalAndInterest;
+    }
+
+    public void setAnnnualPrincipalAndInterest(double annualPrincipalAndInterest) {
+        this.annualPrincipalAndInterest = annualPrincipalAndInterest;
+    }
+
+    public double getDtiRatio() {
+        return dtiRatio;
+    }
+
+    public void setDtiRatio(double dtiRatio) {
+        this.dtiRatio = dtiRatio;
+    }
 }
