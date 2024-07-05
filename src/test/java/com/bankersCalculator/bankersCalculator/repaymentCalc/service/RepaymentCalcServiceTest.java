@@ -3,6 +3,7 @@ package com.bankersCalculator.bankersCalculator.repaymentCalc.service;
 import com.bankersCalculator.bankersCalculator.repaymentCalc.domain.RepaymentSchedule;
 import com.bankersCalculator.bankersCalculator.repaymentCalc.dto.RepaymentCalcResponse;
 import com.bankersCalculator.bankersCalculator.repaymentCalc.dto.RepaymentCalcServiceRequest;
+import com.bankersCalculator.bankersCalculator.repaymentCalc.dto.RepaymentType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,7 @@ class RepaymentCalcServiceTest {
         int gracePeriod = 0;
         double interestRate = 0.036;
         RepaymentCalcServiceRequest repaymentCalcServiceRequest = RepaymentCalcServiceRequest.builder()
+            .type(RepaymentType.Bullet)
             .principal(principal)
             .term(term)
             .gracePeriod(gracePeriod)
@@ -35,7 +37,7 @@ class RepaymentCalcServiceTest {
             .build();
 
         //when
-        RepaymentCalcResponse repaymentCalcResponse = repaymentCalcService.calculateBulletLoanRepayment(repaymentCalcServiceRequest);
+        RepaymentCalcResponse repaymentCalcResponse = repaymentCalcService.calculateRepayment(repaymentCalcServiceRequest);
         List<RepaymentSchedule> repaymentScheduleList = repaymentCalcResponse.getRepaymentScheduleList();
         double totalPrincipal = repaymentCalcResponse.getTotalPrincipal();
         double totalInterest = repaymentCalcResponse.getTotalInterest();
@@ -79,6 +81,7 @@ class RepaymentCalcServiceTest {
         int gracePeriod = 2;
         double interestRate = 0.12;
         RepaymentCalcServiceRequest repaymentCalcServiceRequest = RepaymentCalcServiceRequest.builder()
+            .type(RepaymentType.Amortizing)
             .principal(principal)
             .term(term)
             .gracePeriod(gracePeriod)
@@ -86,7 +89,7 @@ class RepaymentCalcServiceTest {
             .build();
 
         //when
-        RepaymentCalcResponse repaymentCalcResponse = repaymentCalcService.calculateAmortizingLoanRepayment(repaymentCalcServiceRequest);
+        RepaymentCalcResponse repaymentCalcResponse = repaymentCalcService.calculateRepayment(repaymentCalcServiceRequest);
         List<RepaymentSchedule> repaymentScheduleList = repaymentCalcResponse.getRepaymentScheduleList();
 
         double totalPrincipal = repaymentCalcResponse.getTotalPrincipal();

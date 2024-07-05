@@ -33,7 +33,7 @@ public class RepaymentCalcService {
         return response;
     }
 
-    public RepaymentCalcResponse calculateBulletLoanRepayment(RepaymentCalcServiceRequest repaymentCalcServiceRequest) {
+    private RepaymentCalcResponse calculateBulletLoanRepayment(RepaymentCalcServiceRequest repaymentCalcServiceRequest) {
 
         double principalAmount = repaymentCalcServiceRequest.getPrincipal();
         int repaymentTermInMonths = repaymentCalcServiceRequest.getTerm();
@@ -70,7 +70,7 @@ public class RepaymentCalcService {
             .build();
     }
 
-    public RepaymentCalcResponse calculateAmortizingLoanRepayment(RepaymentCalcServiceRequest repaymentCalcServiceRequest) {
+    private RepaymentCalcResponse calculateAmortizingLoanRepayment(RepaymentCalcServiceRequest repaymentCalcServiceRequest) {
         double principalAmount = repaymentCalcServiceRequest.getPrincipal();
         int repaymentTermInMonths = repaymentCalcServiceRequest.getTerm();
         int gracePeriod = repaymentCalcServiceRequest.getGracePeriod();
