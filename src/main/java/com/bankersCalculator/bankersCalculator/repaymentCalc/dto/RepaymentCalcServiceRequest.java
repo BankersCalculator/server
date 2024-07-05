@@ -1,10 +1,13 @@
 package com.bankersCalculator.bankersCalculator.repaymentCalc.dto;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-public class RepaymentCalcDto {
+public class RepaymentCalcServiceRequest {
+
+    private RepaymentType type;
 
     private double principal; // 원금
 
@@ -14,11 +17,14 @@ public class RepaymentCalcDto {
 
     private double interestRate; // 연이자율
 
+
+
     @Builder
-    public RepaymentCalcDto(double principal, int term, int gracePeriod, double interestRate) {
+    public RepaymentCalcServiceRequest(double principal, int term, int gracePeriod, double interestRate, RepaymentType type) {
         this.principal = principal;
         this.term = term;
         this.gracePeriod = gracePeriod;
         this.interestRate = interestRate;
+        this.type = type;
     }
 }
