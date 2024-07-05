@@ -16,6 +16,8 @@ import java.util.List;
 @Service
 public class RepaymentCalcService {
 
+    // TODO: 언젠가(사용자가 생기면..) BigDecimal로 자료형 바꿀 것.
+
     public RepaymentCalcResponse calculateRepayment(RepaymentCalcServiceRequest repaymentCalcServiceRequest) {
         RepaymentType type = repaymentCalcServiceRequest.getType();
 

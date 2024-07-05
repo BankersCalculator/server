@@ -31,8 +31,6 @@ public class RepaymentCalcController {
                                      BindingResult bindingResult) {
         RepaymentCalcResponse repaymentCalcResponse = repaymentCalcService.calculateRepayment(request.toServiceRequest());
         model.addAttribute(repaymentCalcResponse);
-
-        log.info(Double.toString(repaymentCalcResponse.getTotalInterest()));
         return "repaymentCalc/repaymentCalcResult";
     }
 }
