@@ -3,6 +3,7 @@ package com.bankersCalculator.bankersCalculator.repaymentCalc.service;
 import com.bankersCalculator.bankersCalculator.repaymentCalc.domain.RepaymentSchedule;
 import com.bankersCalculator.bankersCalculator.repaymentCalc.dto.RepaymentCalcResponse;
 import com.bankersCalculator.bankersCalculator.repaymentCalc.dto.RepaymentCalcServiceRequest;
+import com.bankersCalculator.bankersCalculator.repaymentCalc.dto.RepaymentType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,21 @@ import java.util.List;
 @Slf4j
 @Service
 public class RepaymentCalcService {
+
+    public RepaymentCalcResponse calculateRepayment(RepaymentCalcServiceRequest repaymentCalcServiceRequest) {
+        RepaymentType type = repaymentCalcServiceRequest.getType();
+
+        RepaymentCalcResponse response = RepaymentCalcResponse.builder().build();
+
+        if (type == RepaymentType.Bullet) {
+             response = calculateBulletLoanRepayment(repaymentCalcServiceRequest);
+        }
+        if (type == RepaymentType.Amortizing) {
+            response = calculateAmortizingLoanRepayment(repaymentCalcServiceRequest);
+        }
+
+        return response;
+    }
 
     public RepaymentCalcResponse calculateBulletLoanRepayment(RepaymentCalcServiceRequest repaymentCalcServiceRequest) {
 
