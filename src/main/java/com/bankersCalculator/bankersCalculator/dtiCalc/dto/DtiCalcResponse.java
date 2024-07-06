@@ -13,7 +13,7 @@ public class DtiCalcResponse {
     }
 
     public void setAnnnualPrincipalAndInterest(double annualPrincipalAndInterest) {
-        this.annualPrincipalAndInterest = annualPrincipalAndInterest;
+        this.annualPrincipalAndInterest = Math.round(annualPrincipalAndInterest);
     }
 
     public double getDtiRatio() {
@@ -21,6 +21,6 @@ public class DtiCalcResponse {
     }
 
     public void setDtiRatio(double dtiRatio) {
-        this.dtiRatio = dtiRatio;
+        this.dtiRatio = Math.round(dtiRatio);
     }
 }

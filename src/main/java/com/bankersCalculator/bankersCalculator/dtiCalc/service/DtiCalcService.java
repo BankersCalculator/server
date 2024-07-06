@@ -27,6 +27,7 @@ public class DtiCalcService {
          
          
          double dtiRatio = (annualPrincipalAndInterest + totalOtherDebtInterest / request.getAnnualIncome()) * 100;
+         
 
          response.setAnnnualPrincipalAndInterest(annualPrincipalAndInterest);
          response.setDtiRatio(dtiRatio);

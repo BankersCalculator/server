@@ -17,14 +17,14 @@ public class DtiCalcController {
 	@Autowired
     private DtiCalcService dtiCalcService;
 
-    @GetMapping("/dti-calc")
+    @GetMapping("/dti")
     public String showCalcForm(Model model) {
         model.addAttribute("dtiCalcRequest", new DtiCalcRequest());
         model.addAttribute("dtiCalcResponse", null); // 초기 상태에서는 결과가 없으므로 null로 설정
         return "DtiCalc";
     }
 
-    @PostMapping("/calculate-dti")
+    @PostMapping("/dti/result")
     public String calculateDti(@ModelAttribute DtiCalcRequest request, Model model) {
         DtiCalcResponse response = dtiCalcService.calculateDti(request);
         model.addAttribute("dtiCalcRequest", request); // 폼 데이터를 유지
