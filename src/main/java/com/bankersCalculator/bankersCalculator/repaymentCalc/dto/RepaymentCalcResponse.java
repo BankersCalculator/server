@@ -12,5 +12,5 @@ public class RepaymentCalcResponse {
     private List<RepaymentSchedule> repaymentScheduleList;
     private double totalPrincipal; // 총 원금
     private double totalInterest; // 총 이자
-    private int totalInstallments; // 총 상환금액
+    private int totalInstallments; // 총 상환회차
 }

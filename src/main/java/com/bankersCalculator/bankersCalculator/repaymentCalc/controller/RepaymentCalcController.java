@@ -27,8 +27,7 @@ public class RepaymentCalcController {
 
     @PostMapping
     public String calculateRepayment(@ModelAttribute @Valid RepaymentCalcRequest request,
-                                     Model model,
-                                     BindingResult bindingResult) {
+                                     Model model) {
         RepaymentCalcResponse repaymentCalcResponse = repaymentCalcService.calculateRepayment(request.toServiceRequest());
         model.addAttribute(repaymentCalcResponse);
         return "repaymentCalc/repaymentCalcResult";

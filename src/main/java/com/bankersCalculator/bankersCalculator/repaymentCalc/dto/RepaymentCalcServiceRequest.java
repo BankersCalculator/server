@@ -17,8 +17,6 @@ public class RepaymentCalcServiceRequest {
 
     private double interestRate; // 연이자율
 
-
-
     @Builder
     public RepaymentCalcServiceRequest(double principal, int term, int gracePeriod, double interestRate, RepaymentType type) {
         this.principal = principal;
@@ -26,5 +24,9 @@ public class RepaymentCalcServiceRequest {
         this.gracePeriod = gracePeriod;
         this.interestRate = interestRate;
         this.type = type;
+    }
+
+    public double getInterestRateAsDecimal() {
+        return interestRate / 100.0 ;
     }
 }
