@@ -1,5 +1,6 @@
 package com.bankersCalculator.bankersCalculator.repaymentCalc.dto;
 
+import com.bankersCalculator.bankersCalculator.common.enums.RepaymentType;
 import lombok.Builder;
 import lombok.Getter;
 

@@ -1,4 +1,4 @@
-package com.bankersCalculator.bankersCalculator.repaymentCalc.dto;
+package com.bankersCalculator.bankersCalculator.common.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -3,7 +3,7 @@ package com.bankersCalculator.bankersCalculator.repaymentCalc.service;
 import com.bankersCalculator.bankersCalculator.repaymentCalc.domain.RepaymentSchedule;
 import com.bankersCalculator.bankersCalculator.repaymentCalc.dto.RepaymentCalcResponse;
 import com.bankersCalculator.bankersCalculator.repaymentCalc.dto.RepaymentCalcServiceRequest;
-import com.bankersCalculator.bankersCalculator.repaymentCalc.dto.RepaymentType;
+import com.bankersCalculator.bankersCalculator.common.enums.RepaymentType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
