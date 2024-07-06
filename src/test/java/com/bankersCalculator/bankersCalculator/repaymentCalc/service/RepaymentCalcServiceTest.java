@@ -339,7 +339,6 @@ class RepaymentCalcServiceTest {
         assertEquals(expectedTotal, totalPayments, delta);
     }
 
-    // TODO: 이 함수는 테스트할 필요가 없나??
     private double calculateMonthlyPayment(double principal, double monthlyInterestRate, int numberOfPayments) {
         return principal * (monthlyInterestRate * Math.pow(1 + monthlyInterestRate, numberOfPayments))
             / (Math.pow(1 + monthlyInterestRate, numberOfPayments) - 1);

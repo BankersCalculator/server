@@ -1,17 +1,17 @@
 package com.bankersCalculator.bankersCalculator.repaymentCalc.dto;
 
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.validator.constraints.Range;
 
 @Getter
 @Setter
 @NoArgsConstructor
 public class RepaymentCalcRequest {
+
+    // TODO: @Valid 적용할 것.
 
     @NotNull
     private RepaymentType type;

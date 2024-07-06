@@ -1,6 +1,5 @@
 package com.bankersCalculator.bankersCalculator.repaymentCalc.dto;
 
-import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import lombok.Getter;
 
