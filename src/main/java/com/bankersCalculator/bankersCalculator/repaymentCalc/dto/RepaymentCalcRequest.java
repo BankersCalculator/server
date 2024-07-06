@@ -15,7 +15,7 @@ public class RepaymentCalcRequest {
     // TODO: @Valid 적용할 것.
 
     @NotNull
-    private RepaymentType type;
+    private RepaymentType repaymentType;
 //    @Min(1000000)
     private double principal; // 원금
 //    @Range(min = 1, max = 600)
@@ -26,18 +26,9 @@ public class RepaymentCalcRequest {
     private double interestRate; // 연이자율
 
 
-    @Builder
-    public RepaymentCalcRequest(double principal, int term, int gracePeriod, double interestRate, RepaymentType type) {
-        this.principal = principal;
-        this.term = term;
-        this.gracePeriod = gracePeriod;
-        this.interestRate = interestRate;
-        this.type = type;
-    }
-
     public RepaymentCalcServiceRequest toServiceRequest() {
         return RepaymentCalcServiceRequest.builder()
-            .type(type)
+            .repaymentType(repaymentType)
             .principal(principal)
             .term(term)
             .gracePeriod(gracePeriod)

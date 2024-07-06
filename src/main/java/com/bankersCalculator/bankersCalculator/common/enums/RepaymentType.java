@@ -10,5 +10,5 @@ public enum RepaymentType {
     Amortizing("원리금균등분할상환"),
     EqualPrincipal("원금균등분할상환");
 
-    private final String text;
+    private final String description;
 }

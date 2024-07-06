@@ -9,18 +9,8 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class DsrCalcService {
     public DsrCalcResponse dsrCalculate(DsrCalcRequest dsrCalcRequest) {
-        String name = dsrCalcRequest.getTestName();
-        int firstValue = dsrCalcRequest.getFirstValue();
 
-        int calcValue = firstValue * 300;
 
-        DsrCalcResponse response = DsrCalcResponse.builder()
-            .name(name)
-            .firstValue(calcValue)
-            .build();
-
-        log.info("dsrCalcService 실행: {}", response.getFirstValue());
-
-        return response;
+        return null;
     }
 }
