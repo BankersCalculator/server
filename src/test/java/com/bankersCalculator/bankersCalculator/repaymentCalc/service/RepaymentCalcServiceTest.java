@@ -3,7 +3,7 @@ package com.bankersCalculator.bankersCalculator.repaymentCalc.service;
 import com.bankersCalculator.bankersCalculator.repaymentCalc.domain.RepaymentSchedule;
 import com.bankersCalculator.bankersCalculator.repaymentCalc.dto.RepaymentCalcResponse;
 import com.bankersCalculator.bankersCalculator.repaymentCalc.dto.RepaymentCalcServiceRequest;
-import com.bankersCalculator.bankersCalculator.repaymentCalc.dto.RepaymentType;
+import com.bankersCalculator.bankersCalculator.common.enums.RepaymentType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -339,7 +339,6 @@ class RepaymentCalcServiceTest {
         assertEquals(expectedTotal, totalPayments, delta);
     }
 
-    // TODO: 이 함수는 테스트할 필요가 없나??
     private double calculateMonthlyPayment(double principal, double monthlyInterestRate, int numberOfPayments) {
         return principal * (monthlyInterestRate * Math.pow(1 + monthlyInterestRate, numberOfPayments))
             / (Math.pow(1 + monthlyInterestRate, numberOfPayments) - 1);

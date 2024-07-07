@@ -1,9 +1,9 @@
 package com.bankersCalculator.bankersCalculator.repaymentCalc.service;
 
+import com.bankersCalculator.bankersCalculator.common.enums.RepaymentType;
 import com.bankersCalculator.bankersCalculator.repaymentCalc.domain.RepaymentSchedule;
 import com.bankersCalculator.bankersCalculator.repaymentCalc.dto.RepaymentCalcResponse;
 import com.bankersCalculator.bankersCalculator.repaymentCalc.dto.RepaymentCalcServiceRequest;
-import com.bankersCalculator.bankersCalculator.repaymentCalc.dto.RepaymentType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -19,17 +19,17 @@ public class RepaymentCalcService {
     // TODO: 언젠가(사용자가 생기면..) BigDecimal로 자료형 바꿀 것.
 
     public RepaymentCalcResponse calculateRepayment(RepaymentCalcServiceRequest repaymentCalcServiceRequest) {
-        RepaymentType type = repaymentCalcServiceRequest.getType();
+        RepaymentType repaymentType = repaymentCalcServiceRequest.getRepaymentType();
 
         RepaymentCalcResponse response = RepaymentCalcResponse.builder().build();
 
-        if (type == RepaymentType.Bullet) {
+        if (repaymentType == RepaymentType.Bullet) {
             response = calculateBulletLoanRepayment(repaymentCalcServiceRequest);
         }
-        if (type == RepaymentType.Amortizing) {
+        if (repaymentType == RepaymentType.Amortizing) {
             response = calculateAmortizingLoanRepayment(repaymentCalcServiceRequest);
         }
-        if (type == RepaymentType.EqualPrincipal) {
+        if (repaymentType == RepaymentType.EqualPrincipal) {
             response = calculateEqualPrincipalLoanRepayment(repaymentCalcServiceRequest);
         }
 

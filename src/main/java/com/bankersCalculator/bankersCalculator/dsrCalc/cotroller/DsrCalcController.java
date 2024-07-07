@@ -15,23 +15,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequiredArgsConstructor
 @Slf4j
-@RequestMapping("/dsr")
+@RequestMapping("/dsrCalc")
 public class DsrCalcController {
 
     private final DsrCalcService dsrCalcService;
 
     @GetMapping
     public String dsrMain(Model model) {
-        //TODO: 초기화가 꼭 필요한 걸까?
         model.addAttribute("dsrCalcRequest", new DsrCalcRequest());
-        return "dsr/calc";
+        return "dsr/dsrCalc";
     }
 
-    @PostMapping("/calc")
+    @PostMapping()
     public String dsrCalculate(@ModelAttribute("dsrCalcRequest") DsrCalcRequest dsrCalcRequest, Model model) {
-        DsrCalcResponse dsrCalcResponse = dsrCalcService.dsrCalculate(dsrCalcRequest);
+        DsrCalcResponse dsrCalcResponse = dsrCalcService.dsrCalculate(dsrCalcRequest.toServiceRequest());
         model.addAttribute("dsrCalcResponse", dsrCalcResponse);
-        return "dsr/calc";
+        return "dsr/dsrCalc";
     }
 }
 

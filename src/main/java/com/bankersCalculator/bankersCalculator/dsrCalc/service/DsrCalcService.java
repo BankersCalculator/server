@@ -1,26 +1,26 @@
 package com.bankersCalculator.bankersCalculator.dsrCalc.service;
 
-import com.bankersCalculator.bankersCalculator.dsrCalc.dto.DsrCalcRequest;
 import com.bankersCalculator.bankersCalculator.dsrCalc.dto.DsrCalcResponse;
+import com.bankersCalculator.bankersCalculator.dsrCalc.dto.DsrCalcServiceRequest;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class DsrCalcService {
-    public DsrCalcResponse dsrCalculate(DsrCalcRequest dsrCalcRequest) {
-        String name = dsrCalcRequest.getTestName();
-        int firstValue = dsrCalcRequest.getFirstValue();
 
-        int calcValue = firstValue * 300;
+    private final DsrCalculatorFactory dsrCalculatorFactory;
 
-        DsrCalcResponse response = DsrCalcResponse.builder()
-            .name(name)
-            .firstValue(calcValue)
-            .build();
+    // TODO: dsrCalcRequest -> ServiceRequest로 변환할 것.
+    public DsrCalcResponse dsrCalculate(DsrCalcServiceRequest dsrCalcServiceRequest) {
 
-        log.info("dsrCalcService 실행: {}", response.getFirstValue());
+        dsrCalculatorFactory.calcTotalDsr(dsrCalcServiceRequest);
 
-        return response;
+
+
+
+        return null;
     }
 }

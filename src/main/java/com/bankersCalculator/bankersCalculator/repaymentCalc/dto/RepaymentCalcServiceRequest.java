@@ -1,13 +1,13 @@
 package com.bankersCalculator.bankersCalculator.repaymentCalc.dto;
 
-import jakarta.validation.constraints.NotBlank;
+import com.bankersCalculator.bankersCalculator.common.enums.RepaymentType;
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 public class RepaymentCalcServiceRequest {
 
-    private RepaymentType type;
+    private RepaymentType repaymentType;
 
     private double principal; // 원금
 
@@ -18,12 +18,12 @@ public class RepaymentCalcServiceRequest {
     private double interestRate; // 연이자율
 
     @Builder
-    public RepaymentCalcServiceRequest(double principal, int term, int gracePeriod, double interestRate, RepaymentType type) {
+    public RepaymentCalcServiceRequest(double principal, int term, int gracePeriod, double interestRate, RepaymentType repaymentType) {
         this.principal = principal;
         this.term = term;
         this.gracePeriod = gracePeriod;
         this.interestRate = interestRate;
-        this.type = type;
+        this.repaymentType = repaymentType;
     }
 
     public double getInterestRateAsDecimal() {
