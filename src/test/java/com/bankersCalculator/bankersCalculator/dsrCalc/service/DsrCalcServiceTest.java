@@ -2,6 +2,7 @@ package com.bankersCalculator.bankersCalculator.dsrCalc.service;
 
 import com.bankersCalculator.bankersCalculator.common.enums.LoanType;
 import com.bankersCalculator.bankersCalculator.common.enums.RepaymentType;
+import com.bankersCalculator.bankersCalculator.dsrCalc.domain.DsrCalcResult;
 import com.bankersCalculator.bankersCalculator.dsrCalc.dto.DsrCalcResponse;
 import com.bankersCalculator.bankersCalculator.dsrCalc.dto.DsrCalcServiceRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -58,9 +59,17 @@ class DsrCalcServiceTest {
         // 소득, 대출건수 검증
         assertEquals(annualIncome, response.getAnnualIncome());
         assertEquals(request.getLoanStatusList().size(), response.getTotalLoanCount());
-
         // DSR 검증
         assertEquals(expectedDsrRatio, response.getFinalDsrRatio(), delta);
+        // 개별 대출 건 검증
+        List<DsrCalcResult> dsrCalcResultList = response.getDsrCalcResultList();
+        for (int i = 0; i < dsrCalcResultList.size(); i++) {
+            DsrCalcResult result = dsrCalcResultList.get(i);
+            assertEquals(i + 1, result.getSerial());
+            assertEquals(principal, result.getPrincipal(), delta);
+            assertEquals(20000000, result.getAnnualPrincipalRepayment(), delta);
+            assertEquals(5000000, result.getAnnualInterestRepayment(), delta);
+        }
 
     }
 }
