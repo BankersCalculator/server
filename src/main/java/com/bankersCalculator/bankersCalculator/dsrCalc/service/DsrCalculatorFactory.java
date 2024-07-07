@@ -24,31 +24,11 @@ public class DsrCalculatorFactory {
         }
     }
 
-    public DsrCalcResponse calcTotalDsr(DsrCalcServiceRequest request) {
-        double totalDsrAmount = 0;
-        int annualIncome = request.getAnnualIncome();
-        int totalLoanCount = 0;
-
-        List<DsrCalcResult> dsrCalcResultList = new ArrayList<>();
-
-        for (DsrCalcServiceRequest.LoanStatus loanStatus : request.getLoanStatusList()) {
-            DsrCalculator calculator = calculators.get(loanStatus.getLoanType());
-            if (calculator == null) {
-                throw new RuntimeException("예외처리할것..."); // TODO: exception 생성
-            }
-            DsrCalcResult dsrCalcResult = calculator.calculateDsr(loanStatus);
-            dsrCalcResult.setSerial(++totalLoanCount);
-            totalDsrAmount += dsrCalcResult.getAnnualPrincipalRepayment();
-            totalDsrAmount += dsrCalcResult.getAnnualInterestRepayment();
+    public DsrCalculator getCalculator(LoanType loanType) {
+        DsrCalculator calculator = calculators.get(loanType);
+        if (calculator == null) {
+            throw new RuntimeException("예외처리할것..."); // TODO: exception 생성
         }
-
-        double totalDsrRatio = (totalDsrAmount / annualIncome) * 100;
-
-        return DsrCalcResponse.builder()
-            .annualIncome(annualIncome)
-            .totalLoanCount(totalLoanCount)
-            .dsrCalcResultList(dsrCalcResultList)
-            .finalDsrRatio(totalDsrRatio)
-            .build();
+        return calculator;
     }
 }

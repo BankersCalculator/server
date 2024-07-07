@@ -1,12 +1,13 @@
-package com.bankersCalculator.bankersCalculator.dsrCalc.calculator;
+package com.bankersCalculator.bankersCalculator.dsrCalc.calculator.DsrCalculatorImpl;
 
 import com.bankersCalculator.bankersCalculator.common.enums.LoanType;
+import com.bankersCalculator.bankersCalculator.dsrCalc.calculator.DsrCalculator;
 import com.bankersCalculator.bankersCalculator.dsrCalc.domain.DsrCalcResult;
 import com.bankersCalculator.bankersCalculator.dsrCalc.dto.DsrCalcServiceRequest;
 import org.springframework.stereotype.Component;
 
 @Component
-public class JeonseLoanDsrCalc implements DsrCalculator{
+public class JeonseDepositCollateralLoanDsrCalc implements DsrCalculator {
 
     @Override
     public DsrCalcResult calculateDsr(DsrCalcServiceRequest.LoanStatus loanStatus) {
@@ -15,6 +16,6 @@ public class JeonseLoanDsrCalc implements DsrCalculator{
 
     @Override
     public LoanType getLoanType() {
-        return LoanType.JEONSE_LOAN;
+        return LoanType.JEONSE_DEPOSIT_COLLATERAL_LOAN;
     }
 }
