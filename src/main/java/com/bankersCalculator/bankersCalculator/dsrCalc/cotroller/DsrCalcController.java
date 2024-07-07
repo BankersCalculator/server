@@ -23,14 +23,14 @@ public class DsrCalcController {
     @GetMapping
     public String dsrMain(Model model) {
         model.addAttribute("dsrCalcRequest", new DsrCalcRequest());
-        return "dsr/dsrCalc";
+        return "dsrCalc/dsrCalc";
     }
 
     @PostMapping()
     public String dsrCalculate(@ModelAttribute("dsrCalcRequest") DsrCalcRequest dsrCalcRequest, Model model) {
         DsrCalcResponse dsrCalcResponse = dsrCalcService.dsrCalculate(dsrCalcRequest.toServiceRequest());
         model.addAttribute("dsrCalcResponse", dsrCalcResponse);
-        return "dsr/dsrCalc";
+        return "dsrCalc/dsrCalc";
     }
 }
 

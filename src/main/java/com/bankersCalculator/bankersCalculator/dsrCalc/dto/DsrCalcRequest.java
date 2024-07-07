@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,7 +17,7 @@ public class DsrCalcRequest {
 
     // TODO: @Valid 추가할 것.
 
-    private List<LoanStatus> loanStatusList;
+    private List<LoanStatus> loanStatusList = new ArrayList<>();
 
     private int annualIncome;
 
@@ -29,7 +30,7 @@ public class DsrCalcRequest {
         private int term;
         private int gracePeriod;
         private int remainingTerm;
-        private double interestRate;
+        private double interestRatePercentage;
     }
 
     public DsrCalcServiceRequest toServiceRequest() {
@@ -41,7 +42,7 @@ public class DsrCalcRequest {
                 .term(loanStatus.getTerm())
                 .gracePeriod(loanStatus.getGracePeriod())
                 .remainingTerm(loanStatus.getRemainingTerm())
-                .interestRate(loanStatus.getInterestRate())
+                .interestRate(loanStatus.getInterestRatePercentage() / 100)
                 .build())
             .collect(Collectors.toList());
 

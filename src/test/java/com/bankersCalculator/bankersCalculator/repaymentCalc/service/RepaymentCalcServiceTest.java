@@ -28,9 +28,9 @@ class RepaymentCalcServiceTest {
         double principal = 100000000;
         int term = 36;
         int gracePeriod = 0;
-        double interestRate = 3.6;
+        double interestRate = 0.36;
         RepaymentCalcServiceRequest repaymentCalcServiceRequest = RepaymentCalcServiceRequest.builder()
-            .type(RepaymentType.Bullet)
+            .repaymentType(RepaymentType.BULLET)
             .principal(principal)
             .term(term)
             .gracePeriod(gracePeriod)
@@ -45,7 +45,7 @@ class RepaymentCalcServiceTest {
         int totalInstallments = repaymentCalcResponse.getTotalInstallments();
 
         //then
-        double expectedMonthlyInterest = principal * interestRate / 100 / 12;
+        double expectedMonthlyInterest = principal * interestRate / 12;
 
         assertEquals(36, repaymentScheduleList.size());
         assertEquals(36, totalInstallments);
@@ -81,9 +81,9 @@ class RepaymentCalcServiceTest {
         double principal = 1000000;
         int term = 12;
         int gracePeriod = 2;
-        double interestRate = 12;
+        double interestRate = 0.12;
         RepaymentCalcServiceRequest repaymentCalcServiceRequest = RepaymentCalcServiceRequest.builder()
-            .type(RepaymentType.Amortizing)
+            .repaymentType(RepaymentType.AMORTIZING)
             .principal(principal)
             .term(term)
             .gracePeriod(gracePeriod)
@@ -111,7 +111,7 @@ class RepaymentCalcServiceTest {
 
         // 월상환금 테스트
         assertTrue(repaymentScheduleList.get(2).getPrincipalPayment() > 0);
-        double expectedMonthlyPayment = calculateMonthlyPayment(principal, interestRate / 100 / 12, term - gracePeriod);
+        double expectedMonthlyPayment = calculateMonthlyPayment(principal, interestRate / 12, term - gracePeriod);
         assertEquals(expectedMonthlyPayment, repaymentScheduleList.get(2).getTotalPayment(), delta);
 
         // 최종회차 잔금 테스트
@@ -143,9 +143,9 @@ class RepaymentCalcServiceTest {
         double principal = 1000000;
         int term = 12;
         int gracePeriod = 0;
-        double interestRate = 12;
+        double interestRate = 0.12;
         RepaymentCalcServiceRequest repaymentCalcServiceRequest = RepaymentCalcServiceRequest.builder()
-            .type(RepaymentType.Amortizing)
+            .repaymentType(RepaymentType.AMORTIZING)
             .principal(principal)
             .term(term)
             .gracePeriod(gracePeriod)
@@ -173,7 +173,7 @@ class RepaymentCalcServiceTest {
 
         // 월상환금 테스트
         assertTrue(repaymentScheduleList.get(2).getPrincipalPayment() > 0);
-        double expectedMonthlyPayment = calculateMonthlyPayment(principal, interestRate / 100 / 12, term - gracePeriod);
+        double expectedMonthlyPayment = calculateMonthlyPayment(principal, interestRate / 12, term - gracePeriod);
         assertEquals(expectedMonthlyPayment, repaymentScheduleList.get(2).getTotalPayment(), delta);
 
         // 최종회차 잔금 테스트
@@ -206,9 +206,9 @@ class RepaymentCalcServiceTest {
         double principal = 1000000;
         int term = 12;
         int gracePeriod = 2;
-        double interestRate = 12;
+        double interestRate = 0.12;
         RepaymentCalcServiceRequest repaymentCalcServiceRequest = RepaymentCalcServiceRequest.builder()
-            .type(RepaymentType.EqualPrincipal)
+            .repaymentType(RepaymentType.EQUAL_PRINCIPAL)
             .principal(principal)
             .term(term)
             .gracePeriod(gracePeriod)
@@ -244,7 +244,7 @@ class RepaymentCalcServiceTest {
         // 총 이자 테스트
         double sumInterest = repaymentScheduleList.stream().mapToDouble(RepaymentSchedule::getInterestPayment).sum();
         double expectedTotalInterest = 0;
-        double monthlyInterestRate = interestRate / 100 / 12;
+        double monthlyInterestRate = interestRate / 12;
         double remainingPricipal = principal;
 
         for (int i = 0; i < gracePeriod; i++) {
@@ -277,9 +277,9 @@ class RepaymentCalcServiceTest {
         double principal = 1200000;
         int term = 12;
         int gracePeriod = 0;
-        double interestRate = 12;
+        double interestRate = 0.12;
         RepaymentCalcServiceRequest repaymentCalcServiceRequest = RepaymentCalcServiceRequest.builder()
-            .type(RepaymentType.EqualPrincipal)
+            .repaymentType(RepaymentType.EQUAL_PRINCIPAL)
             .principal(principal)
             .term(term)
             .gracePeriod(gracePeriod)
@@ -315,7 +315,7 @@ class RepaymentCalcServiceTest {
         // 총 이자 테스트
         double sumInterest = repaymentScheduleList.stream().mapToDouble(RepaymentSchedule::getInterestPayment).sum();
         double expectedTotalInterest = 0;
-        double monthlyInterestRate = interestRate / 100 / 12;
+        double monthlyInterestRate = interestRate / 12;
         double remainingPricipal = principal;
 
         for (int i = 0; i < gracePeriod; i++) {

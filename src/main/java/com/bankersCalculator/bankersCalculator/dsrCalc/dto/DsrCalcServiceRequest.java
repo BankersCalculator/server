@@ -33,7 +33,4 @@ public class DsrCalcServiceRequest {
         private int remainingTerm;
         private double interestRate;
     }
-
-
-
 }

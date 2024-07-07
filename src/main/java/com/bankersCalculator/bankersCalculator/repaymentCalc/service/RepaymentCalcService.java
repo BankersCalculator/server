@@ -23,13 +23,13 @@ public class RepaymentCalcService {
 
         RepaymentCalcResponse response = RepaymentCalcResponse.builder().build();
 
-        if (repaymentType == RepaymentType.Bullet) {
+        if (repaymentType == RepaymentType.BULLET) {
             response = calculateBulletLoanRepayment(repaymentCalcServiceRequest);
         }
-        if (repaymentType == RepaymentType.Amortizing) {
+        if (repaymentType == RepaymentType.AMORTIZING) {
             response = calculateAmortizingLoanRepayment(repaymentCalcServiceRequest);
         }
-        if (repaymentType == RepaymentType.EqualPrincipal) {
+        if (repaymentType == RepaymentType.EQUAL_PRINCIPAL) {
             response = calculateEqualPrincipalLoanRepayment(repaymentCalcServiceRequest);
         }
 
@@ -40,7 +40,7 @@ public class RepaymentCalcService {
 
         double principalAmount = repaymentCalcServiceRequest.getPrincipal();
         int repaymentTermInMonths = repaymentCalcServiceRequest.getTerm();
-        double annualInterestRate = repaymentCalcServiceRequest.getInterestRateAsDecimal();
+        double annualInterestRate = repaymentCalcServiceRequest.getInterestRate();
 
         double annualInterest = principalAmount * annualInterestRate;
         double monthlyInterest = annualInterest / 12;
@@ -77,7 +77,7 @@ public class RepaymentCalcService {
         double principalAmount = repaymentCalcServiceRequest.getPrincipal();
         int repaymentTermInMonths = repaymentCalcServiceRequest.getTerm();
         int gracePeriod = repaymentCalcServiceRequest.getGracePeriod();
-        double monthlyInterestRate = repaymentCalcServiceRequest.getInterestRateAsDecimal() / 12;
+        double monthlyInterestRate = repaymentCalcServiceRequest.getInterestRate() / 12;
 
         List<RepaymentSchedule> repaymentScheduleList = new ArrayList<>();
         int numberOfPayments = repaymentTermInMonths - gracePeriod;
@@ -125,7 +125,7 @@ public class RepaymentCalcService {
         double principalAmount = repaymentCalcServiceRequest.getPrincipal();
         int repaymentTermInMonths = repaymentCalcServiceRequest.getTerm();
         int gracePeriod = repaymentCalcServiceRequest.getGracePeriod();
-        double monthlyInterestRate = repaymentCalcServiceRequest.getInterestRateAsDecimal() / 12;
+        double monthlyInterestRate = repaymentCalcServiceRequest.getInterestRate() / 12;
 
         List<RepaymentSchedule> repaymentScheduleList = new ArrayList<>();
         int numberOfPayments = repaymentTermInMonths - gracePeriod;

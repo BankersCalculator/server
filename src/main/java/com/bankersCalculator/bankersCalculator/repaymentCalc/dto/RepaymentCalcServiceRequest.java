@@ -25,8 +25,4 @@ public class RepaymentCalcServiceRequest {
         this.interestRate = interestRate;
         this.repaymentType = repaymentType;
     }
-
-    public double getInterestRateAsDecimal() {
-        return interestRate / 100.0 ;
-    }
 }
