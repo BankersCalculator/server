@@ -5,9 +5,9 @@ import com.bankersCalculator.bankersCalculator.dsrCalc.dto.DsrCalcServiceRequest
 import org.springframework.stereotype.Component;
 
 @Component
-public class CommonCalculator {
+public class DsrCommonCalculator {
 
-    public DsrCalcResult calcForBulletLoan(DsrCalcServiceRequest.LoanStatus loanStatus, int maxTerm) {
+    public DsrCalcResult dsrCalcForBulletLoan(DsrCalcServiceRequest.LoanStatus loanStatus, int maxTerm) {
         double principal = loanStatus.getPrincipal();
         int term = loanStatus.getTerm();
         double interestRate = loanStatus.getInterestRate();
