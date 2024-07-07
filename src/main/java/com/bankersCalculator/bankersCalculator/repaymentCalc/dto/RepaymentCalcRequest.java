@@ -22,7 +22,7 @@ public class RepaymentCalcRequest {
 //    @Range(min = 0, max = 600)
     private int gracePeriod; // 거치기간
 //    @Range(min = 0, max = 20)
-    private double interestRate; // 연이자율
+    private double interestRatePercentage; // 연이자율
 
 
     public RepaymentCalcServiceRequest toServiceRequest() {
@@ -31,7 +31,7 @@ public class RepaymentCalcRequest {
             .principal(principal)
             .term(term)
             .gracePeriod(gracePeriod)
-            .interestRate(interestRate)
+            .interestRate(interestRatePercentage / 100)
             .build();
     }
 }

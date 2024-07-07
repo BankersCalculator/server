@@ -10,10 +10,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 @Slf4j
@@ -33,7 +32,9 @@ class DsrCalcServiceTest {
         int term = 60;
         int gracePeriod = 0;
         int remainingTerm = 0;
-        double interestRate = 5.0;
+        double interestRate = 0.05;
+        double expectedDsrRatio = 0.025;
+
         //given
         DsrCalcServiceRequest request = DsrCalcServiceRequest.builder()
             .annualIncome(annualIncome)
@@ -54,16 +55,12 @@ class DsrCalcServiceTest {
         DsrCalcResponse response = dsrCalcService.dsrCalculate(request);
 
         //then
-        assertNotNull(response);
-
         // 소득, 대출건수 검증
         assertEquals(annualIncome, response.getAnnualIncome());
         assertEquals(request.getLoanStatusList().size(), response.getTotalLoanCount());
 
         // DSR 검증
-        assertEquals(25, response.getFinalDsrRatio(), delta);
+        assertEquals(expectedDsrRatio, response.getFinalDsrRatio(), delta);
 
     }
-
-
 }

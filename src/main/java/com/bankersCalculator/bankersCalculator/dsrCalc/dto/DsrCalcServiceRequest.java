@@ -32,14 +32,5 @@ public class DsrCalcServiceRequest {
         private int gracePeriod;
         private int remainingTerm;
         private double interestRate;
-
-        public double getInterestRateAsDecimal() {
-            return interestRate / 100.0 ;
-        }
     }
-
-
-
-
-
 }

@@ -10,7 +10,7 @@ public class CommonCalculator {
     public DsrCalcResult calcForBulletLoan(DsrCalcServiceRequest.LoanStatus loanStatus, int maxTerm) {
         double principal = loanStatus.getPrincipal();
         int term = loanStatus.getTerm();
-        double interestRate = loanStatus.getInterestRateAsDecimal();
+        double interestRate = loanStatus.getInterestRate();
 
         double annualPrincipalRepayment = principal / maxTerm * 12;
         double annalInterestRepayment = principal * interestRate;

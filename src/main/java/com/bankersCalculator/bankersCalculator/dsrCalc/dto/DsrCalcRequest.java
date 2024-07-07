@@ -30,7 +30,7 @@ public class DsrCalcRequest {
         private int term;
         private int gracePeriod;
         private int remainingTerm;
-        private double interestRate;
+        private double interestRatePercentage;
     }
 
     public DsrCalcServiceRequest toServiceRequest() {
@@ -42,7 +42,7 @@ public class DsrCalcRequest {
                 .term(loanStatus.getTerm())
                 .gracePeriod(loanStatus.getGracePeriod())
                 .remainingTerm(loanStatus.getRemainingTerm())
-                .interestRate(loanStatus.getInterestRate())
+                .interestRate(loanStatus.getInterestRatePercentage() / 100)
                 .build())
             .collect(Collectors.toList());
 
