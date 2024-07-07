@@ -13,9 +13,11 @@ import java.util.List;
 @NoArgsConstructor
 public class DsrCalcRequest {
 
+    // TODO: @Valid 추가할 것.
+
     private List<LoanStatus> loanStatusList;
 
-    private int income;
+    private int annualIncome;
 
     @Getter
     @NoArgsConstructor
