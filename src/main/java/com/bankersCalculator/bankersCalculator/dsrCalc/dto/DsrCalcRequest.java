@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -29,6 +30,25 @@ public class DsrCalcRequest {
         private int gracePeriod;
         private int remainingTerm;
         private double interestRate;
+    }
+
+    public DsrCalcServiceRequest toServiceRequest() {
+        List<DsrCalcServiceRequest.LoanStatus> serviceLoanStatusList = loanStatusList.stream()
+            .map(loanStatus -> DsrCalcServiceRequest.LoanStatus.builder()
+                .repaymentType(loanStatus.getRepaymentType())
+                .loanType(loanStatus.getLoanType())
+                .principal(loanStatus.getPrincipal())
+                .term(loanStatus.getTerm())
+                .gracePeriod(loanStatus.getGracePeriod())
+                .remainingTerm(loanStatus.getRemainingTerm())
+                .interestRate(loanStatus.getInterestRate())
+                .build())
+            .collect(Collectors.toList());
+
+        return DsrCalcServiceRequest.builder()
+            .loanStatusList(serviceLoanStatusList)
+            .annualIncome(annualIncome)
+            .build();
     }
 
 

@@ -1,13 +1,12 @@
 package com.bankersCalculator.bankersCalculator.dsrCalc.calculator;
 
 import com.bankersCalculator.bankersCalculator.common.enums.LoanType;
-import com.bankersCalculator.bankersCalculator.dsrCalc.dto.DsrCalcRequest;
-
-import java.util.List;
+import com.bankersCalculator.bankersCalculator.dsrCalc.dto.DsrCalcResponse;
+import com.bankersCalculator.bankersCalculator.dsrCalc.dto.DsrCalcServiceRequest;
 
 public interface DsrCalculator {
 
-    double calculateDsr(DsrCalcRequest.LoanStatus loanStatus);
+    DsrCalcResponse calculateDsr(DsrCalcServiceRequest.LoanStatus loanStatus);
 
     LoanType getLoanType();
 }

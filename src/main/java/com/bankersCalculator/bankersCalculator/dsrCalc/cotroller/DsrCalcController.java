@@ -28,7 +28,7 @@ public class DsrCalcController {
 
     @PostMapping()
     public String dsrCalculate(@ModelAttribute("dsrCalcRequest") DsrCalcRequest dsrCalcRequest, Model model) {
-        DsrCalcResponse dsrCalcResponse = dsrCalcService.dsrCalculate(dsrCalcRequest);
+        DsrCalcResponse dsrCalcResponse = dsrCalcService.dsrCalculate(dsrCalcRequest.toServiceRequest());
         model.addAttribute("dsrCalcResponse", dsrCalcResponse);
         return "dsr/dsrCalc";
     }

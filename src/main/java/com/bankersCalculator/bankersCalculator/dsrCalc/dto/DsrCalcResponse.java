@@ -1,19 +1,17 @@
 package com.bankersCalculator.bankersCalculator.dsrCalc.dto;
 
+import com.bankersCalculator.bankersCalculator.dsrCalc.domain.DsrCalcResult;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Getter
-@NoArgsConstructor
+@Builder
 public class DsrCalcResponse {
 
-    private String name;
-    private int firstValue;
-
-    @Builder
-    private DsrCalcResponse(String name, int firstValue) {
-        this.name = name;
-        this.firstValue = firstValue;
-    }
+    private int annualIncome;
+    private int totalLoanCount;
+    private List<DsrCalcResult> dsrCalcResultList;
+    private double finalDsrRatio;
 }

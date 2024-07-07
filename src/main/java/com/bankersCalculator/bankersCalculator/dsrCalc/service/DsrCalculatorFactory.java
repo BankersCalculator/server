@@ -2,7 +2,7 @@ package com.bankersCalculator.bankersCalculator.dsrCalc.service;
 
 import com.bankersCalculator.bankersCalculator.common.enums.LoanType;
 import com.bankersCalculator.bankersCalculator.dsrCalc.calculator.DsrCalculator;
-import com.bankersCalculator.bankersCalculator.dsrCalc.dto.DsrCalcRequest;
+import com.bankersCalculator.bankersCalculator.dsrCalc.dto.DsrCalcServiceRequest;
 import org.springframework.stereotype.Component;
 
 import java.util.EnumMap;
@@ -21,15 +21,15 @@ public class DsrCalculatorFactory {
         }
     }
 
-    public double calcTotalDsr(DsrCalcRequest request) {
+    public double calcTotalDsr(DsrCalcServiceRequest request) {
         double totalDsrAmount = 0 ;
         int annualIncome = request.getAnnualIncome();
-        for (DsrCalcRequest.LoanStatus loanStatus : request.getLoanStatusList()) {
+        for (DsrCalcServiceRequest.LoanStatus loanStatus : request.getLoanStatusList()) {
             DsrCalculator calculator = calculators.get(loanStatus.getLoanType());
             if (calculator == null) {
                 throw new RuntimeException("예외할것...");
             }
-            totalDsrAmount += calculator.calculateDsr(loanStatus);
+            totalDsrAmount += calculator.calculateDsr(loanStatus); // TODO: response를 위한 Dto반환할 것
         }
         return (totalDsrAmount / annualIncome) * 100;
     }

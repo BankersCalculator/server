@@ -1,17 +1,16 @@
 package com.bankersCalculator.bankersCalculator.dsrCalc.calculator;
 
 import com.bankersCalculator.bankersCalculator.common.enums.LoanType;
-import com.bankersCalculator.bankersCalculator.dsrCalc.dto.DsrCalcRequest;
+import com.bankersCalculator.bankersCalculator.dsrCalc.dto.DsrCalcResponse;
+import com.bankersCalculator.bankersCalculator.dsrCalc.dto.DsrCalcServiceRequest;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 @Component
 public class DepositAndInsuranceCollateralLoanDsrCalc implements DsrCalculator{
 
     @Override
-    public double calculateDsr(DsrCalcRequest.LoanStatus loanStatus) {
-        return 0;
+    public DsrCalcResponse calculateDsr(DsrCalcServiceRequest.LoanStatus loanStatus) {
+        return null;
     }
 
     @Override

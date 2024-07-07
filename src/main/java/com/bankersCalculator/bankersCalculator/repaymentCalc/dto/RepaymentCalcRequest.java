@@ -2,7 +2,6 @@ package com.bankersCalculator.bankersCalculator.repaymentCalc.dto;
 
 import com.bankersCalculator.bankersCalculator.common.enums.RepaymentType;
 import jakarta.validation.constraints.NotNull;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
