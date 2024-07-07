@@ -25,7 +25,7 @@ public class DtiCalcController {
     }
 
     @PostMapping("/dti/result")
-    public String calculateDti(@ModelAttribute DtiCalcRequest request, Model model) {
+    public String calculateDti( DtiCalcRequest request, Model model) {
         DtiCalcResponse response = dtiCalcService.calculateDti(request);
         model.addAttribute("dtiCalcRequest", request); // 폼 데이터를 유지
         model.addAttribute("dtiCalcResponse", response); // 결과 데이터 설정

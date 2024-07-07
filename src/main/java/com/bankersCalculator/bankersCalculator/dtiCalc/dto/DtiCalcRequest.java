@@ -1,5 +1,7 @@
 package com.bankersCalculator.bankersCalculator.dtiCalc.dto;
 
+import java.math.BigDecimal;
+
 public class DtiCalcRequest {
     private double applicationAmount;
     private double maturityRepaymentAmount;
@@ -15,10 +17,19 @@ public class DtiCalcRequest {
     private String baseDate;
     private double currentAnnualRepaymentOrInterest;
 
-    // Getters and Setters
+
+    
     public double getApplicationAmount() {
-        return applicationAmount;
+        //return applicationAmount != null ? applicationAmount.doubleValue() : 0.0;
+    	return applicationAmount;
     }
+    
+    public BigDecimal getApplicationAmount2() {
+        //return applicationAmount != null ? applicationAmount.doubleValue() : 0.0;
+    	System.out.println(BigDecimal.valueOf(applicationAmount));
+    	return BigDecimal.valueOf(applicationAmount);
+    }
+    
 
     public void setApplicationAmount(double applicationAmount) {
         this.applicationAmount = applicationAmount;

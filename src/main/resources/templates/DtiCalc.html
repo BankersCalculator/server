@@ -54,12 +54,11 @@
             width: 50%; /* Adjusted to 50% width to accommodate unit */
             margin-bottom: 5px;
         }
-        input[type="text"], input[type="date"], select {
+        input[type="number"], input[type="text"], input[type="date"], select {
             width: 100%; /* Adjusted to 100% width of the container */
             padding: 8px;
             box-sizing: border-box;
             text-align: right; /* Right align text */
-            -moz-appearance: textfield; /* Remove up/down arrows for Firefox */
         }
         input::-webkit-outer-spin-button,
         input::-webkit-inner-spin-button {
@@ -122,7 +121,7 @@
         .formatted-value {
             font-size: 0.9em;
             color: #888;
-            text-align: right; /* Right align formatted values */
+            text-align: right; /* Left align formatted values */
             width: 50%; /* Match width of input-container */
             margin-top: 5px;
         }
@@ -141,13 +140,11 @@
         <div class="formula">
             🏦 DTI = (해당 주택담보대출의 연간 원리금 상환액 + 기타부채의 연간 이자상환액) / 연소득 × 100 <br>[은행업 감독규정]
         </div>
-        <form th:action="@{/dti/result}" th:object="${dtiCalcRequest}" method="post" onsubmit="return prepareFormSubmit(this)">
+        <form th:action="@{/dti/result}" th:object="${dtiCalcRequest}" method="post">
             <div class="form-group">
                 <label>연소득 (세전, 증빙가능한 소득기준)</label>
                 <div class="input-container">
-                    <input type="text" th:field="*{annualIncome}" id="annualIncome" placeholder="0" 
-                           onfocus="this.placeholder=''" onblur="this.placeholder='0'" 
-                           oninput="formatNumber(this); updateFormattedValue(this, 'formatted-annualIncome')" pattern="\d*" />
+                    <input type="number" th:field="*{annualIncome}" id="annualIncome" placeholder="0" onfocus="this.placeholder=''" onblur="this.placeholder='0'" oninput="updateFormattedValue(this, 'formatted-annualIncome')" />
                     <span class="unit">원</span>
                 </div>
                 <div class="buttons">
@@ -160,9 +157,7 @@
             <div class="form-group">
                 <label>주택 구매에 필요하신 금액을 입력해주세요(대출금액)</label>
                 <div class="input-container">
-                    <input type="text" th:field="*{applicationAmount}" id="applicationAmount" placeholder="0" 
-                           onfocus="this.placeholder=''" onblur="this.placeholder='0'" 
-                           oninput="formatNumber(this); updateFormattedValue(this, 'formatted-applicationAmount')" pattern="\d*" />
+                    <input type="number" th:field="*{applicationAmount}" id="applicationAmount" placeholder="0" onfocus="this.placeholder=''" onblur="this.placeholder='0'" oninput="updateFormattedValue(this, 'formatted-applicationAmount')" />
                     <span class="unit">원</span>
                 </div>
                 <div class="buttons">
@@ -175,11 +170,14 @@
             <div class="form-group">
                 <label>대출 만기 때, 일정금액을 남기실건가요?(만기상환금액)</label>
                 <div class="input-container">
-                    <input type="text" th:field="*{maturityRepaymentAmount}" placeholder="0" 
-                           onfocus="this.placeholder=''" onblur="this.placeholder='0'" 
-                           oninput="formatNumber(this); updateFormattedValue(this, 'formatted-maturityRepaymentAmount')" pattern="\d*" />
+                    <input type="number" th:field="*{maturityRepaymentAmount}" placeholder="0" onfocus="this.placeholder=''" onblur="this.placeholder='0'" oninput="updateFormattedValue(this, 'formatted-maturityRepaymentAmount')" />
                     <span class="unit">원</span>
                 </div>
+				<div class="buttons">
+				     <button type="button" onclick="adjustValue('maturityRepaymentAmount', 1000000)">+100만</button>
+				     <button type="button" onclick="adjustValue('maturityRepaymentAmount', 10000000)">+1000만</button>
+				     <button type="button" onclick="adjustValue('maturityRepaymentAmount', 100000000)">+1억</button>
+			    </div>
                 <div class="formatted-value" id="formatted-maturityRepaymentAmount">0원</div>
             </div>
             <div class="form-group">
@@ -192,9 +190,7 @@
             <div class="form-group">
                 <label>대출 기간을 입력해주세요</label>
                 <div class="input-container">
-                    <input type="text" th:field="*{loanPeriod}" id="loanPeriod" placeholder="0" 
-                           onfocus="this.placeholder=''" onblur="this.placeholder='0'" 
-                           oninput="formatNumber(this); updateFormattedValue(this, 'formatted-loanPeriod')" pattern="\d*" />
+                    <input type="number" th:field="*{loanPeriod}" id="loanPeriod" placeholder="0" onfocus="this.placeholder=''" onblur="this.placeholder='0'" oninput="updateFormattedValue(this, 'formatted-loanPeriod')" />
                     <span class="unit">년</span>
                 </div>
                 <div class="buttons">
@@ -206,68 +202,74 @@
             <div class="form-group">
                 <label>일정 기간 이자만 납부하실건가요?(거치기간)</label>
                 <div class="input-container">
-                    <input type="text" th:field="*{gracePeriod}" placeholder="0" 
-                           onfocus="this.placeholder=''" onblur="this.placeholder='0'" 
-                           oninput="formatNumber(this); updateFormattedValue(this, 'formatted-gracePeriod')" pattern="\d*" />
+                    <input type="number" th:field="*{gracePeriod}" placeholder="0" onfocus="this.placeholder=''" onblur="this.placeholder='0'" oninput="updateFormattedValue(this, 'formatted-gracePeriod')" />
                     <span class="unit">년</span>
                 </div>
             </div>
             <div class="form-group">
                 <label>이자율</label>
                 <div class="input-container">
-                    <input type="text" step="0.01" th:field="*{interestRate}" id="interestRate" placeholder="0" 
-                           onfocus="this.placeholder=''" onblur="this.placeholder='0'" 
-                           oninput="formatNumber(this); updateFormattedValue(this, 'formatted-interestRate')" pattern="\d*" />
+                    <input type="number" step="0.01" th:field="*{interestRate}" id="interestRate" placeholder="0" onfocus="this.placeholder=''" onblur="this.placeholder='0'" oninput="formatPercentage(this)" />
                     <span class="unit">%</span>
                 </div>
                 <div class="formatted-value" id="formatted-interestRate">0%</div>
             </div>
             <div class="form-group">
-                <label>대출 당일, 상환하실 주택담보대출금액이 있으신가요?</label>
+                <label>대출 당일, 상환하실 주택담보대출금액이 있으신가요? (대환여부)</label>
                 <div class="input-container">
-                    <input type="text" th:field="*{repaymentAmount}" placeholder="0" 
-                           onfocus="this.placeholder=''" onblur="this.placeholder='0'" 
-                           oninput="formatNumber(this); updateFormattedValue(this, 'formatted-repaymentAmount')" pattern="\d*" />
+                    <input type="number" th:field="*{repaymentAmount}" placeholder="0" onfocus="this.placeholder=''" onblur="this.placeholder='0'" oninput="updateFormattedValue(this, 'formatted-repaymentAmount')" />
                     <span class="unit">원</span>
                 </div>
+				<div class="buttons">
+				     <button type="button" onclick="adjustValue('repaymentAmount', 1000000)">+100만</button>
+				     <button type="button" onclick="adjustValue('repaymentAmount', 10000000)">+1000만</button>
+				     <button type="button" onclick="adjustValue('repaymentAmount', 100000000)">+1억</button>
+				</div>
                 <div class="formatted-value" id="formatted-repaymentAmount">0원</div>
             </div>
             <div class="form-group">
                 <label>예금이나 적금으로 받으신 대출이 있으신가요?(예적금대출)</label>
                 <div class="input-container">
-                    <input type="text" th:field="*{savingsLoanAmount}" placeholder="0" 
-                           onfocus="this.placeholder=''" onblur="this.placeholder='0'" 
-                           oninput="formatNumber(this); updateFormattedValue(this, 'formatted-savingsLoanAmount')" pattern="\d*" />
+                    <input type="number" th:field="*{savingsLoanAmount}" placeholder="0" onfocus="this.placeholder=''" onblur="this.placeholder='0'" oninput="updateFormattedValue(this, 'formatted-savingsLoanAmount')" />
                     <span class="unit">원</span>
                 </div>
+				<div class="buttons">
+				     <button type="button" onclick="adjustValue('savingsLoanAmount', 1000000)">+100만</button>
+				     <button type="button" onclick="adjustValue('savingsLoanAmount', 10000000)">+1000만</button>
+				     <button type="button" onclick="adjustValue('savingsLoanAmount', 100000000)">+1억</button>
+				</div>
                 <div class="formatted-value" id="formatted-savingsLoanAmount">0원</div>
             </div>
             <div class="form-group">
                 <label>이미 받으신 주택담보대출이 있으신가요?</label>
                 <div class="input-container">
-                    <input type="text" th:field="*{mortgageLoanAmount}" placeholder="0" 
-                           onfocus="this.placeholder=''" onblur="this.placeholder='0'" 
-                           oninput="formatNumber(this); updateFormattedValue(this, 'formatted-mortgageLoanAmount')" pattern="\d*" />
+                    <input type="number" th:field="*{mortgageLoanAmount}" placeholder="0" onfocus="this.placeholder=''" onblur="this.placeholder='0'" oninput="updateFormattedValue(this, 'formatted-mortgageLoanAmount')" />
                     <span class="unit">원</span>
                 </div>
+				<div class="buttons">
+				     <button type="button" onclick="adjustValue('mortgageLoanAmount', 1000000)">+100만</button>
+				     <button type="button" onclick="adjustValue('mortgageLoanAmount', 10000000)">+1000만</button>
+				     <button type="button" onclick="adjustValue('mortgageLoanAmount', 100000000)">+1억</button>
+				</div>
                 <div class="formatted-value" id="formatted-mortgageLoanAmount">0원</div>
             </div>
             <div class="form-group">
-                <label>다른 은행에서 받고계신 대출이 있으신가요?</label>
+                <label>기타, 받고계신 대출금액이 얼마신가요? (위의 예적금담보대출, 주택담보대출 제외)</label>
                 <div class="input-container">
-                    <input type="text" th:field="*{otherDebtAmount}" placeholder="0" 
-                           onfocus="this.placeholder=''" onblur="this.placeholder='0'" 
-                           oninput="formatNumber(this); updateFormattedValue(this, 'formatted-otherDebtAmount')" pattern="\d*" />
+                    <input type="number" th:field="*{otherDebtAmount}" placeholder="0" onfocus="this.placeholder=''" onblur="this.placeholder='0'" oninput="updateFormattedValue(this, 'formatted-otherDebtAmount')" />
                     <span class="unit">원</span>
                 </div>
+				<div class="buttons">
+				     <button type="button" onclick="adjustValue('otherDebtAmount', 1000000)">+100만</button>
+				     <button type="button" onclick="adjustValue('otherDebtAmount', 10000000)">+1000만</button>
+				     <button type="button" onclick="adjustValue('otherDebtAmount', 100000000)">+1억</button>
+				</div>
                 <div class="formatted-value" id="formatted-otherDebtAmount">0원</div>
             </div>
             <div class="form-group">
                 <label>현재 납부중인 연 원리금 /연이자를 입력해주세요</label>
                 <div class="input-container">
-                    <input type="text" th:field="*{currentAnnualRepaymentOrInterest}" placeholder="0" 
-                           onfocus="this.placeholder=''" onblur="this.placeholder='0'" 
-                           oninput="formatNumber(this); updateFormattedValue(this, 'formatted-currentAnnualRepaymentOrInterest')" pattern="\d*" />
+                    <input type="number" th:field="*{currentAnnualRepaymentOrInterest}" placeholder="0" onfocus="this.placeholder=''" onblur="this.placeholder='0'" oninput="updateFormattedValue(this, 'formatted-currentAnnualRepaymentOrInterest')" />
                     <span class="unit">원</span>
                 </div>
                 <div class="formatted-value" id="formatted-currentAnnualRepaymentOrInterest">0원</div>
@@ -278,31 +280,22 @@
 
         <div class="result" th:if="${dtiCalcResponse != null}">
             <h2>결과</h2>
-            <p>연 원리금 합계: <span th:text="${dtiCalcResponse.annualPrincipalAndInterest}"></span>원</p>
-            <p>DTI 비율: <span th:text="${dtiCalcResponse.dtiRatio}"></span>%</p>
+            <p th:utext="${dtiCalcResponse.getCtt}"></p>			
         </div>
     </div>
     <script>
         function adjustValue(id, amount) {
             var input = document.getElementById(id);
-            input.value = parseInt(input.value.replace(/,/g, '')) + amount;
-            formatNumber(input);
+            input.value = parseInt(input.value || 0) + amount;
             updateFormattedValue(input, 'formatted-' + id);
         }
 
         function resetForm() {
-            document.querySelectorAll('input[type="text"], input[type="date"], select').forEach(input => {
+            document.querySelectorAll('input[type="number"], input[type="text"], input[type="date"], select').forEach(input => {
                 input.value = '';
                 input.placeholder = '0';
             });
             document.querySelectorAll('.formatted-value').forEach(el => el.textContent = '0원');
-        }
-
-        function formatNumber(input) {
-            input.value = input.value.replace(/\D/g, ''); // 숫자 이외의 값 제거
-            var value = input.value.replace(/,/g, '');
-            var formattedValue = Number(value).toLocaleString();
-            input.value = formattedValue;
         }
 
         function formatCurrency(value) {
@@ -333,21 +326,9 @@
         }
 
         function formatPercentage(input) {
-            var value = parseFloat(input.value.replace(/,/g, '')) || 0;
+            var value = parseFloat(input.value) || 0;
             document.getElementById('formatted-' + input.id).textContent = value.toFixed(2) + '%';
         }
-
-        function prepareFormSubmit(form) {
-            var inputs = form.querySelectorAll('input[type="text"]');
-            inputs.forEach(function(input) {
-                input.value = input.value.replace(/,/g, ''); // 쉼표 제거
-            });
-            return true; // 폼 제출 진행
-        }
-
-        document.addEventListener("DOMContentLoaded", function() {
-            resetForm(); // Reset form on page load
-        });
     </script>
 </body>
 </html>
