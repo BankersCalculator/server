@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,7 +17,7 @@ public class DsrCalcRequest {
 
     // TODO: @Valid 추가할 것.
 
-    private List<LoanStatus> loanStatusList;
+    private List<LoanStatus> loanStatusList = new ArrayList<>();
 
     private int annualIncome;
 

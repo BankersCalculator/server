@@ -6,6 +6,8 @@ import com.bankersCalculator.bankersCalculator.dsrCalc.calculator.CommonCalculat
 import com.bankersCalculator.bankersCalculator.dsrCalc.calculator.DsrCalculator;
 import com.bankersCalculator.bankersCalculator.dsrCalc.domain.DsrCalcResult;
 import com.bankersCalculator.bankersCalculator.dsrCalc.dto.DsrCalcServiceRequest;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -14,6 +16,7 @@ public class PersonalLoanDsrCalc implements DsrCalculator {
     private static final int MAX_TERM_FOR_BULLET = 60;
     private static final int MAX_TERM_FOR_EQUALPRINCIPAL_AND_AMORTIZING = 120;
 
+    @Autowired
     private CommonCalculator commonCalculator;
 
     @Override

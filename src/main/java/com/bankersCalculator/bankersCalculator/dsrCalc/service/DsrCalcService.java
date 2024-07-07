@@ -27,6 +27,9 @@ public class DsrCalcService {
         for (DsrCalcServiceRequest.LoanStatus loanStatus : request.getLoanStatusList()) {
             DsrCalculator calculator = dsrCalculatorFactory.getCalculator(loanStatus.getLoanType());
             DsrCalcResult dsrCalcResult = calculator.calculateDsr(loanStatus);
+            log.info(Double.toString(dsrCalcResult.getAnnualPrincipalRepayment()));
+            log.info(Double.toString(dsrCalcResult.getAnnualInterestRepayment()));
+
 
             dsrCalcResult.setSerial(++totalLoanCount);
             totalDsrAmount += dsrCalcResult.getAnnualPrincipalRepayment();
@@ -36,6 +39,9 @@ public class DsrCalcService {
         }
 
         double totalDsrRatio = (totalDsrAmount / annualIncome) * 100;
+        log.info(Double.toString(totalDsrAmount));
+        log.info(Double.toString(annualIncome));
+        log.info(Double.toString(totalDsrRatio));
 
         return DsrCalcResponse.builder()
             .annualIncome(annualIncome)
