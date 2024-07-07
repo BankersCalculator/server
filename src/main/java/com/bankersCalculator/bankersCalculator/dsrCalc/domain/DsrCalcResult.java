@@ -22,4 +22,8 @@ public class DsrCalcResult {
         this.annualPrincipalRepayment = annualPrincipalRepayment;
         this.annualInterestRepayment = annualInterestRepayment;
     }
+
+    public void setSerial(int serial) {
+        this.serial = serial;
+    }
 }

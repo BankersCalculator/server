@@ -13,14 +13,10 @@ public class DsrCalcService {
 
     private final DsrCalculatorFactory dsrCalculatorFactory;
 
-    // TODO: dsrCalcRequest -> ServiceRequest로 변환할 것.
     public DsrCalcResponse dsrCalculate(DsrCalcServiceRequest dsrCalcServiceRequest) {
 
-        dsrCalculatorFactory.calcTotalDsr(dsrCalcServiceRequest);
+        DsrCalcResponse dsrCalcResponse = dsrCalculatorFactory.calcTotalDsr(dsrCalcServiceRequest);
 
-
-
-
-        return null;
+        return dsrCalcResponse;
     }
 }
