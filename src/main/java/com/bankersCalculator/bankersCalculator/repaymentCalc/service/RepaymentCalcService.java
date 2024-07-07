@@ -23,13 +23,13 @@ public class RepaymentCalcService {
 
         RepaymentCalcResponse response = RepaymentCalcResponse.builder().build();
 
-        if (repaymentType == RepaymentType.Bullet) {
+        if (repaymentType == RepaymentType.BULLET) {
             response = calculateBulletLoanRepayment(repaymentCalcServiceRequest);
         }
-        if (repaymentType == RepaymentType.Amortizing) {
+        if (repaymentType == RepaymentType.AMORTIZING) {
             response = calculateAmortizingLoanRepayment(repaymentCalcServiceRequest);
         }
-        if (repaymentType == RepaymentType.EqualPrincipal) {
+        if (repaymentType == RepaymentType.EQUAL_PRINCIPAL) {
             response = calculateEqualPrincipalLoanRepayment(repaymentCalcServiceRequest);
         }
 

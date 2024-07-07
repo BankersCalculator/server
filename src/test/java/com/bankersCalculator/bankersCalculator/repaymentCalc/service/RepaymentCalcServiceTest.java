@@ -30,7 +30,7 @@ class RepaymentCalcServiceTest {
         int gracePeriod = 0;
         double interestRate = 3.6;
         RepaymentCalcServiceRequest repaymentCalcServiceRequest = RepaymentCalcServiceRequest.builder()
-            .type(RepaymentType.Bullet)
+            .type(RepaymentType.BULLET)
             .principal(principal)
             .term(term)
             .gracePeriod(gracePeriod)
@@ -83,7 +83,7 @@ class RepaymentCalcServiceTest {
         int gracePeriod = 2;
         double interestRate = 12;
         RepaymentCalcServiceRequest repaymentCalcServiceRequest = RepaymentCalcServiceRequest.builder()
-            .type(RepaymentType.Amortizing)
+            .type(RepaymentType.AMORTIZING)
             .principal(principal)
             .term(term)
             .gracePeriod(gracePeriod)
@@ -145,7 +145,7 @@ class RepaymentCalcServiceTest {
         int gracePeriod = 0;
         double interestRate = 12;
         RepaymentCalcServiceRequest repaymentCalcServiceRequest = RepaymentCalcServiceRequest.builder()
-            .type(RepaymentType.Amortizing)
+            .type(RepaymentType.AMORTIZING)
             .principal(principal)
             .term(term)
             .gracePeriod(gracePeriod)
@@ -208,7 +208,7 @@ class RepaymentCalcServiceTest {
         int gracePeriod = 2;
         double interestRate = 12;
         RepaymentCalcServiceRequest repaymentCalcServiceRequest = RepaymentCalcServiceRequest.builder()
-            .type(RepaymentType.EqualPrincipal)
+            .type(RepaymentType.EQUAL_PRINCIPAL)
             .principal(principal)
             .term(term)
             .gracePeriod(gracePeriod)
@@ -279,7 +279,7 @@ class RepaymentCalcServiceTest {
         int gracePeriod = 0;
         double interestRate = 12;
         RepaymentCalcServiceRequest repaymentCalcServiceRequest = RepaymentCalcServiceRequest.builder()
-            .type(RepaymentType.EqualPrincipal)
+            .type(RepaymentType.EQUAL_PRINCIPAL)
             .principal(principal)
             .term(term)
             .gracePeriod(gracePeriod)
