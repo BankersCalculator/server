@@ -49,11 +49,11 @@ class DsrCalcServiceTest {
             Arguments.of(LoanType.JEONSE_LOAN, RepaymentType.BULLET, 200000000, 240, 0.03, 0.06),
             Arguments.of(LoanType.LONG_TERM_CARD_LOAN, RepaymentType.BULLET, 200000000, 240, 0.03, 0.72),
             Arguments.of(LoanType.MORTGAGE, RepaymentType.BULLET, 200000000, 240, 0.03, 0.26),
-            Arguments.of(LoanType.NON_HOUSING_REAL_ESTATE_COLLATERAL_LOAN, RepaymentType.BULLET, 200000000, 240, 0.03, 0.26),
-            Arguments.of(LoanType.OFFICETEL_MORTGAGE_LOAN, RepaymentType.BULLET, 200000000, 240, 0.03, 0.26),
+            Arguments.of(LoanType.NON_HOUSING_REAL_ESTATE_COLLATERAL_LOAN, RepaymentType.BULLET, 200000000, 240, 0.03, 0.31),
+            Arguments.of(LoanType.OFFICETEL_MORTGAGE_LOAN, RepaymentType.BULLET, 200000000, 240, 0.03, 0.31),
             Arguments.of(LoanType.OTHER_COLLATERAL_LOAN, RepaymentType.BULLET, 200000000, 240, 0.03, 0.26),
             Arguments.of(LoanType.OTHER_LOAN, RepaymentType.BULLET, 200000000, 240, 0.03, 0.16),
-            Arguments.of(LoanType.PERSONAL_LOAN, RepaymentType.BULLET, 200000000, 240, 0.03, 0.16),
+            Arguments.of(LoanType.PERSONAL_LOAN, RepaymentType.BULLET, 200000000, 240, 0.03, 0.46),
             Arguments.of(LoanType.SECURITIES_COLLATERAL_LOAN, RepaymentType.BULLET, 200000000, 240, 0.03, 0.31)
         );
     }
@@ -79,7 +79,7 @@ class DsrCalcServiceTest {
     private void assertCommonExpectations(DsrCalcResponse response, DsrCalcServiceRequest request, double expectedDsrRatio) {
         assertEquals(request.getAnnualIncome(), response.getAnnualIncome());
         assertEquals(request.getLoanStatusList().size(), response.getTotalLoanCount());
-        assertEquals(expectedDsrRatio, response.getFinalDsrRatio(), 1);
+        assertEquals(expectedDsrRatio, response.getFinalDsrRatio(), 0.01);
     }
 
 //    private void assertSpecificExpectations(DsrCalcResponse response, LoanType loanType, RepaymentType repaymentType) {
