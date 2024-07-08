@@ -19,7 +19,6 @@ public class DepositAndInsuranceCollateralLoanDsrCalc implements DsrCalculator {
         DsrCalcResult dsrCalcResult = DsrCalcResult.builder().build();
 
         if (repaymentType == RepaymentType.BULLET) {
-            int maxTermForBullet = getMaxTermForBullet();
             dsrCalcResult = dsrCalcForBulletLoan.dsrCalcForBulletLoanWithoutPrincipalRepayment(loanStatus);
         }
 
