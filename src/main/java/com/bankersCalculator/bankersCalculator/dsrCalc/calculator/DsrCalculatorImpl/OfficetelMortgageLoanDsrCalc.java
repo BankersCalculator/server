@@ -13,7 +13,7 @@ public class OfficetelMortgageLoanDsrCalc implements DsrCalculator {
 
     @Override
     public LoanType getLoanType() {
-        return LoanType.MORTGAGE;
+        return LoanType.OFFICETEL_MORTGAGE_LOAN;
     }
 
     @Override

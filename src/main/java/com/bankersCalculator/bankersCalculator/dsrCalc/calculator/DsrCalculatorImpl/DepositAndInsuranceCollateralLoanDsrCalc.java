@@ -28,7 +28,7 @@ public class DepositAndInsuranceCollateralLoanDsrCalc implements DsrCalculator {
 
     @Override
     public LoanType getLoanType() {
-        return LoanType.NON_HOUSING_REAL_ESTATE_COLLATERAL_LOAN;
+        return LoanType.DEPOSIT_AND_INSURANCE_COLLATERAL_LOAN;
     }
 
     @Override
