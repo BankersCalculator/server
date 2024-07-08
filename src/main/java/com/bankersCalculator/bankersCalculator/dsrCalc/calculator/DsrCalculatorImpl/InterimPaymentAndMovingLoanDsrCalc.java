@@ -2,20 +2,26 @@ package com.bankersCalculator.bankersCalculator.dsrCalc.calculator.DsrCalculator
 
 import com.bankersCalculator.bankersCalculator.common.enums.LoanType;
 import com.bankersCalculator.bankersCalculator.dsrCalc.calculator.DsrCalculator;
-import com.bankersCalculator.bankersCalculator.dsrCalc.domain.DsrCalcResult;
-import com.bankersCalculator.bankersCalculator.dsrCalc.dto.DsrCalcServiceRequest;
 import org.springframework.stereotype.Component;
 
 @Component
 public class InterimPaymentAndMovingLoanDsrCalc implements DsrCalculator {
 
-    @Override
-    public DsrCalcResult calculateDsr(DsrCalcServiceRequest.LoanStatus loanStatus) {
-        return null;
-    }
+    private static final int MAX_TERM_FOR_BULLET = 300;
+    private static final int MAX_TERM_FOR_EQUALPRINCIPAL_AND_AMORTIZING = 300;
 
     @Override
     public LoanType getLoanType() {
         return LoanType.INTERIM_PAYMENT_AND_MOVING;
+    }
+
+    @Override
+    public int getMaxTermForBullet() {
+        return MAX_TERM_FOR_BULLET;
+    }
+
+    @Override
+    public int getMaxTermForEqualPrincipalAndAmortizing() {
+        return MAX_TERM_FOR_EQUALPRINCIPAL_AND_AMORTIZING;
     }
 }
