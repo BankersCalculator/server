@@ -22,4 +22,20 @@ public class DsrCommonCalculator {
             .annualInterestRepayment(annalInterestRepayment)
             .build();
     }
+
+    public DsrCalcResult dsrCalcForBulletLoanWithoutPrincipalRepayment(DsrCalcServiceRequest.LoanStatus loanStatus) {
+        double principal = loanStatus.getPrincipal();
+        int term = loanStatus.getTerm();
+        double interestRate = loanStatus.getInterestRate();
+
+        double annualPrincipalRepayment = 0;
+        double annalInterestRepayment = principal * interestRate;
+
+        return DsrCalcResult.builder()
+            .principal(principal)
+            .term(term)
+            .annualPrincipalRepayment(annualPrincipalRepayment)
+            .annualInterestRepayment(annalInterestRepayment)
+            .build();
+    }
 }

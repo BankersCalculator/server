@@ -7,8 +7,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class NonHousingRealEstateCollateralLoanDsrCalc implements DsrCalculator {
 
-    private static final int MAX_TERM_FOR_BULLET = 60;
-    private static final int MAX_TERM_FOR_EQUALPRINCIPAL_AND_AMORTIZING = 120;
+    private static final int MAX_TERM_FOR_BULLET = 96;
+    private static final int MAX_TERM_FOR_EQUALPRINCIPAL_AND_AMORTIZING = 96;
 
     @Override
     public LoanType getLoanType() {

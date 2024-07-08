@@ -25,7 +25,9 @@ public interface DsrCalculator {
             dsrCalcResult = dsrCalcForBulletLoan.dsrCalcForBulletLoan(loanStatus, maxTermForBullet);
         } else {
             int maxTermForEqualPrincipalAndAmortizing = getMaxTermForEqualPrincipalAndAmortizing();
-            dsrCalcResult = dsrCalcForBulletLoan.dsrCalcForBulletLoan(loanStatus, maxTermForEqualPrincipalAndAmortizing);
+
+            // TODO: 메서드 변경할것
+//            dsrCalcResult = dsrCalcForBulletLoan.dsrCalcForBulletLoan(loanStatus, maxTermForEqualPrincipalAndAmortizing);
         }
         return dsrCalcResult;
     }
