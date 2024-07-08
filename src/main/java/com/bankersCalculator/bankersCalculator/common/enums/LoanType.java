@@ -8,6 +8,7 @@ import lombok.Getter;
 public enum LoanType {
     MORTGAGE("주택담보대출"),
     INTERIM_PAYMENT_AND_MOVING("중도금 및 이주비"),
+    OFFICETEL_MORTGAGE_LOAN("오피스텔담보대출"),
     JEONSE_LOAN("전세대출"),    // 전세는 우리나라만의 제도라 영문명칭도 JEONSE라고 함.
     JEONSE_DEPOSIT_COLLATERAL_LOAN("전세보증금담보대출"),
     PERSONAL_LOAN("신용대출"),

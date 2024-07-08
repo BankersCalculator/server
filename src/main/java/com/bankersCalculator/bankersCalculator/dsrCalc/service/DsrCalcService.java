@@ -28,6 +28,8 @@ public class DsrCalcService {
             DsrCalculator calculator = dsrCalculatorFactory.getCalculator(loanStatus.getLoanType());
             DsrCalcResult dsrCalcResult = calculator.calculateDsr(loanStatus);
 
+            log.info(Double.toString(dsrCalcResult.getAnnualPrincipalRepayment()));
+            log.info(Double.toString(dsrCalcResult.getAnnualInterestRepayment()));
             dsrCalcResult.setSerial(++totalLoanCount);
             totalDsrAmount += dsrCalcResult.getAnnualPrincipalRepayment();
             totalDsrAmount += dsrCalcResult.getAnnualInterestRepayment();

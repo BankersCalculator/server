@@ -5,14 +5,15 @@ import com.bankersCalculator.bankersCalculator.dsrCalc.calculator.DsrCalculator;
 import org.springframework.stereotype.Component;
 
 @Component
-public class PersonalLoanDsrCalc implements DsrCalculator {
+public class OfficetelMortgageLoanDsrCalc implements DsrCalculator {
 
-    private static final int MAX_TERM_FOR_BULLET = 60;
-    private static final int MAX_TERM_FOR_EQUALPRINCIPAL_AND_AMORTIZING = 120;
+    private static final int MAX_TERM_FOR_BULLET = 96;
+    private static final int MAX_TERM_FOR_EQUALPRINCIPAL_AND_AMORTIZING = -1;
+
 
     @Override
     public LoanType getLoanType() {
-        return LoanType.PERSONAL_LOAN;
+        return LoanType.OFFICETEL_MORTGAGE_LOAN;
     }
 
     @Override

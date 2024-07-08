@@ -5,14 +5,30 @@ import com.bankersCalculator.bankersCalculator.dsrCalc.dto.DsrCalcServiceRequest
 import org.springframework.stereotype.Component;
 
 @Component
-public class CommonCalculator {
+public class DsrCommonCalculator {
 
-    public DsrCalcResult calcForBulletLoan(DsrCalcServiceRequest.LoanStatus loanStatus, int maxTerm) {
+    public DsrCalcResult dsrCalcForBulletLoan(DsrCalcServiceRequest.LoanStatus loanStatus, int maxTerm) {
         double principal = loanStatus.getPrincipal();
         int term = loanStatus.getTerm();
         double interestRate = loanStatus.getInterestRate();
 
         double annualPrincipalRepayment = principal / maxTerm * 12;
+        double annalInterestRepayment = principal * interestRate;
+
+        return DsrCalcResult.builder()
+            .principal(principal)
+            .term(term)
+            .annualPrincipalRepayment(annualPrincipalRepayment)
+            .annualInterestRepayment(annalInterestRepayment)
+            .build();
+    }
+
+    public DsrCalcResult dsrCalcForBulletLoanWithoutPrincipalRepayment(DsrCalcServiceRequest.LoanStatus loanStatus) {
+        double principal = loanStatus.getPrincipal();
+        int term = loanStatus.getTerm();
+        double interestRate = loanStatus.getInterestRate();
+
+        double annualPrincipalRepayment = 0;
         double annalInterestRepayment = principal * interestRate;
 
         return DsrCalcResult.builder()
