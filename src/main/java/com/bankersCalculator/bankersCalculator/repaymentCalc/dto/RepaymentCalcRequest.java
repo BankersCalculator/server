@@ -24,6 +24,9 @@ public class RepaymentCalcRequest {
 //    @Range(min = 0, max = 20)
     private double interestRatePercentage; // 연이자율
 
+    private double maturityPaymentAmount;
+
+
 
     public RepaymentCalcServiceRequest toServiceRequest() {
         return RepaymentCalcServiceRequest.builder()
@@ -32,6 +35,7 @@ public class RepaymentCalcRequest {
             .term(term)
             .gracePeriod(gracePeriod)
             .interestRate(interestRatePercentage / 100)
+            .maturityPaymentAmount(maturityPaymentAmount)
             .build();
     }
 }
