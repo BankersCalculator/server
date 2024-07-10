@@ -20,7 +20,15 @@ public class LongTermCardLoanDsrCalc implements DsrCalculator {
 
         if (repaymentType == RepaymentType.BULLET) {
             int term = Math.min(loanStatus.getTerm(), getMaxTermForBullet());
-            dsrCalcResult = dsrCalcForBulletLoan.dsrCalcForBulletLoan(loanStatus, term);
+            dsrCalcResult = dsrCommonCaclulator.dsrCalcForBulletLoan(loanStatus, term);
+        }
+        if (repaymentType == RepaymentType.AMORTIZING) {
+            int term = Math.min(loanStatus.getTerm(), getMaxTermForEqualPrincipalAndAmortizing());
+            dsrCalcResult = dsrCommonCaclulator.dsrCalcForAmortizingLoan(loanStatus, term);
+        }
+        if (repaymentType == RepaymentType.EQUAL_PRINCIPAL) {
+            int term = Math.min(loanStatus.getTerm(), getMaxTermForEqualPrincipalAndAmortizing());
+            dsrCalcResult = dsrCommonCaclulator.dsrCalcForEqualPrincipalLoan(loanStatus, term);
         }
         return dsrCalcResult;
     }

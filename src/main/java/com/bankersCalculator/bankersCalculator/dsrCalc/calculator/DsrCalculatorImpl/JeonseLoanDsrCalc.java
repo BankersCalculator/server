@@ -1,7 +1,6 @@
 package com.bankersCalculator.bankersCalculator.dsrCalc.calculator.DsrCalculatorImpl;
 
 import com.bankersCalculator.bankersCalculator.common.enums.LoanType;
-import com.bankersCalculator.bankersCalculator.common.enums.RepaymentType;
 import com.bankersCalculator.bankersCalculator.dsrCalc.calculator.DsrCalculator;
 import com.bankersCalculator.bankersCalculator.dsrCalc.domain.DsrCalcResult;
 import com.bankersCalculator.bankersCalculator.dsrCalc.dto.DsrCalcServiceRequest;
@@ -15,14 +14,7 @@ public class JeonseLoanDsrCalc implements DsrCalculator {
 
     @Override
     public DsrCalcResult calculateDsr(DsrCalcServiceRequest.LoanStatus loanStatus) {
-        RepaymentType repaymentType = loanStatus.getRepaymentType();
-        DsrCalcResult dsrCalcResult = DsrCalcResult.builder().build();
-
-        if (repaymentType == RepaymentType.BULLET) {
-            dsrCalcResult = dsrCalcForBulletLoan.dsrCalcForBulletLoanWithoutPrincipalRepayment(loanStatus);
-        }
-
-        return dsrCalcResult;
+        return dsrCommonCaclulator.dsrCalcWithoutPrincipalRepayment(loanStatus);
     }
 
     @Override

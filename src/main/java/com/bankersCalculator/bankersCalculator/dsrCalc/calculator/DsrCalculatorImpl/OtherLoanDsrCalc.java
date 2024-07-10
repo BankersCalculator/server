@@ -17,10 +17,16 @@ public class OtherLoanDsrCalc implements DsrCalculator {
     public DsrCalcResult calculateDsr(DsrCalcServiceRequest.LoanStatus loanStatus) {
         RepaymentType repaymentType = loanStatus.getRepaymentType();
         DsrCalcResult dsrCalcResult = DsrCalcResult.builder().build();
+        int term = loanStatus.getTerm();
 
         if (repaymentType == RepaymentType.BULLET) {
-            int term = loanStatus.getTerm();
-            dsrCalcResult = dsrCalcForBulletLoan.dsrCalcForBulletLoan(loanStatus, term);
+            dsrCalcResult = dsrCommonCaclulator.dsrCalcForBulletLoan(loanStatus, term);
+        }
+        if (repaymentType == RepaymentType.AMORTIZING) {
+            dsrCalcResult = dsrCommonCaclulator.dsrCalcForAmortizingLoan(loanStatus, term);
+        }
+        if (repaymentType == RepaymentType.EQUAL_PRINCIPAL) {
+            dsrCalcResult = dsrCommonCaclulator.dsrCalcForEqualPrincipalLoan(loanStatus, term);
         }
         return dsrCalcResult;
     }
