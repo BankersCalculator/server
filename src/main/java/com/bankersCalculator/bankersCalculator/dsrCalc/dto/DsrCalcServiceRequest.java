@@ -2,6 +2,7 @@ package com.bankersCalculator.bankersCalculator.dsrCalc.dto;
 
 import com.bankersCalculator.bankersCalculator.common.enums.LoanType;
 import com.bankersCalculator.bankersCalculator.common.enums.RepaymentType;
+import com.bankersCalculator.bankersCalculator.repaymentCalc.dto.RepaymentCalcServiceRequest;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -28,9 +29,21 @@ public class DsrCalcServiceRequest {
         private RepaymentType repaymentType;
         private LoanType loanType;
         private double principal;
+        private double maturityPaymentAmount;
         private int term;
         private int gracePeriod;
         private int remainingTerm;
         private double interestRate;
+
+        public RepaymentCalcServiceRequest toRepaymentCalcServiceRequest() {
+            return RepaymentCalcServiceRequest.builder()
+                .repaymentType(repaymentType)
+                .principal(principal)
+                .term(term)
+                .gracePeriod(gracePeriod)
+                .interestRate(interestRate)
+                .maturityPaymentAmount(maturityPaymentAmount)
+                .build();
+        }
     }
 }

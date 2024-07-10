@@ -101,6 +101,9 @@ public class RepaymentCalcService {
 
             remainingPrincipal -= principalPayment;
             totalInterest += interestPayment;
+            log.info("total remainingPrincipal {} {}", i, remainingPrincipal);
+
+            log.info("total interest {} {}", i, totalInterest);
 
             RepaymentSchedule repaymentSchedule = RepaymentSchedule.builder()
                 .installmentNumber(i)
@@ -112,6 +115,8 @@ public class RepaymentCalcService {
 
             repaymentScheduleList.add(repaymentSchedule);
         }
+
+        log.info("hello?? {}", Double.toString(totalInterest));
 
         return RepaymentCalcResponse.builder()
             .repaymentScheduleList(repaymentScheduleList)
