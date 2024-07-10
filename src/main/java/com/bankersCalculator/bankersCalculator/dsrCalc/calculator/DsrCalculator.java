@@ -4,12 +4,13 @@ import com.bankersCalculator.bankersCalculator.common.enums.LoanType;
 import com.bankersCalculator.bankersCalculator.common.enums.RepaymentType;
 import com.bankersCalculator.bankersCalculator.dsrCalc.domain.DsrCalcResult;
 import com.bankersCalculator.bankersCalculator.dsrCalc.dto.DsrCalcServiceRequest;
+import com.bankersCalculator.bankersCalculator.repaymentCalc.service.RepaymentCalcService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public interface DsrCalculator {
 
     @Autowired
-    DsrCommonCalculator dsrCommonCaclulator = new DsrCommonCalculator();
+    DsrCommonCalculator dsrCommonCaclulator = new DsrCommonCalculator(new RepaymentCalcService());
 
     LoanType getLoanType();
 
