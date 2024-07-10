@@ -14,6 +14,21 @@ public class OtherLoanDsrCalc implements DsrCalculator {
     private static final int MAX_TERM_FOR_EQUALPRINCIPAL_AND_AMORTIZING = -1;
 
     @Override
+    public LoanType getLoanType() {
+        return LoanType.OTHER_LOAN;
+    }
+
+    @Override
+    public int getMaxTermForBullet() {
+        return MAX_TERM_FOR_BULLET;
+    }
+
+    @Override
+    public int getMaxTermForEqualPrincipalAndAmortizing() {
+        return MAX_TERM_FOR_EQUALPRINCIPAL_AND_AMORTIZING;
+    }
+
+    @Override
     public DsrCalcResult calculateDsr(DsrCalcServiceRequest.LoanStatus loanStatus) {
         RepaymentType repaymentType = loanStatus.getRepaymentType();
         DsrCalcResult dsrCalcResult = DsrCalcResult.builder().build();
@@ -29,20 +44,5 @@ public class OtherLoanDsrCalc implements DsrCalculator {
             dsrCalcResult = dsrCommonCaclulator.dsrCalcForEqualPrincipalLoan(loanStatus, term);
         }
         return dsrCalcResult;
-    }
-
-    @Override
-    public LoanType getLoanType() {
-        return LoanType.OTHER_LOAN;
-    }
-
-    @Override
-    public int getMaxTermForBullet() {
-        return MAX_TERM_FOR_BULLET;
-    }
-
-    @Override
-    public int getMaxTermForEqualPrincipalAndAmortizing() {
-        return MAX_TERM_FOR_EQUALPRINCIPAL_AND_AMORTIZING;
     }
 }

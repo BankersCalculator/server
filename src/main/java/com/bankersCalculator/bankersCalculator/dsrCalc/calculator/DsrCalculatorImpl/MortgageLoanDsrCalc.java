@@ -20,6 +20,21 @@ public class MortgageLoanDsrCalc implements DsrCalculator {
     private static final int MAX_TERM_FOR_EQUALPRINCIPAL_AND_AMORTIZING = -1;
 
     @Override
+    public LoanType getLoanType() {
+        return LoanType.MORTGAGE;
+    }
+
+    @Override
+    public int getMaxTermForBullet() {
+        return MAX_TERM_FOR_BULLET;
+    }
+
+    @Override
+    public int getMaxTermForEqualPrincipalAndAmortizing() {
+        return MAX_TERM_FOR_EQUALPRINCIPAL_AND_AMORTIZING;
+    }
+
+    @Override
     public DsrCalcResult calculateDsr(DsrCalcServiceRequest.LoanStatus loanStatus) {
         RepaymentType repaymentType = loanStatus.getRepaymentType();
         DsrCalcResult dsrCalcResult = DsrCalcResult.builder().build();
@@ -29,11 +44,10 @@ public class MortgageLoanDsrCalc implements DsrCalculator {
             dsrCalcResult = dsrCommonCaclulator.dsrCalcForBulletLoan(loanStatus, maxTermForBullet);
         }
         if (repaymentType == RepaymentType.AMORTIZING) {
-            dsrCalcResult = dsrCalcForAmortizingMortgageLoan(loanStatus);
+            dsrCalcResult = dsrCalcForInstallmentRepaymentMortgageLoan(loanStatus);
         }
         if (repaymentType == RepaymentType.EQUAL_PRINCIPAL) {
-            // TODO: 수정 필요
-            dsrCalcResult = dsrCalcForAmortizingMortgageLoan(loanStatus);
+            dsrCalcResult = dsrCalcForInstallmentRepaymentMortgageLoan(loanStatus);
         }
         return dsrCalcResult;
     }
@@ -47,7 +61,7 @@ public class MortgageLoanDsrCalc implements DsrCalculator {
      *  ㄴ 분할상환액 = (대출총액 - 만기상환액) / 대출기간
      *  연이자상환액 = 총이자액 / 대출기간 * 12
      */
-    private DsrCalcResult dsrCalcForAmortizingMortgageLoan(DsrCalcServiceRequest.LoanStatus loanStatus) {
+    private DsrCalcResult dsrCalcForInstallmentRepaymentMortgageLoan(DsrCalcServiceRequest.LoanStatus loanStatus) {
         double principal = loanStatus.getPrincipal();
         double maturityPaymentAmount = loanStatus.getMaturityPaymentAmount();
         int term = loanStatus.getTerm();
@@ -68,20 +82,5 @@ public class MortgageLoanDsrCalc implements DsrCalculator {
             .annualPrincipalRepayment(annualPrincipalRepayment)
             .annualInterestRepayment(annalInterestRepayment)
             .build();
-    }
-
-    @Override
-    public LoanType getLoanType() {
-        return LoanType.MORTGAGE;
-    }
-
-    @Override
-    public int getMaxTermForBullet() {
-        return MAX_TERM_FOR_BULLET;
-    }
-
-    @Override
-    public int getMaxTermForEqualPrincipalAndAmortizing() {
-        return MAX_TERM_FOR_EQUALPRINCIPAL_AND_AMORTIZING;
     }
 }
