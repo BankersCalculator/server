@@ -41,7 +41,9 @@ public class MortgageLoanDsrCalc implements DsrCalculator {
 
         if (repaymentType == RepaymentType.BULLET) {
             int maxTermForBullet = getMaxTermForBullet();
-            dsrCalcResult = dsrCommonCaclulator.dsrCalcForBulletLoan(loanStatus, maxTermForBullet);
+            int actualTerm = loanStatus.getTerm();
+            int term = Math.min(maxTermForBullet, actualTerm);
+            dsrCalcResult = dsrCommonCaclulator.dsrCalcForBulletLoan(loanStatus, term);
         }
         if (repaymentType == RepaymentType.AMORTIZING) {
             dsrCalcResult = dsrCalcForInstallmentRepaymentMortgageLoan(loanStatus);

@@ -18,6 +18,17 @@ public class DsrCalcService {
 
     private final DsrCalculatorFactory dsrCalculatorFactory;
 
+    /***
+     *
+     * @param request
+     * @return DsrCalcResponse
+     *
+     * ***확인이 필요한 사항***
+     * 1. 주담대 원금균등상환 - 거치기간 존재할 경우.
+     *      우리는 거치기간을 고려한 repaymentCalc의 총이자를 기준으로 계산하나
+     *      부동산계산기는 이자계산 시 거치기간 없는 원금균등상환액의 이자를 기준으로 계산함.
+     *      무엇이 맞는 건지..??
+     */
     public DsrCalcResponse dsrCalculate(DsrCalcServiceRequest request) {
         double totalDsrAmount = 0;
         int annualIncome = request.getAnnualIncome();
@@ -28,8 +39,6 @@ public class DsrCalcService {
             DsrCalculator calculator = dsrCalculatorFactory.getCalculator(loanStatus.getLoanType());
             DsrCalcResult dsrCalcResult = calculator.calculateDsr(loanStatus);
 
-            log.info(Double.toString(dsrCalcResult.getAnnualPrincipalRepayment()));
-            log.info(Double.toString(dsrCalcResult.getAnnualInterestRepayment()));
             dsrCalcResult.setSerial(++totalLoanCount);
             totalDsrAmount += dsrCalcResult.getAnnualPrincipalRepayment();
             totalDsrAmount += dsrCalcResult.getAnnualInterestRepayment();
