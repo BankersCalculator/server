@@ -2,6 +2,7 @@ package com.bankersCalculator.bankersCalculator.dsrCalc.service;
 
 import com.bankersCalculator.bankersCalculator.common.enums.LoanType;
 import com.bankersCalculator.bankersCalculator.dsrCalc.calculator.DsrCalculator;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.EnumMap;
@@ -9,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 @Component
+@Slf4j
 public class DsrCalculatorFactory {
 
     private final Map<LoanType, DsrCalculator> calculators;
