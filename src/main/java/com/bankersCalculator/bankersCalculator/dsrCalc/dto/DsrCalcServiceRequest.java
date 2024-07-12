@@ -32,7 +32,6 @@ public class DsrCalcServiceRequest {
         private double maturityPaymentAmount;
         private int term;
         private int gracePeriod;
-        private int remainingTerm;
         private double interestRate;
 
         public RepaymentCalcServiceRequest toRepaymentCalcServiceRequest() {

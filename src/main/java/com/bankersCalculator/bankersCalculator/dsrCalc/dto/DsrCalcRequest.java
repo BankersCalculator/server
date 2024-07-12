@@ -31,9 +31,9 @@ public class DsrCalcRequest {
         private RepaymentType repaymentType;
         private LoanType loanType;
         private double principal;
+        private double maturityPaymentAmount;
         private int term;
         private int gracePeriod;
-        private int remainingTerm;
         private double interestRatePercentage;
     }
 
@@ -43,9 +43,9 @@ public class DsrCalcRequest {
                 .repaymentType(loanStatus.getRepaymentType())
                 .loanType(loanStatus.getLoanType())
                 .principal(loanStatus.getPrincipal())
+                .maturityPaymentAmount(loanStatus.maturityPaymentAmount)
                 .term(loanStatus.getTerm())
                 .gracePeriod(loanStatus.getGracePeriod())
-                .remainingTerm(loanStatus.getRemainingTerm())
                 .interestRate(loanStatus.getInterestRatePercentage() / 100)
                 .build())
             .collect(Collectors.toList());

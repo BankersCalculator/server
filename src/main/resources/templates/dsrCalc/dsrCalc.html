@@ -37,16 +37,16 @@
                     <input type="number" th:id="${'principal' + stat.index}" th:field="*{loanStatusList[__${stat.index}__].principal}" class="form-control" required>
                 </div>
                 <div class="mb-3">
+                    <label th:for="${'maturityPaymentAmount' + stat.index}" class="form-label">만기 상환금</label>
+                    <input type="number" th:id="${'maturityPaymentAmount' + stat.index}" th:field="*{loanStatusList[__${stat.index}__].maturityPaymentAmount}" class="form-control" required>
+                </div>
+                <div class="mb-3">
                     <label th:for="${'term' + stat.index}" class="form-label">기간 (개월)</label>
                     <input type="number" th:id="${'term' + stat.index}" th:field="*{loanStatusList[__${stat.index}__].term}" class="form-control" required>
                 </div>
                 <div class="mb-3">
                     <label th:for="${'gracePeriod' + stat.index}" class="form-label">거치 기간 (개월)</label>
                     <input type="number" th:id="${'gracePeriod' + stat.index}" th:field="*{loanStatusList[__${stat.index}__].gracePeriod}" class="form-control">
-                </div>
-                <div class="mb-3">
-                    <label th:for="${'remainingTerm' + stat.index}" class="form-label">남은 기간 (개월)</label>
-                    <input type="number" th:id="${'remainingTerm' + stat.index}" th:field="*{loanStatusList[__${stat.index}__].remainingTerm}" class="form-control" required>
                 </div>
                 <div class="mb-3">
                     <label th:for="${'interestRate' + stat.index}" class="form-label">이자율 (%)</label>
@@ -86,7 +86,7 @@
                             <option value="MORTGAGE">주택담보대출</option>
                             <option value="INTERIM_PAYMENT_AND_MOVING">중도금 및 이주비</option>
                             <option value="OFFICETEL_MORTGAGE_LOAN">오피스텔담보대출</option>
-                           <option value="JEONSE_LOAN">전세대출</option>
+                            <option value="JEONSE_LOAN">전세대출</option>
                             <option value="JEONSE_DEPOSIT_COLLATERAL_LOAN">전세보증금담보대출</option>
                             <option value="PERSONAL_LOAN">신용대출</option>
                             <option value="NON_HOUSING_REAL_ESTATE_COLLATERAL_LOAN">비주택 부동산 담보 대출</option>
@@ -102,16 +102,16 @@
                         <input type="number" id="principal${loanCount}" name="loanStatusList[${loanCount}].principal" class="form-control" required>
                     </div>
                     <div class="mb-3">
+                        <label for="maturityPaymentAmount${loanCount}" class="form-label">만기 상환금</label>
+                        <input type="number" id="maturityPaymentAmount${loanCount}" name="loanStatusList[${loanCount}].maturityPaymentAmount" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
                         <label for="term${loanCount}" class="form-label">기간 (개월)</label>
                         <input type="number" id="term${loanCount}" name="loanStatusList[${loanCount}].term" class="form-control" required>
                     </div>
                     <div class="mb-3">
                         <label for="gracePeriod${loanCount}" class="form-label">거치 기간 (개월)</label>
                         <input type="number" id="gracePeriod${loanCount}" name="loanStatusList[${loanCount}].gracePeriod" class="form-control">
-                    </div>
-                    <div class="mb-3">
-                        <label for="remainingTerm${loanCount}" class="form-label">남은 기간 (개월)</label>
-                        <input type="number" id="remainingTerm${loanCount}" name="loanStatusList[${loanCount}].remainingTerm" class="form-control" required>
                     </div>
                     <div class="mb-3">
                         <label for="interestRate${loanCount}" class="form-label">이자율 (%)</label>
