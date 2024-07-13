@@ -5,6 +5,7 @@ import com.bankersCalculator.bankersCalculator.common.enums.RepaymentType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.stream.Collectors;
 @Getter
 @Setter
 @NoArgsConstructor
+@ToString
 public class DsrCalcRequest {
 
     // TODO: @Valid 추가할 것.
@@ -22,14 +24,16 @@ public class DsrCalcRequest {
     private int annualIncome;
 
     @Getter
+    @Setter
     @NoArgsConstructor
+    @ToString
     public static class LoanStatus {
         private RepaymentType repaymentType;
         private LoanType loanType;
         private double principal;
+        private double maturityPaymentAmount;
         private int term;
         private int gracePeriod;
-        private int remainingTerm;
         private double interestRatePercentage;
     }
 
@@ -39,9 +43,9 @@ public class DsrCalcRequest {
                 .repaymentType(loanStatus.getRepaymentType())
                 .loanType(loanStatus.getLoanType())
                 .principal(loanStatus.getPrincipal())
+                .maturityPaymentAmount(loanStatus.maturityPaymentAmount)
                 .term(loanStatus.getTerm())
                 .gracePeriod(loanStatus.getGracePeriod())
-                .remainingTerm(loanStatus.getRemainingTerm())
                 .interestRate(loanStatus.getInterestRatePercentage() / 100)
                 .build())
             .collect(Collectors.toList());

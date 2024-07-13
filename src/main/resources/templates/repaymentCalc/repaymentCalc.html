@@ -14,10 +14,10 @@
             <form th:action="@{/repaymentCalc}" th:object="${repaymentCalcRequest}" method="post">
                 <div class="mb-3">
                     <label for="type" class="form-label">상환 유형</label>
-                    <select id="type" th:field="*{type}" class="form-select">
+                    <select id="type" th:field="*{repaymentType}" class="form-select">
                         <option value="">상환 유형을 선택하세요</option>
-                        <option th:each="typeOpt : ${T(com.bankersCalculator.bankersCalculator.repaymentCalc.dto.RepaymentType).values()}"
-                                th:value="${typeOpt}" th:text="${typeOpt.text}">
+                        <option th:each="typeOpt : ${T(com.bankersCalculator.bankersCalculator.common.enums.RepaymentType).values()}"
+                                th:value="${typeOpt}" th:text="${typeOpt.description}">
                         </option>
                     </select>
                 </div>
@@ -37,7 +37,7 @@
                 </div>
                 <div class="mb-3">
                     <label for="interestRate" class="form-label">연이자율</label>
-                    <input type="number" step="0.01" id="interestRate" th:field="*{getInterestRatePercentage}" class="form-control" placeholder="연이자율을 입력하세요">
+                    <input type="number" step="0.01" id="interestRate" th:field="*{interestRatePercentage}" class="form-control" placeholder="연이자율을 입력하세요">
                 </div>
                 <button class="btn btn-primary w-100" type="submit">산출</button>
             </form>

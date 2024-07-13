@@ -2,17 +2,15 @@ package com.bankersCalculator.bankersCalculator.dsrCalc.service;
 
 import com.bankersCalculator.bankersCalculator.common.enums.LoanType;
 import com.bankersCalculator.bankersCalculator.dsrCalc.calculator.DsrCalculator;
-import com.bankersCalculator.bankersCalculator.dsrCalc.domain.DsrCalcResult;
-import com.bankersCalculator.bankersCalculator.dsrCalc.dto.DsrCalcResponse;
-import com.bankersCalculator.bankersCalculator.dsrCalc.dto.DsrCalcServiceRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
 @Component
+@Slf4j
 public class DsrCalculatorFactory {
 
     private final Map<LoanType, DsrCalculator> calculators;
