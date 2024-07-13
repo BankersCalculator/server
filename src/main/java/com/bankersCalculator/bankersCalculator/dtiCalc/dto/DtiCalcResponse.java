@@ -1,40 +1,24 @@
 package com.bankersCalculator.bankersCalculator.dtiCalc.dto;
 import java.math.BigDecimal;
+import java.util.List;
+
+import com.bankersCalculator.bankersCalculator.dtiCalc.domain.DtiCalcResult;
+import com.bankersCalculator.bankersCalculator.dtiCalc.dto.DtiCalcResponse;
+
+import lombok.Builder;
+import lombok.Getter;
 
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 
 
+@Getter
+@Builder
 public class DtiCalcResponse {
-	private double annualPrincipalAndInterest;
-    private double dtiRatio;
-    private String ctt;
-
-    // 지수제거하여, 숫자 표현 필요한 경우 사용 
-    public BigDecimal getAnnualPrincipalAndInterest() {
-    	return BigDecimal.valueOf(annualPrincipalAndInterest);
-    }
-
-    public void setAnnnualPrincipalAndInterest(double annualPrincipalAndInterest) {
-        this.annualPrincipalAndInterest = annualPrincipalAndInterest;
-    }
-    
-    
-    public double getDtiRatio() {
-        return dtiRatio;
-    }
-
-    public void setDtiRatio(double dtiRatio) {
-        this.dtiRatio = dtiRatio;
-    }
-
-	public void setCtt(String ctt) {
-		// TODO Auto-generated method stub
-		this.ctt = ctt;
-	}
+	private int annualIncome;
+	private int totalLoanCount;
+	private double finalDtiRatio;
+	private List<DtiCalcResult> dtiCalcResultList;
 	
-	public String getCtt() {
-		return ctt;
-	}
+	
+	
 }
