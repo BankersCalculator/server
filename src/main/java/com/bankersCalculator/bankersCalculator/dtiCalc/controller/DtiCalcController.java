@@ -23,7 +23,7 @@ public class DtiCalcController {
         
         return "DtiCalc";
     }
-
+    //action : 스프링 MVC에서 컨트롤러 메서드는 특정 URL 요청을 처리하는 "액션" 역할을 합니다.
     @PostMapping("/dti/result")
     public String dtiCalculate(@ModelAttribute("dtiCalcRequest") DtiCalcRequest request, Model model) {
         DtiCalcResponse response = dtiCalcService.dticalculate(request.toServiceRequest());

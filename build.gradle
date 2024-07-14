@@ -39,6 +39,8 @@ dependencies {
 	developmentOnly 'org.springframework.boot:spring-boot-devtools' //2024-07-07 jegal, 서버를 재시작하지 않아도 클래스를 변경할 때 서버가 자동으로 재가동, 개발 환경에만 적용
 	testCompileOnly 'org.projectlombok:lombok'
 	testAnnotationProcessor 'org.projectlombok:lombok'
+	
+	testImplementation 'org.junit.jupiter:junit-jupiter' 
 }
 
 tasks.named('test') {

@@ -26,7 +26,9 @@ public class DtiCalculatorFactory {
 	public DtiCalculator getCalculator(LoanType loanType) {
         DtiCalculator calculator = calculators.get(loanType);
         if (calculator == null) {
-            throw new RuntimeException("예외처리할것..."); // TODO: exception 생성
+            //throw new RuntimeException("예외처리할것..."); // TODO: exception 생성
+            throw new IllegalArgumentException("해당 대출 유형에 대한 계산기를 찾을 수 없습니다: " + loanType);
+
         }
         return calculator;
     }
