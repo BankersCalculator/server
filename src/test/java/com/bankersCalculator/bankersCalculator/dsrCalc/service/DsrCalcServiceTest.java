@@ -111,7 +111,6 @@ class DsrCalcServiceTest {
                     .principal(principal)
                     .term(term)
                     .gracePeriod(gracePeriod)
-                    .remainingTerm(0)
                     .interestRate(interestRate)
                     .maturityPaymentAmount(maturityPaymentAmount)
                     .build()

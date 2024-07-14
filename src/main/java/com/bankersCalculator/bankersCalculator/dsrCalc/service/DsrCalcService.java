@@ -23,8 +23,7 @@ public class DsrCalcService {
      * @param request
      * @return DsrCalcResponse
      *
-     * ***확인이 필요한 사항***
-     *
+     * TODO: 확인이 필요한 사항
      * 1. 주담대 원금균등상환 - 거치기간 존재할 경우.
      *      본 프로그램은 거치기간을 고려한 repaymentCalc의 총이자를 기준으로 계산하나
      *      부동산계산기는 이자계산 시 거치기간 없는 원금균등상환액의 이자를 기준으로 계산함.
@@ -35,6 +34,11 @@ public class DsrCalcService {
      * 2. 전세대출 원금/원리금균등분할상환
      *      본 프로그램은 전세일 경우 상환구분 없이 연이자율을 곱한 값을 이자액으로 산출하나
      *      부동산계산기는 원금/원리금 계산 후 이자합산액을 기간으로 나눠서 계산함.
+     *
+     * TODO: 개발이 필요한 사항
+     * 1. 스트레스 금리 적용
+     * 2. 초년도 기준(필요없을지도?)
+     * 3. 신DTI 구현(마찬가지로 필요없을 것 같다.)
      */
     public DsrCalcResponse dsrCalculate(DsrCalcServiceRequest request) {
         double totalDsrAmount = 0;
