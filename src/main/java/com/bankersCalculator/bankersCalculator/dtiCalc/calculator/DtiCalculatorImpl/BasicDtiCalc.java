@@ -19,7 +19,7 @@ import com.bankersCalculator.bankersCalculator.repaymentCalc.service.RepaymentCa
 
 //스프링 컨텍스트에 빈으로 등록 
 @Component
-public class MortgageLoanDtiCalc implements DtiCalculator{
+public class BasicDtiCalc implements DtiCalculator{
 	@Autowired
     RepaymentCalcService repaymentCalcService;
 

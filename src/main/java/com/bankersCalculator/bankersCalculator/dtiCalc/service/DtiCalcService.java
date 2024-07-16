@@ -39,7 +39,7 @@ public class DtiCalcService {
     	double totalDtiAmount = 0;
     	int annualIncome = request.getAnnualIncome();
     	int totalLoanCount = 0;
-    	
+    	   
     	List<DtiCalcResult> dtiCalcResultList = new ArrayList<>();
     	for (DtiCalcServiceRequest.LoanStatus loanStatus : request.getLoanStatusList()) {
     		DtiCalculator calculator = dtiCalculatorFactory.getCalculator(loanStatus.getLoanType()); 
