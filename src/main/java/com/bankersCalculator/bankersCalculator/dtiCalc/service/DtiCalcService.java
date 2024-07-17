@@ -9,7 +9,7 @@ import com.bankersCalculator.bankersCalculator.dtiCalc.dto.DtiCalcResponse;
 import com.bankersCalculator.bankersCalculator.dtiCalc.calculator.DtiCalculator;
 import com.bankersCalculator.bankersCalculator.dtiCalc.domain.DtiCalcResult;
 import com.bankersCalculator.bankersCalculator.dtiCalc.dto.DtiCalcServiceRequest;
-import com.bankersCalculator.bankersCalculator.dtiCalc.service.DtiCalculatorFactory;
+import com.bankersCalculator.bankersCalculator.dtiCalc.calculator.DtiCalculator;
 import com.bankersCalculator.bankersCalculator.dtiCalc.domain.DtiCalcResult;
 import com.bankersCalculator.bankersCalculator.dtiCalc.dto.DtiCalcRequest;
 import com.bankersCalculator.bankersCalculator.dtiCalc.dto.DtiCalcResponse;
@@ -23,8 +23,6 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 @Service
-@RequiredArgsConstructor
-
 public class DtiCalcService {
 	
 
@@ -34,19 +32,18 @@ public class DtiCalcService {
 	 * 수정  : 2024-07-13, 리펙토링.  
 	 */
 	
-	private final DtiCalculatorFactory dtiCalculatorFactory;
+	private DtiCalculator dtiCalculator;
     public DtiCalcResponse dticalculate(DtiCalcServiceRequest request) {
     	double totalDtiAmount = 0;
     	int annualIncome = request.getAnnualIncome();
     	int totalLoanCount = 0;
     	   
     	List<DtiCalcResult> dtiCalcResultList = new ArrayList<>();
-    	for (DtiCalcServiceRequest.LoanStatus loanStatus : request.getLoanStatusList()) {
-    		DtiCalculator calculator = dtiCalculatorFactory.getCalculator(loanStatus.getLoanType()); 
-    		DtiCalcResult dtiCalcResult = calculator.calculateDti(loanStatus);
+    	for (DtiCalcServiceRequest.LoanStatus loanStatus : request.getLoanStatusList()) { 
+    		DtiCalcResult dtiCalcResult = dtiCalculator.calculateDti(loanStatus);
     		
     		dtiCalcResult.setSerial(++totalLoanCount);
-    		totalDtiAmount += dtiCalcResult.getAnnualPrincipalRepayment();            totalDtiAmount += dtiCalcResult.getAnnualPrincipalRepayment();
+    		totalDtiAmount += dtiCalcResult.getAnnualPrincipalRepayment();            
             totalDtiAmount += dtiCalcResult.getAnnualInterestRepayment();
 
             dtiCalcResultList.add(dtiCalcResult);

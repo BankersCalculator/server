@@ -5,6 +5,10 @@ import org.springframework.stereotype.Component;
 
 import com.bankersCalculator.bankersCalculator.common.enums.LoanType;
 import com.bankersCalculator.bankersCalculator.common.enums.RepaymentType;
+import com.bankersCalculator.bankersCalculator.dtiCalc.calculator.DtiCommonCalculator;
+import com.bankersCalculator.bankersCalculator.dtiCalc.calculator.DtiCommonCalculator;
+import com.bankersCalculator.bankersCalculator.dtiCalc.domain.DtiCalcResult;
+import com.bankersCalculator.bankersCalculator.dtiCalc.dto.DtiCalcServiceRequest;
 import com.bankersCalculator.bankersCalculator.dtiCalc.domain.DtiCalcResult;
 import com.bankersCalculator.bankersCalculator.dtiCalc.dto.DtiCalcServiceRequest;
 import com.bankersCalculator.bankersCalculator.dtiCalc.calculator.DtiCalculator;
@@ -20,47 +24,67 @@ import com.bankersCalculator.bankersCalculator.repaymentCalc.service.RepaymentCa
 //스프링 컨텍스트에 빈으로 등록 
 @Component
 public class BasicDtiCalc implements DtiCalculator{
+	
 	@Autowired
+    DtiCommonCalculator dtiCommonCaclulator = new DtiCommonCalculator(new RepaymentCalcService());
+	
+    @Autowired
     RepaymentCalcService repaymentCalcService;
 
     private static final int MAX_TERM_FOR_BULLET = 120;
     private static final int MAX_TERM_FOR_EQUALPRINCIPAL_AND_AMORTIZING = -1;
-    
-    @Override
-    public LoanType getLoanType() {
-        return LoanType.MORTGAGE;
-    }
 
-    @Override
+
     public int getMaxTermForBullet() {
         return MAX_TERM_FOR_BULLET;
     }
-
-    @Override
     public int getMaxTermForEqualPrincipalAndAmortizing() {
         return MAX_TERM_FOR_EQUALPRINCIPAL_AND_AMORTIZING;
     }
-    
+
     @Override
     public DtiCalcResult calculateDti(DtiCalcServiceRequest.LoanStatus loanStatus) {
         RepaymentType repaymentType = loanStatus.getRepaymentType();
         DtiCalcResult dtiCalcResult = DtiCalcResult.builder().build();
-
-        if (repaymentType == RepaymentType.BULLET) {
-            int maxTermForBullet = getMaxTermForBullet();
-            int actualTerm = loanStatus.getTerm();
-            int term = Math.min(maxTermForBullet, actualTerm);
-            dtiCalcResult = dtiCommonCalculator.dtiCalcForBulletLoan(loanStatus, term);
+        
+        // 주택담보대출인 경우
+        if (loanStatus.getLoanType() == LoanType.MORTGAGE) {
+            if (repaymentType == RepaymentType.BULLET) {
+                int maxTermForBullet = getMaxTermForBullet();
+                int actualTerm = loanStatus.getTerm();
+                int term = Math.min(maxTermForBullet, actualTerm);
+                dtiCalcResult = dtiCommonCaclulator.dtiCalcForBulletLoan(loanStatus, term);
+            }
+            if (repaymentType == RepaymentType.AMORTIZING) {
+                dtiCalcResult = dtiCalcForInstallmentRepaymentMortgageLoan(loanStatus);
+            }
+            if (repaymentType == RepaymentType.EQUAL_PRINCIPAL) {
+                dtiCalcResult = dtiCalcForInstallmentRepaymentMortgageLoan(loanStatus);
+            }
+            return dtiCalcResult;
+        
+        //나머지 대출에 대해서는 연이자만 계함. 
+        } else {
+        	double principal = loanStatus.getPrincipal();
+        	double interestRatePercentage = loanStatus.getPrincipal();
+        	double annalInterestRepayment = principal * interestRatePercentage; 
+        	dtiCalcResult = DtiCalcResult.builder()
+        			       .principal(principal)
+        			       .annualInterestRepayment(annalInterestRepayment)
+        			       .build();
+        	return dtiCalcResult;
         }
-        if (repaymentType == RepaymentType.AMORTIZING) {
-            dtiCalcResult = dtiCalcForInstallmentRepaymentMortgageLoan(loanStatus);
-        }
-        if (repaymentType == RepaymentType.EQUAL_PRINCIPAL) {
-            dtiCalcResult = dtiCalcForInstallmentRepaymentMortgageLoan(loanStatus);
-        }
-        return dtiCalcResult;
     }
-    
+
+    /***
+     *
+     * @param loanStatus
+     * @return DtiCalcResult
+     *
+     * 연원금상환액 = 분할상환액 + 만기상환액 / (대출기간 - 거치기간)
+     *  ㄴ 분할상환액 = (대출총액 - 만기상환액) / 대출기간
+     *  연이자상환액 = 총이자액 / 대출기간 * 12
+     */
     private DtiCalcResult dtiCalcForInstallmentRepaymentMortgageLoan(DtiCalcServiceRequest.LoanStatus loanStatus) {
         double principal = loanStatus.getPrincipal();
         double maturityPaymentAmount = loanStatus.getMaturityPaymentAmount();
