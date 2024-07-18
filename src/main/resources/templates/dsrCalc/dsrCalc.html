@@ -21,14 +21,14 @@
                 <div class="mb-3">
                     <label th:for="${'repaymentType' + stat.index}" class="form-label">상환 유형</label>
                     <select th:id="${'repaymentType' + stat.index}" th:field="*{loanStatusList[__${stat.index}__].repaymentType}" class="form-select">
-                        <option th:each="type : ${T(com.bankersCalculator.bankersCalculator.common.enums.RepaymentType).values()}"
+                        <option th:each="type : ${T(com.bankersCalculator.server.common.enums.RepaymentType).values()}"
                                 th:value="${type}" th:text="${type.description}"></option>
                     </select>
                 </div>
                 <div class="mb-3">
                     <label th:for="${'loanType' + stat.index}" class="form-label">대출 유형</label>
                     <select th:id="${'loanType' + stat.index}" th:field="*{loanStatusList[__${stat.index}__].loanType}" class="form-select">
-                        <option th:each="type : ${T(com.bankersCalculator.bankersCalculator.common.enums.LoanType).values()}"
+                        <option th:each="type : ${T(com.bankersCalculator.server.common.enums.LoanType).values()}"
                                 th:value="${type}" th:text="${type.description}"></option>
                     </select>
                 </div>
