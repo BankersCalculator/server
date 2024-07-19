@@ -1,5 +1,7 @@
 package com.bankersCalculator.server.ltvCalc.service;
 
+import com.bankersCalculator.server.common.enums.ltv.HousingType;
+import com.bankersCalculator.server.common.enums.ltv.RegionType;
 import com.bankersCalculator.server.ltvCalc.dto.LtvCalcServiceRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,14 +28,48 @@ public class LtvCalcService {
      *
      * -- 2. LTV에 따른 최대 한도
      * 그러나.. MVP인 전세대출 추천 서비스에서는 필요 없을 것 같다.
-     * 추후에 만들어도 될듯
+     * 추후에 주담대를 구현할 때 만들어도 될듯.
      * 1. 거주지역에 따른 투기과열/조정대상/기타지역 산정
      * 2. 주택가격, 주택보유수, 부동산관리지역타입을 토대로 지역별 LTV 계산
      * 3. LTV에 따른 최대 한도 계산
      */
     public void ltvCalculate(LtvCalcServiceRequest request) {
         double loanAmount = request.getLoanAmount();
+        double priorMortgage = request.getPriorMortgage();
 
+        double topPriorityRepaymentAmount = getTopPriorityRepaymentAmount(request);
+
+        double ltvRatio = calculateLtvRatio(request, topPriorityRepaymentAmount);
+
+
+    }
+
+    private double getTopPriorityRepaymentAmount(LtvCalcServiceRequest request) {
+        double collateralValue = request.getCollateralValue();
+        HousingType housingType = request.getHousingType();
+        int numbersOfRooms = request.getNumbersOfRooms();
+        RegionType regionType = request.getRegionType();
+        double smallAmountLeaseDeposit = regionType.getSmallAmountLeaseDeposit();
+
+
+        double topPriorityRepaymentAmount = 0.0;
+        double maximumRepaymentAmount = collateralValue / 2;
+
+        if (housingType == HousingType.APARTMENT) {
+            topPriorityRepaymentAmount = smallAmountLeaseDeposit;
+        } else {
+            topPriorityRepaymentAmount = numbersOfRooms * smallAmountLeaseDeposit;
+        }
+
+        return Math.min(topPriorityRepaymentAmount, maximumRepaymentAmount);
+    }
+
+    private double calculateLtvRatio(LtvCalcServiceRequest request, double topPriorityRepaymentAmount) {
+        double collateralValue = request.getCollateralValue();
+        double loanAmount = request.getLoanAmount();
+        double currentLeaseDeposit = request.getCurrentLeaseDeposit();
+
+        return (loanAmount + currentLeaseDeposit + topPriorityRepaymentAmount) / collateralValue;
 
     }
 }

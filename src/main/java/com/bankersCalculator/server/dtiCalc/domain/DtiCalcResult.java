@@ -27,6 +27,4 @@ public class DtiCalcResult {
     public void setSerial(int serial) {
         this.serial = serial;
     }
-
-
 }

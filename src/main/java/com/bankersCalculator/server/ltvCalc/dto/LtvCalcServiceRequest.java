@@ -21,7 +21,8 @@ public class LtvCalcServiceRequest {
     private int numbersOfRooms; // 방 수
     private HousingType housingType; // 주택유형
     private RegionType regionType; // 지역
-    private HouseOwnershipType houseOwnershipType;
-    private LoanPurpose loanPurpose;
+    private double currentLeaseDeposit; // 현재임차보증금
+//    private HouseOwnershipType houseOwnershipType;  // 주택보유유형
+//    private LoanPurpose loanPurpose;    // 대출목적
 
 }
