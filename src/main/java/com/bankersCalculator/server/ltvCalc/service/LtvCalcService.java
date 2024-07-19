@@ -2,20 +2,19 @@ package com.bankersCalculator.server.ltvCalc.service;
 
 import com.bankersCalculator.server.common.enums.ltv.HousingType;
 import com.bankersCalculator.server.common.enums.ltv.RegionType;
+import com.bankersCalculator.server.ltvCalc.dto.LtvCalcResponse;
 import com.bankersCalculator.server.ltvCalc.dto.LtvCalcServiceRequest;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 @Service
-@Slf4j
 @RequiredArgsConstructor
 public class LtvCalcService {
 
     /***
      *
-     * @param request
-     * 어떻게 구현할까...
+     * @param request LTv 계산에 필요한 정보를 담고 있는 요청 객체
+     * @return 계산된 정보를 담은 응답 객체
      *
      * 단순 LTV 계산기 기능과 LTV에 따른 최대한도를 계산하는 기능을 나눠야 할 것 같다.
      * 우선 계산기부터 구현하자
@@ -33,43 +32,40 @@ public class LtvCalcService {
      * 2. 주택가격, 주택보유수, 부동산관리지역타입을 토대로 지역별 LTV 계산
      * 3. LTV에 따른 최대 한도 계산
      */
-    public void ltvCalculate(LtvCalcServiceRequest request) {
-        double loanAmount = request.getLoanAmount();
-        double priorMortgage = request.getPriorMortgage();
+    public LtvCalcResponse ltvCalculate(LtvCalcServiceRequest request) {
 
         double topPriorityRepaymentAmount = getTopPriorityRepaymentAmount(request);
+        double totalLoanExposure = calculateTotalLoanExposure(request, topPriorityRepaymentAmount);
+        double ltvRatio = calculateLtvRatio(request.getCollateralValue(), totalLoanExposure);
 
-        double ltvRatio = calculateLtvRatio(request, topPriorityRepaymentAmount);
-
-
+        return request.toResponse(topPriorityRepaymentAmount, totalLoanExposure, ltvRatio);
     }
 
     private double getTopPriorityRepaymentAmount(LtvCalcServiceRequest request) {
         double collateralValue = request.getCollateralValue();
         HousingType housingType = request.getHousingType();
-        int numbersOfRooms = request.getNumbersOfRooms();
+        int numberOfRooms = request.getNumberOfRooms();
         RegionType regionType = request.getRegionType();
         double smallAmountLeaseDeposit = regionType.getSmallAmountLeaseDeposit();
 
-
-        double topPriorityRepaymentAmount = 0.0;
+        double topPriorityRepaymentAmount;
         double maximumRepaymentAmount = collateralValue / 2;
 
         if (housingType == HousingType.APARTMENT) {
             topPriorityRepaymentAmount = smallAmountLeaseDeposit;
         } else {
-            topPriorityRepaymentAmount = numbersOfRooms * smallAmountLeaseDeposit;
+            topPriorityRepaymentAmount = numberOfRooms * smallAmountLeaseDeposit;
         }
 
         return Math.min(topPriorityRepaymentAmount, maximumRepaymentAmount);
     }
 
-    private double calculateLtvRatio(LtvCalcServiceRequest request, double topPriorityRepaymentAmount) {
-        double collateralValue = request.getCollateralValue();
-        double loanAmount = request.getLoanAmount();
-        double currentLeaseDeposit = request.getCurrentLeaseDeposit();
+    private double calculateTotalLoanExposure(LtvCalcServiceRequest request, double topPriorityRepaymentAmount) {
+        return request.getLoanAmount() + request.getCurrentLeaseDeposit() + topPriorityRepaymentAmount + request.getPriorMortgage();
+    }
 
-        return (loanAmount + currentLeaseDeposit + topPriorityRepaymentAmount) / collateralValue;
+    private double calculateLtvRatio(double collateralValue, double totalLoanExposure) {
+        return totalLoanExposure / collateralValue;
 
     }
 }
