@@ -46,21 +46,25 @@ public class LtvCalcService {
 
     // TODO: 방수차감기준 확인/수정할 것.
     private double getTopPriorityRepaymentAmount(LtvCalcServiceRequest request) {
+        double totalSmallAmountLeaseDeposit = getTotalSmallAmountLeaseDeposit(request);
         double collateralValue = request.getCollateralValue();
+        double maximumRepaymentAmount = collateralValue / 2;
+        return Math.min(totalSmallAmountLeaseDeposit, maximumRepaymentAmount);
+    }
+
+    private double getTotalSmallAmountLeaseDeposit(LtvCalcServiceRequest request) {
         HousingType housingType = request.getHousingType();
-        int numberOfRooms = request.getNumberOfRooms();
         RegionType regionType = request.getRegionType();
         double smallAmountLeaseDeposit = regionType.getSmallAmountLeaseDeposit();
+        int numberOfRooms = request.getNumberOfRooms();
+        double totalSmallAmountLeaseDeposit;
 
-        double topPriorityRepaymentAmount;
         if (housingType == HousingType.APARTMENT) {
-            topPriorityRepaymentAmount = smallAmountLeaseDeposit;
+            totalSmallAmountLeaseDeposit = smallAmountLeaseDeposit;
         } else {
-            topPriorityRepaymentAmount = (numberOfRooms - 1) * smallAmountLeaseDeposit;
+            totalSmallAmountLeaseDeposit =  (numberOfRooms - 1) * smallAmountLeaseDeposit;
         }
-
-        double maximumRepaymentAmount = collateralValue / 2;
-        return Math.min(topPriorityRepaymentAmount, maximumRepaymentAmount);
+        return totalSmallAmountLeaseDeposit;
     }
 
     private double calculateTotalLoanExposure(LtvCalcServiceRequest request, double topPriorityRepaymentAmount) {
