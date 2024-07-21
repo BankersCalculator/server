@@ -2,6 +2,7 @@ package com.bankersCalculator.server.repaymentCalc.dto;
 
 import com.bankersCalculator.server.common.enums.RepaymentType;
 import jakarta.validation.constraints.NotNull;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -24,9 +25,17 @@ public class RepaymentCalcRequest {
 //    @Range(min = 0, max = 20)
     private double interestRatePercentage; // 연이자율
 
-    private double maturityPaymentAmount;
+    private double maturityPaymentAmount; // 만기상환금액
 
-
+    @Builder
+    private RepaymentCalcRequest(RepaymentType repaymentType, double principal, int term, int gracePeriod, double interestRatePercentage, double maturityPaymentAmount) {
+        this.repaymentType = repaymentType;
+        this.principal = principal;
+        this.term = term;
+        this.gracePeriod = gracePeriod;
+        this.interestRatePercentage = interestRatePercentage;
+        this.maturityPaymentAmount = maturityPaymentAmount;
+    }
 
     public RepaymentCalcServiceRequest toServiceRequest() {
         return RepaymentCalcServiceRequest.builder()

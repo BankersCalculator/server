@@ -13,13 +13,13 @@ import static org.springframework.http.HttpStatus.*;
 public class ApiResponse<T> {
 
     private final int code;
-    private final HttpStatus httpStatus;
+    private final HttpStatus status;
     private final String message;
     private final T data;
 
-    public ApiResponse(HttpStatus httpStatus, String message, T data) {
-        this.code = httpStatus.value();
-        this.httpStatus = httpStatus;
+    public ApiResponse(HttpStatus status, String message, T data) {
+        this.code = status.value();
+        this.status = status;
         this.message = message;
         this.data = data;
     }

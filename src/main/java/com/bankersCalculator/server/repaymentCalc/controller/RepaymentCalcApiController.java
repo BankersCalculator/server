@@ -1,5 +1,6 @@
 package com.bankersCalculator.server.repaymentCalc.controller;
 
+import com.bankersCalculator.server.common.api.ApiResponse;
 import com.bankersCalculator.server.repaymentCalc.dto.RepaymentCalcRequest;
 import com.bankersCalculator.server.repaymentCalc.dto.RepaymentCalcResponse;
 import com.bankersCalculator.server.repaymentCalc.service.RepaymentCalcService;
@@ -19,8 +20,8 @@ public class RepaymentCalcApiController {
     private final RepaymentCalcService repaymentCalcService;
 
     @PostMapping
-    public ResponseEntity<RepaymentCalcResponse> calculateRepayment(@ModelAttribute @Valid RepaymentCalcRequest request) {
+    public ApiResponse<RepaymentCalcResponse> calculateRepayment(@Valid @RequestBody RepaymentCalcRequest request) {
         RepaymentCalcResponse repaymentCalcResponse = repaymentCalcService.calculateRepayment(request.toServiceRequest());
-        return ResponseEntity.ok(repaymentCalcResponse);
+        return ApiResponse.ok(repaymentCalcResponse);
     }
 }
