@@ -3,7 +3,6 @@ package com.bankersCalculator.server.dtiCalc.controller;
 import com.bankersCalculator.server.dtiCalc.dto.DtiCalcRequest;
 import com.bankersCalculator.server.dtiCalc.dto.DtiCalcResponse;
 import com.bankersCalculator.server.dtiCalc.service.DtiCalcService;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,15 +13,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 public class DtiCalcController {
 
-	@Autowired
+    @Autowired
     private DtiCalcService dtiCalcService;
 
     @GetMapping("/dti")
     public String showCalcForm(Model model) {
         model.addAttribute("dtiCalcRequest", new DtiCalcRequest());
-        
+
         return "DtiCalc";
     }
+
     //action : 스프링 MVC에서 컨트롤러 메서드는 특정 URL 요청을 처리하는 "액션" 역할을 합니다.
     @PostMapping("/dti/result")
     public String dtiCalculate(@ModelAttribute("dtiCalcRequest") DtiCalcRequest request, Model model) {

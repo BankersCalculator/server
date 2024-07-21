@@ -3,7 +3,7 @@ package com.bankersCalculator.server.common.api;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
-import static org.springframework.http.HttpStatus.*;
+import static org.springframework.http.HttpStatus.OK;
 
 /***
  * ResponseEntity를 대체할 Api 공통 스펙

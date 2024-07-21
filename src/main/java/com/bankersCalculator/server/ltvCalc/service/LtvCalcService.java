@@ -62,7 +62,7 @@ public class LtvCalcService {
         if (housingType == HousingType.APARTMENT) {
             totalSmallAmountLeaseDeposit = smallAmountLeaseDeposit;
         } else {
-            totalSmallAmountLeaseDeposit =  (numberOfRooms - 1) * smallAmountLeaseDeposit;
+            totalSmallAmountLeaseDeposit = (numberOfRooms - 1) * smallAmountLeaseDeposit;
         }
         return totalSmallAmountLeaseDeposit;
     }

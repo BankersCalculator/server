@@ -1,4 +1,5 @@
 package com.bankersCalculator.server.common.enums.ltv;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

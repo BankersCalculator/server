@@ -9,16 +9,17 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class DtiCalcServiceRequest {
-	private List<LoanStatus> loanStatusList;
-	private int annualIncome;
-	
-	
-	@Getter
+    private List<LoanStatus> loanStatusList;
+    private int annualIncome;
+
+
+    @Getter
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
@@ -30,8 +31,8 @@ public class DtiCalcServiceRequest {
         private int term;
         private int gracePeriod;
         private double interestRate;
-        
-        
+
+
         public RepaymentCalcServiceRequest toRepaymentCalcServiceRequest() {
             return RepaymentCalcServiceRequest.builder()
                 .repaymentType(repaymentType)

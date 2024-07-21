@@ -26,6 +26,7 @@ public class ApiControllerAdvice {
             null
         );
     }
+
     /**
      * IllegalArgumentException 공통 처리 메서드
      *
