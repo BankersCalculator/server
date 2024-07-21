@@ -5,10 +5,12 @@ import com.bankersCalculator.server.common.enums.ltv.RegionType;
 import com.bankersCalculator.server.ltvCalc.dto.LtvCalcResponse;
 import com.bankersCalculator.server.ltvCalc.dto.LtvCalcServiceRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class LtvCalcService {
 
     /***
@@ -41,6 +43,8 @@ public class LtvCalcService {
         return request.toResponse(topPriorityRepaymentAmount, totalLoanExposure, ltvRatio);
     }
 
+
+    // TODO: 방수차감기준 확인/수정할 것.
     private double getTopPriorityRepaymentAmount(LtvCalcServiceRequest request) {
         double collateralValue = request.getCollateralValue();
         HousingType housingType = request.getHousingType();
@@ -49,14 +53,13 @@ public class LtvCalcService {
         double smallAmountLeaseDeposit = regionType.getSmallAmountLeaseDeposit();
 
         double topPriorityRepaymentAmount;
-        double maximumRepaymentAmount = collateralValue / 2;
-
         if (housingType == HousingType.APARTMENT) {
             topPriorityRepaymentAmount = smallAmountLeaseDeposit;
         } else {
-            topPriorityRepaymentAmount = numberOfRooms * smallAmountLeaseDeposit;
+            topPriorityRepaymentAmount = (numberOfRooms - 1) * smallAmountLeaseDeposit;
         }
 
+        double maximumRepaymentAmount = collateralValue / 2;
         return Math.min(topPriorityRepaymentAmount, maximumRepaymentAmount);
     }
 
@@ -65,6 +68,9 @@ public class LtvCalcService {
     }
 
     private double calculateLtvRatio(double collateralValue, double totalLoanExposure) {
+        log.info(String.valueOf(collateralValue));
+        log.info(String.valueOf(totalLoanExposure));
+        log.info(String.valueOf(totalLoanExposure / collateralValue));
         return totalLoanExposure / collateralValue;
 
     }

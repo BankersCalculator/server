@@ -25,7 +25,7 @@ class DsrCalcServiceTest {
     private DsrCalcService dsrCalcService;
 
     // DELTA 수준에 따라 검증의 정확도가 달라진다.
-    private final double DELTA = 0.01;
+    private final double DELTA = 0.001;
 
     @DisplayName("DSR 정상 산출 - 모든 대출 유형")
     @MethodSource("provideTestCases")
@@ -51,7 +51,7 @@ class DsrCalcServiceTest {
             Arguments.of(LoanType.INTERIM_PAYMENT_AND_MOVING, RepaymentType.BULLET, 200000000, 0, 240, 0, 0.03, 0.14),
             Arguments.of(LoanType.JEONSE_DEPOSIT_COLLATERAL_LOAN, RepaymentType.BULLET, 200000000, 0, 240, 0, 0.03, 0.56),
             Arguments.of(LoanType.JEONSE_LOAN, RepaymentType.BULLET, 200000000, 0, 240, 0, 0.03, 0.06),
-            Arguments.of(LoanType.LONG_TERM_CARD_LOAN, RepaymentType.BULLET, 200000000, 0, 240, 0, 0.03, 0.72),
+            Arguments.of(LoanType.LONG_TERM_CARD_LOAN, RepaymentType.BULLET, 200000000, 0, 240, 0, 0.03, 0.726),
             Arguments.of(LoanType.MORTGAGE, RepaymentType.BULLET, 200000000, 0, 240, 0, 0.03, 0.26),
             Arguments.of(LoanType.NON_HOUSING_REAL_ESTATE_COLLATERAL_LOAN, RepaymentType.BULLET, 200000000, 0, 240, 0, 0.03, 0.31),
             Arguments.of(LoanType.OFFICETEL_MORTGAGE_LOAN, RepaymentType.BULLET, 200000000, 0, 240, 0, 0.03, 0.31),
@@ -119,8 +119,8 @@ class DsrCalcServiceTest {
     }
 
     private void assertCommonExpectations(DsrCalcResponse response, DsrCalcServiceRequest request, double expectedDsrRatio) {
-        assertEquals(request.getAnnualIncome(), response.getAnnualIncome());
-        assertEquals(request.getLoanStatusList().size(), response.getTotalLoanCount());
+        assertEquals(request.getAnnualIncome(), response.getAnnualIncome(), DELTA);
+        assertEquals(request.getLoanStatusList().size(), response.getTotalLoanCount(), DELTA);
         assertEquals(expectedDsrRatio, response.getFinalDsrRatio(), DELTA);
     }
 }
