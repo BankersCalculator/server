@@ -16,7 +16,7 @@
                     <label for="type" class="form-label">상환 유형</label>
                     <select id="type" th:field="*{repaymentType}" class="form-select">
                         <option value="">상환 유형을 선택하세요</option>
-                        <option th:each="typeOpt : ${T(com.bankersCalculator.bankersCalculator.common.enums.RepaymentType).values()}"
+                        <option th:each="typeOpt : ${T(com.bankersCalculator.server.common.enums.RepaymentType).values()}"
                                 th:value="${typeOpt}" th:text="${typeOpt.description}">
                         </option>
                     </select>
