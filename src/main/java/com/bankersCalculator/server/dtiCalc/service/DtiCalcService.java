@@ -5,6 +5,8 @@ import com.bankersCalculator.server.dtiCalc.calculator.DtiCalculator;
 import com.bankersCalculator.server.dtiCalc.domain.DtiCalcResult;
 import com.bankersCalculator.server.dtiCalc.dto.DtiCalcResponse;
 import com.bankersCalculator.server.dtiCalc.dto.DtiCalcServiceRequest;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -19,7 +21,8 @@ public class DtiCalcService {
      * 개발자 : 제갈명필
      * 수정  : 2024-07-13, 리펙토링.
      */
-
+	
+	@Autowired
     private DtiCalculator dtiCalculator;
 
     public DtiCalcResponse dticalculate(DtiCalcServiceRequest request) {
