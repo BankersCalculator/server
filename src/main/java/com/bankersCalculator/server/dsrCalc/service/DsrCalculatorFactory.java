@@ -9,6 +9,8 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.bankersCalculator.server.common.message.ExceptionMessage.NO_SUCH_CALCULATOR;
+
 @Component
 @Slf4j
 public class DsrCalculatorFactory {
@@ -25,7 +27,7 @@ public class DsrCalculatorFactory {
     public DsrCalculator getCalculator(LoanType loanType) {
         DsrCalculator calculator = calculators.get(loanType);
         if (calculator == null) {
-            throw new RuntimeException("예외처리할것..."); // TODO: exception 생성
+            throw new RuntimeException(NO_SUCH_CALCULATOR); // TODO: exception 생성
         }
         return calculator;
     }

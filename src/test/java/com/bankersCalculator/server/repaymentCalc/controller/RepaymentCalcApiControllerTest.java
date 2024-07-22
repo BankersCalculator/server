@@ -8,6 +8,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
+import static com.bankersCalculator.server.common.message.ValidationMessage.MAX_VALUE_INTEREST_RATE_PERCENTAGE;
+import static com.bankersCalculator.server.common.message.ValidationMessage.NOT_NULL_REPAYMENT_TYPE;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -89,7 +91,7 @@ class RepaymentCalcApiControllerTest extends ControllerTestSupport {
             .andDo(print())
             .andExpect(jsonPath("$.code").value("400"))
             .andExpect(jsonPath("$.status").value("BAD_REQUEST"))
-            .andExpect(jsonPath("$.message").value("상환 유형은 필수입니다."));
+            .andExpect(jsonPath("$.message").value(NOT_NULL_REPAYMENT_TYPE));
     }
 
     @DisplayName("만기일시상환 비정상 테스트")
@@ -114,7 +116,7 @@ class RepaymentCalcApiControllerTest extends ControllerTestSupport {
             .andDo(print())
             .andExpect(jsonPath("$.code").value("400"))
             .andExpect(jsonPath("$.status").value("BAD_REQUEST"))
-            .andExpect(jsonPath("$.message").value("연이자율은 20%를 초과할 수 없습니다."));
+            .andExpect(jsonPath("$.message").value(MAX_VALUE_INTEREST_RATE_PERCENTAGE));
     }
 
 

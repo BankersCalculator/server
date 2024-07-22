@@ -7,31 +7,33 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import static com.bankersCalculator.server.common.message.ValidationMessage.*;
+
 @Getter
 @Setter
 @NoArgsConstructor
 public class RepaymentCalcRequest {
 
 
-    @NotNull(message = "상환 유형은 필수입니다.")
+    @NotNull(message = NOT_NULL_REPAYMENT_TYPE)
     private RepaymentType repaymentType;
 
-    @NotNull(message = "원금은 필수입니다.")
-    @Min(value = 1000000, message = "원금은 1백만원 이상이어야 합니다.")
-    @Max(value = 10000000000L, message = "원금은  100억원을 초과할 수 없습니다.")
+    @NotNull(message = NOT_NULL_PRINCIPAL)
+    @Min(value = 1000000, message = MIN_VALUE_PRINCIPAL)
+    @Max(value = 10000000000L, message = MAX_VALUE_PRINCIPAL)
     private double principal; // 원금
 
-    @NotNull(message = "기간은 필수입니다.")
-    @Min(value = 1, message = "기간은 1개월 이상이어야 합니다.")
-    @Max(value = 600, message = "기간은 600개월을 초과할 수 없습니다.")
+    @NotNull(message = NOT_NULL_TERM)
+    @Min(value = 1, message = MIN_VALUE_TERM)
+    @Max(value = 600, message = MAX_VALUE_TERM)
     private int term; // 기간(개월수)
 
-    @Max(value = 600, message = "거치기간은 600개월을 초과할 수 없습니다.")
+    @Max(value = 600, message = MAX_VALUE_GRACE_PERIOD)
     private int gracePeriod; // 거치기간
 
-    @NotNull(message = "연이자율은 필수입니다.")
-    @DecimalMin(value = "0.0", inclusive = false, message = "연이자율은 0보다 커야 합니다.")
-    @DecimalMax(value = "20.0", message = "연이자율은 20%를 초과할 수 없습니다.")
+    @NotNull(message = NOT_NULL_INTEREST_RATE_PERCENTAGE)
+    @DecimalMin(value = "0.0", inclusive = false, message = MIN_VALUE_INTEREST_RATE_PERCENTAGE)
+    @DecimalMax(value = "20.0", message = MAX_VALUE_INTEREST_RATE_PERCENTAGE)
     private double interestRatePercentage; // 연이자율
 
     private double maturityPaymentAmount; // 만기상환금액
