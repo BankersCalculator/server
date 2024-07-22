@@ -1,0 +1,38 @@
+package com.bankersCalculator.server.dsrCalc.cotroller;
+
+import com.bankersCalculator.server.dsrCalc.dto.DsrCalcRequest;
+import com.bankersCalculator.server.dsrCalc.dto.DsrCalcResponse;
+import com.bankersCalculator.server.dsrCalc.service.DsrCalcService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+@Controller
+@RequiredArgsConstructor
+@Slf4j
+@RequestMapping("/dsrCalc")
+public class DsrCalcController {
+
+    private final DsrCalcService dsrCalcService;
+
+    @GetMapping
+    public String dsrMain(Model model) {
+        model.addAttribute("dsrCalcRequest", new DsrCalcRequest());
+        return "dsrCalc/dsrCalc.html";
+    }
+
+    @PostMapping()
+    public String dsrCalculate(@ModelAttribute("dsrCalcRequest") DsrCalcRequest dsrCalcRequest, Model model) {
+
+        DsrCalcResponse dsrCalcResponse = dsrCalcService.dsrCalculate(dsrCalcRequest.toServiceRequest());
+        model.addAttribute("dsrCalcResponse", dsrCalcResponse);
+        return "dsrCalc/dsrCalcResult.html";
+    }
+}
+
+
