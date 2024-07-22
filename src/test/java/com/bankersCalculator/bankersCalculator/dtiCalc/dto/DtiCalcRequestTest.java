@@ -38,11 +38,6 @@ public class DtiCalcRequestTest {
         
 
         DtiCalcServiceRequest serviceRequest = request.toServiceRequest();
-        System.out.println("serviceRequest.getLoanStatusList().size() : " + serviceRequest.getLoanStatusList().size());
-        System.out.println("serviceRequest.getLoanStatusList().get(0).getRepaymentType() : " + serviceRequest.getLoanStatusList().get(0).getRepaymentType());
-        System.out.println("serviceRequest.getLoanStatusList().get(0).getLoanType() : " + serviceRequest.getLoanStatusList().get(0).getLoanType());
-        System.out.println("serviceRequest.getLoanStatusList().get(0).getInterestRate() : " + serviceRequest.getLoanStatusList().get(0).getInterestRate());
-        System.out.println("serviceRequest.getLoanStatusList().get(1).getInterestRate() : " + serviceRequest.getLoanStatusList().get(1).getInterestRate());
         
         assertEquals(RepaymentType.BULLET, serviceRequest.getLoanStatusList().get(0).getRepaymentType());
         assertEquals(LoanType.MORTGAGE, serviceRequest.getLoanStatusList().get(0).getLoanType());
