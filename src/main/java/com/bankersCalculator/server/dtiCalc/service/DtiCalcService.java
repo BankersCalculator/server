@@ -9,6 +9,8 @@ import com.bankersCalculator.server.dtiCalc.dto.DtiCalcServiceRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,19 +31,29 @@ public class DtiCalcService {
         double totalDtiAmount = 0;
         int annualIncome = request.getAnnualIncome();
         int totalLoanCount = 0;
+        DecimalFormat decimalFormat = new DecimalFormat("#,###");
+        
 
+        
         List<DtiCalcResult> dtiCalcResultList = new ArrayList<>();
         for (DtiCalcServiceRequest.LoanStatus loanStatus : request.getLoanStatusList()) {
-            DtiCalcResult dtiCalcResult = dtiCalculator.calculateDti(loanStatus);
+            //입력값 체크 -> 투입값 정상
+        	//System.out.println(loanStatus.getLoanType());
+        	//System.out.println(loanStatus.getRepaymentType());
+        	
+        	DtiCalcResult dtiCalcResult = dtiCalculator.calculateDti(loanStatus);
 
             dtiCalcResult.setSerial(++totalLoanCount);
             totalDtiAmount += dtiCalcResult.getAnnualPrincipalRepayment();
             totalDtiAmount += dtiCalcResult.getAnnualInterestRepayment();
+            
+         	
+            System.out.println(decimalFormat.format(totalDtiAmount));
 
             dtiCalcResultList.add(dtiCalcResult);
         }
 
-        double totalDtiRatio = (totalDtiAmount / annualIncome);
+        double totalDtiRatio = (totalDtiAmount / annualIncome) * 100;
 
         return DtiCalcResponse.builder()
             .annualIncome(annualIncome)

@@ -5,12 +5,16 @@ import com.bankersCalculator.server.dtiCalc.dto.DtiCalcServiceRequest;
 import com.bankersCalculator.server.repaymentCalc.dto.RepaymentCalcResponse;
 import com.bankersCalculator.server.repaymentCalc.service.RepaymentCalcService;
 import lombok.RequiredArgsConstructor;
+
+import java.text.DecimalFormat;
+
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
 public class DtiCommonCalculator {
     private final RepaymentCalcService repaymentCalcService;
+    DecimalFormat decimalFormat = new DecimalFormat("#,###");
 
 
     //만기일시상환
@@ -21,6 +25,10 @@ public class DtiCommonCalculator {
 
         double annualPrincipalRepayment = principal / maxTerm * 12;
         double annalInterestRepayment = principal * interestRate;
+        
+        System.out.println("DtiCommonCalculator, principal : " + annalInterestRepayment + " term : " + term + " interestRate : " + interestRate);  
+        System.out.println("annualPrincipalRepayment : " + decimalFormat.format(annualPrincipalRepayment));
+        System.out.println("annalInterestRepayment : " + annalInterestRepayment);
 
         return DtiCalcResult.builder()
             .principal(principal)

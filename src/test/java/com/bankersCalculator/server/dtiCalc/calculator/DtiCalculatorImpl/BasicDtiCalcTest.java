@@ -1,55 +1,108 @@
-//package com.bankersCalculator.bankersCalculator.dtiCalc.calculator.DtiCalculatorImpl;
-//import static org.junit.jupiter.api.Assertions.assertEquals;
-//import static org.mockito.Mockito.when;
-//
-//import com.bankersCalculator.bankersCalculator.dtiCalc.dto.DtiCalcServiceRequest;
-//import com.bankersCalculator.bankersCalculator.dtiCalc.domain.DtiCalcResult;
-//import com.bankersCalculator.bankersCalculator.repaymentCalc.dto.RepaymentCalcResponse;
-//import com.bankersCalculator.bankersCalculator.repaymentCalc.service.RepaymentCalcService;
-//
-//import org.junit.jupiter.api.BeforeEach;
-//import org.junit.jupiter.api.Test;
-//import org.mockito.InjectMocks;
-//import org.mockito.Mock;
-//import org.mockito.MockitoAnnotations;
-//
-//
-//public class BasicDtiCalcTest {
-//	@Mock
-//    private RepaymentCalcService repaymentCalcService;
-//
-//	@InjectMocks
-//    private BasicDtiCalc basicDtiCalc;
-//
-//	@BeforeEach
-//    public void setUp() {
-//        MockitoAnnotations.openMocks(this);
-//    }
-//
-//	@Test
-//    public void testCalculate() {
-//        DtiCalcServiceRequest.LoanStatus loanStatus = DtiCalcServiceRequest.LoanStatus.builder()
-//            .principal(5000000)
-//            .maturityPaymentAmount(1000000)
-//            .term(30)
-//            .gracePeriod(5)
-//            .interestRate(3.5 / 100)
-//            .build();
-//
-//        RepaymentCalcResponse repaymentCalcResponse = RepaymentCalcResponse.builder()
-//            .totalInterest(100000)
-//            .build();
-//
-//        when(repaymentCalcService.calculateRepayment(loanStatus.toRepaymentCalcServiceRequest()))
-//            .thenReturn(repaymentCalcResponse);
-//
-//        DtiCalcResult result = basicDtiCalc.calculateDti(loanStatus);
-//
-//        assertEquals(5000000, result.getPrincipal(), 0.01);
-//        assertEquals(30, result.getTerm());
-//        assertEquals(200000.00, result.getAnnualPrincipalRepayment(), 0.01);
-//        assertEquals(3333.33, result.getAnnualInterestRepayment(), 0.01);
-//    }
-//
-//
-//}
+package com.bankersCalculator.server.dtiCalc.calculator.DtiCalculatorImpl;
+
+import com.bankersCalculator.server.common.enums.LoanType;
+import com.bankersCalculator.server.common.enums.RepaymentType;
+import com.bankersCalculator.server.dtiCalc.calculator.DtiCalculatorImpl.BasicDtiCalc;
+import com.bankersCalculator.server.dtiCalc.domain.DtiCalcResult;
+import com.bankersCalculator.server.dtiCalc.dto.DtiCalcServiceRequest;
+import com.bankersCalculator.server.repaymentCalc.dto.RepaymentCalcResponse;
+import com.bankersCalculator.server.repaymentCalc.service.RepaymentCalcService;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.text.DecimalFormat;
+
+@SpringBootTest
+public class BasicDtiCalcTest {
+
+    @Autowired
+    private BasicDtiCalc basicDtiCalc;
+
+
+
+
+    @BeforeEach
+    public void setUp() {
+        // Optional setup code if necessary
+    }
+    
+    DecimalFormat decimalFormat = new DecimalFormat("#,###");
+
+    @Test
+    public void testCalculateDti_withMortgageAndBullet() {
+        DtiCalcServiceRequest.LoanStatus loanStatus = DtiCalcServiceRequest.LoanStatus.builder()
+                .loanType(LoanType.MORTGAGE)
+                .principal(400000000)
+                .term(120)
+                .interestRate(0.03)
+                .repaymentType(RepaymentType.BULLET)
+                .maturityPaymentAmount(0)
+                .gracePeriod(0)
+                .build();
+
+        DtiCalcResult result = basicDtiCalc.calculateDti(loanStatus);
+        
+        
+
+        assertNotNull(result);
+        System.out.println("Principal: " + decimalFormat.format(result.getPrincipal()));
+        System.out.println("Annual Interest Repayment: " + decimalFormat.format(result.getAnnualInterestRepayment()));
+        System.out.println("Annual Principal Repayment: " + decimalFormat.format(result.getAnnualPrincipalRepayment()));
+        //assertTrue(result.getAnnualInterestRepayment() > 0);
+        
+        //네이버 DTI, 만기상환 MAX = 120개월인 경우 
+        assertEquals(12000000, result.getAnnualInterestRepayment(), 10);
+        assertEquals(40000000, result.getAnnualPrincipalRepayment(), 10);
+    }
+    
+    @Test
+    public void testCalculateDti_withMortgageAndAmortizing() {
+        DtiCalcServiceRequest.LoanStatus loanStatus = DtiCalcServiceRequest.LoanStatus.builder()
+                .loanType(LoanType.MORTGAGE)
+                .principal(400000000)
+                .term(120)
+                .interestRate(0.03)
+                .repaymentType(RepaymentType.AMORTIZING)
+                .maturityPaymentAmount(0)
+                .gracePeriod(0)
+                .build();
+
+        
+
+        DtiCalcResult result = basicDtiCalc.calculateDti(loanStatus);
+
+        assertNotNull(result);
+        
+        System.out.println("Annual Interest Repayment: " + decimalFormat.format(result.getAnnualInterestRepayment()));
+        System.out.println("Annual Principal Repayment: " + decimalFormat.format(result.getAnnualPrincipalRepayment()));
+        
+        assertEquals(6349158, result.getAnnualInterestRepayment(), 10);
+        assertEquals(40000000, result.getAnnualPrincipalRepayment(), 10);
+    }
+    
+    @Test
+    public void testCalculateDti_withOtherLoan() {
+        DtiCalcServiceRequest.LoanStatus loanStatus = DtiCalcServiceRequest.LoanStatus.builder()
+                .loanType(LoanType.OTHER_LOAN)
+                .principal(40000000)
+                .term(120)
+                .interestRate(0.03)
+                .repaymentType(RepaymentType.EQUAL_PRINCIPAL)
+                .maturityPaymentAmount(0)
+                .gracePeriod(0)
+                .build();
+
+        DtiCalcResult result = basicDtiCalc.calculateDti(loanStatus);
+
+        assertNotNull(result);
+        
+        System.out.println("Annual Interest Repayment: " + decimalFormat.format(result.getAnnualInterestRepayment()));
+        System.out.println("Annual Principal Repayment: " + decimalFormat.format(result.getAnnualPrincipalRepayment()));
+
+        assertEquals(1200000, result.getAnnualInterestRepayment(), 10);
+    }
+}
