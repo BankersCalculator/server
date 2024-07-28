@@ -60,7 +60,7 @@ public class RepaymentCalcService {
                 .principalPayment(principalPayment)
                 .interestPayment(monthlyInterest)
                 .totalPayment(principalPayment + monthlyInterest)
-                .remainingPrinciple(remainingPrincipal)
+                .remainingPrincipal(remainingPrincipal)
                 .build();
             repaymentScheduleList.add(repaymentSchedule);
         }
@@ -107,7 +107,7 @@ public class RepaymentCalcService {
                 .principalPayment(principalPayment)
                 .interestPayment(interestPayment)
                 .totalPayment(totalPayment)
-                .remainingPrinciple(remainingPrincipal)
+                .remainingPrincipal(remainingPrincipal)
                 .build();
 
             repaymentScheduleList.add(repaymentSchedule);
@@ -155,7 +155,7 @@ public class RepaymentCalcService {
                 .principalPayment(principalPayment)
                 .interestPayment(interestPayment)
                 .totalPayment(totalPayment)
-                .remainingPrinciple(remainingPrincipal)
+                .remainingPrincipal(remainingPrincipal)
                 .build();
 
             repaymentScheduleList.add(repaymentSchedule);

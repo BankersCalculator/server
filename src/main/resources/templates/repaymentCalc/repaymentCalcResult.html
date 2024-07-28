@@ -37,7 +37,7 @@
                 <td th:text="${#numbers.formatDecimal(schedule.principalPayment, 0, 'COMMA', 0, 'POINT')}"></td>
                 <td th:text="${#numbers.formatDecimal(schedule.interestPayment, 0, 'COMMA', 0, 'POINT')}"></td>
                 <td th:text="${#numbers.formatDecimal(schedule.totalPayment, 0, 'COMMA', 0, 'POINT')}"></td>
-                <td th:text="${#numbers.formatDecimal(schedule.remainingPrinciple, 0, 'COMMA', 0, 'POINT')}"></td>
+                <td th:text="${#numbers.formatDecimal(schedule.getRemainingPrincipal, 0, 'COMMA', 0, 'POINT')}"></td>
             </tr>
             </tbody>
         </table>

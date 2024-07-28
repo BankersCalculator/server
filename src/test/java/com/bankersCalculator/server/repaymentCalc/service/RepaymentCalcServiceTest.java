@@ -62,12 +62,12 @@ class RepaymentCalcServiceTest {
                 // 최종회차 상환금
                 assertEquals(principal, schedule.getPrincipalPayment(), delta);
                 assertEquals(expectedMonthlyInterest + principal, schedule.getTotalPayment(), delta);
-                assertEquals(0.0, schedule.getRemainingPrinciple(), delta);
+                assertEquals(0.0, schedule.getRemainingPrincipal(), delta);
             } else {
                 // 일반회차 상환금
                 assertEquals(0, schedule.getPrincipalPayment(), delta);
                 assertEquals(expectedMonthlyInterest, schedule.getTotalPayment(), delta);
-                assertEquals(principal, schedule.getRemainingPrinciple(), delta);
+                assertEquals(principal, schedule.getRemainingPrincipal(), delta);
             }
         }
     }
@@ -115,7 +115,7 @@ class RepaymentCalcServiceTest {
         assertEquals(expectedMonthlyPayment, repaymentScheduleList.get(2).getTotalPayment(), delta);
 
         // 최종회차 잔금 테스트
-        assertEquals(0, repaymentScheduleList.get(11).getRemainingPrinciple(), delta);
+        assertEquals(0, repaymentScheduleList.get(11).getRemainingPrincipal(), delta);
 
         // 매월 원리금 금액 테스트
         for (int i = gracePeriod; i < term; i++) {
@@ -177,7 +177,7 @@ class RepaymentCalcServiceTest {
         assertEquals(expectedMonthlyPayment, repaymentScheduleList.get(2).getTotalPayment(), delta);
 
         // 최종회차 잔금 테스트
-        assertEquals(0, repaymentScheduleList.get(11).getRemainingPrinciple(), delta);
+        assertEquals(0, repaymentScheduleList.get(11).getRemainingPrincipal(), delta);
 
         // 매월 원리금 금액 테스트
         for (int i = gracePeriod; i < term; i++) {
@@ -260,7 +260,7 @@ class RepaymentCalcServiceTest {
         assertEquals(expectedTotalInterest, totalInterest, delta);
 
         // 최종회차 잔금 테스트
-        assertEquals(0, repaymentScheduleList.get(11).getRemainingPrinciple(), delta);
+        assertEquals(0, repaymentScheduleList.get(11).getRemainingPrincipal(), delta);
 
         // 총 상환액 테스트
         double totalPayments = repaymentScheduleList.stream().mapToDouble(RepaymentSchedule::getTotalPayment).sum();
@@ -331,7 +331,7 @@ class RepaymentCalcServiceTest {
         assertEquals(expectedTotalInterest, totalInterest, delta);
 
         // 최종회차 잔금 테스트
-        assertEquals(0, repaymentScheduleList.get(11).getRemainingPrinciple(), delta);
+        assertEquals(0, repaymentScheduleList.get(11).getRemainingPrincipal(), delta);
 
         // 총 상환액 테스트
         double totalPayments = repaymentScheduleList.stream().mapToDouble(RepaymentSchedule::getTotalPayment).sum();

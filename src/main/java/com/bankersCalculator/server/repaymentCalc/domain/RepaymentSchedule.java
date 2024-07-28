@@ -10,14 +10,14 @@ public class RepaymentSchedule {
     private double principalPayment;
     private double interestPayment;
     private double totalPayment;
-    private double remainingPrinciple;
+    private double remainingPrincipal;
 
     @Builder
-    public RepaymentSchedule(int installmentNumber, double principalPayment, double interestPayment, double totalPayment, double remainingPrinciple) {
+    public RepaymentSchedule(int installmentNumber, double principalPayment, double interestPayment, double totalPayment, double remainingPrincipal) {
         this.installmentNumber = installmentNumber;
         this.principalPayment = principalPayment;
         this.interestPayment = interestPayment;
         this.totalPayment = totalPayment;
-        this.remainingPrinciple = remainingPrinciple;
+        this.remainingPrincipal = remainingPrincipal;
     }
 }
