@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
 //스프링 컨텍스트에 빈으로 등록 
 @Component
 public class BasicDtiCalc implements DtiCalculator {
-
+    
     @Autowired
     DtiCommonCalculator dtiCommonCaclulator = new DtiCommonCalculator(new RepaymentCalcService());
 
@@ -44,11 +44,13 @@ public class BasicDtiCalc implements DtiCalculator {
 
         // 주택담보대출인 경우
         if (loanStatus.getLoanType() == LoanType.MORTGAGE) {
+        	
             if (repaymentType == RepaymentType.BULLET) {
                 int maxTermForBullet = getMaxTermForBullet();
                 int actualTerm = loanStatus.getTerm();
                 int term = Math.min(maxTermForBullet, actualTerm);
                 dtiCalcResult = dtiCommonCaclulator.dtiCalcForBulletLoan(loanStatus, term);
+                
             }
             if (repaymentType == RepaymentType.AMORTIZING) {
                 dtiCalcResult = dtiCalcForInstallmentRepaymentMortgageLoan(loanStatus);
@@ -61,7 +63,7 @@ public class BasicDtiCalc implements DtiCalculator {
             //나머지 대출에 대해서는 연이자만 계함.
         } else {
             double principal = loanStatus.getPrincipal();
-            double interestRatePercentage = loanStatus.getPrincipal();
+            double interestRatePercentage = loanStatus.getInterestRate();
             double annalInterestRepayment = principal * interestRatePercentage;
             dtiCalcResult = DtiCalcResult.builder()
                 .principal(principal)
