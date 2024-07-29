@@ -1,0 +1,12 @@
+[[repaymentCalc]]
+=== 원리금 상환 계산 API
+
+==== HTTP Request
+
+include::{snippets}/repayment-calc/http-request.adoc[]
+include::{snippets}/repayment-calc/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/repayment-calc/http-response.adoc[]
+include::{snippets}/repayment-calc/response-fields.adoc[]

@@ -1,0 +1,19 @@
+ifndef::snippets[]
+:snippets: ./build/generated-snippets
+endif::[]
+= BankersCalculator REST API 문서
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 2
+:sectlinks:
+
+include::overview.adoc[]
+
+
+[[RepaymentCalc-API]]
+== RepaymentCalc API
+
+include::api/repayment-calc/repayment-calc.adoc[]
+
