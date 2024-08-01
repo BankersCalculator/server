@@ -1,9 +1,10 @@
 package com.bankersCalculator.server.dtiCalc.service;
 
+import com.bankersCalculator.server.calculator.dtiCalc.service.DtiCalcService;
 import com.bankersCalculator.server.common.enums.LoanType;
 import com.bankersCalculator.server.common.enums.RepaymentType;
-import com.bankersCalculator.server.dtiCalc.dto.DtiCalcResponse;
-import com.bankersCalculator.server.dtiCalc.dto.DtiCalcServiceRequest;
+import com.bankersCalculator.server.calculator.dtiCalc.dto.DtiCalcResponse;
+import com.bankersCalculator.server.calculator.dtiCalc.dto.DtiCalcServiceRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

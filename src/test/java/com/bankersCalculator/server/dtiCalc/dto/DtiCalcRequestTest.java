@@ -2,6 +2,8 @@ package com.bankersCalculator.server.dtiCalc.dto;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import com.bankersCalculator.server.calculator.dtiCalc.dto.DtiCalcRequest;
+import com.bankersCalculator.server.calculator.dtiCalc.dto.DtiCalcServiceRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 

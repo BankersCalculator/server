@@ -1,7 +1,7 @@
 package com.bankersCalculator.server;
 
-import com.bankersCalculator.server.repaymentCalc.controller.RepaymentCalcApiController;
-import com.bankersCalculator.server.repaymentCalc.service.RepaymentCalcService;
+import com.bankersCalculator.server.calculator.repaymentCalc.controller.RepaymentCalcApiController;
+import com.bankersCalculator.server.calculator.repaymentCalc.service.RepaymentCalcService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;

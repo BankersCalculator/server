@@ -1,9 +1,10 @@
 package com.bankersCalculator.server.dsrCalc.service;
 
+import com.bankersCalculator.server.calculator.dsrCalc.service.DsrCalcService;
 import com.bankersCalculator.server.common.enums.LoanType;
 import com.bankersCalculator.server.common.enums.RepaymentType;
-import com.bankersCalculator.server.dsrCalc.dto.DsrCalcResponse;
-import com.bankersCalculator.server.dsrCalc.dto.DsrCalcServiceRequest;
+import com.bankersCalculator.server.calculator.dsrCalc.dto.DsrCalcResponse;
+import com.bankersCalculator.server.calculator.dsrCalc.dto.DsrCalcServiceRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;

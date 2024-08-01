@@ -1,8 +1,9 @@
 package com.bankersCalculator.server.repaymentCalc.service;
 
-import com.bankersCalculator.server.repaymentCalc.domain.RepaymentSchedule;
-import com.bankersCalculator.server.repaymentCalc.dto.RepaymentCalcResponse;
-import com.bankersCalculator.server.repaymentCalc.dto.RepaymentCalcServiceRequest;
+import com.bankersCalculator.server.calculator.repaymentCalc.domain.RepaymentSchedule;
+import com.bankersCalculator.server.calculator.repaymentCalc.dto.RepaymentCalcResponse;
+import com.bankersCalculator.server.calculator.repaymentCalc.dto.RepaymentCalcServiceRequest;
+import com.bankersCalculator.server.calculator.repaymentCalc.service.RepaymentCalcService;
 import com.bankersCalculator.server.common.enums.RepaymentType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -1,11 +1,12 @@
 package com.bankersCalculator.server.repaymentCalc.controller;
 
 import com.bankersCalculator.server.RestDocsSupport;
+import com.bankersCalculator.server.calculator.repaymentCalc.controller.RepaymentCalcApiController;
 import com.bankersCalculator.server.common.enums.RepaymentType;
-import com.bankersCalculator.server.repaymentCalc.domain.RepaymentSchedule;
-import com.bankersCalculator.server.repaymentCalc.dto.RepaymentCalcRequest;
-import com.bankersCalculator.server.repaymentCalc.dto.RepaymentCalcResponse;
-import com.bankersCalculator.server.repaymentCalc.service.RepaymentCalcService;
+import com.bankersCalculator.server.calculator.repaymentCalc.domain.RepaymentSchedule;
+import com.bankersCalculator.server.calculator.repaymentCalc.dto.RepaymentCalcRequest;
+import com.bankersCalculator.server.calculator.repaymentCalc.dto.RepaymentCalcResponse;
+import com.bankersCalculator.server.calculator.repaymentCalc.service.RepaymentCalcService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;

@@ -2,10 +2,9 @@ package com.bankersCalculator.server.repaymentCalc.controller;
 
 import com.bankersCalculator.server.ControllerTestSupport;
 import com.bankersCalculator.server.common.enums.RepaymentType;
-import com.bankersCalculator.server.repaymentCalc.dto.RepaymentCalcRequest;
+import com.bankersCalculator.server.calculator.repaymentCalc.dto.RepaymentCalcRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
 import static com.bankersCalculator.server.common.message.ValidationMessage.MAX_VALUE_INTEREST_RATE_PERCENTAGE;

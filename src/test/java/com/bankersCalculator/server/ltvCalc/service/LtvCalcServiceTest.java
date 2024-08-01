@@ -1,9 +1,10 @@
 package com.bankersCalculator.server.ltvCalc.service;
 
+import com.bankersCalculator.server.calculator.ltvCalc.service.LtvCalcService;
 import com.bankersCalculator.server.common.enums.ltv.HousingType;
 import com.bankersCalculator.server.common.enums.ltv.RegionType;
-import com.bankersCalculator.server.ltvCalc.dto.LtvCalcResponse;
-import com.bankersCalculator.server.ltvCalc.dto.LtvCalcServiceRequest;
+import com.bankersCalculator.server.calculator.ltvCalc.dto.LtvCalcResponse;
+import com.bankersCalculator.server.calculator.ltvCalc.dto.LtvCalcServiceRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
