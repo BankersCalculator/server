@@ -8,7 +8,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Service
-public class ProductComparisonService {
+public class ProductComparator {
 
     public List<LoanProduct> compareProducts(List<LoanProduct> productList) {
 

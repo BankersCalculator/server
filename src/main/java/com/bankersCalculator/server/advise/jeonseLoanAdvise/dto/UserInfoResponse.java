@@ -18,7 +18,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class LoanAdviseServiceRequest {
+public class UserInfoResponse {
 
     // 고객 정보
     private int age;    // 만나이

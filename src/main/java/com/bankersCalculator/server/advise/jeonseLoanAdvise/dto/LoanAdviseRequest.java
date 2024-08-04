@@ -18,7 +18,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class LoanAdviseServiceRequest {
+public class LoanAdviseRequest {
 
     // 고객 정보
     private int age;    // 만나이
@@ -47,4 +47,27 @@ public class LoanAdviseServiceRequest {
     private long priorDepositAndClaims; // 선순위임차보증금 and 선순위채권
     private boolean isNetAssetOver345M; // 순자산 3.45억 초과 여부
 
+    public LoanAdviseServiceRequest toServiceRequest() {
+        return LoanAdviseServiceRequest.builder()
+            .age(age)
+            .annualIncome(annualIncome)
+            .maritalStatus(maritalStatus)
+            .newlyWedding(newlyWedding)
+            .weddingDate(weddingDate)
+            .spouseAnnualIncome(spouseAnnualIncome)
+            .cashOnHand(cashOnHand)
+            .childStatus(childStatus)
+            .hasNewborn(hasNewborn)
+            .worksForSME(worksForSME)
+            .housingType(housingType)
+            .rentalArea(rentalArea)
+            .regionType(regionType)
+            .propertyName(propertyName)
+            .individualRentalArea(individualRentalArea)
+            .rentalCostList(rentalCostList)
+            .housingPrice(housingPrice)
+            .priorDepositAndClaims(priorDepositAndClaims)
+            .isNetAssetOver345M(isNetAssetOver345M)
+            .build();
+    }
 }

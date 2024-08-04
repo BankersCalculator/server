@@ -10,7 +10,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Service
-public class ProductFilteringService {
+public class ProductFilter {
 
     private final LoanProductRepository loanProductRepository;
 
