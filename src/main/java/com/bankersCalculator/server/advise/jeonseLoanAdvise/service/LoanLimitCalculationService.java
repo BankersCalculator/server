@@ -18,7 +18,7 @@ public class LoanLimitCalculationService {
 
         List<LoanProduct> loanProducts = loanProductRepository.findAll();
         for (LoanProduct loanProduct : loanProducts) {
-            loanProduct.filtering();
+            loanProduct.calculateLoanLimit();
         }
 
         return null;
