@@ -1,8 +1,8 @@
-package com.bankersCalculator.server.advise.jeonseLoanAdvise.service;
+package com.bankersCalculator.server.advise.loanAdvise.service;
 
-import com.bankersCalculator.server.advise.jeonseLoanAdvise.domain.LoanProduct;
-import com.bankersCalculator.server.advise.jeonseLoanAdvise.dto.LoanAdviseServiceRequest;
-import com.bankersCalculator.server.advise.jeonseLoanAdvise.repository.LoanProductRepository;
+import com.bankersCalculator.server.advise.loanAdvise.model.LoanProduct;
+import com.bankersCalculator.server.advise.loanAdvise.dto.LoanAdviseServiceRequest;
+import com.bankersCalculator.server.advise.loanAdvise.repository.LoanProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

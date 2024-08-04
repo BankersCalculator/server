@@ -1,4 +1,4 @@
-package com.bankersCalculator.server.advise.jeonseLoanAdvise.domain;
+package com.bankersCalculator.server.advise.loanAdvise.model;
 
 public interface LoanProduct {
 

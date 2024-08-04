@@ -1,8 +1,10 @@
-package com.bankersCalculator.server.advise.jeonseLoanAdvise.service;
+package com.bankersCalculator.server.advise.loanAdvise.service;
 
-import com.bankersCalculator.server.advise.jeonseLoanAdvise.domain.LoanAdvise;
-import com.bankersCalculator.server.advise.jeonseLoanAdvise.domain.LoanProduct;
-import com.bankersCalculator.server.advise.jeonseLoanAdvise.dto.LoanAdviseServiceRequest;
+import com.bankersCalculator.server.advise.loanAdvise.domain.LoanAdviseResult;
+import com.bankersCalculator.server.advise.loanAdvise.model.LoanProduct;
+import com.bankersCalculator.server.advise.loanAdvise.dto.LoanAdviseServiceRequest;
+import com.bankersCalculator.server.advise.loanAdvise.dto.UserInputInfoResponse;
+import com.bankersCalculator.server.advise.loanAdvise.dto.UserInputInfoServiceRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -19,7 +21,11 @@ public class LoanAdviseService {
     private final ProductComparator productComparator;
 
 
-    public LoanAdvise generateLoanAdvise(LoanAdviseServiceRequest request) {
+    public UserInputInfoResponse getSubmittedUserInput(UserInputInfoServiceRequest serviceRequest) {
+        return null;
+    }
+
+    public LoanAdviseResult generateLoanAdvise(LoanAdviseServiceRequest request) {
 
         // TODO: List<LoanProduct> 부분 전부 전용 DTO로 변환할 것.. LoanProduct는 각 개별 서비스 안에서 사용하는 것으로 할 것임.
         // 대출 가능 상품을 필터링한다. 불가능한 상품은 filter 사유를 반환한다.
@@ -34,13 +40,11 @@ public class LoanAdviseService {
         AdditionalInformationService 는 ReportGenerationService 의 하위 개념으로 보아도 괜찮을 거 같기도?
          */
 
-
-
-
-
-
-
         return null;
 
+    }
+
+    public LoanAdviseResult generateLoanAdviseOnSpecificLoan(LoanAdviseServiceRequest serviceRequest) {
+        return null;
     }
 }

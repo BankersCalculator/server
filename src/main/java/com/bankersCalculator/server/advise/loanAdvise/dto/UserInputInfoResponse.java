@@ -1,24 +1,21 @@
-package com.bankersCalculator.server.advise.jeonseLoanAdvise.dto;
+package com.bankersCalculator.server.advise.loanAdvise.dto;
 
-import com.bankersCalculator.server.advise.jeonseLoanAdvise.domain.RentalCost;
+import com.bankersCalculator.server.advise.loanAdvise.domain.RentalCost;
+import com.bankersCalculator.server.advise.loanAdvise.domain.UserInputInfo;
 import com.bankersCalculator.server.common.enums.loanAdvise.AreaSize;
 import com.bankersCalculator.server.common.enums.loanAdvise.ChildStatus;
 import com.bankersCalculator.server.common.enums.loanAdvise.MaritalStatus;
 import com.bankersCalculator.server.common.enums.ltv.HousingType;
 import com.bankersCalculator.server.common.enums.ltv.RegionType;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.util.List;
 
 @Getter
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
-public class LoanAdviseServiceRequest {
+public class UserInputInfoResponse {
 
     // 고객 정보
     private int age;    // 만나이
@@ -46,5 +43,29 @@ public class LoanAdviseServiceRequest {
     private long housingPrice;  // 주택가액
     private long priorDepositAndClaims; // 선순위임차보증금 and 선순위채권
     private boolean isNetAssetOver345M; // 순자산 3.45억 초과 여부
+
+    public UserInputInfoResponse of(UserInputInfo info) {
+        return UserInputInfoResponse.builder()
+            .age(info.getAge())
+            .annualIncome(info.getAnnualIncome())
+            .maritalStatus(info.getMaritalStatus())
+            .newlyWedding(info.isNewlyWedding())
+            .weddingDate(info.getWeddingDate())
+            .spouseAnnualIncome(info.getSpouseAnnualIncome())
+            .cashOnHand(info.getCashOnHand())
+            .childStatus(info.getChildStatus())
+            .hasNewborn(info.isHasNewborn())
+            .worksForSME(info.isWorksForSME())
+            .housingType(info.getHousingType())
+            .rentalArea(info.getRentalArea())
+            .regionType(info.getRegionType())
+            .propertyName(info.getPropertyName())
+            .individualRentalArea(info.getIndividualRentalArea())
+            .rentalCostList(info.getRentalCostList())
+            .housingPrice(info.getHousingPrice())
+            .priorDepositAndClaims(info.getPriorDepositAndClaims())
+            .isNetAssetOver345M(info.isNetAssetOver345M())
+            .build();
+    }
 
 }

@@ -1,22 +1,18 @@
-package com.bankersCalculator.server.advise.jeonseLoanAdvise.dto;
+package com.bankersCalculator.server.advise.loanAdvise.dto;
 
-import com.bankersCalculator.server.advise.jeonseLoanAdvise.domain.RentalCost;
+import com.bankersCalculator.server.advise.loanAdvise.domain.RentalCost;
 import com.bankersCalculator.server.common.enums.loanAdvise.AreaSize;
 import com.bankersCalculator.server.common.enums.loanAdvise.ChildStatus;
 import com.bankersCalculator.server.common.enums.loanAdvise.MaritalStatus;
 import com.bankersCalculator.server.common.enums.ltv.HousingType;
 import com.bankersCalculator.server.common.enums.ltv.RegionType;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.util.List;
 
 @Getter
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
 public class LoanAdviseRequest {
 

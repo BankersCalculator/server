@@ -1,6 +1,6 @@
-package com.bankersCalculator.server.advise.jeonseLoanAdvise.domain.loanProductImpl;
+package com.bankersCalculator.server.advise.loanAdvise.model.loanProductImpl;
 
-import com.bankersCalculator.server.advise.jeonseLoanAdvise.domain.LoanProduct;
+import com.bankersCalculator.server.advise.loanAdvise.model.LoanProduct;
 import org.springframework.stereotype.Component;
 
 @Component

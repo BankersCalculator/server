@@ -1,7 +1,6 @@
-package com.bankersCalculator.server.advise.jeonseLoanAdvise.repository;
+package com.bankersCalculator.server.advise.loanAdvise.repository;
 
-import com.bankersCalculator.server.advise.jeonseLoanAdvise.domain.LoanProduct;
-import com.bankersCalculator.server.advise.jeonseLoanAdvise.domain.loanProductImpl.LoanProduct1;
+import com.bankersCalculator.server.advise.loanAdvise.model.LoanProduct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
