@@ -7,6 +7,7 @@ import com.bankersCalculator.server.common.enums.loanAdvise.ChildStatus;
 import com.bankersCalculator.server.common.enums.loanAdvise.MaritalStatus;
 import com.bankersCalculator.server.common.enums.ltv.HousingType;
 import com.bankersCalculator.server.common.enums.ltv.RegionType;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -35,14 +36,15 @@ public class UserInputInfoResponse {
     private RegionType regionType; // 주택위치
     // 부동산실거래가 연동
     private String propertyName;   // 건물명
-    private long individualRentalArea; // 임차전용면적
+    private long manualInputRentalArea; // 임차전용면적
     // 임차비용
     private List<RentalCost> rentalCostList;
 
     // 선택 항목
     private long housingPrice;  // 주택가액
     private long priorDepositAndClaims; // 선순위임차보증금 and 선순위채권
-    private boolean isNetAssetOver345M; // 순자산 3.45억 초과 여부
+//    @JsonProperty("isNetAssetOver345M")
+    private boolean netAssetOver345M; // 순자산 3.45억 초과 여부
 
     public UserInputInfoResponse of(UserInputInfo info) {
         return UserInputInfoResponse.builder()
@@ -60,11 +62,11 @@ public class UserInputInfoResponse {
             .rentalArea(info.getRentalArea())
             .regionType(info.getRegionType())
             .propertyName(info.getPropertyName())
-            .individualRentalArea(info.getIndividualRentalArea())
+            .manualInputRentalArea(info.getManualInputRentalArea())
             .rentalCostList(info.getRentalCostList())
             .housingPrice(info.getHousingPrice())
             .priorDepositAndClaims(info.getPriorDepositAndClaims())
-            .isNetAssetOver345M(info.isNetAssetOver345M())
+            .netAssetOver345M(info.isNetAssetOver345M())
             .build();
     }
 

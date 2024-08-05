@@ -514,7 +514,7 @@ Host: localhost:8080
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 575
+Content-Length: 568
 
 {
   "code" : 200,
@@ -523,19 +523,19 @@ Content-Length: 575
   "data" : {
     "repaymentScheduleList" : [ {
       "installmentNumber" : 1,
-      "principalPayment" : 5545455.0,
+      "principalPayment" : 1000000.0,
       "interestPayment" : 5000000.0,
-      "totalPayment" : 545455.0,
+      "totalPayment" : 500000.0,
       "remainingPrincipal" : 2.95E8
     }, {
       "installmentNumber" : 2,
-      "principalPayment" : 5545455.0,
-      "interestPayment" : 5090909.0,
-      "totalPayment" : 454546.0,
-      "remainingPrincipal" : 2.89909091E8
+      "principalPayment" : 2000000.0,
+      "interestPayment" : 7000000.0,
+      "totalPayment" : 450000.0,
+      "remainingPrincipal" : 2.0E8
     } ],
     "totalPrincipal" : 3.0E8,
-    "totalInterest" : 3.27273E7,
+    "totalInterest" : 3500000.0,
     "totalInstallments" : 60
   }
 }</code></pre>
@@ -583,12 +583,12 @@ Content-Length: 575
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.repaymentScheduleList[].installmentNumber</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">할부 번호</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">할부 순번</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.repaymentScheduleList[].totalPayment</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">총 지불 금액</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">상환 총액</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.repaymentScheduleList[].principalPayment</code></p></td>
@@ -598,12 +598,12 @@ Content-Length: 575
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.repaymentScheduleList[].interestPayment</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">이자 지불액</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">이자 상환액</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.repaymentScheduleList[].remainingPrincipal</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">남은 원금</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">잔여 원금</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.totalPrincipal</code></p></td>
@@ -628,7 +628,7 @@ Content-Length: 575
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2024-07-29 21:52:57 +0900
+Last updated 2024-08-02 01:25:26 +0900
 </div>
 </div>
 </body>

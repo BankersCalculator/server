@@ -60,6 +60,10 @@ public class LoanAdviseResponse {
     }
 
     public static LoanAdviseResponse of(LoanAdviseResult result) {
+
+        long totalLivingCost = result.getMonthlyRent() + result.getMonthlyRent();
+        long calculatedCost = (long) (result.getOpportunityCostOwnFunds() * result.getDepositInterestRate());
+
         return LoanAdviseResponse.builder()
             .loanProductName(result.getLoanProductName())
             .loanProductCode(result.getLoanProductCode())
@@ -70,10 +74,10 @@ public class LoanAdviseResponse {
             .ownFunds(result.getOwnFunds())
             .monthlyInterestCost(result.getMonthlyInterestCost())
             .monthlyRent(result.getMonthlyRent())
-            .totalLivingCost(result.getTotalLivingCost())
+            .totalLivingCost(totalLivingCost)
             .opportunityCostOwnFunds(result.getOpportunityCostOwnFunds())
             .depositInterestRate(result.getDepositInterestRate())
-            .calculatedCost(result.getCalculatedCost())
+            .calculatedCost(calculatedCost)
             .guaranteeInsuranceFee(result.getGuaranteeInsuranceFee())
             .stampDuty(result.getStampDuty())
             .recommendationReason(result.getRecommendationReason())

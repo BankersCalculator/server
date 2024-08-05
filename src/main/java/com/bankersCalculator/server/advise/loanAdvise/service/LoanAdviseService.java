@@ -39,12 +39,10 @@ public class LoanAdviseService {
         AdditionalInformationService 와 ReportGenerationService 도 추가할 것.
         AdditionalInformationService 는 ReportGenerationService 의 하위 개념으로 보아도 괜찮을 거 같기도?
          */
-
         return null;
-
     }
 
-    public LoanAdviseResult generateLoanAdviseOnSpecificLoan(LoanAdviseServiceRequest serviceRequest) {
+    public LoanAdviseResult generateLoanAdviseOnSpecificLoan(String productCode, LoanAdviseServiceRequest serviceRequest) {
         return null;
     }
 }

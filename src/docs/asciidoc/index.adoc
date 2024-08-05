@@ -17,3 +17,14 @@ include::overview.adoc[]
 
 include::api/repayment-calc/repayment-calc.adoc[]
 
+
+
+
+
+[[LoanAdvise-API]]
+== LoanAdvise API
+
+include::api/loan-advise/get-submitted-user-input/get-submitted-user-input.adoc[]
+
+
+
