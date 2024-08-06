@@ -1,5 +1,5 @@
-[[get-submitted-user-input]]
-=== 투입된 유저 INPUT 재조회
+[[generate-loan-advise-on-specific-loan]]
+=== 특정 전세대출 추천 서비스 API
 
 ==== HTTP Request
 

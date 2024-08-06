@@ -99,7 +99,7 @@ public class LoanAdviseService {
             .stampDuty(150000L)
             .recommendationReason("고객님의 소득과 신용도를 고려하여 가장 적합한 상품으로 선정되었습니다.")
             .recommendedProducts(Arrays.asList(
-                RecommendedProduct.builder()
+                RecommendedProductDto.builder()
                     .rank(2)
                     .loanProductName("다른 은행 전세자금대출")
                     .loanProductCode("OTHER001")
@@ -107,7 +107,7 @@ public class LoanAdviseService {
                     .expectedLoanRate(3.7)
                     .notEligibleReason(null)
                     .build(),
-                RecommendedProduct.builder()
+                RecommendedProductDto.builder()
                     .rank(3)
                     .loanProductName("보증금 반환 보증 전세자금대출")
                     .loanProductCode("GUARANTEE001")
@@ -141,7 +141,7 @@ public class LoanAdviseService {
             .stampDuty(150000L)
             .recommendationReason("고객님의 소득과 신용도를 고려하여 가장 적합한 상품으로 선정되었습니다.")
             .recommendedProducts(Arrays.asList(
-                RecommendedProduct.builder()
+                RecommendedProductDto.builder()
                     .rank(2)
                     .loanProductName("다른 은행 전세자금대출")
                     .loanProductCode("OTHER001")
@@ -149,7 +149,7 @@ public class LoanAdviseService {
                     .expectedLoanRate(3.7)
                     .notEligibleReason(null)
                     .build(),
-                RecommendedProduct.builder()
+                RecommendedProductDto.builder()
                     .rank(3)
                     .loanProductName("보증금 반환 보증 전세자금대출")
                     .loanProductCode("GUARANTEE001")

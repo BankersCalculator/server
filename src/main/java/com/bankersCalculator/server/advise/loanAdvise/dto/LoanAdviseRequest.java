@@ -42,7 +42,7 @@ public class LoanAdviseRequest {
     // 선택 항목
     private long housingPrice;  // 주택가액
     private long priorDepositAndClaims; // 선순위임차보증금 and 선순위채권
-    private boolean isNetAssetOver345M; // 순자산 3.45억 초과 여부
+    private Boolean isNetAssetOver345M; // 순자산 3.45억 초과 여부
 
 
 

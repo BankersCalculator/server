@@ -24,7 +24,9 @@ include::api/repayment-calc/repayment-calc.adoc[]
 [[LoanAdvise-API]]
 == LoanAdvise API
 
-include::api/loan-advise/get-submitted-user-input/get-submitted-user-input.adoc[]
+include::api/loan-advise/generate-loan-advise.adoc[]
+include::api/loan-advise/generate-loan-advise-on-specific-loan.adoc[]
+include::api/loan-advise/get-submitted-user-input.adoc[]
 
 
 

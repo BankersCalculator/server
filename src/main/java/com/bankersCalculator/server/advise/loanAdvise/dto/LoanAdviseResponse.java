@@ -43,7 +43,7 @@ public class LoanAdviseResponse {
     private String recommendationReason;
 
     // 기타 추천 상품 리스트
-    private List<RecommendedProduct> recommendedProducts;
+    private List<RecommendedProductDto> recommendedProducts;
 
     // 취급 가능 은행
     private List<Bank> availableBanks;
@@ -77,7 +77,7 @@ public class LoanAdviseResponse {
             .stampDuty(result.getStampDuty())
             .recommendationReason(result.getRecommendationReason())
             .recommendedProducts(result.getRecommendedProducts().stream()
-                .map(ap -> RecommendedProduct.builder()
+                .map(ap -> RecommendedProductDto.builder()
                     .rank(ap.getRank())
                     .loanProductName(ap.getLoanProductName())
                     .loanProductCode(ap.getLoanProductCode())

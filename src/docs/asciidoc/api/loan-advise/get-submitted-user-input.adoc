@@ -1,0 +1,12 @@
+[[get-submitted-user-input]]
+=== 투입된 유저 INPUT 재조회 API
+
+==== HTTP Request
+
+include::{snippets}/loan-advise/get-submitted-user-input/http-request.adoc[]
+include::{snippets}/loan-advise/get-submitted-user-input/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/loan-advise/get-submitted-user-input/http-response.adoc[]
+include::{snippets}/loan-advise/get-submitted-user-input/response-fields.adoc[]

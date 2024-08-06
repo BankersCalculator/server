@@ -2,21 +2,18 @@ package com.bankersCalculator.server.docs;
 
 import com.bankersCalculator.server.RestDocsSupport;
 import com.bankersCalculator.server.advise.loanAdvise.controller.LoanAdviseApiController;
+import com.bankersCalculator.server.advise.loanAdvise.domain.RecommendedProduct;
 import com.bankersCalculator.server.advise.loanAdvise.domain.RentalCost;
-import com.bankersCalculator.server.advise.loanAdvise.dto.RentalCostDto;
-import com.bankersCalculator.server.advise.loanAdvise.dto.UserInputInfoRequest;
-import com.bankersCalculator.server.advise.loanAdvise.dto.UserInputInfoResponse;
+import com.bankersCalculator.server.advise.loanAdvise.dto.*;
 import com.bankersCalculator.server.advise.loanAdvise.service.LoanAdviseService;
 import com.bankersCalculator.server.calculator.repaymentCalc.controller.RepaymentCalcApiController;
 import com.bankersCalculator.server.calculator.repaymentCalc.domain.RepaymentSchedule;
 import com.bankersCalculator.server.calculator.repaymentCalc.dto.RepaymentCalcRequest;
 import com.bankersCalculator.server.calculator.repaymentCalc.dto.RepaymentCalcResponse;
 import com.bankersCalculator.server.calculator.repaymentCalc.service.RepaymentCalcService;
+import com.bankersCalculator.server.common.enums.Bank;
 import com.bankersCalculator.server.common.enums.RepaymentType;
-import com.bankersCalculator.server.common.enums.loanAdvise.AreaSize;
-import com.bankersCalculator.server.common.enums.loanAdvise.ChildStatus;
-import com.bankersCalculator.server.common.enums.loanAdvise.MaritalStatus;
-import com.bankersCalculator.server.common.enums.loanAdvise.UserType;
+import com.bankersCalculator.server.common.enums.loanAdvise.*;
 import com.bankersCalculator.server.common.enums.ltv.HousingType;
 import com.bankersCalculator.server.common.enums.ltv.RegionType;
 import org.junit.jupiter.api.DisplayName;
@@ -27,8 +24,9 @@ import org.springframework.restdocs.payload.JsonFieldType;
 import java.time.LocalDate;
 import java.util.Arrays;
 
+import static com.bankersCalculator.server.common.enums.loanAdvise.UserType.MEMBER;
 import static com.bankersCalculator.server.common.enums.loanAdvise.UserType.NON_MEMBER;
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -36,6 +34,7 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -164,5 +163,219 @@ public class LoanAdviseApiControllerDocsTest extends RestDocsSupport {
                         .description("순자산 3억4500만원 초과 여부")
                 )
             ));
+    }
+
+    @DisplayName("대출 상담 결과 생성")
+    @Test
+    void generateLoanAdvise() throws Exception {
+        LoanAdviseRequest request = createSampleLoanAdviseRequest();
+        LoanAdviseResponse response = createSampleLoanAdviseResponse();
+
+        when(loanAdviseService.generateLoanAdvise(any())).thenReturn(response);
+
+        mockMvc.perform(post(BASE_URL)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+            .andExpect(status().isOk())
+            .andDo(document("loan-advise/generate-loan-advise",
+                preprocessRequest(prettyPrint()),
+                preprocessResponse(prettyPrint()),
+                requestFields(
+                    fieldWithPath("age").type(JsonFieldType.NUMBER).description("만나이"),
+                    fieldWithPath("annualIncome").type(JsonFieldType.NUMBER).description("연소득"),
+                    fieldWithPath("maritalStatus").type(JsonFieldType.STRING).description("혼인상태 (SINGLE, MARRIED, ENGAGED)"),
+                    fieldWithPath("newlyWedding").type(JsonFieldType.BOOLEAN).description("신혼여부"),
+                    fieldWithPath("weddingDate").type(JsonFieldType.ARRAY).description("혼인(예정)일"),
+                    fieldWithPath("spouseAnnualIncome").type(JsonFieldType.NUMBER).description("배우자연소득"),
+                    fieldWithPath("cashOnHand").type(JsonFieldType.NUMBER).description("보유현금"),
+                    fieldWithPath("childStatus").type(JsonFieldType.STRING).description("자녀상태 (NO_CHILD, ONE_CHILD, TWO_CHILD, THREE_OR_MORE_CHILDREN)"),
+                    fieldWithPath("hasNewborn").type(JsonFieldType.BOOLEAN).description("신생아여부"),
+                    fieldWithPath("worksForSME").type(JsonFieldType.BOOLEAN).description("중소기업재직여부"),
+                    fieldWithPath("housingType").type(JsonFieldType.STRING).description("주택타입 (APARTMENT, DETACHED_HOUSE, MULTI_FAMILY_HOUSE, MULTI_HOUSEHOLD_HOUSE, OFFICETEL, OTHER)"),
+                    fieldWithPath("rentalArea").type(JsonFieldType.STRING).description("임차전용면적 (UNDER_85_SQM, OVER_85_SQM)"),
+                    fieldWithPath("regionType").type(JsonFieldType.STRING).description("주택위치 (SEOUL, CAPITAL_AREA, METROPOLITAN_CITY, OTHER_AREAS)"),
+                    fieldWithPath("propertyName").type(JsonFieldType.STRING).description("건물명"),
+                    fieldWithPath("individualRentalArea").type(JsonFieldType.NUMBER).description("임차전용면적"),
+                    fieldWithPath("rentalCostList").type(JsonFieldType.ARRAY).description("임차비용 목록"),
+                    fieldWithPath("rentalCostList[].rentalType").type(JsonFieldType.STRING).description("임대 유형 (JEONSE, BANJEONSE, WOLSE)"),
+                    fieldWithPath("rentalCostList[].rentalDeposit").type(JsonFieldType.NUMBER).description("임대 보증금"),
+                    fieldWithPath("rentalCostList[].monthlyRent").type(JsonFieldType.NUMBER).description("월 임대료"),
+                    fieldWithPath("housingPrice").type(JsonFieldType.NUMBER).description("주택가액"),
+                    fieldWithPath("priorDepositAndClaims").type(JsonFieldType.NUMBER).description("선순위임차보증금 and 선순위채권"),
+                    fieldWithPath("isNetAssetOver345M").type(JsonFieldType.BOOLEAN).description("순자산 3.45억 초과 여부")
+                ),
+                responseFields(
+                    fieldWithPath("code").type(JsonFieldType.NUMBER).description("응답 코드"),
+                    fieldWithPath("status").type(JsonFieldType.STRING).description("응답 상태"),
+                    fieldWithPath("message").type(JsonFieldType.STRING).description("응답 메시지"),
+                    fieldWithPath("data").type(JsonFieldType.OBJECT).description("응답 데이터"),
+                    fieldWithPath("data.loanAdviseResultId").type(JsonFieldType.NUMBER).description("대출 상담 결과 ID"),
+                    fieldWithPath("data.loanProductName").type(JsonFieldType.STRING).description("대출 상품명"),
+                    fieldWithPath("data.loanProductCode").type(JsonFieldType.STRING).description("대출 상품 코드"),
+                    fieldWithPath("data.possibleLoanLimit").type(JsonFieldType.NUMBER).description("가능한 대출 한도"),
+                    fieldWithPath("data.expectedLoanRate").type(JsonFieldType.NUMBER).description("예상 대출 금리"),
+                    fieldWithPath("data.totalRentalDeposit").type(JsonFieldType.NUMBER).description("총 임대 보증금"),
+                    fieldWithPath("data.loanAmount").type(JsonFieldType.NUMBER).description("대출 금액"),
+                    fieldWithPath("data.ownFunds").type(JsonFieldType.NUMBER).description("자기 자금"),
+                    fieldWithPath("data.monthlyInterestCost").type(JsonFieldType.NUMBER).description("월 이자 비용"),
+                    fieldWithPath("data.monthlyRent").type(JsonFieldType.NUMBER).description("월 임대료"),
+                    fieldWithPath("data.totalLivingCost").type(JsonFieldType.NUMBER).description("총 주거 비용"),
+                    fieldWithPath("data.opportunityCostOwnFunds").type(JsonFieldType.NUMBER).description("자기 자금 기회 비용"),
+                    fieldWithPath("data.depositInterestRate").type(JsonFieldType.NUMBER).description("예금 이자율"),
+                    fieldWithPath("data.calculatedCost").type(JsonFieldType.NUMBER).description("계산된 비용"),
+                    fieldWithPath("data.guaranteeInsuranceFee").type(JsonFieldType.NUMBER).description("보증 보험료"),
+                    fieldWithPath("data.stampDuty").type(JsonFieldType.NUMBER).description("인지세"),
+                    fieldWithPath("data.recommendationReason").type(JsonFieldType.STRING).description("추천 이유"),
+                    fieldWithPath("data.recommendedProducts").type(JsonFieldType.ARRAY).description("추천 상품 목록"),
+                    fieldWithPath("data.recommendedProducts[].rank").type(JsonFieldType.NUMBER).description("추천 순위"),
+                    fieldWithPath("data.recommendedProducts[].loanProductName").type(JsonFieldType.STRING).description("대출 상품명"),
+                    fieldWithPath("data.recommendedProducts[].loanProductCode").type(JsonFieldType.STRING).description("대출 상품 코드"),
+                    fieldWithPath("data.recommendedProducts[].possibleLoanLimit").type(JsonFieldType.NUMBER).description("가능한 대출 한도"),
+                    fieldWithPath("data.recommendedProducts[].expectedLoanRate").type(JsonFieldType.NUMBER).description("예상 대출 금리"),
+                    fieldWithPath("data.recommendedProducts[].notEligibleReason").type(JsonFieldType.STRING).optional().description("부적격 사유"),
+                    fieldWithPath("data.availableBanks").type(JsonFieldType.ARRAY).description("이용 가능한 은행 목록"),
+                    fieldWithPath("data.rentalLoanGuide").type(JsonFieldType.STRING).description("전세 대출 가이드")
+                )
+            ));
+    }
+
+    @DisplayName("특정 대출 상품에 대한 대출 상담 결과 생성")
+    @Test
+    void generateLoanAdviseOnSpecificLoan() throws Exception {
+        String productCode = "SAMPLE001";
+        Long userId = 1L;
+        Long adviseResultId = 1L;
+        LoanAdviseResponse response = createSampleLoanAdviseResponse();
+
+        SpecificLoanAdviseRequest request = SpecificLoanAdviseRequest.builder().userId(1L).userType(MEMBER).adviseResultId(200L).build();
+
+        when(loanAdviseService.generateLoanAdviseOnSpecificLoan(anyString(), anyLong(), anyLong())).thenReturn(response);
+
+        mockMvc.perform(post(BASE_URL + "/{productCode}", productCode)
+                .param("userId", userId.toString())
+                .param("adviseResultId", adviseResultId.toString())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+            .andExpect(status().isOk())
+            .andDo(document("loan-advise/generate-loan-advise-on-specific-loan",
+                preprocessRequest(prettyPrint()),
+                preprocessResponse(prettyPrint()),
+                pathParameters(
+                    parameterWithName("productCode").description("대출 상품 코드")
+                ),
+                requestFields(
+                    fieldWithPath("userId").type(JsonFieldType.NUMBER)
+                        .description("사용자 ID"),
+                    fieldWithPath("userType").type(JsonFieldType.STRING)
+                        .description("유저 타입(MEMBER: 회원 / NON_MEMBER: 비회원)"),
+                    fieldWithPath("adviseResultId").type(JsonFieldType.NUMBER)
+                        .description("기존 대출 상담 결과 ID")
+                ),
+                responseFields(
+                    fieldWithPath("code").type(JsonFieldType.NUMBER).description("응답 코드"),
+                    fieldWithPath("status").type(JsonFieldType.STRING).description("응답 상태"),
+                    fieldWithPath("message").type(JsonFieldType.STRING).description("응답 메시지"),
+                    fieldWithPath("data").type(JsonFieldType.OBJECT).description("응답 데이터"),
+                    fieldWithPath("data.loanAdviseResultId").type(JsonFieldType.NUMBER).description("대출 상담 결과 ID"),
+                    fieldWithPath("data.loanProductName").type(JsonFieldType.STRING).description("대출 상품명"),
+                    fieldWithPath("data.loanProductCode").type(JsonFieldType.STRING).description("대출 상품 코드"),
+                    fieldWithPath("data.possibleLoanLimit").type(JsonFieldType.NUMBER).description("가능한 대출 한도"),
+                    fieldWithPath("data.expectedLoanRate").type(JsonFieldType.NUMBER).description("예상 대출 금리"),
+                    fieldWithPath("data.totalRentalDeposit").type(JsonFieldType.NUMBER).description("총 임대 보증금"),
+                    fieldWithPath("data.loanAmount").type(JsonFieldType.NUMBER).description("대출 금액"),
+                    fieldWithPath("data.ownFunds").type(JsonFieldType.NUMBER).description("자기 자금"),
+                    fieldWithPath("data.monthlyInterestCost").type(JsonFieldType.NUMBER).description("월 이자 비용"),
+                    fieldWithPath("data.monthlyRent").type(JsonFieldType.NUMBER).description("월 임대료"),
+                    fieldWithPath("data.totalLivingCost").type(JsonFieldType.NUMBER).description("총 주거 비용"),
+                    fieldWithPath("data.opportunityCostOwnFunds").type(JsonFieldType.NUMBER).description("자기 자금 기회 비용"),
+                    fieldWithPath("data.depositInterestRate").type(JsonFieldType.NUMBER).description("예금 이자율"),
+                    fieldWithPath("data.calculatedCost").type(JsonFieldType.NUMBER).description("계산된 비용"),
+                    fieldWithPath("data.guaranteeInsuranceFee").type(JsonFieldType.NUMBER).description("보증 보험료"),
+                    fieldWithPath("data.stampDuty").type(JsonFieldType.NUMBER).description("인지세"),
+                    fieldWithPath("data.recommendationReason").type(JsonFieldType.STRING).description("추천 이유"),
+                    fieldWithPath("data.recommendedProducts").type(JsonFieldType.ARRAY).description("추천 상품 목록"),
+                    fieldWithPath("data.recommendedProducts[].rank").type(JsonFieldType.NUMBER).description("추천 순위"),
+                    fieldWithPath("data.recommendedProducts[].loanProductName").type(JsonFieldType.STRING).description("대출 상품명"),
+                    fieldWithPath("data.recommendedProducts[].loanProductCode").type(JsonFieldType.STRING).description("대출 상품 코드"),
+                    fieldWithPath("data.recommendedProducts[].possibleLoanLimit").type(JsonFieldType.NUMBER).description("가능한 대출 한도"),
+                    fieldWithPath("data.recommendedProducts[].expectedLoanRate").type(JsonFieldType.NUMBER).description("예상 대출 금리"),
+                    fieldWithPath("data.recommendedProducts[].notEligibleReason").type(JsonFieldType.STRING).optional().description("부적격 사유 (해당되는 경우)"),
+                    fieldWithPath("data.availableBanks").type(JsonFieldType.ARRAY).description("이용 가능한 은행 목록"),
+                    fieldWithPath("data.rentalLoanGuide").type(JsonFieldType.STRING).description("전세 대출 가이드")
+                )
+            ));
+    }
+
+
+    private LoanAdviseRequest createSampleLoanAdviseRequest() {
+        return LoanAdviseRequest.builder()
+            .age(30)
+            .annualIncome(50000000L)
+            .maritalStatus(MaritalStatus.MARRIED)
+            .newlyWedding(true)
+            .weddingDate(LocalDate.of(2023, 1, 1))
+            .spouseAnnualIncome(40000000L)
+            .cashOnHand(20000000L)
+            .childStatus(ChildStatus.ONE_CHILD)
+            .hasNewborn(true)
+            .worksForSME(false)
+            .housingType(HousingType.APARTMENT)
+            .rentalArea(AreaSize.UNDER_85_SQM)
+            .regionType(RegionType.SEOUL)
+            .propertyName("Sample Apartment")
+            .individualRentalArea(75L)
+            .rentalCostList(Arrays.asList(
+                RentalCostDto.builder()
+                    .rentalType(RentalType.JEONSE)
+                    .rentalDeposit(200000000L)
+                    .monthlyRent(0L)
+                    .build()
+            ))
+            .housingPrice(300000000L)
+            .priorDepositAndClaims(50000000L)
+            .isNetAssetOver345M(false)
+            .build();
+    }
+
+    private LoanAdviseResponse createSampleLoanAdviseResponse() {
+        return LoanAdviseResponse.builder()
+            .loanAdviseResultId(1L)
+            .loanProductName("샘플 전세자금대출")
+            .loanProductCode("SAMPLE001")
+            .possibleLoanLimit(200000000.0)
+            .expectedLoanRate(3.5)
+            .totalRentalDeposit(300000000L)
+            .loanAmount(200000000L)
+            .ownFunds(100000000L)
+            .monthlyInterestCost(583333L)
+            .monthlyRent(0L)
+            .totalLivingCost(583333L)
+            .opportunityCostOwnFunds(100000000L)
+            .depositInterestRate(2.5)
+            .calculatedCost(2500000L)
+            .guaranteeInsuranceFee(1000000L)
+            .stampDuty(150000L)
+            .recommendationReason("고객님의 소득과 신용도를 고려하여 가장 적합한 상품으로 선정되었습니다.")
+            .recommendedProducts(Arrays.asList(
+                RecommendedProductDto.builder()
+                    .rank(2)
+                    .loanProductName("다른 은행 전세자금대출")
+                    .loanProductCode("OTHER001")
+                    .possibleLoanLimit(180000000.0)
+                    .expectedLoanRate(3.7)
+                    .notEligibleReason(null)
+                    .build(),
+                RecommendedProductDto.builder()
+                    .rank(3)
+                    .loanProductName("보증금 반환 보증 전세자금대출")
+                    .loanProductCode("GUARANTEE001")
+                    .possibleLoanLimit(220000000.0)
+                    .expectedLoanRate(3.8)
+                    .notEligibleReason("보증금 반환 보증 가입 필요")
+                    .build()
+            ))
+            .availableBanks(Arrays.asList(Bank.KOOMIN, Bank.SHINHAN, Bank.WOORI))
+            .rentalLoanGuide("전세자금대출 이용 시 주의사항:\n1. 대출 기간 동안 이자를 꾸준히 납부해야 합니다.\n2. 전세 계약 만료 시 대출금 상환 계획을 미리 세워야 합니다.")
+            .build();
     }
 }

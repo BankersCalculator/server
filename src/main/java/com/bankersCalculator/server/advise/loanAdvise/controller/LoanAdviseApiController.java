@@ -1,9 +1,6 @@
 package com.bankersCalculator.server.advise.loanAdvise.controller;
 
-import com.bankersCalculator.server.advise.loanAdvise.dto.LoanAdviseRequest;
-import com.bankersCalculator.server.advise.loanAdvise.dto.LoanAdviseResponse;
-import com.bankersCalculator.server.advise.loanAdvise.dto.UserInputInfoRequest;
-import com.bankersCalculator.server.advise.loanAdvise.dto.UserInputInfoResponse;
+import com.bankersCalculator.server.advise.loanAdvise.dto.*;
 import com.bankersCalculator.server.advise.loanAdvise.service.LoanAdviseService;
 import com.bankersCalculator.server.common.api.ApiResponse;
 import lombok.RequiredArgsConstructor;
@@ -33,9 +30,8 @@ public class LoanAdviseApiController {
 
     @PostMapping("/{productCode}")
     public ApiResponse<LoanAdviseResponse> generateLoanAdviseOnSpecificLoan(@PathVariable String productCode,
-                                                               @RequestParam Long userId,
-                                                               @RequestParam Long adviseResultId) {
-        LoanAdviseResponse loanAdviseResponse = loanAdviseService.generateLoanAdviseOnSpecificLoan(productCode, userId, adviseResultId);
+                                                                            @RequestBody SpecificLoanAdviseRequest request) {
+        LoanAdviseResponse loanAdviseResponse = loanAdviseService.generateLoanAdviseOnSpecificLoan(productCode, request.getUserId(), request.getAdviseResultId());
 
         return ApiResponse.ok(loanAdviseResponse);
     }
