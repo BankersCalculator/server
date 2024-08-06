@@ -4,6 +4,7 @@ import com.bankersCalculator.server.advise.loanAdvise.domain.RentalCost;
 import com.bankersCalculator.server.common.enums.loanAdvise.AreaSize;
 import com.bankersCalculator.server.common.enums.loanAdvise.ChildStatus;
 import com.bankersCalculator.server.common.enums.loanAdvise.MaritalStatus;
+import com.bankersCalculator.server.common.enums.loanAdvise.RentalType;
 import com.bankersCalculator.server.common.enums.ltv.HousingType;
 import com.bankersCalculator.server.common.enums.ltv.RegionType;
 import lombok.Builder;
@@ -36,12 +37,14 @@ public class LoanAdviseRequest {
     private String propertyName;   // 건물명
     private long individualRentalArea; // 임차전용면적
     // 임차비용
-    private List<RentalCost> rentalCostList;
+    private List<RentalCostDto> rentalCostList;
 
     // 선택 항목
     private long housingPrice;  // 주택가액
     private long priorDepositAndClaims; // 선순위임차보증금 and 선순위채권
     private boolean isNetAssetOver345M; // 순자산 3.45억 초과 여부
+
+
 
     public LoanAdviseServiceRequest toServiceRequest() {
         return LoanAdviseServiceRequest.builder()

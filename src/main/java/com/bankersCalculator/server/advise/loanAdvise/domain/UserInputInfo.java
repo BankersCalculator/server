@@ -1,5 +1,6 @@
 package com.bankersCalculator.server.advise.loanAdvise.domain;
 
+import com.bankersCalculator.server.advise.loanAdvise.dto.RentalCostDto;
 import com.bankersCalculator.server.common.enums.loanAdvise.AreaSize;
 import com.bankersCalculator.server.common.enums.loanAdvise.ChildStatus;
 import com.bankersCalculator.server.common.enums.loanAdvise.MaritalStatus;
@@ -11,6 +12,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+
 import java.time.LocalDate;
 import java.util.List;
 
@@ -60,5 +62,15 @@ public class UserInputInfo {
     // 선택입력 3종
     private long housingPrice; // 주택 가격
     private long priorDepositAndClaims; // 이전 보증금 및 청구액
-    private boolean isNetAssetOver345M; // 순자산이 3억 4500만원 초과 여부
+    private boolean isNetAssetOver345M; // 순자산이 3억4500만원 초과 여부
+
+    public List<RentalCostDto> getRentalCostDtoList() {
+        return rentalCostList.stream()
+            .map(ap -> RentalCostDto.builder()
+                .rentalType(ap.getRentalType())
+                .rentalDeposit(ap.getRentalDeposit())
+                .monthlyRent(ap.getMonthlyRent())
+                .build())
+            .toList();
+    }
 }

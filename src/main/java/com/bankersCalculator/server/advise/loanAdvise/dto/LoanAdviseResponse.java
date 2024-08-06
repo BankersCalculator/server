@@ -1,6 +1,7 @@
 package com.bankersCalculator.server.advise.loanAdvise.dto;
 
 import com.bankersCalculator.server.advise.loanAdvise.domain.LoanAdviseResult;
+import com.bankersCalculator.server.advise.loanAdvise.domain.RecommendedProduct;
 import com.bankersCalculator.server.common.enums.Bank;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,6 +13,7 @@ import java.util.stream.Collectors;
 @Builder
 public class LoanAdviseResponse {
 
+    private long loanAdviseResultId;
     // 대출 상품 정보
     private String loanProductName;
     private String loanProductCode;
@@ -41,7 +43,7 @@ public class LoanAdviseResponse {
     private String recommendationReason;
 
     // 기타 추천 상품 리스트
-    private List<AlternativeProduct> alternativeProducts;
+    private List<RecommendedProduct> recommendedProducts;
 
     // 취급 가능 은행
     private List<Bank> availableBanks;
@@ -49,15 +51,7 @@ public class LoanAdviseResponse {
     // 전세 대출 가이드
     private String rentalLoanGuide;
 
-    @Getter
-    @Builder
-    public static class AlternativeProduct {
-        private String loanProductName;
-        private String loanProductCode;
-        private double possibleLoanLimit;
-        private double expectedLoanRate;
-        private String notEligibleReason; // 불가 사유
-    }
+
 
     public static LoanAdviseResponse of(LoanAdviseResult result) {
 
@@ -65,6 +59,7 @@ public class LoanAdviseResponse {
         long calculatedCost = (long) (result.getOpportunityCostOwnFunds() * result.getDepositInterestRate());
 
         return LoanAdviseResponse.builder()
+            .loanAdviseResultId(result.getId())
             .loanProductName(result.getLoanProductName())
             .loanProductCode(result.getLoanProductCode())
             .possibleLoanLimit(result.getPossibleLoanLimit())
@@ -81,8 +76,9 @@ public class LoanAdviseResponse {
             .guaranteeInsuranceFee(result.getGuaranteeInsuranceFee())
             .stampDuty(result.getStampDuty())
             .recommendationReason(result.getRecommendationReason())
-            .alternativeProducts(result.getAlternativeProducts().stream()
-                .map(ap -> AlternativeProduct.builder()
+            .recommendedProducts(result.getRecommendedProducts().stream()
+                .map(ap -> RecommendedProduct.builder()
+                    .rank(ap.getRank())
                     .loanProductName(ap.getLoanProductName())
                     .loanProductCode(ap.getLoanProductCode())
                     .possibleLoanLimit(ap.getPossibleLoanLimit())

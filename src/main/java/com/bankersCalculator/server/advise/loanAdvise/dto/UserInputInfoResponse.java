@@ -38,13 +38,13 @@ public class UserInputInfoResponse {
     private String propertyName;   // 건물명
     private long manualInputRentalArea; // 임차전용면적
     // 임차비용
-    private List<RentalCost> rentalCostList;
+    private List<RentalCostDto> rentalCostList;
 
     // 선택 항목
     private long housingPrice;  // 주택가액
     private long priorDepositAndClaims; // 선순위임차보증금 and 선순위채권
 //    @JsonProperty("isNetAssetOver345M")
-    private boolean netAssetOver345M; // 순자산 3.45억 초과 여부
+    private Boolean isNetAssetOver345M; // 순자산 3.45억 초과 여부
 
     public UserInputInfoResponse of(UserInputInfo info) {
         return UserInputInfoResponse.builder()
@@ -63,10 +63,10 @@ public class UserInputInfoResponse {
             .regionType(info.getRegionType())
             .propertyName(info.getPropertyName())
             .manualInputRentalArea(info.getManualInputRentalArea())
-            .rentalCostList(info.getRentalCostList())
+            .rentalCostList(info.getRentalCostDtoList())
             .housingPrice(info.getHousingPrice())
             .priorDepositAndClaims(info.getPriorDepositAndClaims())
-            .netAssetOver345M(info.isNetAssetOver345M())
+            .isNetAssetOver345M(info.isNetAssetOver345M())
             .build();
     }
 

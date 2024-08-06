@@ -12,7 +12,7 @@ public class LoanAdviseResult {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;                            // 고유 식별자
+    private Long id;                            // 대출상담결과 ID
 
     private String loanProductName;             // 대출 상품명
     private String loanProductCode;             // 대출 상품코드
@@ -36,8 +36,9 @@ public class LoanAdviseResult {
     @Column(length = 4000)
     private String recommendationReason;        // 추천 이유
 
-    @ElementCollection
-    private List<AlternativeProduct> alternativeProducts;  // 대체 상품 목록
+    @OneToMany(mappedBy = "loanAdviseResult", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderBy("rank ASC")
+    private List<RecommendedProduct> recommendedProducts; // 추천상품 리스트
 
     @ElementCollection(targetClass = Bank.class)
     @Enumerated(EnumType.STRING)
@@ -46,13 +47,4 @@ public class LoanAdviseResult {
     @Column(length = 4000)
     private String rentalLoanGuide;             // 임대 대출 가이드
 
-    @Getter
-    @Embeddable
-    public static class AlternativeProduct {
-        private String loanProductName;         // 대체 상품명
-        private String loanProductCode;         // 대체 상품 코드
-        private double possibleLoanLimit;       // 대체 상품 가능 대출 한도
-        private double expectedLoanRate;        // 대체 상품 예상 대출 금리
-        private String notEligibleReason;       // 부적격 사유
-    }
 }

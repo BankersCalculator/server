@@ -3,6 +3,7 @@ package com.bankersCalculator.server.docs;
 import com.bankersCalculator.server.RestDocsSupport;
 import com.bankersCalculator.server.advise.loanAdvise.controller.LoanAdviseApiController;
 import com.bankersCalculator.server.advise.loanAdvise.domain.RentalCost;
+import com.bankersCalculator.server.advise.loanAdvise.dto.RentalCostDto;
 import com.bankersCalculator.server.advise.loanAdvise.dto.UserInputInfoRequest;
 import com.bankersCalculator.server.advise.loanAdvise.dto.UserInputInfoResponse;
 import com.bankersCalculator.server.advise.loanAdvise.service.LoanAdviseService;
@@ -58,7 +59,6 @@ public class LoanAdviseApiControllerDocsTest extends RestDocsSupport {
             .userType(NON_MEMBER)
             .build();
 
-
         UserInputInfoResponse response = UserInputInfoResponse.builder()
             .age(30)
             .annualIncome(50000000L)
@@ -75,10 +75,10 @@ public class LoanAdviseApiControllerDocsTest extends RestDocsSupport {
             .regionType(RegionType.SEOUL)
             .propertyName("Sample Apartment")
             .manualInputRentalArea(75L)
-            .rentalCostList(Arrays.asList(new RentalCost()))
+            .rentalCostList(Arrays.asList(new RentalCostDto()))
             .housingPrice(300000000L)
             .priorDepositAndClaims(50000000L)
-            .netAssetOver345M(false)
+            .isNetAssetOver345M(false)
             .build();
 
         when(loanAdviseService.getSubmittedUserInput(any())).thenReturn(response);
@@ -98,27 +98,35 @@ public class LoanAdviseApiControllerDocsTest extends RestDocsSupport {
                         .description("사용자 ID")
                 ),
                 responseFields(
-                    fieldWithPath("age").type(JsonFieldType.NUMBER)
+                    fieldWithPath("code").type(JsonFieldType.NUMBER)
+                        .description("응답 코드"),
+                    fieldWithPath("status").type(JsonFieldType.STRING)
+                        .description("응답 상태"),
+                    fieldWithPath("message").type(JsonFieldType.STRING)
+                        .description("응답 메시지"),
+                    fieldWithPath("data").type(JsonFieldType.OBJECT)
+                        .description("응답 데이터"),
+                    fieldWithPath("data.age").type(JsonFieldType.NUMBER)
                         .description("만나이"),
-                    fieldWithPath("annualIncome").type(JsonFieldType.NUMBER)
+                    fieldWithPath("data.annualIncome").type(JsonFieldType.NUMBER)
                         .description("연소득"),
-                    fieldWithPath("maritalStatus").type(JsonFieldType.STRING)
+                    fieldWithPath("data.maritalStatus").type(JsonFieldType.STRING)
                         .description("결혼 상태 (SINGLE / MARRIED / ENGAGED)"),
-                    fieldWithPath("newlyWedding").type(JsonFieldType.BOOLEAN)
+                    fieldWithPath("data.newlyWedding").type(JsonFieldType.BOOLEAN)
                         .description("신혼 여부"),
-                    fieldWithPath("weddingDate").type(JsonFieldType.ARRAY)
+                    fieldWithPath("data.weddingDate").type(JsonFieldType.ARRAY)
                         .description("혼인(예정)일"),
-                    fieldWithPath("spouseAnnualIncome").type(JsonFieldType.NUMBER)
+                    fieldWithPath("data.spouseAnnualIncome").type(JsonFieldType.NUMBER)
                         .description("배우자 연소득"),
-                    fieldWithPath("cashOnHand").type(JsonFieldType.NUMBER)
+                    fieldWithPath("data.cashOnHand").type(JsonFieldType.NUMBER)
                         .description("보유 현금"),
-                    fieldWithPath("childStatus").type(JsonFieldType.STRING)
+                    fieldWithPath("data.childStatus").type(JsonFieldType.STRING)
                         .description("자녀 상태 (NO_CHILD / ONE_CHILD / TWO_CHILD / THREE_OR_MORE_CHILDREN"),
-                    fieldWithPath("hasNewborn").type(JsonFieldType.BOOLEAN)
+                    fieldWithPath("data.hasNewborn").type(JsonFieldType.BOOLEAN)
                         .description("신생아 여부"),
-                    fieldWithPath("worksForSME").type(JsonFieldType.BOOLEAN)
+                    fieldWithPath("data.worksForSME").type(JsonFieldType.BOOLEAN)
                         .description("중소기업 근무 여부"),
-                    fieldWithPath("housingType").type(JsonFieldType.STRING)
+                    fieldWithPath("data.housingType").type(JsonFieldType.STRING)
                         .description("주택 유형 " +
                             "(APARTMENT: 아파트, " +
                             "DETACHED_HOUSE: 단독주택, " +
@@ -126,33 +134,33 @@ public class LoanAdviseApiControllerDocsTest extends RestDocsSupport {
                             "MULTI_HOUSEHOLD_HOUSE: 다세대주택, " +
                             "OFFICETEL: 오피스텔, " +
                             "OTHER: 기타)"),
-                    fieldWithPath("rentalArea").type(JsonFieldType.STRING)
+                    fieldWithPath("data.rentalArea").type(JsonFieldType.STRING)
                         .description("임대 면적 크기 (UNDER_85_SQM: 85제곱이하 / OVER_85_SQM: 85제곱초과"),
-                    fieldWithPath("regionType").type(JsonFieldType.STRING)
+                    fieldWithPath("data.regionType").type(JsonFieldType.STRING)
                         .description("지역 유형 (SEOUL: 서울 / CAPITAL_AREA: 수도권 / METROPOLITAN_CITY: 광역시 / OTHER_AREAS: 기"),
-                    fieldWithPath("propertyName").type(JsonFieldType.STRING)
+                    fieldWithPath("data.propertyName").type(JsonFieldType.STRING)
                         .description("부동산 이름"),
-                    fieldWithPath("manualInputRentalArea").type(JsonFieldType.NUMBER)
+                    fieldWithPath("data.manualInputRentalArea").type(JsonFieldType.NUMBER)
                         .description("수기투입 임차전용면적"),
-                    fieldWithPath("rentalCostList").type(JsonFieldType.ARRAY)
+                    fieldWithPath("data.rentalCostList").type(JsonFieldType.ARRAY)
                         .description("임대 비용 목록"),
-                    fieldWithPath("rentalCostList[].id").type(JsonFieldType.NUMBER)
+                    fieldWithPath("data.rentalCostList[].id").type(JsonFieldType.NUMBER)
                         .description("임대 비용 ID")
                         .optional(),
-                    fieldWithPath("rentalCostList[].rentalType").type(JsonFieldType.STRING)
+                    fieldWithPath("data.rentalCostList[].rentalType").type(JsonFieldType.STRING)
                         .description("임대 유형(JEONSE: 전세 / BANJEONSE: 반전세 / WOLSE: 월세 ")
                         .optional(),
-                    fieldWithPath("rentalCostList[].rentalDeposit").type(JsonFieldType.NUMBER)
+                    fieldWithPath("data.rentalCostList[].rentalDeposit").type(JsonFieldType.NUMBER)
                         .description("임대 보증금"),
-                    fieldWithPath("rentalCostList[].monthlyRent").type(JsonFieldType.NUMBER)
+                    fieldWithPath("data.rentalCostList[].monthlyRent").type(JsonFieldType.NUMBER)
                         .description("월 임대료"),
-                    fieldWithPath("rentalCostList[].userInputInfo").type(JsonFieldType.OBJECT)
+                    fieldWithPath("data.rentalCostList[].userInputInfo").type(JsonFieldType.OBJECT)
                         .description("내부 참조용 필드 (API 응답에서 무시할 것)").optional(),
-                    fieldWithPath("housingPrice").type(JsonFieldType.NUMBER)
+                    fieldWithPath("data.housingPrice").type(JsonFieldType.NUMBER)
                         .description("주택 가격"),
-                    fieldWithPath("priorDepositAndClaims").type(JsonFieldType.NUMBER)
+                    fieldWithPath("data.priorDepositAndClaims").type(JsonFieldType.NUMBER)
                         .description("선순위 보증금 및 채권"),
-                    fieldWithPath("netAssetOver345M").type(JsonFieldType.BOOLEAN)
+                    fieldWithPath("data.isNetAssetOver345M").type(JsonFieldType.BOOLEAN)
                         .description("순자산 3억4500만원 초과 여부")
                 )
             ));
