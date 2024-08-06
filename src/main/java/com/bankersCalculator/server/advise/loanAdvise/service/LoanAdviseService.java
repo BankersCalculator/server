@@ -1,7 +1,5 @@
 package com.bankersCalculator.server.advise.loanAdvise.service;
 
-import com.bankersCalculator.server.advise.loanAdvise.domain.LoanAdviseResult;
-import com.bankersCalculator.server.advise.loanAdvise.domain.RecommendedProduct;
 import com.bankersCalculator.server.advise.loanAdvise.dto.*;
 import com.bankersCalculator.server.advise.loanAdvise.model.LoanProduct;
 import com.bankersCalculator.server.common.enums.Bank;

@@ -1,8 +1,8 @@
 package com.bankersCalculator.server.calculator.repaymentCalc.controller;
 
+import com.bankersCalculator.server.calculator.repaymentCalc.dto.RepaymentCalcRequest;
 import com.bankersCalculator.server.calculator.repaymentCalc.dto.RepaymentCalcResponse;
 import com.bankersCalculator.server.calculator.repaymentCalc.service.RepaymentCalcService;
-import com.bankersCalculator.server.calculator.repaymentCalc.dto.RepaymentCalcRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

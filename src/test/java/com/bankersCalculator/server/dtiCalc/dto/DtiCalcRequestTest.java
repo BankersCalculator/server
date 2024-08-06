@@ -1,14 +1,13 @@
 package com.bankersCalculator.server.dtiCalc.dto;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import com.bankersCalculator.server.calculator.dtiCalc.dto.DtiCalcRequest;
 import com.bankersCalculator.server.calculator.dtiCalc.dto.DtiCalcServiceRequest;
+import com.bankersCalculator.server.common.enums.LoanType;
+import com.bankersCalculator.server.common.enums.RepaymentType;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.bankersCalculator.server.common.enums.LoanType;
-import com.bankersCalculator.server.common.enums.RepaymentType;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 //DTO 변환 테스트
 @SpringBootTest

@@ -1,10 +1,10 @@
 package com.bankersCalculator.server.calculator.dsrCalc.calculator.DsrCalculatorImpl;
 
+import com.bankersCalculator.server.calculator.dsrCalc.calculator.DsrCalculator;
 import com.bankersCalculator.server.calculator.dsrCalc.domain.DsrCalcResult;
+import com.bankersCalculator.server.calculator.dsrCalc.dto.DsrCalcServiceRequest;
 import com.bankersCalculator.server.common.enums.LoanType;
 import com.bankersCalculator.server.common.enums.RepaymentType;
-import com.bankersCalculator.server.calculator.dsrCalc.calculator.DsrCalculator;
-import com.bankersCalculator.server.calculator.dsrCalc.dto.DsrCalcServiceRequest;
 import org.springframework.stereotype.Component;
 
 @Component

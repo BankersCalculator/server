@@ -1,7 +1,7 @@
 package com.bankersCalculator.server.advise.loanAdvise.service;
 
-import com.bankersCalculator.server.advise.loanAdvise.model.LoanProduct;
 import com.bankersCalculator.server.advise.loanAdvise.dto.LoanAdviseServiceRequest;
+import com.bankersCalculator.server.advise.loanAdvise.model.LoanProduct;
 import com.bankersCalculator.server.advise.loanAdvise.repository.LoanProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

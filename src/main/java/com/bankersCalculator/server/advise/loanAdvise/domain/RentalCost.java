@@ -2,10 +2,10 @@ package com.bankersCalculator.server.advise.loanAdvise.domain;
 
 import com.bankersCalculator.server.common.enums.loanAdvise.RentalType;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "rental_cost")

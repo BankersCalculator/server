@@ -1,21 +1,15 @@
 package com.bankersCalculator.server.dtiCalc.controller;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
-
 import com.bankersCalculator.server.calculator.dtiCalc.controller.DtiCalcController;
+import com.bankersCalculator.server.calculator.dtiCalc.service.DtiCalcService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.bankersCalculator.server.calculator.dtiCalc.service.DtiCalcService;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 // 어노테이션은 스프링 MVC 컨트롤러를 테스트하기 위해 사용됩니다. 이 어노테이션은 컨트롤러와 관련된 빈만 로드하여 테스트의 범위를 좁
 // 적용 대상: DtiCalcController.class를 지정하여 DtiCalcController를 테스트합니다.

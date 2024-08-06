@@ -1,18 +1,19 @@
 package com.bankersCalculator.server.dtiCalc.calculator.DtiCalculatorImpl;
 
-import com.bankersCalculator.server.common.enums.LoanType;
-import com.bankersCalculator.server.common.enums.RepaymentType;
 import com.bankersCalculator.server.calculator.dtiCalc.calculator.DtiCalculatorImpl.BasicDtiCalc;
 import com.bankersCalculator.server.calculator.dtiCalc.domain.DtiCalcResult;
 import com.bankersCalculator.server.calculator.dtiCalc.dto.DtiCalcServiceRequest;
+import com.bankersCalculator.server.common.enums.LoanType;
+import com.bankersCalculator.server.common.enums.RepaymentType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import java.text.DecimalFormat;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
 public class BasicDtiCalcTest {

@@ -1,12 +1,7 @@
 package com.bankersCalculator.server.advise.loanAdvise.dto;
 
-import com.bankersCalculator.server.advise.loanAdvise.domain.LoanAdviseResult;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
 @Builder

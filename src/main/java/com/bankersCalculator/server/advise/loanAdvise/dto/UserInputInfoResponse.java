@@ -1,13 +1,11 @@
 package com.bankersCalculator.server.advise.loanAdvise.dto;
 
-import com.bankersCalculator.server.advise.loanAdvise.domain.RentalCost;
 import com.bankersCalculator.server.advise.loanAdvise.domain.UserInputInfo;
 import com.bankersCalculator.server.common.enums.loanAdvise.AreaSize;
 import com.bankersCalculator.server.common.enums.loanAdvise.ChildStatus;
 import com.bankersCalculator.server.common.enums.loanAdvise.MaritalStatus;
 import com.bankersCalculator.server.common.enums.ltv.HousingType;
 import com.bankersCalculator.server.common.enums.ltv.RegionType;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Getter;
 

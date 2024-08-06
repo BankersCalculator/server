@@ -2,18 +2,13 @@ package com.bankersCalculator.server.docs;
 
 import com.bankersCalculator.server.RestDocsSupport;
 import com.bankersCalculator.server.advise.loanAdvise.controller.LoanAdviseApiController;
-import com.bankersCalculator.server.advise.loanAdvise.domain.RecommendedProduct;
-import com.bankersCalculator.server.advise.loanAdvise.domain.RentalCost;
 import com.bankersCalculator.server.advise.loanAdvise.dto.*;
 import com.bankersCalculator.server.advise.loanAdvise.service.LoanAdviseService;
-import com.bankersCalculator.server.calculator.repaymentCalc.controller.RepaymentCalcApiController;
-import com.bankersCalculator.server.calculator.repaymentCalc.domain.RepaymentSchedule;
-import com.bankersCalculator.server.calculator.repaymentCalc.dto.RepaymentCalcRequest;
-import com.bankersCalculator.server.calculator.repaymentCalc.dto.RepaymentCalcResponse;
-import com.bankersCalculator.server.calculator.repaymentCalc.service.RepaymentCalcService;
 import com.bankersCalculator.server.common.enums.Bank;
-import com.bankersCalculator.server.common.enums.RepaymentType;
-import com.bankersCalculator.server.common.enums.loanAdvise.*;
+import com.bankersCalculator.server.common.enums.loanAdvise.AreaSize;
+import com.bankersCalculator.server.common.enums.loanAdvise.ChildStatus;
+import com.bankersCalculator.server.common.enums.loanAdvise.MaritalStatus;
+import com.bankersCalculator.server.common.enums.loanAdvise.RentalType;
 import com.bankersCalculator.server.common.enums.ltv.HousingType;
 import com.bankersCalculator.server.common.enums.ltv.RegionType;
 import org.junit.jupiter.api.DisplayName;
@@ -34,8 +29,8 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.request.RequestDocumentation.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class LoanAdviseApiControllerDocsTest extends RestDocsSupport {

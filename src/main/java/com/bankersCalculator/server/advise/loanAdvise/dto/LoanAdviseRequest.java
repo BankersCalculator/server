@@ -1,10 +1,8 @@
 package com.bankersCalculator.server.advise.loanAdvise.dto;
 
-import com.bankersCalculator.server.advise.loanAdvise.domain.RentalCost;
 import com.bankersCalculator.server.common.enums.loanAdvise.AreaSize;
 import com.bankersCalculator.server.common.enums.loanAdvise.ChildStatus;
 import com.bankersCalculator.server.common.enums.loanAdvise.MaritalStatus;
-import com.bankersCalculator.server.common.enums.loanAdvise.RentalType;
 import com.bankersCalculator.server.common.enums.ltv.HousingType;
 import com.bankersCalculator.server.common.enums.ltv.RegionType;
 import lombok.Builder;

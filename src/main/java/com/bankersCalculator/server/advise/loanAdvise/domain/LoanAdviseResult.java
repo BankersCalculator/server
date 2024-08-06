@@ -3,6 +3,7 @@ package com.bankersCalculator.server.advise.loanAdvise.domain;
 import com.bankersCalculator.server.common.enums.Bank;
 import jakarta.persistence.*;
 import lombok.Getter;
+
 import java.util.List;
 
 @Getter
