@@ -53,6 +53,9 @@ dependencies {
     implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.13.3'
     implementation 'com.fasterxml.jackson.core:jackson-databind'
 
+    implementation 'org.json:json:20210307'
+
+
 }
 
 ext {

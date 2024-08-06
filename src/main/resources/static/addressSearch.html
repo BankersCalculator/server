@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Address Search</title>
+    <title>Address Search Results</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -26,18 +26,14 @@
             font-size: 1.2em;
             color: #555;
         }
-        #search-bar {
-            margin-bottom: 20px;
-        }
     </style>
 </head>
 <body>
 <div class="container">
     <h1>Address Search</h1>
-    <div id="search-bar">
-        <input type="text" id="keyword" placeholder="검색어를 입력하세요" />
-        <button onclick="searchAddress()">검색</button>
-    </div>
+    <input type="text" id="keyword" placeholder="Enter address keyword">
+    <button onclick="searchAddress()">Search</button>
+    <h2>Search Results</h2>
     <div id="results">
         <!-- Results will be dynamically inserted here -->
     </div>
@@ -49,7 +45,7 @@
 <script>
     async function searchAddress() {
         const keyword = document.getElementById('keyword').value;
-        const url = `/api/addressSearch?keyword=${encodeURIComponent(keyword)}`; // 서버의 API URL
+        const url = `http://localhost:8080/api/addressSearch?keyword=${encodeURIComponent(keyword)}`;
 
         try {
             const response = await fetch(url);
@@ -59,42 +55,31 @@
             const data = await response.json();
             displayResults(data);
         } catch (error) {
-            console.error('There was a problem with the fetch operation:', error);
-            displayError();
+            console.error('검색 중 오류가 발생했습니다.', error);
+            document.getElementById('no-results').style.display = 'block';
         }
     }
 
     function displayResults(data) {
         const resultsContainer = document.getElementById('results');
-        const noResultsContainer = document.getElementById('no-results');
         resultsContainer.innerHTML = '';
 
-        if (data && data.jusoList && data.jusoList.length > 0) {
-            noResultsContainer.style.display = 'none';
+        if (data.jusoList && data.jusoList.length > 0) {
             data.jusoList.forEach(juso => {
                 const addressItem = document.createElement('div');
-                addressItem.className = 'result';
+                addressItem.className = 'address-item';
+
                 addressItem.innerHTML = `
-                        <h2>${juso.roadAddr}</h2>
+                        <h3>${juso.bdNm}</h3>
                         <p><strong>도로명 주소:</strong> ${juso.roadAddr}</p>
                         <p><strong>지번 주소:</strong> ${juso.jibunAddr}</p>
-                        <p><strong>우편번호:</strong> ${juso.zipNo}</p>
-                        <p><strong>영문 주소:</strong> ${juso.engAddr || 'N/A'}</p>
-                        <p><strong>행정 동 코드:</strong> ${juso.admCd || 'N/A'}</p>
                     `;
+
                 resultsContainer.appendChild(addressItem);
             });
         } else {
-            noResultsContainer.style.display = 'block';
+            document.getElementById('no-results').style.display = 'block';
         }
-    }
-
-    function displayError() {
-        const resultsContainer = document.getElementById('results');
-        const noResultsContainer = document.getElementById('no-results');
-        resultsContainer.innerHTML = '';
-        noResultsContainer.style.display = 'block';
-        noResultsContainer.innerHTML = '검색 중 오류가 발생했습니다.';
     }
 </script>
 </body>
