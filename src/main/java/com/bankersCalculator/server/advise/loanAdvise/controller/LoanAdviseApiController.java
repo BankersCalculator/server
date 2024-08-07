@@ -17,7 +17,6 @@ public class LoanAdviseApiController {
     public ApiResponse<UserInputInfoResponse> getSubmittedUserInput(@RequestBody UserInputInfoRequest request) {
         UserInputInfoResponse submittedUserInput = loanAdviseService.getSubmittedUserInput(request.toServiceRequest());
 
-
         return ApiResponse.ok(submittedUserInput);
     }
 

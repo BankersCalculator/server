@@ -12,14 +12,6 @@ endif::[]
 include::overview.adoc[]
 
 
-[[RepaymentCalc-API]]
-== RepaymentCalc API
-
-include::api/repayment-calc/repayment-calc.adoc[]
-
-
-
-
 
 [[LoanAdvise-API]]
 == LoanAdvise API
@@ -27,6 +19,18 @@ include::api/repayment-calc/repayment-calc.adoc[]
 include::api/loan-advise/generate-loan-advise.adoc[]
 include::api/loan-advise/generate-loan-advise-on-specific-loan.adoc[]
 include::api/loan-advise/get-submitted-user-input.adoc[]
+
+
+[[RepaymentCalc-API]]
+== RepaymentCalc API
+
+include::api/calculators/repayment-calc.adoc[]
+include::api/calculators/ltv-calc.adoc[]
+include::api/calculators/dsr-calc.adoc[]
+
+
+
+
 
 
 

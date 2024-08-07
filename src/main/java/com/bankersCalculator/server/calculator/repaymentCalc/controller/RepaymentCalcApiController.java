@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
-@RestController
 @RequestMapping("/api/v1/repaymentCalc")
+@RestController
 public class RepaymentCalcApiController {
 
     private final RepaymentCalcService repaymentCalcService;

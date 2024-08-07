@@ -131,7 +131,7 @@ public class LoanAdviseApiControllerDocsTest extends RestDocsSupport {
                     fieldWithPath("data.rentalArea").type(JsonFieldType.STRING)
                         .description("임대 면적 크기 (UNDER_85_SQM: 85제곱이하 / OVER_85_SQM: 85제곱초과"),
                     fieldWithPath("data.regionType").type(JsonFieldType.STRING)
-                        .description("지역 유형 (SEOUL: 서울 / CAPITAL_AREA: 수도권 / METROPOLITAN_CITY: 광역시 / OTHER_AREAS: 기"),
+                        .description("지역 유형 (SEOUL: 서울 / CAPITAL_AREA: 수도권 / METROPOLITAN_CITY: 광역시 / OTHER_AREAS: 기타"),
                     fieldWithPath("data.propertyName").type(JsonFieldType.STRING)
                         .description("부동산 이름"),
                     fieldWithPath("data.manualInputRentalArea").type(JsonFieldType.NUMBER)
@@ -148,8 +148,6 @@ public class LoanAdviseApiControllerDocsTest extends RestDocsSupport {
                         .description("임대 보증금"),
                     fieldWithPath("data.rentalCostList[].monthlyRent").type(JsonFieldType.NUMBER)
                         .description("월 임대료"),
-                    fieldWithPath("data.rentalCostList[].userInputInfo").type(JsonFieldType.OBJECT)
-                        .description("내부 참조용 필드 (API 응답에서 무시할 것)").optional(),
                     fieldWithPath("data.housingPrice").type(JsonFieldType.NUMBER)
                         .description("주택 가격"),
                     fieldWithPath("data.priorDepositAndClaims").type(JsonFieldType.NUMBER)
@@ -186,9 +184,17 @@ public class LoanAdviseApiControllerDocsTest extends RestDocsSupport {
                     fieldWithPath("childStatus").type(JsonFieldType.STRING).description("자녀상태 (NO_CHILD, ONE_CHILD, TWO_CHILD, THREE_OR_MORE_CHILDREN)"),
                     fieldWithPath("hasNewborn").type(JsonFieldType.BOOLEAN).description("신생아여부"),
                     fieldWithPath("worksForSME").type(JsonFieldType.BOOLEAN).description("중소기업재직여부"),
-                    fieldWithPath("housingType").type(JsonFieldType.STRING).description("주택타입 (APARTMENT, DETACHED_HOUSE, MULTI_FAMILY_HOUSE, MULTI_HOUSEHOLD_HOUSE, OFFICETEL, OTHER)"),
+                    fieldWithPath("housingType").type(JsonFieldType.STRING)
+                        .description("주택 유형 " +
+                        "(APARTMENT: 아파트, " +
+                        "DETACHED_HOUSE: 단독주택, " +
+                        "MULTI_FAMILY_HOUSE: 다가구주택, " +
+                        "MULTI_HOUSEHOLD_HOUSE: 다세대주택, " +
+                        "OFFICETEL: 오피스텔, " +
+                        "OTHER: 기타)"),
                     fieldWithPath("rentalArea").type(JsonFieldType.STRING).description("임차전용면적 (UNDER_85_SQM, OVER_85_SQM)"),
-                    fieldWithPath("regionType").type(JsonFieldType.STRING).description("주택위치 (SEOUL, CAPITAL_AREA, METROPOLITAN_CITY, OTHER_AREAS)"),
+                    fieldWithPath("regionType").type(JsonFieldType.STRING)
+                        .description("지역 유형 (SEOUL: 서울 / CAPITAL_AREA: 수도권 / METROPOLITAN_CITY: 광역시 / OTHER_AREAS: 기타"),
                     fieldWithPath("propertyName").type(JsonFieldType.STRING).description("건물명"),
                     fieldWithPath("individualRentalArea").type(JsonFieldType.NUMBER).description("임차전용면적"),
                     fieldWithPath("rentalCostList").type(JsonFieldType.ARRAY).description("임차비용 목록"),
@@ -247,8 +253,6 @@ public class LoanAdviseApiControllerDocsTest extends RestDocsSupport {
         when(loanAdviseService.generateLoanAdviseOnSpecificLoan(anyString(), anyLong(), anyLong())).thenReturn(response);
 
         mockMvc.perform(post(BASE_URL + "/{productCode}", productCode)
-                .param("userId", userId.toString())
-                .param("adviseResultId", adviseResultId.toString())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
             .andExpect(status().isOk())

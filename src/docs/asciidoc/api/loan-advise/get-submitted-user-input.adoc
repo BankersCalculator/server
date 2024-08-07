@@ -1,5 +1,5 @@
 [[get-submitted-user-input]]
-=== 투입된 유저 INPUT 재조회 API
+=== 유저 INPUT 재조회 API
 
 ==== HTTP Request
 

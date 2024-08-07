@@ -64,7 +64,7 @@ public class RepaymentCalcApiControllerDocsTest extends RestDocsSupport {
                 .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andDo(print())
-            .andDo(document("repayment-calc",
+            .andDo(document("calculator/repayment-calc",
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint()),
                 requestFields(
