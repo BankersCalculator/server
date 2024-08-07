@@ -4,12 +4,12 @@ import com.bankersCalculator.server.board.Service.BoardService;
 import com.bankersCalculator.server.board.dto.BoardRequest;
 import com.bankersCalculator.server.board.dto.BoardResponse;
 import com.bankersCalculator.server.common.api.ApiResponse;
+import com.bankersCalculator.server.common.api.SliceResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/board")
@@ -19,8 +19,8 @@ public class BoardApiController {
     private final BoardService boardService;
 
     @GetMapping("/posts")
-    public ApiResponse<Page<BoardResponse>> getAllPosts(Pageable pageable) {
-        Page<BoardResponse> allPosts = boardService.getAllPosts(pageable);
+    public ApiResponse<SliceResponse<BoardResponse>> getAllPosts(Pageable pageable) {
+        SliceResponse<BoardResponse> allPosts = boardService.getAllPosts(pageable);
         return ApiResponse.ok(allPosts);
     }
 
