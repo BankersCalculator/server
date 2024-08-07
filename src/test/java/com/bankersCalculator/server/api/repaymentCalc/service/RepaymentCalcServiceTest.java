@@ -1,4 +1,4 @@
-package com.bankersCalculator.server.repaymentCalc.service;
+package com.bankersCalculator.server.api.repaymentCalc.service;
 
 import com.bankersCalculator.server.calculator.repaymentCalc.domain.RepaymentSchedule;
 import com.bankersCalculator.server.calculator.repaymentCalc.dto.RepaymentCalcResponse;

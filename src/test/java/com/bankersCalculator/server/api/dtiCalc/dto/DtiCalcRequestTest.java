@@ -1,4 +1,4 @@
-package com.bankersCalculator.server.dtiCalc.dto;
+package com.bankersCalculator.server.api.dtiCalc.dto;
 
 import com.bankersCalculator.server.calculator.dtiCalc.dto.DtiCalcRequest;
 import com.bankersCalculator.server.calculator.dtiCalc.dto.DtiCalcServiceRequest;

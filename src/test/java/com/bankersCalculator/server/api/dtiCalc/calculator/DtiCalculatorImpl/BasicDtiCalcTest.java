@@ -1,4 +1,4 @@
-package com.bankersCalculator.server.dtiCalc.calculator.DtiCalculatorImpl;
+package com.bankersCalculator.server.api.dtiCalc.calculator.DtiCalculatorImpl;
 
 import com.bankersCalculator.server.calculator.dtiCalc.calculator.DtiCalculatorImpl.BasicDtiCalc;
 import com.bankersCalculator.server.calculator.dtiCalc.domain.DtiCalcResult;

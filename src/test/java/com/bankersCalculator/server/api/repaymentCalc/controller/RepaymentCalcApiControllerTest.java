@@ -1,4 +1,4 @@
-package com.bankersCalculator.server.repaymentCalc.controller;
+package com.bankersCalculator.server.api.repaymentCalc.controller;
 
 import com.bankersCalculator.server.ControllerTestSupport;
 import com.bankersCalculator.server.calculator.repaymentCalc.dto.RepaymentCalcRequest;

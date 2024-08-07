@@ -1,4 +1,4 @@
-package com.bankersCalculator.server.ltvCalc.service;
+package com.bankersCalculator.server.api.ltvCalc.service;
 
 import com.bankersCalculator.server.calculator.ltvCalc.dto.LtvCalcResponse;
 import com.bankersCalculator.server.calculator.ltvCalc.dto.LtvCalcServiceRequest;

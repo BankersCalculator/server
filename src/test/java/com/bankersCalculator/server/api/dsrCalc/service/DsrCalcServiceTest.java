@@ -1,4 +1,4 @@
-package com.bankersCalculator.server.dsrCalc.service;
+package com.bankersCalculator.server.api.dsrCalc.service;
 
 import com.bankersCalculator.server.calculator.dsrCalc.dto.DsrCalcResponse;
 import com.bankersCalculator.server.calculator.dsrCalc.dto.DsrCalcServiceRequest;
