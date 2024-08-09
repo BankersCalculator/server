@@ -5,10 +5,9 @@ import com.bankersCalculator.server.calculator.dtiCalc.dto.DtiCalcServiceRequest
 import com.bankersCalculator.server.calculator.repaymentCalc.dto.RepaymentCalcResponse;
 import com.bankersCalculator.server.calculator.repaymentCalc.service.RepaymentCalcService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
 import java.text.DecimalFormat;
-
-import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor

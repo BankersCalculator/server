@@ -1,0 +1,12 @@
+[[dsrCalc]]
+=== DSR 계산기 API
+
+==== HTTP Request
+
+include::{snippets}/calculator/dsr-calc/http-request.adoc[]
+include::{snippets}/calculator/dsr-calc/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/calculator/dsr-calc/http-response.adoc[]
+include::{snippets}/calculator/dsr-calc/response-fields.adoc[]
