@@ -27,7 +27,7 @@ public class DtiCalcControllerTest {
 
     @Test
     public void testShowCalcForm() throws Exception {
-    	//dti URL에 대해 get 요청 수행 
+        //dti URL에 대해 get 요청 수행
         mockMvc.perform(get("/dti"))
                 //HTTP 상태코드 200인지 확
                 .andExpect(status().isOk())
@@ -36,40 +36,4 @@ public class DtiCalcControllerTest {
                 //모델에 dtiCalcRequest 속성있는지 존재유무 확인 
                 .andExpect(model().attributeExists("dtiCalcRequest"));
     }
-    
-    
-    //목적: POST 요청을 통해 DTI 계산 결과를 처리하는 컨트롤러 메서드를 테스트합니다.
-//    @Test
-//    public void testDtiCalculate() throws Exception {
-//    	// DtiCalcResponse는 빌더패턴을 사용하기 때문에, 빌더를 사용한 객체생성이 필요함.
-//        //DtiCalcResponse response = new DtiCalcResponse();
-//    	DtiCalcResponse response = DtiCalcResponse.builder()
-//    		    .annualIncome(0)
-//    		    .totalLoanCount(0)
-//    		    .finalDtiRatio(0.0)
-//    		    .dtiCalcResultList(new ArrayList<>())
-//    		    .build();
-//        //dtiCalcService.dticalculate 메서드가 호출될 때 모의 객체가 response를 반환하도록 설정
-//        when(dtiCalcService.dticalculate(any())).thenReturn(response);
-//
-//        // /dti/result URL에 대해 POST 요청을 수행합니다
-//        mockMvc.perform(post("/dti/result")
-//
-//
-//        	.param("annualIncome", "1000000")
-//        	.param("loanStatusList[0].repaymentType", RepaymentType.BULLET.name())
-//        	.param("loanStatusList[0].loanType", LoanType.MORTGAGE.name())
-//        	.param("loanStatusList[0].principal", "5000000")
-//        	.param("loanStatusList[0].maturityPaymentAmount", "1000000")
-//        	.param("loanStatusList[0].term", "30")
-//        	.param("loanStatusList[0].gracePeriod", "5")
-//        	.param("loanStatusList[0].interestRatePercentage", "3.5"))
-//
-//        	.andExpect(status().isOk())
-//            .andExpect(view().name("DtiCalc"))
-//            .andExpect(model().attributeExists("dtiCalcResponse"));
-//    }
-    
-    
-    
 }

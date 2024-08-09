@@ -32,7 +32,6 @@ public class DtiCommonCalculator {
         return DtiCalcResult.builder()
             .principal(principal)
             .term(term)
-            .annualPrincipalRepayment(annualPrincipalRepayment)
             .annualInterestRepayment(annalInterestRepayment)
             .build();
     }
@@ -44,14 +43,11 @@ public class DtiCommonCalculator {
 
         RepaymentCalcResponse repaymentCalcResponse = repaymentCalcService.calculateRepayment(loanStatus.toRepaymentCalcServiceRequest());
         double totalInterest = repaymentCalcResponse.getTotalInterest();
-
-        double annualPrincipalRepayment = principal / maxTerm * 12;
         double annalInterestRepayment = totalInterest / term * 12;
 
         return DtiCalcResult.builder()
             .principal(principal)
             .term(term)
-            .annualPrincipalRepayment(annualPrincipalRepayment)
             .annualInterestRepayment(annalInterestRepayment)
             .build();
     }
@@ -64,13 +60,11 @@ public class DtiCommonCalculator {
         RepaymentCalcResponse repaymentCalcResponse = repaymentCalcService.calculateRepayment(loanStatus.toRepaymentCalcServiceRequest());
         double totalInterest = repaymentCalcResponse.getTotalInterest();
 
-        double annualPrincipalRepayment = principal / maxTerm * 12;
         double annalInterestRepayment = totalInterest / term * 12;
 
         return DtiCalcResult.builder()
             .principal(principal)
             .term(term)
-            .annualPrincipalRepayment(annualPrincipalRepayment)
             .annualInterestRepayment(annalInterestRepayment)
             .build();
     }
