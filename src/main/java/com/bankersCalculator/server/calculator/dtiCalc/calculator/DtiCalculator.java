@@ -12,11 +12,9 @@ import org.springframework.stereotype.Component;
 public class DtiCalculator {
     private static final int MAX_TERM_FOR_BULLET = 120;
 
-    private final DtiCommonCalculator dtiCommonCalculator;
     private final RepaymentCalcService repaymentCalcService;
 
-    public DtiCalculator(DtiCommonCalculator dtiCommonCalculator, RepaymentCalcService repaymentCalcService) {
-        this.dtiCommonCalculator = dtiCommonCalculator;
+    public DtiCalculator(RepaymentCalcService repaymentCalcService) {
         this.repaymentCalcService = repaymentCalcService;
     }
 
@@ -33,7 +31,7 @@ public class DtiCalculator {
 
         if (repaymentType == RepaymentType.BULLET) {
             int term = Math.min(MAX_TERM_FOR_BULLET, loanStatus.getTerm());
-            return dtiCommonCalculator.dtiCalcForBulletLoan(loanStatus, term);
+            return dtiCalcForBulletLoan(loanStatus, term);
         } else if (repaymentType == RepaymentType.AMORTIZING || repaymentType == RepaymentType.EQUAL_PRINCIPAL) {
             return dtiCalcForInstallmentRepaymentMortgageLoan(loanStatus);
         } else {
@@ -60,12 +58,31 @@ public class DtiCalculator {
 
         RepaymentCalcResponse repaymentCalcResponse = repaymentCalcService.calculateRepayment(loanStatus.toRepaymentCalcServiceRequest());
         double totalInterest = repaymentCalcResponse.getTotalInterest();
+        double annualPrincipalRepayment = principal / term * 12;
         double annualInterestRepayment = totalInterest / term * 12;
 
         return DtiCalcResult.builder()
                 .principal(principal)
                 .term(term)
+                .annualPrincipalRepayment(annualPrincipalRepayment)
                 .annualInterestRepayment(annualInterestRepayment)
+                .build();
+    }
+
+
+    private DtiCalcResult dtiCalcForBulletLoan(DtiCalcServiceRequest.LoanStatus loanStatus, int maxTerm) {
+        double principal = loanStatus.getPrincipal();
+        int term = loanStatus.getTerm();
+        double interestRate = loanStatus.getInterestRate();
+
+        double annualPrincipalRepayment = principal / maxTerm * 12;
+        double annalInterestRepayment = principal * interestRate;
+
+        return DtiCalcResult.builder()
+                .principal(principal)
+                .term(term)
+                .annualPrincipalRepayment(annualPrincipalRepayment)
+                .annualInterestRepayment(annalInterestRepayment)
                 .build();
     }
 }

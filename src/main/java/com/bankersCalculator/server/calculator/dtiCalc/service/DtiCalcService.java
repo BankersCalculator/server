@@ -26,6 +26,7 @@ public class DtiCalcService {
         	DtiCalcResult dtiCalcResult = dtiCalculator.calculateDti(loanStatus);
 
             dtiCalcResult.setSerial(++totalLoanCount);
+            totalDtiAmount += dtiCalcResult.getAnnualPrincipalRepayment();
             totalDtiAmount += dtiCalcResult.getAnnualInterestRepayment();
 
             dtiCalcResultList.add(dtiCalcResult);

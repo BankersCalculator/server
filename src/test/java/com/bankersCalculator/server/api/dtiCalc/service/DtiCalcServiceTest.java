@@ -56,13 +56,9 @@ public class DtiCalcServiceTest {
 
 
         // 결과를 출력
-        System.out.println("Annual Principal Repayment for Loan 1: " + decimalFormat.format(response.getDtiCalcResultList().get(0).getAnnualPrincipalRepayment()));
+
         System.out.println("Annual Interest Repayment for Loan 1: " + decimalFormat.format(response.getDtiCalcResultList().get(0).getAnnualInterestRepayment()));
-
-        System.out.println("Annual Principal Repayment for Loan 2: " + decimalFormat.format(response.getDtiCalcResultList().get(1).getAnnualPrincipalRepayment()));
         System.out.println("Annual Interest Repayment for Loan 2: " + decimalFormat.format(response.getDtiCalcResultList().get(1).getAnnualInterestRepayment()));
-
-        System.out.println("Annual Principal Repayment for Loan 3: " + decimalFormat.format(response.getDtiCalcResultList().get(2).getAnnualPrincipalRepayment()));
         System.out.println("Annual Interest Repayment for Loan 3: " + decimalFormat.format(response.getDtiCalcResultList().get(2).getAnnualInterestRepayment()));
 
         System.out.println("Final DTI Ratio: " + Math.round(response.getFinalDtiRatio()));
