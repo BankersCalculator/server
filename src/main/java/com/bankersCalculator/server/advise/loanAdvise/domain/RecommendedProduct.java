@@ -1,0 +1,33 @@
+package com.bankersCalculator.server.advise.loanAdvise.domain;
+
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Entity
+@Table(name = "recommended_product")
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class RecommendedProduct {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "loan_advise_result_id")
+    private LoanAdviseResult loanAdviseResult;
+
+    private int rank; // 추천 순위
+
+    private String loanProductName; // 대출 상품명
+    private String loanProductCode; // 대출 상품코드
+    private double possibleLoanLimit; // 가능한 대출 한도
+    private double expectedLoanRate; // 예상 대출 금리
+    private String notEligibleReason; // 부적격 사유 (해당되는 경우)
+
+}

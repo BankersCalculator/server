@@ -1,0 +1,12 @@
+[[ltvCalc]]
+=== LTV 계산기 API
+
+==== HTTP Request
+
+include::{snippets}/calculator/ltv-calc/http-request.adoc[]
+include::{snippets}/calculator/ltv-calc/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/calculator/ltv-calc/http-response.adoc[]
+include::{snippets}/calculator/ltv-calc/response-fields.adoc[]

@@ -3,11 +3,11 @@ package com.bankersCalculator.server.calculator.dtiCalc.calculator.DtiCalculator
 import com.bankersCalculator.server.calculator.dtiCalc.calculator.DtiCalculator;
 import com.bankersCalculator.server.calculator.dtiCalc.calculator.DtiCommonCalculator;
 import com.bankersCalculator.server.calculator.dtiCalc.domain.DtiCalcResult;
-import com.bankersCalculator.server.common.enums.LoanType;
-import com.bankersCalculator.server.common.enums.RepaymentType;
 import com.bankersCalculator.server.calculator.dtiCalc.dto.DtiCalcServiceRequest;
 import com.bankersCalculator.server.calculator.repaymentCalc.dto.RepaymentCalcResponse;
 import com.bankersCalculator.server.calculator.repaymentCalc.service.RepaymentCalcService;
+import com.bankersCalculator.server.common.enums.LoanType;
+import com.bankersCalculator.server.common.enums.RepaymentType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 /* 프로그램 설명 : MortgageLoanDtiCalc 클래스는 LoanType.MORTGAGE에 대한 DtiCalculator 구현체를 제공합

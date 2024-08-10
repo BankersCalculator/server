@@ -1,0 +1,12 @@
+[[repaymentCalc]]
+=== 상환 일정 계산기 API
+
+==== HTTP Request
+
+include::{snippets}/calculator/repayment-calc/http-request.adoc[]
+include::{snippets}/calculator/repayment-calc/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/calculator/repayment-calc/http-response.adoc[]
+include::{snippets}/calculator/repayment-calc/response-fields.adoc[]
