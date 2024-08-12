@@ -1,0 +1,10 @@
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          kakao:
+            client-id: ${kakao.client-id}
+            client-secret: ${kakao.client-secret}
+            redirect-uri: ${kakao.redirect-uri}
+

@@ -1,0 +1,41 @@
+package com.bankersCalculator.server.common.oauth;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.util.Map;
+
+public class KakaoUserInfo {
+
+    public static final String KAKAO_ACCOUNT = "kakao_account";
+    public static final String EMAIL = "email";
+    public static final String KAKAO_ID = "id";
+
+    private Map<String, Object> attributes;
+
+    public KakaoUserInfo(Map<String, Object> attributes) {
+        this.attributes = attributes;
+    }
+
+    public String getEmail() {
+        Map<String, Object> account = getObjectMap();
+
+        return (String) account.get(EMAIL);
+    }
+
+    // TODO: ID가 맞는지 확인 필요함..
+    public String getKakaoId() {
+        Map<String, Object> account = getObjectMap();
+
+        return (String) account.get(KAKAO_ID);
+    }
+
+    private Map<String, Object> getObjectMap() {
+        ObjectMapper objectMapper = new ObjectMapper();
+        TypeReference<Map<String, Object>> typeReference = new TypeReference<Map<String, Object>>() {};
+
+        Object kakaoAccount = attributes.get(KAKAO_ACCOUNT);
+        Map<String, Object> account = objectMapper.convertValue(kakaoAccount, typeReference);
+        return account;
+    }
+}
