@@ -12,8 +12,6 @@ import java.util.List;
 public class DtiCalcResponse {
     private int annualIncome;
     private int totalLoanCount;
-    private double finalDtiRatio;
     private List<DtiCalcResult> dtiCalcResultList;
-
-
+    private double finalDtiRatio;
 }

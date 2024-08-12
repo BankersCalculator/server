@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Address Search Results</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .result {
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+        .result h2 {
+            margin-top: 0;
+        }
+        .no-results {
+            text-align: center;
+            font-size: 1.2em;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Address Search</h1>
+    <input type="text" id="keyword" placeholder="Enter address keyword">
+    <button onclick="searchAddress()">Search</button>
+    <h2>Search Results</h2>
+    <div id="results">
+        <!-- Results will be dynamically inserted here -->
+    </div>
+    <div id="no-results" class="no-results" style="display: none;">
+        검색 결과가 없습니다.
+    </div>
+</div>
+
+<script>
+    async function searchAddress() {
+        const keyword = document.getElementById('keyword').value;
+        const url = `http://localhost:8080/api/addressSearch?keyword=${encodeURIComponent(keyword)}`;
+
+        try {
+            const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const data = await response.json();
+            displayResults(data);
+        } catch (error) {
+            console.error('검색 중 오류가 발생했습니다.', error);
+            document.getElementById('no-results').style.display = 'block';
+        }
+    }
+
+    function displayResults(data) {
+        const resultsContainer = document.getElementById('results');
+        resultsContainer.innerHTML = '';
+
+        if (data.jusoList && data.jusoList.length > 0) {
+            data.jusoList.forEach(juso => {
+                const addressItem = document.createElement('div');
+                addressItem.className = 'address-item';
+
+                addressItem.innerHTML = `
+                        <h3>${juso.bdNm}</h3>
+                        <p><strong>도로명 주소:</strong> ${juso.roadAddr}</p>
+                        <p><strong>지번 주소:</strong> ${juso.jibunAddr}</p>
+                    `;
+
+                resultsContainer.appendChild(addressItem);
+            });
+        } else {
+            document.getElementById('no-results').style.display = 'block';
+        }
+    }
+</script>
+</body>
+</html>

@@ -27,9 +27,7 @@ public class DtiCalcServiceRequest {
         private RepaymentType repaymentType;
         private LoanType loanType;
         private double principal;
-        private double maturityPaymentAmount;
         private int term;
-        private int gracePeriod;
         private double interestRate;
 
 
@@ -38,9 +36,7 @@ public class DtiCalcServiceRequest {
                 .repaymentType(repaymentType)
                 .principal(principal)
                 .term(term)
-                .gracePeriod(gracePeriod)
                 .interestRate(interestRate)
-                .maturityPaymentAmount(maturityPaymentAmount)
                 .build();
         }
     }
