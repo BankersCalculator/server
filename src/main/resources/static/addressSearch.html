@@ -3,82 +3,99 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Address Search Results</title>
+    <title>Address Search</title>
     <style>
         body {
             font-family: Arial, sans-serif;
+            margin: 20px;
         }
         .container {
-            width: 80%;
+            max-width: 600px;
             margin: 0 auto;
-            padding: 20px;
+        }
+        .search-box {
+            margin-bottom: 20px;
+        }
+        .search-box input {
+            width: calc(100% - 110px);
+            padding: 10px;
+            font-size: 16px;
+        }
+        .search-box button {
+            padding: 10px 20px;
+            font-size: 16px;
         }
         .result {
-            margin-bottom: 20px;
-            padding: 10px;
-            border: 1px solid #ddd;
+            margin-top: 20px;
         }
-        .result h2 {
-            margin-top: 0;
+        .address {
+            border-bottom: 1px solid #ddd;
+            padding: 10px 0;
         }
-        .no-results {
-            text-align: center;
-            font-size: 1.2em;
-            color: #555;
+        .error {
+            color: red;
         }
     </style>
 </head>
 <body>
 <div class="container">
     <h1>Address Search</h1>
-    <input type="text" id="keyword" placeholder="Enter address keyword">
-    <button onclick="searchAddress()">Search</button>
-    <h2>Search Results</h2>
-    <div id="results">
-        <!-- Results will be dynamically inserted here -->
+    <div class="search-box">
+        <input type="text" id="keyword" placeholder="Enter address keyword">
+        <button onclick="searchAddress()">Search</button>
     </div>
-    <div id="no-results" class="no-results" style="display: none;">
-        검색 결과가 없습니다.
-    </div>
+    <div class="result" id="result"></div>
 </div>
 
 <script>
     async function searchAddress() {
         const keyword = document.getElementById('keyword').value;
-        const url = `http://localhost:8080/api/addressSearch?keyword=${encodeURIComponent(keyword)}`;
+        if (!keyword) {
+            alert('Please enter a keyword');
+            return;
+        }
 
         try {
-            const response = await fetch(url);
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
+            const response = await fetch(`/api/addressSearch?keyword=${encodeURIComponent(keyword)}`);
             const data = await response.json();
-            displayResults(data);
-        } catch (error) {
-            console.error('검색 중 오류가 발생했습니다.', error);
-            document.getElementById('no-results').style.display = 'block';
-        }
-    }
 
-    function displayResults(data) {
-        const resultsContainer = document.getElementById('results');
-        resultsContainer.innerHTML = '';
+            const resultElement = document.getElementById('result');
 
-        if (data.jusoList && data.jusoList.length > 0) {
-            data.jusoList.forEach(juso => {
-                const addressItem = document.createElement('div');
-                addressItem.className = 'address-item';
+            if (data.errorCode !== "0") {
+                resultElement.innerHTML = `<p class="error">Error Code: ${data.errorCode}<br>Error Message: ${data.errorMessage}</p>`;
+                return;
+            }
 
-                addressItem.innerHTML = `
-                        <h3>${juso.bdNm}</h3>
-                        <p><strong>도로명 주소:</strong> ${juso.roadAddr}</p>
-                        <p><strong>지번 주소:</strong> ${juso.jibunAddr}</p>
+            const jusoList = data.jusoList;
+
+            if (jusoList.length === 0) {
+                resultElement.innerHTML = `<p class="error">No results found. Error Code: ${data.errorCode}<br>Error Message: ${data.errorMessage}</p>`;
+                return;
+            }
+
+            let resultHtml = '';
+            jusoList.forEach(address => {
+                resultHtml += `
+                        <div class="address">
+                            <p><strong>Road Address:</strong> ${address.roadAddr}</p>
+                            <p><strong>Jibun Address:</strong> ${address.jibunAddr}</p>
+                            <p><strong>Zip Code:</strong> ${address.zipNo}</p>
+                            <p><strong>Detailed Building Name List:</strong> ${address.detBdNmList}</p>
+                            <p><strong>Building Name:</strong> ${address.bdNm}</p>
+                            <p><strong>City:</strong> ${address.siNm}</p>
+                            <p><strong>District:</strong> ${address.sggNm}</p>
+                            <p><strong>Neighborhood:</strong> ${address.emdNm}</p>
+                            <p><strong>Li Name:</strong> ${address.liNm}</p>
+                            <p><strong>Road Name:</strong> ${address.rn}</p>
+                            <p><strong>Building Number:</strong> ${address.buldMnnm}-${address.buldSlno}</p>
+                            <p><strong>Land Number:</strong> ${address.lnbrMnnm}-${address.lnbrSlno}</p>
+                        </div>
                     `;
-
-                resultsContainer.appendChild(addressItem);
             });
-        } else {
-            document.getElementById('no-results').style.display = 'block';
+
+            resultElement.innerHTML = resultHtml;
+        } catch (error) {
+            document.getElementById('result').innerHTML = '<p class="error">An error occurred. Please try again.</p>';
         }
     }
 </script>
