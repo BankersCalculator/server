@@ -27,7 +27,7 @@ public class KakaoUserDetailsService extends DefaultOAuth2UserService {
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         OAuth2User oAuth2User = super.loadUser(userRequest);
         KakaoUserInfo kakaoUserInfo = new KakaoUserInfo(oAuth2User.getAttributes());
-        String kakaoId = kakaoUserInfo.getKakaoId();
+        String kakaoId = kakaoUserInfo.getId();
         String email = kakaoUserInfo.getEmail();
 
         User user = userRepository.findByOauthProviderAndOauthProviderId(PROVIDER, kakaoId)

@@ -8,3 +8,9 @@ spring:
             client-secret: ${kakao.client-secret}
             redirect-uri: ${kakao.redirect-uri}
 
+
+jwt:
+#  secret-key: ${jwt.secret_key} // TODO: UUID ??? ?
+  secret-key: "secretsecret"
+  access-token-validity-in-seconds: 30000
+  refresh-token-validity-in-seconds: 86400

@@ -9,6 +9,7 @@ public class KakaoUserInfo {
 
     public static final String KAKAO_ACCOUNT = "kakao_account";
     public static final String EMAIL = "email";
+    public static final String PROVIDER = "KAKAO";
     public static final String KAKAO_ID = "id";
 
     private Map<String, Object> attributes;
@@ -23,8 +24,12 @@ public class KakaoUserInfo {
         return (String) account.get(EMAIL);
     }
 
+    public String getProvider() {
+        return PROVIDER;
+    }
+
     // TODO: ID가 맞는지 확인 필요함..
-    public String getKakaoId() {
+    public String getId() {
         Map<String, Object> account = getObjectMap();
 
         return (String) account.get(KAKAO_ID);
