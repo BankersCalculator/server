@@ -1,5 +1,6 @@
 package com.bankersCalculator.server.api.dtiCalc.controller;
 
+import com.bankersCalculator.server.ControllerTestSupport;
 import com.bankersCalculator.server.calculator.dtiCalc.controller.DtiCalcController;
 import com.bankersCalculator.server.calculator.dtiCalc.service.DtiCalcService;
 import org.junit.jupiter.api.Test;
@@ -13,8 +14,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 // 어노테이션은 스프링 MVC 컨트롤러를 테스트하기 위해 사용됩니다. 이 어노테이션은 컨트롤러와 관련된 빈만 로드하여 테스트의 범위를 좁
 // 적용 대상: DtiCalcController.class를 지정하여 DtiCalcController를 테스트합니다.
-@WebMvcTest(DtiCalcController.class)
-public class DtiCalcControllerTest {	
+public class DtiCalcControllerTest extends ControllerTestSupport {
 	//스프링 컨텍스트에서 관리되는 빈을 주입받기 위해 사용
 	@Autowired
     private MockMvc mockMvc;

@@ -1,5 +1,6 @@
 package com.bankersCalculator.server.api.repaymentCalc.service;
 
+import com.bankersCalculator.server.IntegrationTestSupport;
 import com.bankersCalculator.server.calculator.repaymentCalc.domain.RepaymentSchedule;
 import com.bankersCalculator.server.calculator.repaymentCalc.dto.RepaymentCalcResponse;
 import com.bankersCalculator.server.calculator.repaymentCalc.dto.RepaymentCalcServiceRequest;
@@ -15,8 +16,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@SpringBootTest
-class RepaymentCalcServiceTest {
+class RepaymentCalcServiceTest extends IntegrationTestSupport {
 
     @Autowired
     RepaymentCalcService repaymentCalcService;
