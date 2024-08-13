@@ -22,8 +22,8 @@ import org.springframework.security.config.annotation.web.configurers.HeadersCon
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -35,23 +35,19 @@ public class SecurityConfig {
     private final Oauth2SuccessHandler oauth2SuccessHandler;
     private final JwtAuthenticationFailEntryPoint jwtAuthenticationFailEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
-    private final SecurityPathConfig securityPathConfig;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
-    private final TokenProvider tokenProvider;
-    private final TokenValidator tokenValidator;
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return (web) -> web.ignoring()
             .requestMatchers(PathRequest.toH2Console())
-            .requestMatchers(new AntPathRequestMatcher("/h2-console/**"))
-            .requestMatchers(securityPathConfig.getPublicPaths().toArray(new String[0]));
+            .requestMatchers("/","/error", "/favicon.ico", "/exception/**", "login/oauth2/*");
     }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-        JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(tokenValidator, tokenProvider, securityPathConfig);
+        log.debug("helllooo~~~?????");
 
 
         http.cors(AbstractHttpConfigurer::disable)
@@ -64,25 +60,22 @@ public class SecurityConfig {
                 .frameOptions(FrameOptionsConfig::sameOrigin)
             )
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers(securityPathConfig.getPublicPaths().toArray(new String[0])).permitAll()
-                .anyRequest().authenticated()
+                    .requestMatchers("/login/oauth2/code/*").permitAll()
+                    .anyRequest().authenticated()
             )
-            .oauth2Login(oAuth2Login -> {
-                oAuth2Login
-                    .userInfoEndpoint(userInfoEndpointConfig ->
-                        userInfoEndpointConfig.userService(kakaoUserDetailsService));
-                oAuth2Login.successHandler(oauth2SuccessHandler);
-            })
+            .oauth2Login(oauth2 -> oauth2
+                .userInfoEndpoint(userInfo -> userInfo
+                    .userService(kakaoUserDetailsService)
+                )
+                .successHandler(oauth2SuccessHandler)
+            )
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
             .exceptionHandling(ex -> {
-//                ex.authenticationEntryPoint(jwtAuthenticationFailEntryPoint);
                 ex.authenticationEntryPoint(authenticationEntryPoint());
                 ex.accessDeniedHandler(jwtAccessDeniedHandler);
             });
         return http.build();
     }
-
-
 
     @Bean
     public AuthenticationEntryPoint authenticationEntryPoint() {

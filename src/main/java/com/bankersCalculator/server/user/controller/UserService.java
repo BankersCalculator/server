@@ -1,6 +1,6 @@
-package com.bankersCalculator.server.user.test;
+package com.bankersCalculator.server.user.controller;
 
-import com.bankersCalculator.server.user.controller.KakaoTokenResponseDto;
+import com.bankersCalculator.server.user.test.KakaoUserInfoResponseDto;
 import io.netty.handler.codec.http.HttpHeaderValues;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,18 +15,28 @@ import reactor.core.publisher.Mono;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class KakaoService {
+public class UserService {
 
     @Value("${spring.security.oauth2.client.registration.kakao.client-id}")
     private String client_id;
+
+    @Value("${spring.security.oauth2.client.registration.kakao.redirect-uri}")
+    private String redirect_uri;
 
     private final String KAUTH_TOKEN_URL_HOST;
     private final String KAUTH_USER_URL_HOST;
 
     @Autowired
-    public KakaoService() {
+    public UserService() {
         KAUTH_TOKEN_URL_HOST ="https://kauth.kakao.com";
         KAUTH_USER_URL_HOST = "https://kapi.kakao.com";
+    }
+
+    public void login(String code) {
+
+        String accessToken = getAccessTokenFromKakao(code);
+        KakaoUserInfoResponseDto userInfo = getUserInfo(accessToken);
+
     }
 
     public String getAccessTokenFromKakao(String code) {
@@ -37,6 +47,7 @@ public class KakaoService {
                 .path("/oauth/token")
                 .queryParam("grant_type", "authorization_code")
                 .queryParam("client_id", client_id)
+                .queryParam("redirect_uri", redirect_uri)
                 .queryParam("code", code)
                 .build(true))
             .header(HttpHeaders.CONTENT_TYPE, HttpHeaderValues.APPLICATION_X_WWW_FORM_URLENCODED.toString())

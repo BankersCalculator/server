@@ -16,8 +16,8 @@ public class JwtAuthenticationFailEntryPoint implements AuthenticationEntryPoint
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
-//        response.sendRedirect(EXCEPTION_ENTRY_POINT);
-        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "비정상 토큰입니다. 다시 로그인해주세요.");
+        response.sendRedirect(EXCEPTION_ENTRY_POINT);
+//        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "비정상 토큰입니다. 다시 로그인해주세요.");
 
     }
 }

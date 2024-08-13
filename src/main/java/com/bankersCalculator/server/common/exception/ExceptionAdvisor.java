@@ -53,14 +53,4 @@ public class ExceptionAdvisor {
             null
         );
     }
-
-    @ExceptionHandler(AuthenticationServiceException.class)
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    public ApiResponse<Object> authenticationEntryPointException(AccessDeniedException e) {
-        return ApiResponse.of(
-            HttpStatus.UNAUTHORIZED,
-            e.getMessage(),
-            null
-        );
-    }
 }

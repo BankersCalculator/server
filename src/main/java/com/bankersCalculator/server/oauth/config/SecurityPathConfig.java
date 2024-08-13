@@ -11,13 +11,8 @@ import java.util.List;
 public class SecurityPathConfig {
 
     private static final List<String> PUBLIC_PATHS = Arrays.asList(
-        "/favicon.ico",
-        "/error",
-        "/docs/**",
-        "/h2-console/**",
-        "/login",
-        "/login/oauth2/code/**",
-        "/oauth2/callback/**"
+        "/",
+        "/auth/success"
     );
 
     public List<String> getPublicPaths() {

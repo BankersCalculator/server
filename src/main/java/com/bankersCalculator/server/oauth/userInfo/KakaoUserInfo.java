@@ -28,12 +28,7 @@ public class KakaoUserInfo {
         return PROVIDER;
     }
 
-    // TODO: ID가 맞는지 확인 필요함..
-    public String getId() {
-        Map<String, Object> account = getObjectMap();
 
-        return (String) account.get(KAKAO_ID);
-    }
 
     private Map<String, Object> getObjectMap() {
         ObjectMapper objectMapper = new ObjectMapper();
