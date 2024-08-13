@@ -17,18 +17,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 // 적용 대상: DtiCalcController.class를 지정하여 DtiCalcController를 테스트합니다.
 public class DtiCalcControllerTest extends ControllerTestSupport {
 
-
-//    @Test
-//    public void testShowCalcForm() throws Exception {
-//    	//dti URL에 대해 get 요청 수행
-//        mockMvc.perform(get("/dti"))
-//                //HTTP 상태코드 200인지 확
-//                .andExpect(status().isOk())
-//                //반환 명칭 확
-//                .andExpect(view().name("DtiCalc"))
-//                //모델에 dtiCalcRequest 속성있는지 존재유무 확인
-//                .andExpect(model().attributeExists("dtiCalcRequest"));
-//    }
+    @Test
+    public void testShowCalcForm() throws Exception {
+    	//dti URL에 대해 get 요청 수행
+        mockMvc.perform(get("/dti"))
+                //HTTP 상태코드 200인지 확
+                .andExpect(status().isOk())
+                //반환 명칭 확
+                .andExpect(view().name("DtiCalc"))
+                //모델에 dtiCalcRequest 속성있는지 존재유무 확인
+                .andExpect(model().attributeExists("dtiCalcRequest"));
+    }
     
     
     //목적: POST 요청을 통해 DTI 계산 결과를 처리하는 컨트롤러 메서드를 테스트합니다.
