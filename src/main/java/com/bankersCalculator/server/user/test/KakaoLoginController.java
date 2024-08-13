@@ -12,18 +12,16 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("")
+@RequestMapping()
 public class KakaoLoginController {
 
     private final KakaoService kakaoService;
 
-    @GetMapping("/callback")
+    @GetMapping("/oauth2/callback/kakao")
     public ResponseEntity<?> callback(@RequestParam("code") String code) {
-        String accessToken = kakaoService.getAccessTokenFromKakao(code);
 
-        KakaoUserInfoResponseDto userInfo = kakaoService.getUserInfo(accessToken);
+        log.info("hellloo~~~~~");
 
-        log.info(userInfo.toString());
 
         // User 로그인, 또는 회원가입 로직 추가
         return new ResponseEntity<>(HttpStatus.OK);

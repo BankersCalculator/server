@@ -1,5 +1,6 @@
-package com.bankersCalculator.server.common.oauth;
+package com.bankersCalculator.server.common.oauth.token;
 
+import com.bankersCalculator.server.common.oauth.user.KakaoUserDetails;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -28,10 +29,10 @@ public class TokenProvider {
     @Value("${jwt.secret-key}")
     private String secretKey;
 
-    @Value("${jwt.access-token-validity-in-seconds")
+    @Value("${jwt.access-token-validity-in-seconds}")
     private long accessTokenValiditySeconds;
 
-    @Value("${jwt.refresh-token-validity-in-seconds")
+    @Value("${jwt.refresh-token-validity-in-seconds}")
     private long refreshTokenValiditySeconds;
 
     private Key jwtKey;

@@ -1,4 +1,4 @@
-package com.bankersCalculator.server.common.oauth;
+package com.bankersCalculator.server.common.oauth.user;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;

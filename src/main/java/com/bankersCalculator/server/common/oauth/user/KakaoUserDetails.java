@@ -1,4 +1,4 @@
-package com.bankersCalculator.server.common.oauth;
+package com.bankersCalculator.server.common.oauth.user;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;

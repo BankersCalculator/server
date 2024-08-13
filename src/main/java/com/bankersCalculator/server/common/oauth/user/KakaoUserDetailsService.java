@@ -1,4 +1,4 @@
-package com.bankersCalculator.server.common.oauth;
+package com.bankersCalculator.server.common.oauth.user;
 
 import com.bankersCalculator.server.common.enums.RoleType;
 import com.bankersCalculator.server.user.domain.User;

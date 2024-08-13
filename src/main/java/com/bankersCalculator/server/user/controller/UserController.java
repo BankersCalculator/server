@@ -1,7 +1,7 @@
 package com.bankersCalculator.server.user.controller;
 
 import com.bankersCalculator.server.common.api.ApiResponse;
-import com.bankersCalculator.server.common.oauth.TokenDto;
+import com.bankersCalculator.server.common.oauth.token.TokenDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

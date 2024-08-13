@@ -1,4 +1,4 @@
-package com.bankersCalculator.server.common.oauth;
+package com.bankersCalculator.server.common.oauth.token;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -8,12 +8,14 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SecurityException;
 import jakarta.annotation.PostConstruct;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
 
 @Component
+@Slf4j
 public class TokenValidator {
 
     private static final String AUTH_KEY = "AUTHORITY";
@@ -22,12 +24,6 @@ public class TokenValidator {
 
     @Value("${jwt.secret-key}")
     private String secretKey;
-
-    @Value("${jwt.access-token-validity-in-seconds")
-    private long accessTokenValiditySeconds;
-
-    @Value("${jwt.refresh-token-validity-in-seconds")
-    private long refreshTokenValiditySeconds;
 
     private Key jwtKey;
 
