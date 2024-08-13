@@ -5,7 +5,6 @@ import com.bankersCalculator.server.oauth.token.TokenProvider;
 import com.bankersCalculator.server.oauth.userInfo.KakaoUserInfo;
 import com.bankersCalculator.server.user.domain.User;
 import com.bankersCalculator.server.user.repository.UserRepository;
-import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

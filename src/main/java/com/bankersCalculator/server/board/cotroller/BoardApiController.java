@@ -6,7 +6,6 @@ import com.bankersCalculator.server.board.dto.BoardResponse;
 import com.bankersCalculator.server.common.api.ApiResponse;
 import com.bankersCalculator.server.common.api.SliceResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 

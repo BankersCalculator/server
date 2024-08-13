@@ -3,7 +3,6 @@ package com.bankersCalculator.server.common.exception;
 import com.bankersCalculator.server.common.api.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
