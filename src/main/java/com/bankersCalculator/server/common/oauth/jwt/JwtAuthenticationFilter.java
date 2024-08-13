@@ -1,4 +1,4 @@
-package com.bankersCalculator.server.common.oauth.filter;
+package com.bankersCalculator.server.common.oauth.jwt;
 
 import com.bankersCalculator.server.common.config.SecurityPathConfig;
 import com.bankersCalculator.server.common.oauth.token.TokenProvider;
@@ -18,7 +18,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 @Component
 @Slf4j
-public class JwtFilter extends OncePerRequestFilter {
+public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private static final String ACCESS_HEADER = "AccessToken";
     private static final String REFRESH_HEADER = "RefreshToken";
@@ -34,15 +34,16 @@ public class JwtFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
 
+
         if (securityPathConfig.isPublicPath(request.getRequestURI())) {
             filterChain.doFilter(request, response);
             return;
         }
 
         String accessToken = request.getHeader(ACCESS_HEADER);
-//        if (tokenValidator.validateExpire(accessToken) && tokenValidator.validateToken(accessToken)) {
-//            SecurityContextHolder.getContext().setAuthentication(tokenProvider.getAuthentication(accessToken));
-//        }
+        if (tokenValidator.validateExpire(accessToken) && tokenValidator.validateToken(accessToken)) {
+            SecurityContextHolder.getContext().setAuthentication(tokenProvider.getAuthentication(accessToken));
+        }
 
         filterChain.doFilter(request, response);
 

@@ -21,7 +21,6 @@ import java.io.IOException;
 
 @RequiredArgsConstructor
 @Component
-
 @Slf4j
 public class Oauth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 

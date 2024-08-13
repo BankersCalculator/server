@@ -36,6 +36,13 @@ spring:
         default_batch_fetch_size: 100
     defer-datasource-initialization: true
 
+logging:
+  level:
+    org.springframework.security: debug
+    org.springframework.web: debug
+    com.bankersCalculator.server: debug
+
+
 jwt:
   secret-key: "secretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecret"
   access-token-validity-in-seconds: 30000
