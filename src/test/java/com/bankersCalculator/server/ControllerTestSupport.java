@@ -5,8 +5,13 @@ import com.bankersCalculator.server.calculator.dtiCalc.service.DtiCalcService;
 import com.bankersCalculator.server.calculator.repaymentCalc.controller.RepaymentCalcApiController;
 import com.bankersCalculator.server.calculator.repaymentCalc.service.RepaymentCalcService;
 import com.bankersCalculator.server.oauth.config.SecurityConfig;
+import com.bankersCalculator.server.oauth.jwt.JwtAccessDeniedHandler;
+import com.bankersCalculator.server.oauth.jwt.JwtAuthenticationFailEntryPoint;
 import com.bankersCalculator.server.oauth.jwt.JwtAuthenticationFilter;
+import com.bankersCalculator.server.oauth.jwt.Oauth2SuccessHandler;
+import com.bankersCalculator.server.oauth.token.TokenProvider;
 import com.bankersCalculator.server.oauth.token.TokenValidator;
+import com.bankersCalculator.server.oauth.userInfo.KakaoUserDetailsService;
 import com.bankersCalculator.server.user.controller.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.mockito.Mock;
@@ -18,9 +23,10 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 
+@WithMockUser(roles = "USER")
 @WebMvcTest(controllers = {
     RepaymentCalcApiController.class, DtiCalcController.class})
-@WithMockUser(roles = "USER")
+@Import(SecurityConfig.class)
 public abstract class ControllerTestSupport {
 
     @Autowired
@@ -34,9 +40,17 @@ public abstract class ControllerTestSupport {
     @MockBean
     protected DtiCalcService dtiCalcService;
     @MockBean
-    protected TokenValidator tokenValidator;
-    @MockBean
     protected JwtAuthenticationFilter jwtAuthenticationFilter;
     @MockBean
-    protected UserService userService;
+    protected TokenValidator tokenValidator;
+    @MockBean
+    protected TokenProvider tokenProvider;
+    @MockBean
+    protected KakaoUserDetailsService kakaoUserDetailsService;
+    @MockBean
+    protected Oauth2SuccessHandler oauth2SuccessHandler;
+    @MockBean
+    protected JwtAuthenticationFailEntryPoint jwtAuthenticationFailEntryPoint;
+    @MockBean
+    protected JwtAccessDeniedHandler jwtAccessDeniedHandler;
 }

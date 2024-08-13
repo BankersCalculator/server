@@ -5,10 +5,9 @@ spring:
         registration:
           kakao:
             client-name: kakao
-            client-id: ${kakao.client-id}
-            client-secret: ${kakao.client-secret}
+            client-id: "testtest"
+            client-secret: "testtest"
             client-authentication-method: client_secret_post
-            #            redirect-uri: ${kakao.redirect-uri}
             redirect-uri: "http://localhost:8080/login/oauth2/code/kakao"
             authorization-grant-type: authorization_code
             scope:
@@ -31,18 +30,11 @@ spring:
   jpa:
     open-in-view: false
     hibernate:
-      ddl-auto: create-drop # TODO: ?? ? update? ??? ?
+      ddl-auto: create-drop
     properties:
       hibernate:
         default_batch_fetch_size: 100
     defer-datasource-initialization: true
-
-logging:
-  level:
-    org.springframework.security: debug
-    org.springframework.web: debug
-    com.bankersCalculator.server: debug
-
 
 jwt:
   secret-key: "secretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecret"
