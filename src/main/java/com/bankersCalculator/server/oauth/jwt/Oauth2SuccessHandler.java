@@ -1,8 +1,8 @@
-package com.bankersCalculator.server.common.oauth.jwt;
+package com.bankersCalculator.server.oauth.jwt;
 
-import com.bankersCalculator.server.common.oauth.token.TokenDto;
-import com.bankersCalculator.server.common.oauth.token.TokenProvider;
-import com.bankersCalculator.server.common.oauth.user.KakaoUserInfo;
+import com.bankersCalculator.server.oauth.token.TokenDto;
+import com.bankersCalculator.server.oauth.token.TokenProvider;
+import com.bankersCalculator.server.oauth.userInfo.KakaoUserInfo;
 import com.bankersCalculator.server.user.domain.User;
 import com.bankersCalculator.server.user.repository.UserRepository;
 import jakarta.servlet.FilterChain;
@@ -43,8 +43,11 @@ public class Oauth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         User user = userRepository.findByOauthProviderAndOauthProviderId(provider, id)
             .orElseThrow(ServletException::new);
 
+
         TokenDto tokenDto = tokenProvider.createToken(provider, id, user.getRoleType().getCode());
 
+        log.info("죽겠다" + tokenDto.getAccessToken());
+        log.info("죽겠다" + tokenDto.getRefreshToken());
         String redirectURI = String.format(REDIRECT_URI,
             tokenDto.getAccessToken(), tokenDto.getRefreshToken());
 

@@ -1,4 +1,4 @@
-package com.bankersCalculator.server.common.config;
+package com.bankersCalculator.server.oauth.config;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -15,7 +15,9 @@ public class SecurityPathConfig {
         "/error",
         "/docs/**",
         "/h2-console/**",
-        "/h2-console"
+        "/login",
+        "/login/oauth2/code/**",
+        "/oauth2/callback/**"
     );
 
     public List<String> getPublicPaths() {
@@ -26,7 +28,7 @@ public class SecurityPathConfig {
 
         return PUBLIC_PATHS.stream().anyMatch(publicPath -> {
             if (publicPath.endsWith("/**")) {
-                String basePath = publicPath.substring(0, publicPath.length() - 2);
+                String basePath = publicPath.substring(0, publicPath.length() - 3);
                 return path.startsWith(basePath);
             } else {
                 return path.equals(publicPath);

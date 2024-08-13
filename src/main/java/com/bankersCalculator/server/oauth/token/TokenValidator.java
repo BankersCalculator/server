@@ -1,4 +1,4 @@
-package com.bankersCalculator.server.common.oauth.token;
+package com.bankersCalculator.server.oauth.token;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -52,7 +52,7 @@ public class TokenValidator {
                 .build()
                 .parseClaimsJws(token);
             return true;
-        } catch (ExpiredJwtException e) {
+        } catch (ExpiredJwtException | IllegalArgumentException e) {
             return false;
         }
     }

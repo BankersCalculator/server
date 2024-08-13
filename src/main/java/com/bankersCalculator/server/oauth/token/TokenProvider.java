@@ -1,6 +1,6 @@
-package com.bankersCalculator.server.common.oauth.token;
+package com.bankersCalculator.server.oauth.token;
 
-import com.bankersCalculator.server.common.oauth.user.KakaoUserDetails;
+import com.bankersCalculator.server.oauth.userInfo.KakaoUserDetails;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

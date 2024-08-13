@@ -1,4 +1,4 @@
-package com.bankersCalculator.server.common.oauth.jwt;
+package com.bankersCalculator.server.oauth.jwt;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -16,6 +16,8 @@ public class JwtAuthenticationFailEntryPoint implements AuthenticationEntryPoint
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
-        response.sendRedirect(EXCEPTION_ENTRY_POINT);
+//        response.sendRedirect(EXCEPTION_ENTRY_POINT);
+        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "비정상 토큰입니다. 다시 로그인해주세요.");
+
     }
 }

@@ -17,7 +17,7 @@ public class KakaoLoginController {
 
     private final KakaoService kakaoService;
 
-    @GetMapping("/oauth2/callback/kakao")
+    @GetMapping("/oauth2/callback/kakao222")
     public ResponseEntity<?> callback(@RequestParam("code") String code) {
 
         log.info("hellloo~~~~~");

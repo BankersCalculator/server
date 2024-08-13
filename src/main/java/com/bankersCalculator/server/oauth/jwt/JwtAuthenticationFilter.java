@@ -1,8 +1,8 @@
-package com.bankersCalculator.server.common.oauth.jwt;
+package com.bankersCalculator.server.oauth.jwt;
 
-import com.bankersCalculator.server.common.config.SecurityPathConfig;
-import com.bankersCalculator.server.common.oauth.token.TokenProvider;
-import com.bankersCalculator.server.common.oauth.token.TokenValidator;
+import com.bankersCalculator.server.oauth.config.SecurityPathConfig;
+import com.bankersCalculator.server.oauth.token.TokenProvider;
+import com.bankersCalculator.server.oauth.token.TokenValidator;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -33,7 +33,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
-
 
         if (securityPathConfig.isPublicPath(request.getRequestURI())) {
             filterChain.doFilter(request, response);

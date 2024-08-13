@@ -13,7 +13,7 @@ public class ExceptionController {
 
     @GetMapping("/entry-point")
     public void authenticateException() {
-        throw new AuthenticationServiceException("접근 불가능한 요청입니다.");
+        throw new AccessDeniedException("접근 불가능한 요청입니다.");
     }
 
     @GetMapping("/access-denied")

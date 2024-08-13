@@ -1,4 +1,4 @@
-package com.bankersCalculator.server.common.oauth.token;
+package com.bankersCalculator.server.oauth.token;
 
 
 import lombok.Builder;

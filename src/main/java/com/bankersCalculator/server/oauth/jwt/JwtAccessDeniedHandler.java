@@ -1,4 +1,4 @@
-package com.bankersCalculator.server.common.oauth.jwt;
+package com.bankersCalculator.server.oauth.jwt;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
