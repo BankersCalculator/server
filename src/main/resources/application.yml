@@ -49,5 +49,5 @@ logging:
 
 jwt:
   secret-key: "secretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecret"
-  access-token-validity-in-seconds: 30000
+  access-token-validity-in-seconds: 36000
   refresh-token-validity-in-seconds: 86400

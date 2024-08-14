@@ -1,12 +1,14 @@
 package com.bankersCalculator.server.oauth.jwt;
 
 import com.bankersCalculator.server.oauth.config.SecurityPathConfig;
+import com.bankersCalculator.server.oauth.token.TokenDto;
 import com.bankersCalculator.server.oauth.token.TokenProvider;
 import com.bankersCalculator.server.oauth.token.TokenValidator;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,8 +22,8 @@ import java.io.IOException;
 @Slf4j
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private static final String ACCESS_HEADER = "AccessToken";
-    private static final String REFRESH_HEADER = "RefreshToken";
+    private static final String ACCESS_HEADER = "accessToken";
+    private static final String REFRESH_HEADER = "refreshToken";
 
     private final TokenValidator tokenValidator;
     private final TokenProvider tokenProvider;
@@ -46,6 +48,24 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             SecurityContextHolder.getContext().setAuthentication(tokenProvider.getAuthentication(accessToken));
         }
 
+        if (!tokenValidator.validateExpire(accessToken) && tokenValidator.validateToken(accessToken)) {
+            String refreshToken = request.getHeader(REFRESH_HEADER);
+            if (tokenValidator.validateExpire(refreshToken) && tokenValidator.validateToken(refreshToken)){
+
+                TokenDto newTokenDto = tokenProvider.reissueAccessToken(refreshToken);
+
+                SecurityContextHolder.getContext().setAuthentication(tokenProvider.getAuthentication(newTokenDto.getAccessToken()));
+                redirectReissueURI(request, response, newTokenDto);
+            }
+        }
+
         filterChain.doFilter(request, response);
+    }
+
+    private void redirectReissueURI(HttpServletRequest request, HttpServletResponse response, TokenDto newTokenDto) throws IOException {
+        HttpSession session = request.getSession();
+        session.setAttribute("accessToken", newTokenDto.getAccessToken());
+        session.setAttribute("refreshToken", newTokenDto.getRefreshToken());
+        response.sendRedirect("/login/oauth2/kakao/reissue");
     }
 }

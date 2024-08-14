@@ -40,7 +40,10 @@ public class TokenValidator {
                 .build()
                 .parseClaimsJws(token);
             return true;
-        } catch (SecurityException | MalformedJwtException | UnsupportedJwtException | IllegalArgumentException e) {
+        } catch (ExpiredJwtException e) {
+            return true;
+        } catch (Exception e) {
+            log.warn("Token validation failed: {}", e.getMessage());
             return false;
         }
     }
@@ -52,7 +55,10 @@ public class TokenValidator {
                 .build()
                 .parseClaimsJws(token);
             return true;
-        } catch (ExpiredJwtException | IllegalArgumentException e) {
+        } catch (ExpiredJwtException e) {
+            return false;
+        } catch (Exception e) {
+            log.warn("Token validation failed: {}", e.getMessage());
             return false;
         }
     }

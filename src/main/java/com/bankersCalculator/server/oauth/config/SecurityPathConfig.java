@@ -17,6 +17,7 @@ public class SecurityPathConfig {
         "/favicon.ico",
         "/exception/**",
         "/login/oauth2/*",
+        "/login/oauth2/kakao/reissue",
         "/docs/**",
         "/api/v1/exception/**"
     );
