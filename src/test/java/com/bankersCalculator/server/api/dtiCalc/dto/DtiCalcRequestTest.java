@@ -21,19 +21,15 @@ public class DtiCalcRequestTest {
         DtiCalcRequest.LoanStatus loanStatus2 = new DtiCalcRequest.LoanStatus();
         loanStatus.setRepaymentType(RepaymentType.BULLET);  //BULLET AMORTIZING EQUAL_PRINCIPAL
         loanStatus.setLoanType(LoanType.MORTGAGE);
-        loanStatus.setMaturityPaymentAmount(60000000);
         loanStatus.setPrincipal(5000000);
         loanStatus.setTerm(300);
-        loanStatus.setGracePeriod(120);
         loanStatus.setInterestRatePercentage(3);
         request.getLoanStatusList().add(loanStatus);
         
         loanStatus2.setRepaymentType(RepaymentType.BULLET);  //BULLET AMORTIZING EQUAL_PRINCIPAL
         loanStatus2.setLoanType(LoanType.MORTGAGE);
-        loanStatus2.setMaturityPaymentAmount(60000000);
         loanStatus2.setPrincipal(5000000);
         loanStatus2.setTerm(300);
-        loanStatus2.setGracePeriod(120);
         loanStatus2.setInterestRatePercentage(2);
         request.getLoanStatusList().add(loanStatus2);
         
@@ -42,10 +38,8 @@ public class DtiCalcRequestTest {
         
         assertEquals(RepaymentType.BULLET, serviceRequest.getLoanStatusList().get(0).getRepaymentType());
         assertEquals(LoanType.MORTGAGE, serviceRequest.getLoanStatusList().get(0).getLoanType());
-        assertEquals(60000000, serviceRequest.getLoanStatusList().get(0).getMaturityPaymentAmount());
         assertEquals(5000000, serviceRequest.getLoanStatusList().get(0).getPrincipal());
         assertEquals(300, serviceRequest.getLoanStatusList().get(0).getTerm());
-        assertEquals(120, serviceRequest.getLoanStatusList().get(0).getGracePeriod());
         assertEquals(0.03, serviceRequest.getLoanStatusList().get(0).getInterestRate());
         assertEquals(2, serviceRequest.getLoanStatusList().size());
         assertEquals(0.02, serviceRequest.getLoanStatusList().get(1).getInterestRate());
