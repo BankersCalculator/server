@@ -43,7 +43,7 @@ public class TokenProvider {
         this.jwtKey = Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public TokenDto createToken(String provider, String providerId, String role) {
+    public TokenDto createToken(String provider, String email, String role) {
         long now = new Date().getTime();
 
         Date accessValidity = new Date(now + accessTokenValiditySeconds);
@@ -51,7 +51,7 @@ public class TokenProvider {
 
         String accessToken = Jwts.builder()
             .addClaims(Map.of(AUTH_PROVIDER, provider))
-            .addClaims(Map.of(AUTH_ID, providerId))
+            .addClaims(Map.of(AUTH_ID, email))
             .addClaims(Map.of(AUTH_KEY, role))
             .signWith(jwtKey, SignatureAlgorithm.HS256)
             .setExpiration(accessValidity)
@@ -59,7 +59,7 @@ public class TokenProvider {
 
         String refreshToken = Jwts.builder()
             .addClaims(Map.of(AUTH_PROVIDER, provider))
-            .addClaims(Map.of(AUTH_ID, providerId))
+            .addClaims(Map.of(AUTH_ID, email))
             .addClaims(Map.of(AUTH_KEY, role))
             .signWith(jwtKey, SignatureAlgorithm.HS256)
             .setExpiration(refreshValidity)

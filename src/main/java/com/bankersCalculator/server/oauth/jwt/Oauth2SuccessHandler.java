@@ -36,16 +36,17 @@ public class Oauth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
         OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
         KakaoUserInfo kakaoUserInfo = new KakaoUserInfo(oAuth2User.getAttributes());
-        String id = kakaoUserInfo.getEmail();
         String provider = kakaoUserInfo.getProvider();
         String email = kakaoUserInfo.getEmail();
+
+        log.error("lgw id" + kakaoUserInfo.getEmail());
 
         // TODO: exception 커스텀할 것.
         User user = userRepository.findByOauthProviderAndEmail(provider, email)
             .orElseThrow(ServletException::new);
 
 
-        TokenDto tokenDto = tokenProvider.createToken(provider, id, user.getRoleType().getCode());
+        TokenDto tokenDto = tokenProvider.createToken(provider, email, user.getRoleType().getCode());
 
         String redirectURI = String.format(REDIRECT_URI,
             tokenDto.getAccessToken(), tokenDto.getRefreshToken());

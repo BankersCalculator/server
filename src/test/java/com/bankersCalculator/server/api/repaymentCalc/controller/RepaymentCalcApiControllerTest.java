@@ -122,7 +122,4 @@ class RepaymentCalcApiControllerTest extends ControllerTestSupport {
             .andExpect(jsonPath("$.status").value("BAD_REQUEST"))
             .andExpect(jsonPath("$.message").value(MAX_VALUE_INTEREST_RATE_PERCENTAGE));
     }
-
-
-
 }
