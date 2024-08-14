@@ -10,6 +10,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -20,7 +21,9 @@ public class DtiCalcControllerTest extends ControllerTestSupport {
     @Test
     public void testShowCalcForm() throws Exception {
     	//dti URL에 대해 get 요청 수행
-        mockMvc.perform(get("/dti"))
+        mockMvc.perform(get("/dti")
+                .with(csrf())
+            )
                 //HTTP 상태코드 200인지 확
                 .andExpect(status().isOk())
                 //반환 명칭 확

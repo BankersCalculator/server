@@ -5,6 +5,7 @@ import com.bankersCalculator.server.calculator.dtiCalc.service.DtiCalcService;
 import com.bankersCalculator.server.calculator.repaymentCalc.controller.RepaymentCalcApiController;
 import com.bankersCalculator.server.calculator.repaymentCalc.service.RepaymentCalcService;
 import com.bankersCalculator.server.oauth.config.SecurityConfig;
+import com.bankersCalculator.server.oauth.config.SecurityPathConfig;
 import com.bankersCalculator.server.oauth.jwt.JwtAccessDeniedHandler;
 import com.bankersCalculator.server.oauth.jwt.JwtAuthenticationFailEntryPoint;
 import com.bankersCalculator.server.oauth.jwt.JwtAuthenticationFilter;
@@ -13,25 +14,42 @@ import com.bankersCalculator.server.oauth.token.TokenProvider;
 import com.bankersCalculator.server.oauth.token.TokenValidator;
 import com.bankersCalculator.server.oauth.userInfo.KakaoUserDetailsService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
+
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.securityContext;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 
 
 @WithMockUser(roles = "USER")
 @WebMvcTest(controllers = {
     RepaymentCalcApiController.class, DtiCalcController.class})
-@Import(SecurityConfig.class)
 public abstract class ControllerTestSupport {
 
+
     @Autowired
-    protected MockMvc mockMvc;
+    private WebApplicationContext context;
     @Autowired
     protected ObjectMapper objectMapper;
 
+    protected MockMvc mockMvc;
+    @BeforeEach
+    public void setup() {
+        mockMvc = MockMvcBuilders
+            .webAppContextSetup(context)
+            .apply(springSecurity())
+            .build();
+    }
     // 서비스를 이곳에서 관리할지말지는 추후 고민해보자.
     @MockBean
     protected RepaymentCalcService repaymentCalcService;
@@ -51,4 +69,6 @@ public abstract class ControllerTestSupport {
     protected JwtAuthenticationFailEntryPoint jwtAuthenticationFailEntryPoint;
     @MockBean
     protected JwtAccessDeniedHandler jwtAccessDeniedHandler;
+    @MockBean
+    protected SecurityPathConfig securityPathConfig;
 }
