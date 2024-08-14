@@ -30,14 +30,9 @@ public class KakaoUserDetailsService extends DefaultOAuth2UserService {
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
 
-        log.debug("사람살려...");
         OAuth2User oAuth2User = super.loadUser(userRequest);
         KakaoUserInfo kakaoUserInfo = new KakaoUserInfo(oAuth2User.getAttributes());
         String email = kakaoUserInfo.getEmail();
-
-
-
-        log.debug("email" + email);
 
         User user = userRepository.findByOauthProviderAndEmail(PROVIDER, email)
             .orElseGet(() -> userRepository.save(
@@ -48,12 +43,7 @@ public class KakaoUserDetailsService extends DefaultOAuth2UserService {
                     .build()
             ));
 
-        log.debug("user" + user.toString());
-
-
         SimpleGrantedAuthority authority = new SimpleGrantedAuthority(user.getRoleType().getCode());
-        log.debug("authority" + authority);
-
 
         return new KakaoUserDetails(String.valueOf(user.getEmail()),
             Collections.singletonList(authority),

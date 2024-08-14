@@ -20,15 +20,12 @@ public class KakaoUserInfo {
 
     public String getEmail() {
         Map<String, Object> account = getObjectMap();
-
         return (String) account.get(EMAIL);
     }
 
     public String getProvider() {
         return PROVIDER;
     }
-
-
 
     private Map<String, Object> getObjectMap() {
         ObjectMapper objectMapper = new ObjectMapper();

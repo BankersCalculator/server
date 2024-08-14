@@ -31,7 +31,7 @@ spring:
   jpa:
     open-in-view: false
     hibernate:
-      ddl-auto: create-drop # TODO: ?? ? update? ??? ?
+      ddl-auto: create-drop # TODO: update
     properties:
       hibernate:
         default_batch_fetch_size: 100
@@ -42,7 +42,6 @@ logging:
     org.springframework.security: debug
     org.springframework.web: debug
     com.bankersCalculator.server: debug
-
 
 jwt:
   secret-key: "secretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecret"

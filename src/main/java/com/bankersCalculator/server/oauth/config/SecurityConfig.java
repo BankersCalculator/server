@@ -33,19 +33,17 @@ public class SecurityConfig {
     private final JwtAuthenticationFailEntryPoint jwtAuthenticationFailEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final SecurityPathConfig securityPathConfig;
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return (web) -> web.ignoring()
             .requestMatchers(PathRequest.toH2Console())
-            .requestMatchers("/","/error", "/favicon.ico", "/exception/**", "login/oauth2/*");
+            .requestMatchers(securityPathConfig.getPublicPaths());
     }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-
-        log.debug("helllooo~~~?????");
-
 
         http.cors(AbstractHttpConfigurer::disable)
             .csrf(AbstractHttpConfigurer::disable)
@@ -57,7 +55,6 @@ public class SecurityConfig {
                 .frameOptions(FrameOptionsConfig::sameOrigin)
             )
             .authorizeHttpRequests(auth -> auth
-                    .requestMatchers("/login/oauth2/code/*").permitAll()
                     .anyRequest().authenticated()
             )
             .oauth2Login(oauth2 -> oauth2
@@ -68,18 +65,9 @@ public class SecurityConfig {
             )
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
             .exceptionHandling(ex -> {
-                ex.authenticationEntryPoint(authenticationEntryPoint());
+                ex.authenticationEntryPoint(jwtAuthenticationFailEntryPoint);
                 ex.accessDeniedHandler(jwtAccessDeniedHandler);
             });
         return http.build();
     }
-
-    @Bean
-    public AuthenticationEntryPoint authenticationEntryPoint() {
-        return (request, response, authException) -> {
-            log.error("Unauthorized error: {}", authException.getMessage());
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "아 모르겠다");
-        };
-    }
-
 }

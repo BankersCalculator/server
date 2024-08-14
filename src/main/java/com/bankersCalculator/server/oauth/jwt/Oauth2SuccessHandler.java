@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
@@ -23,9 +24,8 @@ import java.io.IOException;
 @Component
 public class Oauth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
-    // TODO: 수정 요망
-    private static final String REDIRECT_URI = "http://localhost:8080/login/oauth2/kakao?accessToken=%s&refreshToken=%s";
-    private static final String URI = "/auth/success";
+    // 인증 완료 후 Client에게 토큰반환할 Controller 주소
+    private static final String REDIRECT_URI = "/login/oauth2/kakao?accessToken=%s&refreshToken=%s";
 
     private final TokenProvider tokenProvider;
     private final UserRepository userRepository;
@@ -49,10 +49,6 @@ public class Oauth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
         String redirectURI = String.format(REDIRECT_URI,
             tokenDto.getAccessToken(), tokenDto.getRefreshToken());
-
-//        String redirectUrl = UriComponentsBuilder.fromUriString(URI)
-//            .queryParam("accessToken", tokenDto.getAccessToken())
-//            .build().toUriString();
 
         getRedirectStrategy().sendRedirect(request, response, redirectURI);
     }

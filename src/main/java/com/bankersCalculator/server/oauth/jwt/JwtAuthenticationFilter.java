@@ -35,22 +35,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     FilterChain filterChain) throws ServletException, IOException {
 
 
-
-        //TODO : 수정요망
-//        if (securityPathConfig.isPublicPath(request.getRequestURI())) {
-//            filterChain.doFilter(request, response);
-//            return;
-//        }
+        if (securityPathConfig.isPublicPath(request.getRequestURI())) {
+            filterChain.doFilter(request, response);
+            return;
+        }
 
         String accessToken = request.getHeader(ACCESS_HEADER);
-
-
 
         if (tokenValidator.validateExpire(accessToken) && tokenValidator.validateToken(accessToken)) {
             SecurityContextHolder.getContext().setAuthentication(tokenProvider.getAuthentication(accessToken));
         }
 
         filterChain.doFilter(request, response);
-
     }
 }
