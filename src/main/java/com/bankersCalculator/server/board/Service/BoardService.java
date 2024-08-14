@@ -6,13 +6,10 @@ import com.bankersCalculator.server.board.dto.BoardResponse;
 import com.bankersCalculator.server.board.repository.BoardRepository;
 import com.bankersCalculator.server.common.api.SliceResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class BoardService {

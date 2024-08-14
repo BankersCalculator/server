@@ -1,5 +1,6 @@
 package com.bankersCalculator.server.api.ltvCalc.service;
 
+import com.bankersCalculator.server.IntegrationTestSupport;
 import com.bankersCalculator.server.calculator.ltvCalc.dto.LtvCalcResponse;
 import com.bankersCalculator.server.calculator.ltvCalc.dto.LtvCalcServiceRequest;
 import com.bankersCalculator.server.calculator.ltvCalc.service.LtvCalcService;
@@ -16,8 +17,7 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@SpringBootTest
-class LtvCalcServiceTest {
+class LtvCalcServiceTest extends IntegrationTestSupport {
 
     @Autowired
     private LtvCalcService ltvCalcService;
