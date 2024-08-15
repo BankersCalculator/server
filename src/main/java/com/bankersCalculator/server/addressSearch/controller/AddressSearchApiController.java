@@ -11,7 +11,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
-public class AddressController {
+public class AddressSearchApiController {
     private final AddressSearchService addressSearchService;
 
     @GetMapping("/addressSearch")

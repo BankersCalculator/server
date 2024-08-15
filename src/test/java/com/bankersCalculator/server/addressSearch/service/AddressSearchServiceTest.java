@@ -1,14 +1,11 @@
 package com.bankersCalculator.server.addressSearch.service;
-
-import com.bankersCalculator.server.addressSearch.dto.AddressResponse;
+import com.bankersCalculator.server.addressSearch.dto.AddressSearchResponse;
 import org.json.JSONException;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
@@ -17,7 +14,9 @@ public class AddressSearchServiceTest {
     @Test
     void testSearchAddress() throws IOException, JSONException {
         AddressSearchService addressSearchService = new AddressSearchService();
+
         // 사용할 키워드 설정
+        String keyword0 = "현대썬앤빌";
         String keyword1 = " ";
         String keyword2 = "서";
         String keyword3 = "123";
@@ -27,6 +26,7 @@ public class AddressSearchServiceTest {
         String keyword7 = "SELECT";
 
         // 실제 API 호출
+        Map<String, Object> result0 = addressSearchService.searchAddress(keyword0);
         Map<String, Object> result1 = addressSearchService.searchAddress(keyword1);
         Map<String, Object> result2 = addressSearchService.searchAddress(keyword2);
         Map<String, Object> result3 = addressSearchService.searchAddress(keyword3);
@@ -36,6 +36,16 @@ public class AddressSearchServiceTest {
         Map<String, Object> result7 = addressSearchService.searchAddress(keyword7);
 
         // 결과 검증
+        List<AddressSearchResponse> addressList = (List<AddressSearchResponse>) result0.get("jusoList");
+        AddressSearchResponse firstAddress = addressList.get(0);
+        System.out.println("도로명 주소: " + firstAddress.getRoadAddr());
+        System.out.println("지번 주소: " + firstAddress.getJibunAddr());
+        System.out.println("우편번호: " + firstAddress.getZipNo());
+
+
+
+
+        String errorCode0 = (String) result0.get("errorCode");
         String errorCode1 = (String) result1.get("errorCode");
         String errorCode2 = (String) result2.get("errorCode");
         String errorCode3 = (String) result3.get("errorCode");
@@ -44,6 +54,7 @@ public class AddressSearchServiceTest {
         String errorCode6 = (String) result6.get("errorCode");
         String errorCode7 = (String) result7.get("errorCode");
 
+        String errorMessage0 = (String) result0.get("errorMessage");
         String errorMessage1 = (String) result1.get("errorMessage");
         String errorMessage2 = (String) result2.get("errorMessage");
         String errorMessage3 = (String) result3.get("errorMessage");
@@ -52,13 +63,15 @@ public class AddressSearchServiceTest {
         String errorMessage6 = (String) result6.get("errorMessage");
         String errorMessage7 = (String) result7.get("errorMessage");
 
-        System.out.println("Error Code1: " + errorCode1 + "Error Message1: " + errorMessage1);
-        System.out.println("Error Code2: " + errorCode2 + "Error Message2: " + errorMessage2);
-        System.out.println("Error Code3: " + errorCode3 + "Error Message3: " + errorMessage3);
-        System.out.println("Error Code4: " + errorCode4 + "Error Message4: " + errorMessage4);
-        System.out.println("Error Code5: " + errorCode5 + "Error Message5: " + errorMessage5);
-        System.out.println("Error Code6: " + errorCode6 + "Error Message6: " + errorMessage6);
-        System.out.println("Error Code7: " + errorCode7 + "Error Message7: " + errorMessage7);
+
+        System.out.println("Error Code0: " + errorCode0 + ", Error Message0: " + errorMessage0);
+        System.out.println("Error Code1: " + errorCode1 + ", Error Message1: " + errorMessage1);
+        System.out.println("Error Code2: " + errorCode2 + ", Error Message2: " + errorMessage2);
+        System.out.println("Error Code3: " + errorCode3 + ", Error Message3: " + errorMessage3);
+        System.out.println("Error Code4: " + errorCode4 + ", Error Message4: " + errorMessage4);
+        System.out.println("Error Code5: " + errorCode5 + ", Error Message5: " + errorMessage5);
+        System.out.println("Error Code6: " + errorCode6 + ", Error Message6: " + errorMessage6);
+        System.out.println("Error Code7: " + errorCode7 + ", Error Message7: " + errorMessage7);
 
         assertEquals("E0005", errorCode1 );
         assertEquals("E0008", errorCode2  );

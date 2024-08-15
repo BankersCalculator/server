@@ -1,8 +1,9 @@
 package com.bankersCalculator.server.addressSearch.service;
 
-import com.bankersCalculator.server.addressSearch.dto.AddressResponse;
+import com.bankersCalculator.server.addressSearch.dto.AddressSearchResponse;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONArray;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+/**
+ * 주어진 키워드를 사용하여 주소 검색 이 메서드는 Juso API를 호출하여 주소 정보를 가져옵니다.
+ *
+ * @param keyword 주소를 검색 키워드
+ * @return 검색 결과를 포함하는 Map 객체입니다. 이 Map에는 다음과 같은 항목들이 포함됩니다:
+ *         - "errorCode": API 요청 결과
+ *         - "errorMessage": 결과에 대한 메시지
+ *         - "jusoList": 주소 세부 정보를 포함하는 {@link AddressSearchResponse} 객체 리스트. 주소가 없을 경우 빈 리스트 반환
+ * @throws IOException 입출력 예외
+ * @throws JSONException API로부터 받은 JSON 응답을 파싱하는 동안 오류가 발생한 경우
+ */
 
 @Service
 @RequiredArgsConstructor
@@ -48,6 +60,7 @@ public class AddressSearchService {
         br.close();
 
         JSONObject jsonObject = new JSONObject(sb.toString());
+
         JSONObject common = jsonObject.getJSONObject("results").getJSONObject("common");
         String errorCode = common.getString("errorCode");
         String errorMessage = common.getString("errorMessage");
@@ -56,34 +69,40 @@ public class AddressSearchService {
         searchResult.put("errorCode", errorCode);
         searchResult.put("errorMessage", errorMessage);
 
-        JSONObject jusoObject = jsonObject.getJSONObject("results").optJSONObject("juso");
-        if (jusoObject != null) {
-            List<AddressResponse> addressList = new ArrayList<>();
-            AddressResponse addressResponse = new AddressResponse();
-            addressResponse.setRoadAddr(jusoObject.optString("roadAddr"));
-            addressResponse.setJibunAddr(jusoObject.optString("jibunAddr"));
-            addressResponse.setZipNo(jusoObject.optString("zipNo"));
-            addressResponse.setAdmCd(jusoObject.optString("admCd"));
-            addressResponse.setRnMgtSn(jusoObject.optString("rnMgtSn"));
-            addressResponse.setBdMgtSn(jusoObject.optString("bdMgtSn"));
-            addressResponse.setDetBdNmList(jusoObject.optString("detBdNmList"));
-            addressResponse.setBdNm(jusoObject.optString("bdNm"));
-            addressResponse.setBdKdcd(jusoObject.optString("bdKdcd"));
-            addressResponse.setSiNm(jusoObject.optString("siNm"));
-            addressResponse.setSggNm(jusoObject.optString("sggNm"));
-            addressResponse.setEmdNm(jusoObject.optString("emdNm"));
-            addressResponse.setLiNm(jusoObject.optString("liNm"));
-            addressResponse.setRn(jusoObject.optString("rn"));
-            addressResponse.setUdrtYn(jusoObject.optString("udrtYn"));
-            addressResponse.setBuldMnnm(jusoObject.optInt("buldMnnm"));
-            addressResponse.setBuldSlno(jusoObject.optInt("buldSlno"));
-            addressResponse.setMtYn(jusoObject.optString("mtYn"));
-            addressResponse.setLnbrMnnm(jusoObject.optInt("lnbrMnnm"));
-            addressResponse.setLnbrSlno(jusoObject.optInt("lnbrSlno"));
-            addressResponse.setEmdNo(jusoObject.optString("emdNo"));
-            addressList.add(addressResponse);
+
+        if (!jsonObject.getJSONObject("results").isNull("juso")) {
+            JSONArray jusoArray = jsonObject.getJSONObject("results").getJSONArray("juso");
+            List<AddressSearchResponse> addressList = new ArrayList<>();
+
+            for (int i = 0; i < jusoArray.length(); i++) {
+                JSONObject jusoObject = jusoArray.getJSONObject(i);
+                AddressSearchResponse addressSearchResponse = new AddressSearchResponse();
+                addressSearchResponse.setRoadAddr(jusoObject.getString("roadAddr"));
+                addressSearchResponse.setJibunAddr(jusoObject.getString("jibunAddr"));
+                addressSearchResponse.setZipNo(jusoObject.getString("zipNo"));
+                addressSearchResponse.setAdmCd(jusoObject.getString("admCd"));
+                addressSearchResponse.setRnMgtSn(jusoObject.getString("rnMgtSn"));
+                addressSearchResponse.setBdMgtSn(jusoObject.getString("bdMgtSn"));
+                addressSearchResponse.setDetBdNmList(jusoObject.getString("detBdNmList"));
+                addressSearchResponse.setBdNm(jusoObject.getString("bdNm"));
+                addressSearchResponse.setBdKdcd(jusoObject.getString("bdKdcd"));
+                addressSearchResponse.setSiNm(jusoObject.getString("siNm"));
+                addressSearchResponse.setSggNm(jusoObject.getString("sggNm"));
+                addressSearchResponse.setEmdNm(jusoObject.getString("emdNm"));
+                addressSearchResponse.setLiNm(jusoObject.getString("liNm"));
+                addressSearchResponse.setRn(jusoObject.getString("rn"));
+                addressSearchResponse.setUdrtYn(jusoObject.getString("udrtYn"));
+                addressSearchResponse.setBuldMnnm(jusoObject.getInt("buldMnnm"));
+                addressSearchResponse.setBuldSlno(jusoObject.getInt("buldSlno"));
+                addressSearchResponse.setMtYn(jusoObject.getString("mtYn"));
+                addressSearchResponse.setLnbrMnnm(jusoObject.getInt("lnbrMnnm"));
+                addressSearchResponse.setLnbrSlno(jusoObject.getInt("lnbrSlno"));
+                addressSearchResponse.setEmdNo(jusoObject.getString("emdNo"));
+                addressList.add(addressSearchResponse);
+            }
             searchResult.put("jusoList", addressList);
         } else {
+            // juso가 없는 경우 빈 리스트 반환
             searchResult.put("jusoList", new ArrayList<>());
         }
 

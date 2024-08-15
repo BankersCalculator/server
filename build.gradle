@@ -49,11 +49,13 @@ dependencies {
     testAnnotationProcessor 'org.projectlombok:lombok'
 
     testImplementation 'org.junit.jupiter:junit-jupiter'
+
     //2024-08-05 jegal,xml -> java 객체변환
     implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.13.3'
     implementation 'com.fasterxml.jackson.core:jackson-databind'
 
-    implementation 'org.json:json:20210307'
+
+    implementation 'org.json:json:20231013'
 
 
 }

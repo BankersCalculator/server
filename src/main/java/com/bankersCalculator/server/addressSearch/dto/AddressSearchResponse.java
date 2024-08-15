@@ -8,7 +8,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class AddressResponse {
+public class AddressSearchResponse {
     private String roadAddr;
     private String jibunAddr;
     private String zipNo;
