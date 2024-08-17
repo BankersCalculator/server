@@ -140,7 +140,7 @@
         <div class="formula">
             🏦 DTI = (해당 주택담보대출의 연간 원리금 상환액 + 기타부채의 연간 이자상환액) / 연소득 × 100 <br>[은행업 감독규정]
         </div>
-        <form th:action="@{/dti/result}" th:object="${dtiCalcRequest}" method="post">
+        <form th:action="@{dtiCalc/dtiCalcResult}" th:object="${dtiCalcRequest}" method="post">
             <div class="form-group">
                 <label>연소득 (세전, 증빙가능한 소득기준)</label>
                 <div class="input-container">
