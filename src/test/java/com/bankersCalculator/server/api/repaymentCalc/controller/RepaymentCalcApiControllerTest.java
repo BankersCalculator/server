@@ -9,6 +9,7 @@ import org.springframework.http.MediaType;
 
 import static com.bankersCalculator.server.common.message.ValidationMessage.MAX_VALUE_INTEREST_RATE_PERCENTAGE;
 import static com.bankersCalculator.server.common.message.ValidationMessage.NOT_NULL_REPAYMENT_TYPE;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -37,6 +38,7 @@ class RepaymentCalcApiControllerTest extends ControllerTestSupport {
                 post(BASE_URL)
                     .content(objectMapper.writeValueAsBytes(request))
                     .contentType(MediaType.APPLICATION_JSON)
+                    .with(csrf())
             )
             .andDo(print())
             .andExpect(jsonPath("$.code").value("200"))
@@ -62,6 +64,7 @@ class RepaymentCalcApiControllerTest extends ControllerTestSupport {
                 post(BASE_URL)
                     .content(objectMapper.writeValueAsBytes(request))
                     .contentType(MediaType.APPLICATION_JSON)
+                    .with(csrf())
             )
             .andDo(print())
             .andExpect(jsonPath("$.code").value("200"))
@@ -86,6 +89,7 @@ class RepaymentCalcApiControllerTest extends ControllerTestSupport {
                 post(BASE_URL)
                     .content(objectMapper.writeValueAsBytes(request))
                     .contentType(MediaType.APPLICATION_JSON)
+                    .with(csrf())
             )
             .andDo(print())
             .andExpect(jsonPath("$.code").value("400"))
@@ -111,13 +115,11 @@ class RepaymentCalcApiControllerTest extends ControllerTestSupport {
                 post(BASE_URL)
                     .content(objectMapper.writeValueAsBytes(request))
                     .contentType(MediaType.APPLICATION_JSON)
+                    .with(csrf())
             )
             .andDo(print())
             .andExpect(jsonPath("$.code").value("400"))
             .andExpect(jsonPath("$.status").value("BAD_REQUEST"))
             .andExpect(jsonPath("$.message").value(MAX_VALUE_INTEREST_RATE_PERCENTAGE));
     }
-
-
-
 }

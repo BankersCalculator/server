@@ -1,5 +1,6 @@
 package com.bankersCalculator.server.api.dsrCalc.service;
 
+import com.bankersCalculator.server.IntegrationTestSupport;
 import com.bankersCalculator.server.calculator.dsrCalc.dto.DsrCalcResponse;
 import com.bankersCalculator.server.calculator.dsrCalc.dto.DsrCalcServiceRequest;
 import com.bankersCalculator.server.calculator.dsrCalc.service.DsrCalcService;
@@ -18,9 +19,8 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@SpringBootTest
 @Slf4j
-class DsrCalcServiceTest {
+class DsrCalcServiceTest extends IntegrationTestSupport {
 
     @Autowired
     private DsrCalcService dsrCalcService;
