@@ -41,6 +41,24 @@ public class AddressSearchServiceTest {
         System.out.println("도로명 주소: " + firstAddress.getRoadAddr());
         System.out.println("지번 주소: " + firstAddress.getJibunAddr());
         System.out.println("우편번호: " + firstAddress.getZipNo());
+        System.out.println("행정구역 코드: " + firstAddress.getAdmCd());
+        System.out.println("도로명 코드: " + firstAddress.getRnMgtSn());
+        System.out.println("건물 관리 코드: " + firstAddress.getBdMgtSn());
+        System.out.println("상세 건물명: " + firstAddress.getDetBdNmList());
+        System.out.println("건물명: " + firstAddress.getBdNm());
+        System.out.println("공동주택 여부: " + firstAddress.getBdKdcd());
+        System.out.println("시도명: " + firstAddress.getSiNm());
+        System.out.println("시군구명: " + firstAddress.getSggNm());
+        System.out.println("읍면동명: " + firstAddress.getEmdNm());
+        System.out.println("법정리명: " + firstAddress.getLiNm());
+        System.out.println("도로명: " + firstAddress.getRn());
+        System.out.println("지하 여부: " + firstAddress.getUdrtYn());
+        System.out.println("건물 본번: " + firstAddress.getBuldMnnm());
+        System.out.println("건물 부번: " + firstAddress.getBuldSlno());
+        System.out.println("산 여부: " + firstAddress.getMtYn());
+        System.out.println("지번 본번: " + firstAddress.getLnbrMnnm());
+        System.out.println("지번 부번: " + firstAddress.getLnbrSlno());
+        System.out.println("읍면동 일련 번호: " + firstAddress.getEmdNo());
 
 
 
