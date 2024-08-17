@@ -16,7 +16,7 @@ public class AddressSearchServiceTest {
         AddressSearchService addressSearchService = new AddressSearchService();
 
         // 사용할 키워드 설정
-        String keyword0 = "현대썬앤빌";
+        String keyword0 = "삼성동 189";
         String keyword1 = " ";
         String keyword2 = "서";
         String keyword3 = "123";

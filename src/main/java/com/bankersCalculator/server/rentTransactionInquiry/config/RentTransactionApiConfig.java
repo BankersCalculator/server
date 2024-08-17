@@ -35,6 +35,7 @@ public class RentTransactionApiConfig {
                 + endpointMethod(rentHousingType)
                 + "LAWD_CD=" + URLEncoder.encode(lawdCd, "UTF-8")
                 + "&DEAL_YMD=" + URLEncoder.encode(dealYmd, "UTF-8")
+                + "&numOfRows=" + "10000"
                 + "&serviceKey=" + encodedServiceKey;
 
 

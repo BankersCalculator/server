@@ -59,12 +59,20 @@ public class RentTransactionApiClientTest {
             System.out.println("계약 기간: " + item.getContractTerm());
             System.out.println("계약 유형: " + item.getContractType());
             System.out.println("거래일: " + item.getDealDay());
+            System.out.println("계약 월: " + item.getDealMonth());
+            System.out.println("계약 년도: " + item.getDealYear());
             System.out.println("보증금: " + item.getDeposit());
             System.out.println("전용면적: " + item.getExcluUseAr());
             System.out.println("층수: " + item.getFloor());
             System.out.println("지번: " + item.getJibun());
             System.out.println("월세 금액: " + item.getMonthlyRent());
+            System.out.println("이전 보증금: " + item.getPreDeposit());
+            System.out.println("이전 월세 금액: " + item.getPreMonthlyRent());
+            System.out.println("시군구 코드: " + item.getSggCd());
+            System.out.println("읍면동 이름: " + item.getUmdNm());
+            System.out.println("사용권리: " + item.getUseRRRight());
             System.out.println("--------------");
+
         }
     }
 }

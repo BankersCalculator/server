@@ -81,7 +81,7 @@ public class RentTransactionApiClient {
 
             // XML을 JSON으로 변환
             JSONObject jsonObject = new JSONObject(xmlMapper.readTree(sb.toString()).toString());
-            logger.info("Converted XML to JSON: {}", jsonObject);
+            //logger.info("Converted XML to JSON: {}", jsonObject);
 
             // 결과 처리 및 DTO 매핑
             return processApiResponse(jsonObject);
@@ -107,7 +107,6 @@ public class RentTransactionApiClient {
         if (!body.isNull("items")) {
             JSONArray itemsArray = body.getJSONObject("items").getJSONArray("item");
             List<RentTransactionApiResponse.ApiResponseItem> itemList = new ArrayList<>();
-
             for (int i = 0; i < itemsArray.length(); i++) {
                 JSONObject itemObject = itemsArray.getJSONObject(i);
                 RentTransactionApiResponse.ApiResponseItem item = new RentTransactionApiResponse.ApiResponseItem();
