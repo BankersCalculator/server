@@ -22,7 +22,14 @@ include::api/oauth2/oauth2.adoc[]
 
 include::api/loan-advise/generate-loan-advise.adoc[]
 include::api/loan-advise/generate-loan-advise-on-specific-loan.adoc[]
-include::api/loan-advise/get-submitted-user-input.adoc[]
+
+[[UserInputInfo-API]]
+== UserInputInfo API
+
+include::api/user-input-info/get-recently-submitted.adoc[]
+include::api/user-input-info/get-recent-ten.adoc[]
+include::api/user-input-info/get-specific.adoc[]
+
 
 
 [[Calculator-API]]

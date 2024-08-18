@@ -452,33 +452,27 @@ Accept: application/json
 accessToken: 액세스 토큰
 refreshToken: 리프레시 토큰
 tempUserId: 일회성 유저 ID
-Content-Length: 652
+Content-Length: 482
 Host: localhost:8080
 
 {
-  "age" : 30,
-  "annualIncome" : 50000000,
-  "maritalStatus" : "MARRIED",
-  "newlyWedding" : true,
-  "weddingDate" : [ 2023, 1, 1 ],
-  "spouseAnnualIncome" : 40000000,
+  "rentalDeposit" : 200000000,
+  "monthlyRent" : 0,
   "cashOnHand" : 20000000,
+  "age" : 30,
+  "maritalStatus" : "MARRIED",
+  "annualIncome" : 50000000,
+  "spouseAnnualIncome" : 40000000,
   "childStatus" : "ONE_CHILD",
   "hasNewborn" : true,
-  "worksForSME" : false,
-  "housingType" : "APARTMENT",
-  "rentalArea" : "UNDER_85_SQM",
-  "regionType" : "SEOUL",
-  "propertyName" : "Sample Apartment",
-  "individualRentalArea" : 75,
-  "rentalCostList" : [ {
-    "rentalType" : "JEONSE",
-    "rentalDeposit" : 200000000,
-    "monthlyRent" : 0
-  } ],
-  "housingPrice" : 300000000,
-  "priorDepositAndClaims" : 50000000,
-  "isNetAssetOver345M" : false
+  "isSMEEmployee" : false,
+  "isNetAssetOver345M" : false,
+  "rentHousingType" : "APARTMENT",
+  "exclusiveArea" : 75,
+  "buildingName" : "Sample Apartment",
+  "districtCode" : "1168010100",
+  "dongName" : "삼성동",
+  "jibun" : "79-1"
 }</code></pre>
 </div>
 </div>
@@ -529,14 +523,24 @@ Host: localhost:8080
 </thead>
 <tbody>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>rentalDeposit</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">임차보증금</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>monthlyRent</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">월세</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>cashOnHand</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">보유현금</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>age</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">만나이</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>annualIncome</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">연소득</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>maritalStatus</code></p></td>
@@ -544,24 +548,14 @@ Host: localhost:8080
 <td class="tableblock halign-left valign-top"><p class="tableblock">혼인상태 (SINGLE, MARRIED, ENGAGED)</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>newlyWedding</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">신혼여부</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>weddingDate</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">혼인(예정)일</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>annualIncome</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">연소득</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>spouseAnnualIncome</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">배우자연소득</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>cashOnHand</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">보유현금</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>childStatus</code></p></td>
@@ -574,69 +568,44 @@ Host: localhost:8080
 <td class="tableblock halign-left valign-top"><p class="tableblock">신생아여부</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>worksForSME</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>isSMEEmployee</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">중소기업재직여부</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>housingType</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">주택 유형 (APARTMENT: 아파트, DETACHED_HOUSE: 단독주택, MULTI_FAMILY_HOUSE: 다가구주택, MULTI_HOUSEHOLD_HOUSE: 다세대주택, OFFICETEL: 오피스텔, OTHER: 기타)</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>rentalArea</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">임차전용면적 (UNDER_85_SQM, OVER_85_SQM)</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>regionType</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">지역 유형 (SEOUL: 서울 / CAPITAL_AREA: 수도권 / METROPOLITAN_CITY: 광역시 / OTHER_AREAS: 기타</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>propertyName</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">건물명</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>individualRentalArea</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">임차전용면적</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>rentalCostList</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">임차비용 목록</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>rentalCostList[].rentalType</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">임대 유형 (JEONSE, BANJEONSE, WOLSE)</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>rentalCostList[].rentalDeposit</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">임대 보증금</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>rentalCostList[].monthlyRent</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">월 임대료</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>housingPrice</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">주택가액</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>priorDepositAndClaims</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">선순위임차보증금 and 선순위채권</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>isNetAssetOver345M</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">순자산 3.45억 초과 여부</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>rentHousingType</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">주택 유형 (APARTMENT, DETACHED_HOUSE, MULTI_FAMILY_HOUSE, MULTI_HOUSEHOLD_HOUSE, OFFICETEL, OTHER)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>exclusiveArea</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">전용면적</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>buildingName</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">건물명</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>districtCode</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">법정동 코드</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>dongName</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">읍면동 이름</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>jibun</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">지번</p></td>
 </tr>
 </tbody>
 </table>

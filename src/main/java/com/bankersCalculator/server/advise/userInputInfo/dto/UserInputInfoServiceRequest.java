@@ -8,6 +8,5 @@ import lombok.Getter;
 @Builder
 public class UserInputInfoServiceRequest {
 
-    private final UserType userType;
-    private final String userId;
+    private final String userInputInfoId;
 }

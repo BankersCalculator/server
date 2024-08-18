@@ -1,0 +1,16 @@
+[[get-specific]]
+=== 특정 유저투입정보 목록 조회 API
+
+==== HTTP Request
+
+include::{snippets}/user-input-info/get-specific/http-request.adoc[]
+==== Request Parameters
+include::{snippets}/user-input-info/get-specific/query-parameters.adoc[]
+==== Request Headers
+include::{snippets}/user-input-info/get-specific/request-headers.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/user-input-info/get-specific/http-response.adoc[]
+==== Response Fields
+include::{snippets}/user-input-info/get-specific/response-fields.adoc[]
