@@ -22,13 +22,14 @@ public class DtiCalcControllerTest extends ControllerTestSupport {
     public void testShowCalcForm() throws Exception {
       
     	//dti URL에 대해 get 요청 수행
-        mockMvc.perform(get("/dti")
+        mockMvc.perform(get("/dtiCalc")
+
                 .with(csrf())
             )
                 //HTTP 상태코드 200인지 확
                 .andExpect(status().isOk())
                 //반환 명칭 확
-                .andExpect(view().name("DtiCalc"))
+                .andExpect(view().name("dtiCalc/dtiCalc"))
                 //모델에 dtiCalcRequest 속성있는지 존재유무 확인
                 .andExpect(model().attributeExists("dtiCalcRequest"));
     }

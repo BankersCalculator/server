@@ -63,10 +63,12 @@ dependencies {
     testImplementation 'org.springframework.security:spring-security-test'
     //2024-08-05 jegal,xml -> java 객체변환
     implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.15.2'
-
-
-
     implementation 'org.json:json:20231013'
+
+    //2024-08-18 jegal, `android-json`제외, org.json:json과 충돌
+    configurations.all {
+        exclude group: 'com.vaadin.external.google', module: 'android-json'
+    }
 
 
 }

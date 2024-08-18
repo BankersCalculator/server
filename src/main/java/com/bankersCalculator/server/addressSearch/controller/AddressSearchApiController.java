@@ -9,12 +9,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/v1/addressSearch")
 @RequiredArgsConstructor
 public class AddressSearchApiController {
     private final AddressSearchService addressSearchService;
 
-    @GetMapping("/addressSearch")
+    @PostMapping
     public ResponseEntity<Map<String, Object>> searchAddress(@RequestParam String keyword) {
         try {
             Map<String, Object> addressSearchResult = addressSearchService.searchAddress(keyword);
