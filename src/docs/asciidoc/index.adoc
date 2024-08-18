@@ -60,7 +60,7 @@ Content-Length: 1567
 |응답 데이터
 
 |`+data.accessToken+`
-|`+Number+`
+|`+String+`
 |액세스토큰
 
 |`+data.refreshToken+`
