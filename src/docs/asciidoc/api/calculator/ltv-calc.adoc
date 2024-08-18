@@ -4,10 +4,13 @@
 ==== HTTP Request
 
 include::{snippets}/calculator/ltv-calc/http-request.adoc[]
+==== Request Headers
 include::{snippets}/calculator/ltv-calc/request-headers.adoc[]
+==== Request Fields
 include::{snippets}/calculator/ltv-calc/request-fields.adoc[]
 
 ==== HTTP Response
 
 include::{snippets}/calculator/ltv-calc/http-response.adoc[]
+==== Response Fields
 include::{snippets}/calculator/ltv-calc/response-fields.adoc[]

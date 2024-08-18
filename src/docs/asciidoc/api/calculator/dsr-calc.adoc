@@ -4,10 +4,13 @@
 ==== HTTP Request
 
 include::{snippets}/calculator/dsr-calc/http-request.adoc[]
+==== Request Headers
 include::{snippets}/calculator/dsr-calc/request-headers.adoc[]
+==== Request Fields
 include::{snippets}/calculator/dsr-calc/request-fields.adoc[]
 
 ==== HTTP Response
 
 include::{snippets}/calculator/dsr-calc/http-response.adoc[]
+==== Response Fields
 include::{snippets}/calculator/dsr-calc/response-fields.adoc[]
