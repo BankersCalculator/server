@@ -1,5 +1,5 @@
-package com.bankersCalculator.server.addressSearch.controller;
-import com.bankersCalculator.server.addressSearch.service.AddressSearchService;
+package com.bankersCalculator.server.housingInfo.addressSearch.controller;
+import com.bankersCalculator.server.housingInfo.addressSearch.service.AddressSearchService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -1,9 +1,9 @@
-package com.bankersCalculator.server.rentTransactionInquiry.service;
+package com.bankersCalculator.server.housingInfo.rentTransactionInquiry.service;
 
-import com.bankersCalculator.server.rentTransactionInquiry.api.RentTransactionApiClient;
-import com.bankersCalculator.server.rentTransactionInquiry.common.RentHousingType;
-import com.bankersCalculator.server.rentTransactionInquiry.dto.RentTransactionApiResponse;
-import com.bankersCalculator.server.rentTransactionInquiry.dto.RentTransactionInquiryResponse;
+import com.bankersCalculator.server.housingInfo.rentTransactionInquiry.api.RentTransactionApiClient;
+import com.bankersCalculator.server.housingInfo.rentTransactionInquiry.common.RentHousingType;
+import com.bankersCalculator.server.housingInfo.rentTransactionInquiry.dto.RentTransactionApiResponse;
+import com.bankersCalculator.server.housingInfo.rentTransactionInquiry.dto.RentTransactionInquiryResponse;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;

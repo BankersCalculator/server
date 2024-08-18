@@ -1,4 +1,4 @@
-package com.bankersCalculator.server.rentTransactionInquiry.common;
+package com.bankersCalculator.server.housingInfo.rentTransactionInquiry.common;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

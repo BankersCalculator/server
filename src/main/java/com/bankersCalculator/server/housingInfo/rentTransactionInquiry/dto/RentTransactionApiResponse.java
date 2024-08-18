@@ -1,4 +1,4 @@
-package com.bankersCalculator.server.rentTransactionInquiry.dto;
+package com.bankersCalculator.server.housingInfo.rentTransactionInquiry.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;

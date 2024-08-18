@@ -1,6 +1,6 @@
-package com.bankersCalculator.server.addressSearch.service;
+package com.bankersCalculator.server.housingInfo.addressSearch.service;
 
-import com.bankersCalculator.server.addressSearch.dto.AddressSearchResponse;
+import com.bankersCalculator.server.housingInfo.addressSearch.dto.AddressSearchResponse;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONArray;
 

@@ -1,4 +1,4 @@
-package com.bankersCalculator.server.addressSearch.dto;
+package com.bankersCalculator.server.housingInfo.addressSearch.dto;
 
 import lombok.Getter;
 import lombok.Setter;

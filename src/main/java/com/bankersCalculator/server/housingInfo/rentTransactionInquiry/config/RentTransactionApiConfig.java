@@ -1,5 +1,5 @@
-package com.bankersCalculator.server.rentTransactionInquiry.config;
-import com.bankersCalculator.server.rentTransactionInquiry.common.RentHousingType;
+package com.bankersCalculator.server.housingInfo.rentTransactionInquiry.config;
+import com.bankersCalculator.server.housingInfo.rentTransactionInquiry.common.RentHousingType;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Bean;

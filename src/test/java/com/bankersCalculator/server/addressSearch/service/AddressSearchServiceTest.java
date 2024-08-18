@@ -1,5 +1,6 @@
 package com.bankersCalculator.server.addressSearch.service;
-import com.bankersCalculator.server.addressSearch.dto.AddressSearchResponse;
+import com.bankersCalculator.server.housingInfo.addressSearch.dto.AddressSearchResponse;
+import com.bankersCalculator.server.housingInfo.addressSearch.service.AddressSearchService;
 import org.json.JSONException;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
