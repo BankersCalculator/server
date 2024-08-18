@@ -4,6 +4,7 @@
 ==== HTTP Request
 
 include::{snippets}/loan-advise/generate-loan-advise/http-request.adoc[]
+include::{snippets}/loan-advise/generate-loan-advise/request-headers.adoc[]
 include::{snippets}/loan-advise/generate-loan-advise/request-fields.adoc[]
 
 ==== HTTP Response

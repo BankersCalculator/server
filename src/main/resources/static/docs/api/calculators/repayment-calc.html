@@ -449,6 +449,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">POST /api/v1/repaymentCalc HTTP/1.1
 Content-Type: application/json
 Accept: application/json
+accessToken: 액세스 토큰
+refreshToken: 리프레시 토큰
 Content-Length: 162
 Host: localhost:8080
 
@@ -462,6 +464,28 @@ Host: localhost:8080
 }</code></pre>
 </div>
 </div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>accessToken</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">액세스 토큰</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>refreshToken</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">리프레쉬 토큰</p></td>
+</tr>
+</tbody>
+</table>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -629,7 +653,7 @@ Content-Length: 568
 <div id="footer">
 <div id="footer-text">
 Version 1.0<br>
-Last updated 2024-08-18 18:30:51 +0900
+Last updated 2024-08-18 19:25:48 +0900
 </div>
 </div>
 </body>

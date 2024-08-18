@@ -15,6 +15,8 @@ import org.springframework.restdocs.payload.JsonFieldType;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
@@ -62,12 +64,21 @@ public class LtvCalcApiControllerDocsTest extends RestDocsSupport {
         mockMvc.perform(post(BASE_URL)
                 .content(objectMapper.writeValueAsString(request))
                 .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON))
+                .accept(MediaType.APPLICATION_JSON)
+                .header("accessToken", "액세스 토큰")
+                .header("refreshToken", "리프레시 토큰")
+            )
             .andExpect(status().isOk())
             .andDo(print())
             .andDo(document("calculator/ltv-calc",
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint()),
+                requestHeaders(
+                    headerWithName("accessToken")
+                        .description("액세스 토큰"),
+                    headerWithName("refreshToken")
+                        .description("리프레쉬 토큰")
+                ),
                 requestFields(
                     fieldWithPath("loanAmount").type(JsonFieldType.NUMBER)
                         .description("대출금액"),

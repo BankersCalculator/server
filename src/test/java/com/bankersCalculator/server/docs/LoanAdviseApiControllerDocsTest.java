@@ -13,6 +13,7 @@ import com.bankersCalculator.server.common.enums.ltv.HousingType;
 import com.bankersCalculator.server.common.enums.ltv.RegionType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 
@@ -24,6 +25,8 @@ import static com.bankersCalculator.server.common.enums.loanAdvise.UserType.NON_
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
@@ -81,11 +84,20 @@ public class LoanAdviseApiControllerDocsTest extends RestDocsSupport {
         mockMvc.perform(get(BASE_URL + "/userInfo")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request))
-                .accept(MediaType.APPLICATION_JSON))
+                .accept(MediaType.APPLICATION_JSON)
+                .header("accessToken", "액세스 토큰")
+                .header("refreshToken", "리프레시 토큰")
+            )
             .andExpect(status().isOk())
             .andDo(document("loan-advise/get-submitted-user-input",
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint()),
+                requestHeaders(
+                    headerWithName("accessToken")
+                        .description("액세스 토큰"),
+                    headerWithName("refreshToken")
+                        .description("리프레쉬 토큰")
+                ),
                 requestFields(
                     fieldWithPath("userType").type(JsonFieldType.STRING)
                         .description("유저 타입(MEMBER: 회원 / NON_MEMBER: 비회원)"),
@@ -170,11 +182,23 @@ public class LoanAdviseApiControllerDocsTest extends RestDocsSupport {
         mockMvc.perform(post(BASE_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request)))
+                .content(objectMapper.writeValueAsString(request))
+                .header("accessToken", "액세스 토큰")
+                .header("refreshToken", "리프레시 토큰")
+                .header("tempUserId", "일회성 유저 ID")
+            )
             .andExpect(status().isOk())
             .andDo(document("loan-advise/generate-loan-advise",
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint()),
+                requestHeaders(
+                    headerWithName("accessToken")
+                        .description("액세스 토큰"),
+                    headerWithName("refreshToken")
+                        .description("리프레쉬 토큰"),
+                    headerWithName("tempUserId")
+                        .description("일회성 유저 ID")
+                ),
                 requestFields(
                     fieldWithPath("age").type(JsonFieldType.NUMBER).description("만나이"),
                     fieldWithPath("annualIncome").type(JsonFieldType.NUMBER).description("연소득"),
@@ -257,11 +281,20 @@ public class LoanAdviseApiControllerDocsTest extends RestDocsSupport {
         mockMvc.perform(post(BASE_URL + "/{productCode}", productCode)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request)))
+                .content(objectMapper.writeValueAsString(request))
+                .header("accessToken", "액세스 토큰")
+                .header("refreshToken", "리프레시 토큰")
+            )
             .andExpect(status().isOk())
             .andDo(document("loan-advise/generate-loan-advise-on-specific-loan",
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint()),
+                requestHeaders(
+                    headerWithName("accessToken")
+                        .description("액세스 토큰"),
+                    headerWithName("refreshToken")
+                        .description("리프레쉬 토큰")
+                ),
                 pathParameters(
                     parameterWithName("productCode").description("대출 상품 코드")
                 ),

@@ -4,6 +4,7 @@
 ==== HTTP Request
 
 include::{snippets}/loan-advise/get-submitted-user-input/http-request.adoc[]
+include::{snippets}/loan-advise/get-submitted-user-input/request-headers.adoc[]
 include::{snippets}/loan-advise/get-submitted-user-input/request-fields.adoc[]
 
 ==== HTTP Response
