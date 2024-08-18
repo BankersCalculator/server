@@ -22,45 +22,45 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class AddressSearchService {
 
-    private String callJusoApi(String keyword) throws IOException {
-        String apiUrl = "https://business.juso.go.kr/addrlink/addrLinkApi.do";
-        String apiKey = "devU01TX0FVVEgyMDI0MDgwNTIxMTIzNjExNDk4OTM=";
-        String currentPage = "1";
-        String countPerPage = "10";
-        String resultType = "json";
-        String apiUrlWithParams = apiUrl
-                + "?confmKey=" + apiKey
-                + "&currentPage=" + currentPage
-                + "&countPerPage=" + countPerPage
-                + "&resultType=" + resultType
+    private static final String API_URL = "https://business.juso.go.kr/addrlink/addrLinkApi.do";
+    private static final String API_KEY = "devU01TX0FVVEgyMDI0MDgwNTIxMTIzNjExNDk4OTM=";
+    private static final String CURRENT_PAGE = "1";
+    private static final String COUNT_PER_PAGE = "10";
+    private static final String RESULT_TYPE = "json";
+
+    private String buildApiUrl(String keyword) throws IOException {
+        return API_URL
+                + "?confmKey=" + API_KEY
+                + "&currentPage=" + CURRENT_PAGE
+                + "&countPerPage=" + COUNT_PER_PAGE
+                + "&resultType=" + RESULT_TYPE
                 + "&keyword=" + URLEncoder.encode(keyword, "UTF-8");
-
-        URL url = new URL(apiUrlWithParams);
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setRequestMethod("GET");
-
-        BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
-        StringBuilder sb = new StringBuilder();
-        String line;
-
-        while ((line = br.readLine()) != null) {
-            sb.append(line);
-        }
-        br.close();
-
-        return sb.toString();
     }
 
-    private List<AddressSearchApiResponse> parseJusoApiResponse(String apiResponse) throws JSONException {
-        List<AddressSearchApiResponse> addressList = new ArrayList<>();
+    private String callAddressSerarchApi(String apiUrl) throws IOException {
+        HttpURLConnection conn = (HttpURLConnection) new URL(apiUrl).openConnection();
+        conn.setRequestMethod("GET");
+
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"))) {
+            StringBuilder response = new StringBuilder();
+            String line;
+
+            while ((line = br.readLine()) != null) {
+                response.append(line);
+            }
+
+            return response.toString();
+        }
+    }
+
+    private List<AddressSearchApiResponse> parseAddressInfoResponse(String apiResponse) throws JSONException {
+        List<AddressSearchApiResponse> addressInfoList = new ArrayList<>();
         JSONObject jsonObject = new JSONObject(apiResponse);
+        JSONObject results = jsonObject.getJSONObject("results");
+        JSONObject common = results.getJSONObject("common");
 
-        JSONObject common = jsonObject.getJSONObject("results").getJSONObject("common");
-        String errorCode = common.getString("errorCode");
-
-        if ("0".equals(errorCode) && !jsonObject.getJSONObject("results").isNull("juso")) {
-            JSONArray jusoArray = jsonObject.getJSONObject("results").getJSONArray("juso");
-
+        if ("0".equals(common.getString("errorCode")) && !results.isNull("juso")) {
+            JSONArray jusoArray = results.getJSONArray("juso");
             for (int i = 0; i < jusoArray.length(); i++) {
                 JSONObject addressObject = jusoArray.getJSONObject(i);
                 AddressSearchApiResponse addressSearchApiResponse = new AddressSearchApiResponse();
@@ -69,38 +69,26 @@ public class AddressSearchService {
                 addressSearchApiResponse.setDistrictCode(addressObject.getString("admCd"));
                 addressSearchApiResponse.setBuildingName(addressObject.getString("bdNm"));
                 addressSearchApiResponse.setDongName(addressObject.getString("emdNm"));
+                addressSearchApiResponse.setJibun(addressObject.getInt("lnbrMnnm") + "-" + addressObject.getInt("lnbrSlno"));
 
-                int jibunMain = addressObject.getInt("lnbrMnnm");
-                int jibunSub = addressObject.getInt("lnbrSlno");
-
-                String jibun = jibunMain + "-" + jibunSub;
-
-                addressSearchApiResponse.setJibun(jibun);
-                addressList.add(addressSearchApiResponse);
+                addressInfoList.add(addressSearchApiResponse);
             }
         }
-
-        return addressList;
+        return addressInfoList;
     }
 
     public Map<String, Object> searchAddress(String keyword) throws IOException, JSONException {
-        String apiResponse = callJusoApi(keyword);
+        String apiUrl = buildApiUrl(keyword);
+        String apiResponse = callAddressSerarchApi(apiUrl);
         JSONObject jsonObject = new JSONObject(apiResponse);
-
         JSONObject common = jsonObject.getJSONObject("results").getJSONObject("common");
-        String errorCode = common.getString("errorCode");
-        String errorMessage = common.getString("errorMessage");
 
         Map<String, Object> searchResult = new HashMap<>();
-        searchResult.put("errorCode", errorCode);
-        searchResult.put("errorMessage", errorMessage);
+        searchResult.put("apiResultCode", common.getString("errorCode"));
+        searchResult.put("apiResultMessage", common.getString("errorMessage"));
 
-        if ("0".equals(errorCode)) {
-            List<AddressSearchApiResponse> addressList = parseJusoApiResponse(apiResponse);
-            searchResult.put("addressList", addressList);
-        } else {
-            searchResult.put("addressList", new ArrayList<>());
-        }
+        List<AddressSearchApiResponse> addressInfoList = parseAddressInfoResponse(apiResponse);
+        searchResult.put("addressInfoList", addressInfoList);
 
         return searchResult;
     }

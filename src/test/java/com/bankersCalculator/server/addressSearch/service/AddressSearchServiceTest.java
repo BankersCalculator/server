@@ -41,8 +41,8 @@ public class AddressSearchServiceTest {
 
         // 결과 검증
         @SuppressWarnings("unchecked")
-        List<AddressSearchApiResponse> addressList = (List<AddressSearchApiResponse>) result0.get("addressList");
-        AddressSearchApiResponse firstAddress = addressList.get(0);
+        List<AddressSearchApiResponse> addressInfoList = (List<AddressSearchApiResponse>) result0.get("addressInfoList");
+        AddressSearchApiResponse firstAddress = addressInfoList.get(0);
 
         // 검증 로직
         System.out.println("도로명 주소: " + firstAddress.getRoadAddress());
@@ -54,39 +54,39 @@ public class AddressSearchServiceTest {
 
 
         // 에러 코드 및 메시지 검증
-        String errorCode0 = (String) result0.get("errorCode");
-        String errorCode1 = (String) result1.get("errorCode");
-        String errorCode2 = (String) result2.get("errorCode");
-        String errorCode3 = (String) result3.get("errorCode");
-        String errorCode4 = (String) result4.get("errorCode");
-        String errorCode5 = (String) result5.get("errorCode");
-        String errorCode6 = (String) result6.get("errorCode");
-        String errorCode7 = (String) result7.get("errorCode");
+        String apiResultCode0 = (String) result0.get("apiResultCode");
+        String apiResultCode1 = (String) result1.get("apiResultCode");
+        String apiResultCode2 = (String) result2.get("apiResultCode");
+        String apiResultCode3 = (String) result3.get("apiResultCode");
+        String apiResultCode4 = (String) result4.get("apiResultCode");
+        String apiResultCode5 = (String) result5.get("apiResultCode");
+        String apiResultCode6 = (String) result6.get("apiResultCode");
+        String apiResultCode7 = (String) result7.get("apiResultCode");
 
-        String errorMessage0 = (String) result0.get("errorMessage");
-        String errorMessage1 = (String) result1.get("errorMessage");
-        String errorMessage2 = (String) result2.get("errorMessage");
-        String errorMessage3 = (String) result3.get("errorMessage");
-        String errorMessage4 = (String) result4.get("errorMessage");
-        String errorMessage5 = (String) result5.get("errorMessage");
-        String errorMessage6 = (String) result6.get("errorMessage");
-        String errorMessage7 = (String) result7.get("errorMessage");
+        String apiResultMessage0 = (String) result0.get("apiResultMessage");
+        String apiResultMessage1 = (String) result1.get("apiResultMessage");
+        String apiResultMessage2 = (String) result2.get("apiResultMessage");
+        String apiResultMessage3 = (String) result3.get("apiResultMessage");
+        String apiResultMessage4 = (String) result4.get("apiResultMessage");
+        String apiResultMessage5 = (String) result5.get("apiResultMessage");
+        String apiResultMessage6 = (String) result6.get("apiResultMessage");
+        String apiResultMessage7 = (String) result7.get("apiResultMessage");
 
-        System.out.println("Error Code0: " + errorCode0 + ", Error Message0: " + errorMessage0);
-        System.out.println("Error Code1: " + errorCode1 + ", Error Message1: " + errorMessage1);
-        System.out.println("Error Code2: " + errorCode2 + ", Error Message2: " + errorMessage2);
-        System.out.println("Error Code3: " + errorCode3 + ", Error Message3: " + errorMessage3);
-        System.out.println("Error Code4: " + errorCode4 + ", Error Message4: " + errorMessage4);
-        System.out.println("Error Code5: " + errorCode5 + ", Error Message5: " + errorMessage5);
-        System.out.println("Error Code6: " + errorCode6 + ", Error Message6: " + errorMessage6);
-        System.out.println("Error Code7: " + errorCode7 + ", Error Message7: " + errorMessage7);
+        System.out.println("Error Code0: " + apiResultCode0 + ", Error Message0: " + apiResultMessage0);
+        System.out.println("Error Code1: " + apiResultCode1 + ", Error Message1: " + apiResultMessage1);
+        System.out.println("Error Code2: " + apiResultCode2 + ", Error Message2: " + apiResultMessage2);
+        System.out.println("Error Code3: " + apiResultCode3 + ", Error Message3: " + apiResultMessage3);
+        System.out.println("Error Code4: " + apiResultCode4 + ", Error Message4: " + apiResultMessage4);
+        System.out.println("Error Code5: " + apiResultCode5 + ", Error Message5: " + apiResultMessage5);
+        System.out.println("Error Code6: " + apiResultCode6 + ", Error Message6: " + apiResultMessage6);
+        System.out.println("Error Code7: " + apiResultCode7 + ", Error Message7: " + apiResultMessage7);
 
-        assertEquals("E0005", errorCode1);
-        assertEquals("E0008", errorCode2);
-        assertEquals("E0009", errorCode3);
-        assertEquals("E0010", errorCode4);
-        assertEquals("E0011", errorCode5);
-        assertEquals("E0012", errorCode6);
-        assertEquals("E0013", errorCode7);
+        assertEquals("E0005", apiResultCode1);
+        assertEquals("E0008", apiResultCode2);
+        assertEquals("E0009", apiResultCode3);
+        assertEquals("E0010", apiResultCode4);
+        assertEquals("E0011", apiResultCode5);
+        assertEquals("E0012", apiResultCode6);
+        assertEquals("E0013", apiResultCode7);
     }
 }

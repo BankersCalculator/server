@@ -11,7 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import static org.mockito.ArgumentMatchers.anyString;
@@ -50,15 +50,16 @@ public class AddressSearchApiControllerDocsTest extends RestDocsSupport {
         addressSearchApiResponse.setDongName("청라동");
         addressSearchApiResponse.setJibun("95-1");
 
-        Map<String, Object> response = new HashMap<>();
-        response.put("errorCode", "0");
-        response.put("errorMessage", "Success");
-        response.put("addressList", Collections.singletonList(addressSearchApiResponse));
+        // 응답을 LinkedHashMap으로 구성
+        Map<String, Object> response = new LinkedHashMap<>();
+        response.put("apiResultCode", "0");
+        response.put("apiResultMessage", "Success");
+        response.put("addressInfoList", Collections.singletonList(addressSearchApiResponse));
 
         when(addressSearchService.searchAddress(anyString())).thenReturn(response);
 
         mockMvc.perform(post(BASE_URL)
-                        .content("{\"keyword\": \"세종대로 110\"}")  // JSON 형식으로 요청 본문을 전달
+                        .content("{\"keyword\": \"청라한내로 100번길\"}")  // JSON 형식으로 요청 본문을 전달
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -70,15 +71,15 @@ public class AddressSearchApiControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("keyword").type(JsonFieldType.STRING).description("주소 검색을 위한 키워드")
                         ),
                         responseFields(
-                                fieldWithPath("errorCode").type(JsonFieldType.STRING).description("결과 코드"),
-                                fieldWithPath("errorMessage").type(JsonFieldType.STRING).description("결과 메시지"),
-                                fieldWithPath("addressList").type(JsonFieldType.ARRAY).description("주소정보"),
-                                fieldWithPath("addressList[].roadAddress").type(JsonFieldType.STRING).description("전체 도로명 주소"),
-                                fieldWithPath("addressList[].jibunAddress").type(JsonFieldType.STRING).description("전체 지번 주소"),
-                                fieldWithPath("addressList[].buildingName").optional().type(JsonFieldType.STRING).description("건물명"),
-                                fieldWithPath("addressList[].districtCode").type(JsonFieldType.STRING).description("행정구역 코드"),
-                                fieldWithPath("addressList[].dongName").type(JsonFieldType.STRING).description("읍/면/동 이름"),
-                                fieldWithPath("addressList[].jibun").type(JsonFieldType.STRING).description("지번(본번)-지번(부번)")
+                                fieldWithPath("apiResultCode").type(JsonFieldType.STRING).description("api 결과코드"),
+                                fieldWithPath("apiResultMessage").type(JsonFieldType.STRING).description("api 결과메시지"),
+                                fieldWithPath("addressInfoList").type(JsonFieldType.ARRAY).description("주소정보"),
+                                fieldWithPath("addressInfoList[].roadAddress").type(JsonFieldType.STRING).description("전체 도로명 주소"),
+                                fieldWithPath("addressInfoList[].jibunAddress").type(JsonFieldType.STRING).description("전체 지번 주소"),
+                                fieldWithPath("addressInfoList[].buildingName").optional().type(JsonFieldType.STRING).description("건물명"),
+                                fieldWithPath("addressInfoList[].districtCode").type(JsonFieldType.STRING).description("행정구역 코드"),
+                                fieldWithPath("addressInfoList[].dongName").type(JsonFieldType.STRING).description("읍/면/동 이름"),
+                                fieldWithPath("addressInfoList[].jibun").type(JsonFieldType.STRING).description("지번(본번)-지번(부번)")
                         )
                 ));
     }
