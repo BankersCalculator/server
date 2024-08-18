@@ -1,8 +1,7 @@
 package com.bankersCalculator.server.rentTransactionInquiry.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,98 +12,97 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class RentTransactionApiResponse {
 
-    @JacksonXmlProperty(localName = "header")
+    @JsonProperty("header")
     private ApiResponseHeader header;
 
-    @JacksonXmlProperty(localName = "body")
+    @JsonProperty("body")
     private ApiResponseBody body;
 
     @Getter
     @Setter
     public static class ApiResponseHeader {
-        @JacksonXmlProperty(localName = "resultCode")
+        @JsonProperty("resultCode")
         private String resultCode;
 
-        @JacksonXmlProperty(localName = "resultMsg")
+        @JsonProperty("resultMsg")
         private String resultMsg;
     }
 
     @Getter
     @Setter
     public static class ApiResponseBody {
-        @JacksonXmlProperty(localName = "items")
+        @JsonProperty("items")
         private ApiResponseItems items;
 
-        @JacksonXmlProperty(localName = "numOfRows")
+        @JsonProperty("numOfRows")
         private int numOfRows;
 
-        @JacksonXmlProperty(localName = "pageNo")
+        @JsonProperty("pageNo")
         private int pageNo;
 
-        @JacksonXmlProperty(localName = "totalCount")
+        @JsonProperty("totalCount")
         private int totalCount;
     }
 
     @Getter
     @Setter
     public static class ApiResponseItems {
-        @JacksonXmlElementWrapper(useWrapping = false)
-        @JacksonXmlProperty(localName = "item")
+        @JsonProperty("item")
         private List<ApiResponseItem> itemList;
     }
 
     @Getter
     @Setter
     public static class ApiResponseItem {
-        @JacksonXmlProperty(localName = "aptNm")
+        @JsonProperty("aptNm")
         private String aptNm;
 
-        @JacksonXmlProperty(localName = "buildYear")
+        @JsonProperty("buildYear")
         private String buildYear;
 
-        @JacksonXmlProperty(localName = "contractTerm")
+        @JsonProperty("contractTerm")
         private String contractTerm;
 
-        @JacksonXmlProperty(localName = "contractType")
+        @JsonProperty("contractType")
         private String contractType;
 
-        @JacksonXmlProperty(localName = "dealDay")
+        @JsonProperty("dealDay")
         private String dealDay;
 
-        @JacksonXmlProperty(localName = "dealMonth")
+        @JsonProperty("dealMonth")
         private String dealMonth;
 
-        @JacksonXmlProperty(localName = "dealYear")
+        @JsonProperty("dealYear")
         private String dealYear;
 
-        @JacksonXmlProperty(localName = "deposit")
+        @JsonProperty("deposit")
         private String deposit;
 
-        @JacksonXmlProperty(localName = "excluUseAr")
+        @JsonProperty("excluUseAr")
         private String excluUseAr;
 
-        @JacksonXmlProperty(localName = "floor")
+        @JsonProperty("floor")
         private String floor;
 
-        @JacksonXmlProperty(localName = "jibun")
+        @JsonProperty("jibun")
         private String jibun;
 
-        @JacksonXmlProperty(localName = "monthlyRent")
+        @JsonProperty("monthlyRent")
         private String monthlyRent;
 
-        @JacksonXmlProperty(localName = "preDeposit")
+        @JsonProperty("preDeposit")
         private String preDeposit;
 
-        @JacksonXmlProperty(localName = "preMonthlyRent")
+        @JsonProperty("preMonthlyRent")
         private String preMonthlyRent;
 
-        @JacksonXmlProperty(localName = "sggCd")
+        @JsonProperty("sggCd")
         private String sggCd;
 
-        @JacksonXmlProperty(localName = "umdNm")
+        @JsonProperty("umdNm")
         private String umdNm;
 
-        @JacksonXmlProperty(localName = "useRRRight")
+        @JsonProperty("useRRRight")
         private String useRRRight;
     }
 }

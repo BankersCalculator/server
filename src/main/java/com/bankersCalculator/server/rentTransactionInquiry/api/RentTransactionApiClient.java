@@ -55,9 +55,9 @@ public class RentTransactionApiClient {
     private final RentTransactionApiConfig apiConfig;
     private final XmlMapper xmlMapper;
 
-    public RentTransactionApiClient(RentTransactionApiConfig apiConfig, XmlMapper xmlMapper) {
+    public RentTransactionApiClient(RentTransactionApiConfig apiConfig ) {
         this.apiConfig = apiConfig;
-        this.xmlMapper = xmlMapper;
+        this.xmlMapper = new XmlMapper();
     }
 
     public RentTransactionApiResponse RentTransactionCallApi(String lawdCd, String dealYmd, RentHousingType rentHousingType) throws IOException {

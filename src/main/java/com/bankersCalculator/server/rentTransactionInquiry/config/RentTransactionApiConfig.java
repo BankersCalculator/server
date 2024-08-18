@@ -4,7 +4,6 @@ import com.bankersCalculator.server.rentTransactionInquiry.common.RentHousingTyp
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.client.RestTemplate;
-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import java.nio.charset.StandardCharsets;
 
 import java.io.IOException;
@@ -46,8 +45,4 @@ public class RentTransactionApiConfig {
         return new RestTemplate();  // RestTemplate 객체를 생성하고 빈으로 등록
     }
 
-    @Bean
-    public XmlMapper xmlMapper() {
-        return new XmlMapper();  // XmlMapper 객체를 생성하고 빈으로 등록
-    }
 }
