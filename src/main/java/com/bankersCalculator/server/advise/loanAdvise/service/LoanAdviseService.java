@@ -1,6 +1,8 @@
 package com.bankersCalculator.server.advise.loanAdvise.service;
 
 import com.bankersCalculator.server.advise.loanAdvise.dto.*;
+import com.bankersCalculator.server.advise.loanAdvise.dto.userInfo.UserInputInfoResponse;
+import com.bankersCalculator.server.advise.loanAdvise.dto.userInfo.UserInputInfoServiceRequest;
 import com.bankersCalculator.server.advise.loanAdvise.model.LoanProduct;
 import com.bankersCalculator.server.common.enums.Bank;
 import com.bankersCalculator.server.common.enums.loanAdvise.AreaSize;

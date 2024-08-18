@@ -3,6 +3,8 @@ package com.bankersCalculator.server.docs;
 import com.bankersCalculator.server.RestDocsSupport;
 import com.bankersCalculator.server.advise.loanAdvise.controller.LoanAdviseApiController;
 import com.bankersCalculator.server.advise.loanAdvise.dto.*;
+import com.bankersCalculator.server.advise.loanAdvise.dto.userInfo.UserInputInfoRequest;
+import com.bankersCalculator.server.advise.loanAdvise.dto.userInfo.UserInputInfoResponse;
 import com.bankersCalculator.server.advise.loanAdvise.service.LoanAdviseService;
 import com.bankersCalculator.server.common.enums.Bank;
 import com.bankersCalculator.server.common.enums.loanAdvise.AreaSize;
@@ -13,7 +15,6 @@ import com.bankersCalculator.server.common.enums.ltv.HousingType;
 import com.bankersCalculator.server.common.enums.ltv.RegionType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 

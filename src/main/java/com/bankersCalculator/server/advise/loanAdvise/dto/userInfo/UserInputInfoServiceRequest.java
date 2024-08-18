@@ -1,4 +1,4 @@
-package com.bankersCalculator.server.advise.loanAdvise.dto;
+package com.bankersCalculator.server.advise.loanAdvise.dto.userInfo;
 
 import com.bankersCalculator.server.common.enums.loanAdvise.UserType;
 import lombok.Builder;
