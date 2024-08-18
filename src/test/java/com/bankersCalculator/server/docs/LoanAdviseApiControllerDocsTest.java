@@ -80,7 +80,8 @@ public class LoanAdviseApiControllerDocsTest extends RestDocsSupport {
 
         mockMvc.perform(get(BASE_URL + "/userInfo")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request)))
+                .content(objectMapper.writeValueAsString(request))
+                .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andDo(document("loan-advise/get-submitted-user-input",
                 preprocessRequest(prettyPrint()),
@@ -168,6 +169,7 @@ public class LoanAdviseApiControllerDocsTest extends RestDocsSupport {
 
         mockMvc.perform(post(BASE_URL)
                 .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
             .andExpect(status().isOk())
             .andDo(document("loan-advise/generate-loan-advise",
@@ -254,6 +256,7 @@ public class LoanAdviseApiControllerDocsTest extends RestDocsSupport {
 
         mockMvc.perform(post(BASE_URL + "/{productCode}", productCode)
                 .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
             .andExpect(status().isOk())
             .andDo(document("loan-advise/generate-loan-advise-on-specific-loan",

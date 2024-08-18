@@ -61,7 +61,8 @@ public class LtvCalcApiControllerDocsTest extends RestDocsSupport {
 
         mockMvc.perform(post(BASE_URL)
                 .content(objectMapper.writeValueAsString(request))
-                .contentType(MediaType.APPLICATION_JSON))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andDo(print())
             .andDo(document("calculator/ltv-calc",

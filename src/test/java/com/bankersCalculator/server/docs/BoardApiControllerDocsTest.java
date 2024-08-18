@@ -65,6 +65,8 @@ public class BoardApiControllerDocsTest extends RestDocsSupport {
             .thenReturn(sliceResponse);
 
         mockMvc.perform(get(BASE_URL + "/posts")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
                 .param("page", "0")
                 .param("size", "10"))
             .andExpect(status().isOk())
@@ -110,7 +112,9 @@ public class BoardApiControllerDocsTest extends RestDocsSupport {
         when(boardService.getPostById(any()))
             .thenReturn(response);
 
-        mockMvc.perform(get(BASE_URL + "/posts/{postId}", 1L))
+        mockMvc.perform(get(BASE_URL + "/posts/{postId}", 1L)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andDo(print())
             .andDo(document("board/get-post-by-id",
@@ -155,7 +159,8 @@ public class BoardApiControllerDocsTest extends RestDocsSupport {
 
         mockMvc.perform(post(BASE_URL + "/posts")
                 .content(objectMapper.writeValueAsString(request))
-                .contentType(MediaType.APPLICATION_JSON))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andDo(print())
             .andDo(document("board/create-post",
@@ -202,6 +207,7 @@ public class BoardApiControllerDocsTest extends RestDocsSupport {
 
         mockMvc.perform(put(BASE_URL + "/posts/{postId}", 1L)
                 .content(objectMapper.writeValueAsString(request))
+                .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andDo(print())
@@ -234,7 +240,9 @@ public class BoardApiControllerDocsTest extends RestDocsSupport {
     @DisplayName("게시글 삭제 API")
     @Test
     void deletePost() throws Exception {
-        mockMvc.perform(delete(BASE_URL + "/posts/{postId}", 1L))
+        mockMvc.perform(delete(BASE_URL + "/posts/{postId}", 1L)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andDo(print())
             .andDo(document("board/delete-post",
