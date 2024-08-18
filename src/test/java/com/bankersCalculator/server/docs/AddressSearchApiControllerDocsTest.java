@@ -71,15 +71,19 @@ public class AddressSearchApiControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("keyword").type(JsonFieldType.STRING).description("주소 검색을 위한 키워드")
                         ),
                         responseFields(
-                                fieldWithPath("apiResultCode").type(JsonFieldType.STRING).description("api 결과코드"),
-                                fieldWithPath("apiResultMessage").type(JsonFieldType.STRING).description("api 결과메시지"),
-                                fieldWithPath("addressInfoList").type(JsonFieldType.ARRAY).description("주소정보"),
-                                fieldWithPath("addressInfoList[].roadAddress").type(JsonFieldType.STRING).description("전체 도로명 주소"),
-                                fieldWithPath("addressInfoList[].jibunAddress").type(JsonFieldType.STRING).description("전체 지번 주소"),
-                                fieldWithPath("addressInfoList[].buildingName").optional().type(JsonFieldType.STRING).description("건물명"),
-                                fieldWithPath("addressInfoList[].districtCode").type(JsonFieldType.STRING).description("행정구역 코드"),
-                                fieldWithPath("addressInfoList[].dongName").type(JsonFieldType.STRING).description("읍/면/동 이름"),
-                                fieldWithPath("addressInfoList[].jibun").type(JsonFieldType.STRING).description("지번(본번)-지번(부번)")
+                                fieldWithPath("code").type(JsonFieldType.NUMBER).description("응답 코드"),
+                                fieldWithPath("status").type(JsonFieldType.STRING).description("응답 상태"),
+                                fieldWithPath("message").type(JsonFieldType.STRING).description("응답 메시지"),
+                                fieldWithPath("data").type(JsonFieldType.OBJECT).description("응답 데이터"),
+                                fieldWithPath("data.apiResultCode").type(JsonFieldType.STRING).description("API 결과 코드"),
+                                fieldWithPath("data.apiResultMessage").type(JsonFieldType.STRING).description("API 결과 메시지"),
+                                fieldWithPath("data.addressInfoList").type(JsonFieldType.ARRAY).description("주소 정보 목록"),
+                                fieldWithPath("data.addressInfoList[].roadAddress").type(JsonFieldType.STRING).description("전체 도로명 주소"),
+                                fieldWithPath("data.addressInfoList[].jibunAddress").type(JsonFieldType.STRING).description("전체 지번 주소"),
+                                fieldWithPath("data.addressInfoList[].buildingName").optional().type(JsonFieldType.STRING).description("건물명"),
+                                fieldWithPath("data.addressInfoList[].districtCode").type(JsonFieldType.STRING).description("행정구역 코드"),
+                                fieldWithPath("data.addressInfoList[].dongName").type(JsonFieldType.STRING).description("읍/면/동 이름"),
+                                fieldWithPath("data.addressInfoList[].jibun").type(JsonFieldType.STRING).description("지번(본번)-지번(부번)")
                         )
                 ));
     }

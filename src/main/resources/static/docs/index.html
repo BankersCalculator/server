@@ -2127,19 +2127,24 @@ Host: localhost:8080
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 440
+Content-Length: 532
 
 {
-  "apiResultCode" : "0",
-  "apiResultMessage" : "Success",
-  "addressInfoList" : [ {
-    "roadAddress" : "인천광역시 서구 청라한내로100번길 10 (청라동)",
-    "jibunAddress" : "인천광역시 서구 청라동 95-1 청라 큐브시그니처 1차 오피스텔",
-    "buildingName" : "청라 큐브시그니처 1차 오피스텔",
-    "districtCode" : "2826012200",
-    "dongName" : "청라동",
-    "jibun" : "95-1"
-  } ]
+  "code" : 200,
+  "status" : "OK",
+  "message" : "OK",
+  "data" : {
+    "apiResultCode" : "0",
+    "apiResultMessage" : "Success",
+    "addressInfoList" : [ {
+      "roadAddress" : "인천광역시 서구 청라한내로100번길 10 (청라동)",
+      "jibunAddress" : "인천광역시 서구 청라동 95-1 청라 큐브시그니처 1차 오피스텔",
+      "buildingName" : "청라 큐브시그니처 1차 오피스텔",
+      "districtCode" : "2826012200",
+      "dongName" : "청라동",
+      "jibun" : "95-1"
+    } ]
+  }
 }</code></pre>
 </div>
 </div>
@@ -2158,47 +2163,67 @@ Content-Length: 440
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>apiResultCode</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">api 결과코드</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>code</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">응답 코드</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>apiResultMessage</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>status</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">api 결과메시지</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">응답 상태</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>addressInfoList</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>message</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">응답 메시지</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Object</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">응답 데이터</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.apiResultCode</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">API 결과 코드</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.apiResultMessage</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">API 결과 메시지</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.addressInfoList</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">주소정보</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">주소 정보 목록</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>addressInfoList[].roadAddress</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.addressInfoList[].roadAddress</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">전체 도로명 주소</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>addressInfoList[].jibunAddress</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.addressInfoList[].jibunAddress</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">전체 지번 주소</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>addressInfoList[].buildingName</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.addressInfoList[].buildingName</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">건물명</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>addressInfoList[].districtCode</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.addressInfoList[].districtCode</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">행정구역 코드</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>addressInfoList[].dongName</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.addressInfoList[].dongName</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">읍/면/동 이름</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>addressInfoList[].jibun</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.addressInfoList[].jibun</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">지번(본번)-지번(부번)</p></td>
 </tr>

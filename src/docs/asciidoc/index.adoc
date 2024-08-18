@@ -83,9 +83,14 @@ include::api/loan-advise/get-submitted-user-input.adoc[]
 include::api/calculators/repayment-calc.adoc[]
 include::api/calculators/ltv-calc.adoc[]
 include::api/calculators/dsr-calc.adoc[]
+include::api/calculators/dti-calc.adoc[]
+
+
 
 [[HousingInfo-API]]
 == HousingInfo API
+
+
 include::api/housing-info/address-search.adoc[]
 
 
