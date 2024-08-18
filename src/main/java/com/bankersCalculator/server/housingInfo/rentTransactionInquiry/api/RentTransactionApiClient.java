@@ -1,8 +1,8 @@
-package com.bankersCalculator.server.rentTransactionInquiry.api;
+package com.bankersCalculator.server.housingInfo.rentTransactionInquiry.api;
 
-import com.bankersCalculator.server.rentTransactionInquiry.common.RentHousingType;
-import com.bankersCalculator.server.rentTransactionInquiry.config.RentTransactionApiConfig;
-import com.bankersCalculator.server.rentTransactionInquiry.dto.RentTransactionApiResponse;
+import com.bankersCalculator.server.housingInfo.rentTransactionInquiry.common.RentHousingType;
+import com.bankersCalculator.server.housingInfo.rentTransactionInquiry.config.RentTransactionApiConfig;
+import com.bankersCalculator.server.housingInfo.rentTransactionInquiry.dto.RentTransactionApiResponse;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import org.json.JSONArray;
 import org.json.JSONObject;

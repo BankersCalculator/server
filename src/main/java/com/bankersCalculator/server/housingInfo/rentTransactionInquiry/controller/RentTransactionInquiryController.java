@@ -1,8 +1,8 @@
-package com.bankersCalculator.server.rentTransactionInquiry.controller;
+package com.bankersCalculator.server.housingInfo.rentTransactionInquiry.controller;
 
-import com.bankersCalculator.server.rentTransactionInquiry.common.RentHousingType;
-import com.bankersCalculator.server.rentTransactionInquiry.dto.RentTransactionInquiryResponse;
-import com.bankersCalculator.server.rentTransactionInquiry.service.RentTransactionInquiryService;
+import com.bankersCalculator.server.housingInfo.rentTransactionInquiry.common.RentHousingType;
+import com.bankersCalculator.server.housingInfo.rentTransactionInquiry.dto.RentTransactionInquiryResponse;
+import com.bankersCalculator.server.housingInfo.rentTransactionInquiry.service.RentTransactionInquiryService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;

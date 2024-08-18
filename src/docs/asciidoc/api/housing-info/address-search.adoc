@@ -1,0 +1,15 @@
+[[addressSearch]]
+=== 주소 검색 API
+
+==== HTTP Request
+
+include::{snippets}/address/search/http-request.adoc[]
+include::{snippets}/address/search/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/address/search/http-response.adoc[]
+include::{snippets}/address/search/response-fields.adoc[]
+
+
+

@@ -1,7 +1,8 @@
 package com.bankersCalculator.server.rentTransactionInquiry.api;
 
-import com.bankersCalculator.server.rentTransactionInquiry.common.RentHousingType;
-import com.bankersCalculator.server.rentTransactionInquiry.dto.RentTransactionApiResponse;
+import com.bankersCalculator.server.housingInfo.rentTransactionInquiry.api.RentTransactionApiClient;
+import com.bankersCalculator.server.housingInfo.rentTransactionInquiry.common.RentHousingType;
+import com.bankersCalculator.server.housingInfo.rentTransactionInquiry.dto.RentTransactionApiResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
