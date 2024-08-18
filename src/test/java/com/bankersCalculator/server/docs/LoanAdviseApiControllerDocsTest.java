@@ -3,8 +3,8 @@ package com.bankersCalculator.server.docs;
 import com.bankersCalculator.server.RestDocsSupport;
 import com.bankersCalculator.server.advise.loanAdvise.controller.LoanAdviseApiController;
 import com.bankersCalculator.server.advise.loanAdvise.dto.*;
-import com.bankersCalculator.server.advise.loanAdvise.dto.userInfo.UserInputInfoRequest;
-import com.bankersCalculator.server.advise.loanAdvise.dto.userInfo.UserInputInfoResponse;
+import com.bankersCalculator.server.advise.userInputInfo.dto.UserInputInfoRequest;
+import com.bankersCalculator.server.advise.userInputInfo.dto.UserInputInfoResponse;
 import com.bankersCalculator.server.advise.loanAdvise.service.LoanAdviseService;
 import com.bankersCalculator.server.common.enums.Bank;
 import com.bankersCalculator.server.common.enums.loanAdvise.AreaSize;
@@ -13,6 +13,7 @@ import com.bankersCalculator.server.common.enums.loanAdvise.MaritalStatus;
 import com.bankersCalculator.server.common.enums.loanAdvise.RentalType;
 import com.bankersCalculator.server.common.enums.ltv.HousingType;
 import com.bankersCalculator.server.common.enums.ltv.RegionType;
+import com.bankersCalculator.server.housingInfo.rentTransactionInquiry.common.RentHousingType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
@@ -58,25 +59,23 @@ public class LoanAdviseApiControllerDocsTest extends RestDocsSupport {
             .build();
 
         UserInputInfoResponse response = UserInputInfoResponse.builder()
-            .age(30)
-            .annualIncome(50000000L)
+            .rentalDeposit(300000000L)  // 3억원 임차보증금
+            .monthlyRent(500000L)       // 50만원 월세
+            .cashOnHand(50000000L)      // 5천만원 보유 현금
+            .age(35)                    // 35세
             .maritalStatus(MaritalStatus.MARRIED)
-            .newlyWedding(true)
-            .weddingDate(LocalDate.of(2023, 1, 1))
-            .spouseAnnualIncome(40000000L)
-            .cashOnHand(20000000L)
+            .annualIncome(60000000L)    // 6천만원 연소득
+            .spouseAnnualIncome(40000000L)  // 4천만원 배우자 연소득
             .childStatus(ChildStatus.ONE_CHILD)
             .hasNewborn(true)
-            .worksForSME(false)
-            .housingType(HousingType.APARTMENT)
-            .rentalArea(AreaSize.UNDER_85_SQM)
-            .regionType(RegionType.SEOUL)
-            .propertyName("Sample Apartment")
-            .manualInputRentalArea(75L)
-            .rentalCostList(Arrays.asList(new RentalCostDto()))
-            .housingPrice(300000000L)
-            .priorDepositAndClaims(50000000L)
-            .isNetAssetOver345M(false)
+            .isSMEEmployee(true)        // 중소기업 재직 여부
+            .isNetAssetOver345M(false)  // 순자산 3.45억 초과 여부
+            .rentHousingType(RentHousingType.APARTMENT)
+            .exclusiveArea(85L)         // 85제곱미터 전용면적
+            .buildingName("행복아파트")
+            .districtCode("1168010100") // 서울특별시 강남구 삼성동
+            .dongName("삼성동")
+            .jibun("79-1")
             .build();
 
         when(loanAdviseService.getSubmittedUserInput(any())).thenReturn(response);
@@ -345,31 +344,23 @@ public class LoanAdviseApiControllerDocsTest extends RestDocsSupport {
 
     private LoanAdviseRequest createSampleLoanAdviseRequest() {
         return LoanAdviseRequest.builder()
-            .age(30)
-            .annualIncome(50000000L)
+            .rentalDeposit(200000000L)  // 2억원 임차보증금
+            .monthlyRent(0L)            // 전세이므로 월세 0원
+            .cashOnHand(20000000L)      // 2천만원 보유현금
+            .age(30)                    // 30세
             .maritalStatus(MaritalStatus.MARRIED)
-            .newlyWedding(true)
-            .weddingDate(LocalDate.of(2023, 1, 1))
-            .spouseAnnualIncome(40000000L)
-            .cashOnHand(20000000L)
+            .annualIncome(50000000L)    // 5천만원 연소득
+            .spouseAnnualIncome(40000000L)  // 4천만원 배우자 연소득
             .childStatus(ChildStatus.ONE_CHILD)
             .hasNewborn(true)
-            .worksForSME(false)
-            .housingType(HousingType.APARTMENT)
-            .rentalArea(AreaSize.UNDER_85_SQM)
-            .regionType(RegionType.SEOUL)
-            .propertyName("Sample Apartment")
-            .individualRentalArea(75L)
-            .rentalCostList(Arrays.asList(
-                RentalCostDto.builder()
-                    .rentalType(RentalType.JEONSE)
-                    .rentalDeposit(200000000L)
-                    .monthlyRent(0L)
-                    .build()
-            ))
-            .housingPrice(300000000L)
-            .priorDepositAndClaims(50000000L)
-            .isNetAssetOver345M(false)
+            .isSMEEmployee(false)       // 중소기업 재직 아님
+            .isNetAssetOver345M(false)  // 순자산 3.45억 초과 아님
+            .rentHousingType(RentHousingType.APARTMENT)
+            .exclusiveArea(75L)         // 75제곱미터 전용면적
+            .buildingName("Sample Apartment")
+            .districtCode("1168010100") // 예: 서울특별시 강남구 삼성동
+            .dongName("삼성동")
+            .jibun("79-1")
             .build();
     }
 

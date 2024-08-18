@@ -1,4 +1,4 @@
-package com.bankersCalculator.server.advise.loanAdvise.domain;
+package com.bankersCalculator.server.advise.userInputInfo.domain;
 
 import com.bankersCalculator.server.common.enums.loanAdvise.ChildStatus;
 import com.bankersCalculator.server.common.enums.loanAdvise.MaritalStatus;
