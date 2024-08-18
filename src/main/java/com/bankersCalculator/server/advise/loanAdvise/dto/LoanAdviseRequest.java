@@ -5,6 +5,7 @@ import com.bankersCalculator.server.common.enums.loanAdvise.ChildStatus;
 import com.bankersCalculator.server.common.enums.loanAdvise.MaritalStatus;
 import com.bankersCalculator.server.common.enums.ltv.HousingType;
 import com.bankersCalculator.server.common.enums.ltv.RegionType;
+import com.bankersCalculator.server.housingInfo.rentTransactionInquiry.common.RentHousingType;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -16,55 +17,47 @@ import java.util.List;
 public class LoanAdviseRequest {
 
     // 고객 정보
-    private int age;    // 만나이
-    private long annualIncome;  //연소득
-    private MaritalStatus maritalStatus; // 혼인상태
-    private boolean newlyWedding;   // 신혼여부
-    private LocalDate weddingDate;   // 혼인(예정)일
-    private long spouseAnnualIncome;    // 배우자연소득
+    private long rentalDeposit; // 임차보증금
+    private long monthlyRent;   // 월세
     private long cashOnHand;    // 보유현금
+    private int age;    // 만나이
+    private MaritalStatus maritalStatus; // 혼인상태
+    private long annualIncome;  //연소득
+    private long spouseAnnualIncome;    // 배우자연소득
     private ChildStatus childStatus;    // 자녀상태
     private boolean hasNewborn; // 신생아여부
-    private boolean worksForSME; // 중소기업재직여부(SME: SmallMediumEnterprise);
-
-    // 주택정보 수기 투입
-    private HousingType housingType;    // 주택타입
-    private AreaSize rentalArea;    // 임차전용면적
-    private RegionType regionType; // 주택위치
-    // 부동산실거래가 연동
-    private String propertyName;   // 건물명
-    private long individualRentalArea; // 임차전용면적
-    // 임차비용
-    private List<RentalCostDto> rentalCostList;
-
-    // 선택 항목
-    private long housingPrice;  // 주택가액
-    private long priorDepositAndClaims; // 선순위임차보증금 and 선순위채권
+    private Boolean isSMEEmployee; // 중소기업재직여부(SME: SmallMediumEnterprise);
     private Boolean isNetAssetOver345M; // 순자산 3.45억 초과 여부
 
+
+    // 주택정보
+    private RentHousingType rentHousingType;  // 주택타입
+    private long exclusiveArea; // 전용면적
+    private String buildingName;   // 건물명
+    private String districtCode; // 법정동 코드
+    private String dongName;   // 읍명동이름
+    private String jibun;   // 지번
 
 
     public LoanAdviseServiceRequest toServiceRequest() {
         return LoanAdviseServiceRequest.builder()
-            .age(age)
-            .annualIncome(annualIncome)
-            .maritalStatus(maritalStatus)
-            .newlyWedding(newlyWedding)
-            .weddingDate(weddingDate)
-            .spouseAnnualIncome(spouseAnnualIncome)
+            .rentalDeposit(rentalDeposit)
+            .monthlyRent(monthlyRent)
             .cashOnHand(cashOnHand)
+            .age(age)
+            .maritalStatus(maritalStatus)
+            .annualIncome(annualIncome)
+            .spouseAnnualIncome(spouseAnnualIncome)
             .childStatus(childStatus)
             .hasNewborn(hasNewborn)
-            .worksForSME(worksForSME)
-            .housingType(housingType)
-            .rentalArea(rentalArea)
-            .regionType(regionType)
-            .propertyName(propertyName)
-            .individualRentalArea(individualRentalArea)
-            .rentalCostList(rentalCostList)
-            .housingPrice(housingPrice)
-            .priorDepositAndClaims(priorDepositAndClaims)
+            .isSMEEmployee(isSMEEmployee)
             .isNetAssetOver345M(isNetAssetOver345M)
+            .rentHousingType(rentHousingType)
+            .exclusiveArea(exclusiveArea)
+            .buildingName(buildingName)
+            .districtCode(districtCode)
+            .dongName(dongName)
+            .jibun(jibun)
             .build();
     }
 }

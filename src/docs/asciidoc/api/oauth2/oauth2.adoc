@@ -1,0 +1,52 @@
+| KAKAO Oauth2 Login URI |
+
+==== HTTP Request
+----
+GET /oauth2/authorization/kakao HTTP/1.1
+Content-Type: application/json
+Content-Length: 652
+Host: localhost:8080
+----
+==== HTTP Response
+----
+HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 1567
+
+{
+  "code" : 200,
+  "status" : "OK",
+  "message" : "OK",
+  "data" : {
+    "accessToken" : token....token,
+    "refreshToken" : "token....token",
+  }
+}
+----
+|===
+|Path|Type|Description
+
+|`+code+`
+|`+Number+`
+|응답 코드
+
+|`+status+`
+|`+String+`
+|응답 상태
+
+|`+message+`
+|`+String+`
+|응답 메시지
+
+|`+data+`
+|`+Object+`
+|응답 데이터
+
+|`+data.accessToken+`
+|`+String+`
+|액세스토큰
+
+|`+data.refreshToken+`
+|`+String+`
+|리프레쉬토큰
+|===
