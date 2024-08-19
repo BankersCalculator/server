@@ -1,6 +1,8 @@
 package com.bankersCalculator.server.advise.loanAdvise.service;
 
 import com.bankersCalculator.server.advise.loanAdvise.dto.*;
+import com.bankersCalculator.server.advise.userInputInfo.dto.UserInputInfoResponse;
+import com.bankersCalculator.server.advise.userInputInfo.dto.UserInputInfoServiceRequest;
 import com.bankersCalculator.server.advise.loanAdvise.model.LoanProduct;
 import com.bankersCalculator.server.common.enums.Bank;
 import com.bankersCalculator.server.common.enums.loanAdvise.AreaSize;
@@ -9,6 +11,7 @@ import com.bankersCalculator.server.common.enums.loanAdvise.MaritalStatus;
 import com.bankersCalculator.server.common.enums.loanAdvise.RentalType;
 import com.bankersCalculator.server.common.enums.ltv.HousingType;
 import com.bankersCalculator.server.common.enums.ltv.RegionType;
+import com.bankersCalculator.server.housingInfo.rentTransactionInquiry.common.RentHousingType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -25,43 +28,6 @@ public class LoanAdviseService {
     private final ProductFilter productFilter;
     private final LoanLimitCalculator loanLimitCalculator;
     private final ProductComparator productComparator;
-
-
-    public UserInputInfoResponse getSubmittedUserInput(UserInputInfoServiceRequest serviceRequest) {
-        UserInputInfoResponse response = UserInputInfoResponse.builder()
-            .age(30)
-            .annualIncome(50000000L)
-            .maritalStatus(MaritalStatus.MARRIED)
-            .newlyWedding(true)
-            .weddingDate(LocalDate.of(2023, 1, 1))
-            .spouseAnnualIncome(40000000L)
-            .cashOnHand(20000000L)
-            .childStatus(ChildStatus.ONE_CHILD)
-            .hasNewborn(true)
-            .worksForSME(false)
-            .housingType(HousingType.APARTMENT)
-            .rentalArea(AreaSize.UNDER_85_SQM)
-            .regionType(RegionType.SEOUL)
-            .propertyName("Sample Apartment")
-            .manualInputRentalArea(75L)
-            .rentalCostList(Arrays.asList(
-                RentalCostDto.builder()
-                    .rentalType(RentalType.JEONSE)
-                    .rentalDeposit(300000000)
-                    .monthlyRent(0)
-                    .build(),
-                RentalCostDto.builder()
-                    .rentalType(RentalType.WOLSE)
-                    .rentalDeposit(100000000)
-                    .monthlyRent(300000)
-                    .build())
-            )
-            .housingPrice(300000000L)
-            .priorDepositAndClaims(50000000L)
-            .isNetAssetOver345M(false)
-            .build();
-        return response;
-    }
 
     public LoanAdviseResponse generateLoanAdvise(LoanAdviseServiceRequest request) {
 

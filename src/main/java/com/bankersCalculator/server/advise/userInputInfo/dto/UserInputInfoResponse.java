@@ -1,20 +1,15 @@
-package com.bankersCalculator.server.advise.loanAdvise.dto;
+package com.bankersCalculator.server.advise.userInputInfo.dto;
 
-import com.bankersCalculator.server.common.enums.loanAdvise.AreaSize;
+import com.bankersCalculator.server.advise.userInputInfo.domain.UserInputInfo;
 import com.bankersCalculator.server.common.enums.loanAdvise.ChildStatus;
 import com.bankersCalculator.server.common.enums.loanAdvise.MaritalStatus;
-import com.bankersCalculator.server.common.enums.ltv.HousingType;
-import com.bankersCalculator.server.common.enums.ltv.RegionType;
 import com.bankersCalculator.server.housingInfo.rentTransactionInquiry.common.RentHousingType;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.time.LocalDate;
-import java.util.List;
-
 @Getter
 @Builder
-public class LoanAdviseRequest {
+public class UserInputInfoResponse {
 
     // 고객 정보
     private long rentalDeposit; // 임차보증금
@@ -38,26 +33,26 @@ public class LoanAdviseRequest {
     private String dongName;   // 읍명동이름
     private String jibun;   // 지번
 
-
-    public LoanAdviseServiceRequest toServiceRequest() {
-        return LoanAdviseServiceRequest.builder()
-            .rentalDeposit(rentalDeposit)
-            .monthlyRent(monthlyRent)
-            .cashOnHand(cashOnHand)
-            .age(age)
-            .maritalStatus(maritalStatus)
-            .annualIncome(annualIncome)
-            .spouseAnnualIncome(spouseAnnualIncome)
-            .childStatus(childStatus)
-            .hasNewborn(hasNewborn)
-            .isSMEEmployee(isSMEEmployee)
-            .isNetAssetOver345M(isNetAssetOver345M)
-            .rentHousingType(rentHousingType)
-            .exclusiveArea(exclusiveArea)
-            .buildingName(buildingName)
-            .districtCode(districtCode)
-            .dongName(dongName)
-            .jibun(jibun)
+    public static UserInputInfoResponse of(UserInputInfo info) {
+        return UserInputInfoResponse.builder()
+            .rentalDeposit(info.getRentalDeposit())
+            .monthlyRent(info.getMonthlyRent())
+            .cashOnHand(info.getCashOnHand())
+            .age(info.getAge())
+            .maritalStatus(info.getMaritalStatus())
+            .annualIncome(info.getAnnualIncome())
+            .spouseAnnualIncome(info.getSpouseAnnualIncome())
+            .childStatus(info.getChildStatus())
+            .hasNewborn(info.isHasNewborn())
+            .isSMEEmployee(info.getIsSMEEmployee())
+            .isNetAssetOver345M(info.getIsNetAssetOver345M())
+            .rentHousingType(info.getRentHousingType())
+            .exclusiveArea(info.getExclusiveArea())
+            .buildingName(info.getBuildingName())
+            .districtCode(info.getDistrictCode())
+            .dongName(info.getDongName())
+            .jibun(info.getJibun())
             .build();
     }
+
 }

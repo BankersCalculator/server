@@ -1,4 +1,4 @@
-package com.bankersCalculator.server.advise.loanAdvise.dto;
+package com.bankersCalculator.server.advise.userInputInfo.dto;
 
 import com.bankersCalculator.server.common.enums.loanAdvise.UserType;
 import lombok.Builder;
@@ -8,13 +8,11 @@ import lombok.Getter;
 @Builder
 public class UserInputInfoRequest {
 
-    private final UserType userType;
-    private final String userId;
+    private final String userInputInfoId;
 
     public UserInputInfoServiceRequest toServiceRequest() {
         return UserInputInfoServiceRequest.builder()
-            .userType(userType)
-            .userId(userId)
+            .userInputInfoId(userInputInfoId)
             .build();
     }
 }

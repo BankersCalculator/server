@@ -4,9 +4,13 @@
 ==== HTTP Request
 
 include::{snippets}/calculator/repayment-calc/http-request.adoc[]
+==== Request Headers
+include::{snippets}/calculator/repayment-calc/request-headers.adoc[]
+==== Request Fields
 include::{snippets}/calculator/repayment-calc/request-fields.adoc[]
 
 ==== HTTP Response
 
 include::{snippets}/calculator/repayment-calc/http-response.adoc[]
+==== Response Fields
 include::{snippets}/calculator/repayment-calc/response-fields.adoc[]

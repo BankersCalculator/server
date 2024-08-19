@@ -13,13 +13,6 @@ public class LoanAdviseApiController {
 
     private final LoanAdviseService loanAdviseService;
 
-    @GetMapping("/userInfo")
-    public ApiResponse<UserInputInfoResponse> getSubmittedUserInput(@RequestBody UserInputInfoRequest request) {
-        UserInputInfoResponse submittedUserInput = loanAdviseService.getSubmittedUserInput(request.toServiceRequest());
-
-        return ApiResponse.ok(submittedUserInput);
-    }
-
     @PostMapping
     public ApiResponse<LoanAdviseResponse> generateLoanAdvise(@RequestBody LoanAdviseRequest request) {
         LoanAdviseResponse loanAdviseResponse = loanAdviseService.generateLoanAdvise(request.toServiceRequest());

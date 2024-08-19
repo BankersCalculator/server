@@ -1,0 +1,15 @@
+[[get-recently-submitted]]
+=== 마지막 유저투입정보 조회 API
+
+
+==== HTTP Request
+
+include::{snippets}/user-input-info/get-recently-submitted/http-request.adoc[]
+==== Request Headers
+include::{snippets}/user-input-info/get-recently-submitted/request-headers.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/user-input-info/get-recently-submitted/http-response.adoc[]
+==== Response Fields
+include::{snippets}/user-input-info/get-recently-submitted/response-fields.adoc[]
