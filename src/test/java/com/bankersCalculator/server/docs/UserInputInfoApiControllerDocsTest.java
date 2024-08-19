@@ -1,18 +1,10 @@
 package com.bankersCalculator.server.docs;
 
 import com.bankersCalculator.server.RestDocsSupport;
-import com.bankersCalculator.server.advise.loanAdvise.controller.LoanAdviseApiController;
-import com.bankersCalculator.server.advise.loanAdvise.dto.LoanAdviseRequest;
-import com.bankersCalculator.server.advise.loanAdvise.dto.LoanAdviseResponse;
-import com.bankersCalculator.server.advise.loanAdvise.dto.RecommendedProductDto;
-import com.bankersCalculator.server.advise.loanAdvise.dto.SpecificLoanAdviseRequest;
-import com.bankersCalculator.server.advise.loanAdvise.service.LoanAdviseService;
-import com.bankersCalculator.server.advise.userInputInfo.controller.UserInputInfoApiController;
-import com.bankersCalculator.server.advise.userInputInfo.dto.UserInputInfoRequest;
-import com.bankersCalculator.server.advise.userInputInfo.dto.UserInputInfoResponse;
-import com.bankersCalculator.server.advise.userInputInfo.dto.UserInputSummary;
-import com.bankersCalculator.server.advise.userInputInfo.service.UserInputInfoService;
-import com.bankersCalculator.server.common.enums.Bank;
+import com.bankersCalculator.server.advice.userInputInfo.controller.UserInputInfoApiController;
+import com.bankersCalculator.server.advice.userInputInfo.dto.UserInputInfoResponse;
+import com.bankersCalculator.server.advice.userInputInfo.dto.UserInputSummaryResponse;
+import com.bankersCalculator.server.advice.userInputInfo.service.UserInputInfoService;
 import com.bankersCalculator.server.common.enums.loanAdvise.ChildStatus;
 import com.bankersCalculator.server.common.enums.loanAdvise.MaritalStatus;
 import com.bankersCalculator.server.housingInfo.rentTransactionInquiry.common.RentHousingType;
@@ -25,16 +17,12 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.bankersCalculator.server.common.enums.loanAdvise.UserType.MEMBER;
-import static com.bankersCalculator.server.common.enums.loanAdvise.UserType.NON_MEMBER;
-import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
@@ -107,12 +95,11 @@ public class UserInputInfoApiControllerDocsTest extends RestDocsSupport {
     @DisplayName("특정 유저 INPUT 조회")
     @Test
     void getSpecificUserInput() throws Exception {
-        String userInfoInputId = "sample-id";
+        Long userInfoInputId = 1234L;
         UserInputInfoResponse response = createSampleUserInputInfoResponse();
         when(userInputInfoService.getSpecificUserInput(userInfoInputId)).thenReturn(response);
 
-        mockMvc.perform(get(BASE_URL + "/specific")
-                .param("UserInfoInputId", userInfoInputId)
+        mockMvc.perform(get(BASE_URL + "/specific/{userInfoInputId}", userInfoInputId)
                 .accept(MediaType.APPLICATION_JSON)
                 .header("accessToken", "액세스 토큰")
                 .header("refreshToken", "리프레시 토큰"))
@@ -126,8 +113,8 @@ public class UserInputInfoApiControllerDocsTest extends RestDocsSupport {
                     headerWithName("refreshToken")
                         .description("리프레쉬 토큰")
                 ),
-                queryParameters(
-                    parameterWithName("UserInfoInputId").description("조회할 유저 INPUT ID")
+                pathParameters(
+                    parameterWithName("userInfoInputId").description("조회할 유저 INPUT ID")
                 ),
                 responseFields(
                     fieldWithPath("code").type(JsonFieldType.NUMBER).description("응답 코드"),
@@ -163,7 +150,7 @@ public class UserInputInfoApiControllerDocsTest extends RestDocsSupport {
     @DisplayName("최근 10개의 유저 INPUT 요약 조회")
     @Test
     void getRecentUserInputs() throws Exception {
-        List<UserInputSummary> summaries = Arrays.asList(
+        List<UserInputSummaryResponse> summaries = Arrays.asList(
             createSampleUserInputSummary(),
             createSampleUserInputSummary()
         );
@@ -188,7 +175,7 @@ public class UserInputInfoApiControllerDocsTest extends RestDocsSupport {
                     fieldWithPath("status").type(JsonFieldType.STRING).description("응답 상태"),
                     fieldWithPath("message").type(JsonFieldType.STRING).description("응답 메시지"),
                     fieldWithPath("data").type(JsonFieldType.ARRAY).description("응답 데이터"),
-                    fieldWithPath("data[].userInputInfoId").type(JsonFieldType.STRING).description("UserInputInfo 고유ID"),
+                    fieldWithPath("data[].userInputInfoId").type(JsonFieldType.NUMBER).description("UserInputInfo 고유ID"),
                     fieldWithPath("data[].inquiryDateTime").type(JsonFieldType.ARRAY).description("조회일시"),
                     fieldWithPath("data[].dongName").type(JsonFieldType.STRING).description("읍명동이름"),
                     fieldWithPath("data[].buildingName").type(JsonFieldType.STRING).description("건물명"),
@@ -220,9 +207,9 @@ public class UserInputInfoApiControllerDocsTest extends RestDocsSupport {
             .build();
     }
 
-    private UserInputSummary createSampleUserInputSummary() {
-        return UserInputSummary.builder()
-            .userInputInfoId("sample-id")
+    private UserInputSummaryResponse createSampleUserInputSummary() {
+        return UserInputSummaryResponse.builder()
+            .userInputInfoId(1234L)
             .inquiryDateTime(LocalDateTime.now())
             .dongName("삼성동")
             .buildingName("행복아파트")
