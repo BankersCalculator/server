@@ -17,11 +17,11 @@ include::overview.adoc[]
 include::api/oauth2/oauth2.adoc[]
 
 
-[[LoanAdvise-API]]
-== LoanAdvise API
+[[Loanadvice-API]]
+== LoanAdvice API
 
-include::api/loan-advise/generate-loan-advise.adoc[]
-include::api/loan-advise/generate-loan-advise-on-specific-loan.adoc[]
+include::api/loan-advice/generate-loan-advice.adoc[]
+include::api/loan-advice/generate-loan-advice-on-specific-loan.adoc[]
 
 [[UserInputInfo-API]]
 == UserInputInfo API

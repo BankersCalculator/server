@@ -6,6 +6,7 @@ import com.bankersCalculator.server.advice.loanAdvice.dto.LoanAdviceSummaryRespo
 import com.bankersCalculator.server.advice.loanAdvice.dto.SpecificLoanAdviceRequest;
 import com.bankersCalculator.server.advice.loanAdvice.service.LoanAdviceService;
 import com.bankersCalculator.server.common.api.ApiResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,6 +18,10 @@ import java.util.List;
 public class LoanAdviceApiController {
 
     private final LoanAdviceService loanAdviceService;
+
+    // TODO: 내일할일
+    // TODO: @VALID, ResponseDto 정비, Docs 구현
+    // TODO: 1회성 유저 인증, 1회성유저 데이터 기존유저 편입..
 
 
     @GetMapping
@@ -34,16 +39,15 @@ public class LoanAdviceApiController {
     }
 
     @PostMapping
-    public ApiResponse<LoanAdviceResponse> generateLoanAdvice(@RequestBody LoanAdviceRequest request) {
+    public ApiResponse<LoanAdviceResponse> generateLoanAdvice(@RequestBody @Valid LoanAdviceRequest request) {
         LoanAdviceResponse loanAdviceResponse = loanAdviceService.generateLoanAdvice(request.toServiceRequest());
 
         return ApiResponse.ok(loanAdviceResponse);
     }
 
-    @PostMapping("/{productCode}")
-    public ApiResponse<LoanAdviceResponse> generateLoanAdviceOnSpecificLoan(@PathVariable String productCode,
-                                                                            @RequestBody SpecificLoanAdviceRequest request) {
-        LoanAdviceResponse loanAdviceResponse = loanAdviceService.generateLoanAdviceOnSpecificLoan(productCode, request.getUserId(), request.getLoanAdviceResultId());
+    @PostMapping("/specific")
+    public ApiResponse<LoanAdviceResponse> generateLoanAdviceOnSpecificLoan(@RequestBody SpecificLoanAdviceRequest request) {
+        LoanAdviceResponse loanAdviceResponse = loanAdviceService.generateLoanAdviceOnSpecificLoan(request.getLoanAdviceResultId(), request.getProductCode());
 
         return ApiResponse.ok(loanAdviceResponse);
     }

@@ -485,22 +485,22 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 546
+Content-Length: 532
 
 {
   "code" : 200,
   "status" : "OK",
   "message" : "OK",
   "data" : [ {
-    "userInputInfoId" : "sample-id",
-    "inquiryDateTime" : [ 2024, 8, 19, 0, 11, 33, 302047000 ],
+    "userInputInfoId" : 1234,
+    "inquiryDateTime" : [ 2024, 8, 20, 22, 7, 35, 174019000 ],
     "dongName" : "삼성동",
     "buildingName" : "행복아파트",
     "rentalDeposit" : 300000000,
     "monthlyRent" : 500000
   }, {
-    "userInputInfoId" : "sample-id",
-    "inquiryDateTime" : [ 2024, 8, 19, 0, 11, 33, 302063000 ],
+    "userInputInfoId" : 1234,
+    "inquiryDateTime" : [ 2024, 8, 20, 22, 7, 35, 174043000 ],
     "dongName" : "삼성동",
     "buildingName" : "행복아파트",
     "rentalDeposit" : 300000000,
@@ -548,7 +548,7 @@ Content-Length: 546
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data[].userInputInfoId</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">UserInputInfo 고유ID</p></td>
 </tr>
 <tr>

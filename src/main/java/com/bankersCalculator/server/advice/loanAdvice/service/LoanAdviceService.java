@@ -78,7 +78,7 @@ public class LoanAdviceService {
             .build();
     }
 
-    public LoanAdviceResponse generateLoanAdviceOnSpecificLoan(String productCode, Long userId, Long AdviceResultId) {
+    public LoanAdviceResponse generateLoanAdviceOnSpecificLoan(Long loanAdviceResultId, String productCode) {
         return LoanAdviceResponse.builder()
             .loanAdviceResultId(1L)
             .loanProductName("샘플 전세자금대출")

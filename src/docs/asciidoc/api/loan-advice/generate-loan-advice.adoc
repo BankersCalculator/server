@@ -1,0 +1,16 @@
+[[generate-loan-advice]]
+=== 전세대출 추천 서비스 API
+
+==== HTTP Request
+
+include::{snippets}/loan-advice/generate-loan-advice/http-request.adoc[]
+==== Request Headers
+include::{snippets}/loan-advice/generate-loan-advice/request-headers.adoc[]
+==== Request Fields
+include::{snippets}/loan-advice/generate-loan-advice/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/loan-advice/generate-loan-advice/http-response.adoc[]
+==== Response Fields
+include::{snippets}/loan-advice/generate-loan-advice/response-fields.adoc[]

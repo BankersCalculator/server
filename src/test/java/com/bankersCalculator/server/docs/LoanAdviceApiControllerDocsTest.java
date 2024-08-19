@@ -128,16 +128,18 @@ public class LoanAdviceApiControllerDocsTest extends RestDocsSupport {
     @DisplayName("특정 대출 상품에 대한 대출 상담 결과 생성")
     @Test
     void generateLoanAdviceOnSpecificLoan() throws Exception {
-        String productCode = "SAMPLE001";
         Long userId = 1L;
         Long loanAdviceResultId = 1L;
         LoanAdviceResponse response = createSampleLoanAdviceResponse();
 
-        SpecificLoanAdviceRequest request = SpecificLoanAdviceRequest.builder().userId(1L).userType(MEMBER).loanAdviceResultId(200L).build();
+        SpecificLoanAdviceRequest request = SpecificLoanAdviceRequest.builder()
+            .loanAdviceResultId(200L)
+            .productCode("HF0001")
+            .build();
 
-        when(loanAdviceService.generateLoanAdviceOnSpecificLoan(anyString(), anyLong(), anyLong())).thenReturn(response);
+        when(loanAdviceService.generateLoanAdviceOnSpecificLoan(anyLong(), anyString())).thenReturn(response);
 
-        mockMvc.perform(post(BASE_URL + "/{productCode}", productCode)
+        mockMvc.perform(post(BASE_URL + "/specific")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request))
@@ -154,16 +156,11 @@ public class LoanAdviceApiControllerDocsTest extends RestDocsSupport {
                     headerWithName("refreshToken")
                         .description("리프레쉬 토큰")
                 ),
-                pathParameters(
-                    parameterWithName("productCode").description("대출 상품 코드")
-                ),
                 requestFields(
-                    fieldWithPath("userId").type(JsonFieldType.NUMBER)
-                        .description("사용자 ID"),
-                    fieldWithPath("userType").type(JsonFieldType.STRING)
-                        .description("유저 타입(MEMBER: 회원 / NON_MEMBER: 비회원)"),
                     fieldWithPath("loanAdviceResultId").type(JsonFieldType.NUMBER)
-                        .description("기존 대출 상담 결과 ID")
+                        .description("기존 대출 상담 결과 ID"),
+                    fieldWithPath("productCode").type(JsonFieldType.STRING)
+                        .description("전세 상품 코드")
                 ),
                 responseFields(
                     fieldWithPath("code").type(JsonFieldType.NUMBER).description("응답 코드"),

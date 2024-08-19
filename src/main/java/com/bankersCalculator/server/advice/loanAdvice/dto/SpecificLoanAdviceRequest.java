@@ -8,9 +8,8 @@ import lombok.Getter;
 @Builder
 public class SpecificLoanAdviceRequest {
 
-    private final Long userId;
-    private UserType userType;
     private final Long loanAdviceResultId;
+    private final String productCode;
 
 
 }
