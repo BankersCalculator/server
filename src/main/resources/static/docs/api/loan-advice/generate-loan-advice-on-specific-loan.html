@@ -521,7 +521,7 @@ Host: localhost:8080
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 1535
+Content-Length: 1556
 
 {
   "code" : 200,
@@ -531,7 +531,7 @@ Content-Length: 1535
     "loanAdviceResultId" : 1,
     "loanProductName" : "샘플 전세자금대출",
     "loanProductCode" : "SAMPLE001",
-    "possibleLoanLimit" : 2.0E8,
+    "possibleLoanLimit" : 200000000,
     "expectedLoanRate" : 3.5,
     "totalRentalDeposit" : 300000000,
     "loanAmount" : 200000000,
@@ -546,18 +546,18 @@ Content-Length: 1535
     "recommendationReason" : "고객님의 소득과 신용도를 고려하여 가장 적합한 상품으로 선정되었습니다.",
     "recommendedProducts" : [ {
       "rank" : 2,
-      "loanProductName" : "다른 은행 전세자금대출",
-      "loanProductCode" : "OTHER001",
-      "possibleLoanLimit" : 1.8E8,
+      "loanProductName" : "신혼부부전용전세자금대출",
+      "loanProductCode" : "HF-001",
+      "possibleLoanLimit" : 180000000,
       "expectedLoanRate" : 3.7,
-      "notEligibleReason" : null
+      "notEligibleReasons" : [ ]
     }, {
       "rank" : 3,
-      "loanProductName" : "보증금 반환 보증 전세자금대출",
-      "loanProductCode" : "GUARANTEE001",
-      "possibleLoanLimit" : 2.2E8,
+      "loanProductName" : "서울시신혼부부임차보증금대출",
+      "loanProductCode" : "HF-002",
+      "possibleLoanLimit" : 220000000,
       "expectedLoanRate" : 3.8,
-      "notEligibleReason" : "보증금 반환 보증 가입 필요"
+      "notEligibleReasons" : [ "임차목적지가 서울시가 아닙니다." ]
     } ],
     "availableBanks" : [ "KOOMIN", "SHINHAN", "WOORI" ],
     "rentalLoanGuide" : "전세자금대출 이용 시 주의사항:\n1. 대출 기간 동안 이자를 꾸준히 납부해야 합니다.\n2. 전세 계약 만료 시 대출금 상환 계획을 미리 세워야 합니다."
@@ -590,7 +590,7 @@ Content-Length: 1535
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>status</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">응답 상태</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">응답님 상태</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>message</code></p></td>
@@ -713,8 +713,8 @@ Content-Length: 1535
 <td class="tableblock halign-left valign-top"><p class="tableblock">예상 대출 금리</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.recommendedProducts[].notEligibleReason</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.recommendedProducts[].notEligibleReasons</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">부적격 사유 (해당되는 경우)</p></td>
 </tr>
 <tr>

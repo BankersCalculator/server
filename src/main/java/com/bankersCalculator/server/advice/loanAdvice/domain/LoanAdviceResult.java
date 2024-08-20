@@ -18,21 +18,21 @@ public class LoanAdviceResult {
     private String loanProductName;             // 대출 상품명
     private String loanProductCode;             // 대출 상품코드
 
-    private double possibleLoanLimit;           // 가능한 대출 한도
-    private double expectedLoanRate;            // 예상 대출 금리\
+    private Long possibleLoanLimit;           // 가능한 대출 한도
+    private Double expectedLoanRate;            // 예상 대출 금리
 
-    private long totalRentalDeposit;            // 총 임대 보증금
-    private long loanAmount;                    // 대출 금액
-    private long ownFunds;                      // 소요 자기 자금
+    private Long totalRentalDeposit;            // 총 임대 보증금
+    private Long loanAmount;                    // 대출 금액
+    private Long ownFunds;                      // 소요 자기 자금
 
-    private long monthlyInterestCost;           // 월 이자 비용
-    private long monthlyRent;                   // 월 임대료
+    private Long monthlyInterestCost;           // 월 이자 비용
+    private Long monthlyRent;                   // 월 임대료
 
-    private long opportunityCostOwnFunds;       // 기회 비용
-    private double depositInterestRate;         // 예금 이자율
+    private Long opportunityCostOwnFunds;       // 기회 비용
+    private Double depositInterestRate;         // 예금 이자율
 
-    private long guaranteeInsuranceFee;         // 보증 보험료
-    private long stampDuty;                     // 인지세
+    private Long guaranteeInsuranceFee;         // 보증 보험료
+    private Long stampDuty;                     // 인지세
 
     @Column(length = 4000)
     private String recommendationReason;        // 추천 이유

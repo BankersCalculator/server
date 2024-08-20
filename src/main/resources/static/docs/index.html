@@ -454,7 +454,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li><a href="#User-API">User API</a>
 <ul class="sectlevel2">
-<li><a href="#_카카오_oauth2_login">카카오 Oauth2 Login</a></li>
+<li><a href="#_카카오_oauth2_로그인_api">카카오 Oauth2 로그인 API</a></li>
 <li><a href="#transfer-temp-user-to-login-user">일회성 고객의 데이터를 기존 고객으로 편입 API</a></li>
 <li><a href="#logout">로그아웃 API</a></li>
 <li><a href="#withdraw">회원탈퇴 API</a></li>
@@ -549,7 +549,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h2 id="User-API"><a class="link" href="#User-API">User API</a></h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_카카오_oauth2_login"><a class="link" href="#_카카오_oauth2_login">카카오 Oauth2 Login</a></h3>
+<h3 id="_카카오_oauth2_로그인_api"><a class="link" href="#_카카오_oauth2_로그인_api">카카오 Oauth2 로그인 API</a></h3>
 <div class="sect3">
 <h4 id="_http_request"><a class="link" href="#_http_request">HTTP Request</a></h4>
 <div class="listingblock">
@@ -853,7 +853,7 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 456
+Content-Length: 482
 
 {
   "code" : 200,
@@ -861,16 +861,16 @@ Content-Length: 456
   "message" : "OK",
   "data" : [ {
     "loanAdviceResultId" : 1,
-    "loanProductName" : "샘플 전세자금대출",
-    "loanProductCode" : "SAMPLE001",
-    "possibleLoanLimit" : 2.0E8,
-    "expectedLoanRate" : 3.5
+    "loanProductName" : "서울시신혼부부임차보증금대출",
+    "loanProductCode" : "HF-001",
+    "possibleLoanLimit" : 300000000,
+    "expectedLoanRate" : 2.5
   }, {
     "loanAdviceResultId" : 2,
-    "loanProductName" : "다른 은행 전세자금대출",
-    "loanProductCode" : "OTHER001",
-    "possibleLoanLimit" : 1.8E8,
-    "expectedLoanRate" : 3.7
+    "loanProductName" : "신혼부부전용전세자금대출",
+    "loanProductCode" : "NHUF-001",
+    "possibleLoanLimit" : 180000000,
+    "expectedLoanRate" : 2.1
   } ]
 }</code></pre>
 </div>
@@ -1009,7 +1009,7 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 1535
+Content-Length: 1556
 
 {
   "code" : 200,
@@ -1019,7 +1019,7 @@ Content-Length: 1535
     "loanAdviceResultId" : 1,
     "loanProductName" : "샘플 전세자금대출",
     "loanProductCode" : "SAMPLE001",
-    "possibleLoanLimit" : 2.0E8,
+    "possibleLoanLimit" : 200000000,
     "expectedLoanRate" : 3.5,
     "totalRentalDeposit" : 300000000,
     "loanAmount" : 200000000,
@@ -1034,18 +1034,18 @@ Content-Length: 1535
     "recommendationReason" : "고객님의 소득과 신용도를 고려하여 가장 적합한 상품으로 선정되었습니다.",
     "recommendedProducts" : [ {
       "rank" : 2,
-      "loanProductName" : "다른 은행 전세자금대출",
-      "loanProductCode" : "OTHER001",
-      "possibleLoanLimit" : 1.8E8,
+      "loanProductName" : "신혼부부전용전세자금대출",
+      "loanProductCode" : "HF-001",
+      "possibleLoanLimit" : 180000000,
       "expectedLoanRate" : 3.7,
-      "notEligibleReason" : null
+      "notEligibleReasons" : [ ]
     }, {
       "rank" : 3,
-      "loanProductName" : "보증금 반환 보증 전세자금대출",
-      "loanProductCode" : "GUARANTEE001",
-      "possibleLoanLimit" : 2.2E8,
+      "loanProductName" : "서울시신혼부부임차보증금대출",
+      "loanProductCode" : "HF-002",
+      "possibleLoanLimit" : 220000000,
       "expectedLoanRate" : 3.8,
-      "notEligibleReason" : "보증금 반환 보증 가입 필요"
+      "notEligibleReasons" : [ "임차목적지가 서울시가 아닙니다." ]
     } ],
     "availableBanks" : [ "KOOMIN", "SHINHAN", "WOORI" ],
     "rentalLoanGuide" : "전세자금대출 이용 시 주의사항:\n1. 대출 기간 동안 이자를 꾸준히 납부해야 합니다.\n2. 전세 계약 만료 시 대출금 상환 계획을 미리 세워야 합니다."
@@ -1201,8 +1201,8 @@ Content-Length: 1535
 <td class="tableblock halign-left valign-top"><p class="tableblock">예상 대출 금리</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.recommendedProducts[].notEligibleReason</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.recommendedProducts[].notEligibleReasons</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">부적격 사유</p></td>
 </tr>
 <tr>
@@ -1324,7 +1324,7 @@ Host: localhost:8080
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>maritalStatus</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">혼인상태 (SINGLE, MARRIED, ENGAGED)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">혼인 상태 (SINGLE, ENGAGED, NEWLY_MARRIED, MARRIED)</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>annualIncome</code></p></td>
@@ -1339,7 +1339,7 @@ Host: localhost:8080
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>childStatus</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">자녀상태 (NO_CHILD, ONE_CHILD, TWO_CHILD, THREE_OR_MORE_CHILDREN)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">자녀 상태 (NO_CHILD, ONE_CHILD, TWO_CHILD, THREE_OR_MORE_CHILDREN)</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>hasNewborn</code></p></td>
@@ -1395,7 +1395,7 @@ Host: localhost:8080
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 1535
+Content-Length: 1556
 
 {
   "code" : 200,
@@ -1405,7 +1405,7 @@ Content-Length: 1535
     "loanAdviceResultId" : 1,
     "loanProductName" : "샘플 전세자금대출",
     "loanProductCode" : "SAMPLE001",
-    "possibleLoanLimit" : 2.0E8,
+    "possibleLoanLimit" : 200000000,
     "expectedLoanRate" : 3.5,
     "totalRentalDeposit" : 300000000,
     "loanAmount" : 200000000,
@@ -1420,18 +1420,18 @@ Content-Length: 1535
     "recommendationReason" : "고객님의 소득과 신용도를 고려하여 가장 적합한 상품으로 선정되었습니다.",
     "recommendedProducts" : [ {
       "rank" : 2,
-      "loanProductName" : "다른 은행 전세자금대출",
-      "loanProductCode" : "OTHER001",
-      "possibleLoanLimit" : 1.8E8,
+      "loanProductName" : "신혼부부전용전세자금대출",
+      "loanProductCode" : "HF-001",
+      "possibleLoanLimit" : 180000000,
       "expectedLoanRate" : 3.7,
-      "notEligibleReason" : null
+      "notEligibleReasons" : [ ]
     }, {
       "rank" : 3,
-      "loanProductName" : "보증금 반환 보증 전세자금대출",
-      "loanProductCode" : "GUARANTEE001",
-      "possibleLoanLimit" : 2.2E8,
+      "loanProductName" : "서울시신혼부부임차보증금대출",
+      "loanProductCode" : "HF-002",
+      "possibleLoanLimit" : 220000000,
       "expectedLoanRate" : 3.8,
-      "notEligibleReason" : "보증금 반환 보증 가입 필요"
+      "notEligibleReasons" : [ "임차목적지가 서울시가 아닙니다." ]
     } ],
     "availableBanks" : [ "KOOMIN", "SHINHAN", "WOORI" ],
     "rentalLoanGuide" : "전세자금대출 이용 시 주의사항:\n1. 대출 기간 동안 이자를 꾸준히 납부해야 합니다.\n2. 전세 계약 만료 시 대출금 상환 계획을 미리 세워야 합니다."
@@ -1587,8 +1587,8 @@ Content-Length: 1535
 <td class="tableblock halign-left valign-top"><p class="tableblock">예상 대출 금리</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.recommendedProducts[].notEligibleReason</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.recommendedProducts[].notEligibleReasons</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">부적격 사유</p></td>
 </tr>
 <tr>
@@ -1686,7 +1686,7 @@ Host: localhost:8080
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 1535
+Content-Length: 1556
 
 {
   "code" : 200,
@@ -1696,7 +1696,7 @@ Content-Length: 1535
     "loanAdviceResultId" : 1,
     "loanProductName" : "샘플 전세자금대출",
     "loanProductCode" : "SAMPLE001",
-    "possibleLoanLimit" : 2.0E8,
+    "possibleLoanLimit" : 200000000,
     "expectedLoanRate" : 3.5,
     "totalRentalDeposit" : 300000000,
     "loanAmount" : 200000000,
@@ -1711,18 +1711,18 @@ Content-Length: 1535
     "recommendationReason" : "고객님의 소득과 신용도를 고려하여 가장 적합한 상품으로 선정되었습니다.",
     "recommendedProducts" : [ {
       "rank" : 2,
-      "loanProductName" : "다른 은행 전세자금대출",
-      "loanProductCode" : "OTHER001",
-      "possibleLoanLimit" : 1.8E8,
+      "loanProductName" : "신혼부부전용전세자금대출",
+      "loanProductCode" : "HF-001",
+      "possibleLoanLimit" : 180000000,
       "expectedLoanRate" : 3.7,
-      "notEligibleReason" : null
+      "notEligibleReasons" : [ ]
     }, {
       "rank" : 3,
-      "loanProductName" : "보증금 반환 보증 전세자금대출",
-      "loanProductCode" : "GUARANTEE001",
-      "possibleLoanLimit" : 2.2E8,
+      "loanProductName" : "서울시신혼부부임차보증금대출",
+      "loanProductCode" : "HF-002",
+      "possibleLoanLimit" : 220000000,
       "expectedLoanRate" : 3.8,
-      "notEligibleReason" : "보증금 반환 보증 가입 필요"
+      "notEligibleReasons" : [ "임차목적지가 서울시가 아닙니다." ]
     } ],
     "availableBanks" : [ "KOOMIN", "SHINHAN", "WOORI" ],
     "rentalLoanGuide" : "전세자금대출 이용 시 주의사항:\n1. 대출 기간 동안 이자를 꾸준히 납부해야 합니다.\n2. 전세 계약 만료 시 대출금 상환 계획을 미리 세워야 합니다."
@@ -1755,7 +1755,7 @@ Content-Length: 1535
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>status</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">응답 상태</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">응답님 상태</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>message</code></p></td>
@@ -1878,8 +1878,8 @@ Content-Length: 1535
 <td class="tableblock halign-left valign-top"><p class="tableblock">예상 대출 금리</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.recommendedProducts[].notEligibleReason</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.recommendedProducts[].notEligibleReasons</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">부적격 사유 (해당되는 경우)</p></td>
 </tr>
 <tr>
@@ -2145,7 +2145,7 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 534
+Content-Length: 530
 
 {
   "code" : 200,
@@ -2153,14 +2153,14 @@ Content-Length: 534
   "message" : "OK",
   "data" : [ {
     "userInputInfoId" : 1234,
-    "inquiryDateTime" : [ 2024, 8, 20, 23, 51, 35, 129833000 ],
+    "inquiryDateTime" : [ 2024, 8, 21, 0, 20, 2, 483403000 ],
     "dongName" : "삼성동",
     "buildingName" : "행복아파트",
     "rentalDeposit" : 300000000,
     "monthlyRent" : 500000
   }, {
     "userInputInfoId" : 1234,
-    "inquiryDateTime" : [ 2024, 8, 20, 23, 51, 35, 129849000 ],
+    "inquiryDateTime" : [ 2024, 8, 21, 0, 20, 2, 483418000 ],
     "dongName" : "삼성동",
     "buildingName" : "행복아파트",
     "rentalDeposit" : 300000000,

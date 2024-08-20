@@ -5,6 +5,7 @@ import com.bankersCalculator.server.common.enums.Bank;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,7 +17,7 @@ public class LoanAdviceResponse {
     // 대출 상품 정보
     private String loanProductName;
     private String loanProductCode;
-    private Double possibleLoanLimit;
+    private Long possibleLoanLimit;
     private Double expectedLoanRate;
 
     // 소요 자금 상세
@@ -80,7 +81,7 @@ public class LoanAdviceResponse {
                     .loanProductCode(ap.getLoanProductCode())
                     .possibleLoanLimit(ap.getPossibleLoanLimit())
                     .expectedLoanRate(ap.getExpectedLoanRate())
-                    .notEligibleReason(ap.getNotEligibleReason())
+                    .notEligibleReasons(Arrays.stream(ap.getNotEligibleReasons().split(",")).toList()) // TODO: 수정요망
                     .build())
                 .collect(Collectors.toList()))
             .availableBanks(result.getAvailableBanks())

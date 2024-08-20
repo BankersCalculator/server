@@ -21,22 +21,22 @@ public class RepaymentCalcRequest {
     @NotNull(message = NOT_NULL_PRINCIPAL)
     @Min(value = 1000000, message = MIN_VALUE_PRINCIPAL)
     @Max(value = 10000000000L, message = MAX_VALUE_PRINCIPAL)
-    private double principal; // 원금
+    private Double principal; // 원금
 
     @NotNull(message = NOT_NULL_TERM)
     @Min(value = 1, message = MIN_VALUE_TERM)
     @Max(value = 600, message = MAX_VALUE_TERM)
-    private int term; // 기간(개월수)
+    private Integer term; // 기간(개월수)
 
     @Max(value = 600, message = MAX_VALUE_GRACE_PERIOD)
-    private int gracePeriod; // 거치기간
+    private Integer gracePeriod; // 거치기간
 
     @NotNull(message = NOT_NULL_INTEREST_RATE_PERCENTAGE)
     @DecimalMin(value = "0.0", inclusive = false, message = MIN_VALUE_INTEREST_RATE_PERCENTAGE)
     @DecimalMax(value = "20.0", message = MAX_VALUE_INTEREST_RATE_PERCENTAGE)
-    private double interestRatePercentage; // 연이자율
+    private Double interestRatePercentage; // 연이자율
 
-    private double maturityPaymentAmount; // 만기상환금액
+    private Double maturityPaymentAmount; // 만기상환금액
 
     @Builder
     private RepaymentCalcRequest(RepaymentType repaymentType, double principal, int term, int gracePeriod, double interestRatePercentage, double maturityPaymentAmount) {

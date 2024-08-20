@@ -7,9 +7,9 @@ import lombok.Getter;
 @Builder
 public class LoanAdviceSummaryResponse {
 
-    private final Long loanAdviceResultId;
+    private Long loanAdviceResultId;
     private String loanProductName;
     private String loanProductCode;
-    private double possibleLoanLimit;
-    private double expectedLoanRate;
+    private Long possibleLoanLimit;
+    private Double expectedLoanRate;
 }
