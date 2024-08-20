@@ -1,4 +1,4 @@
-| KAKAO Oauth2 Login URI |
+=== 카카오 Oauth2 로그인 API
 
 ==== HTTP Request
 ----

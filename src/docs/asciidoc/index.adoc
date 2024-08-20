@@ -13,9 +13,15 @@ include::overview.adoc[]
 
 
 [[overview-http-status-codes]]
-=== Oauth2 Login
-include::api/oauth2/oauth2.adoc[]
 
+
+[[User-API]]
+== User API
+
+include::api/user/oauth2.adoc[]
+include::api/user/transfer-temp-user-to-login-user.adoc[]
+include::api/user/logout.adoc[]
+include::api/user/withdraw.adoc[]
 
 [[Loanadvice-API]]
 == LoanAdvice API

@@ -19,8 +19,6 @@ public class LoanAdviceApiController {
 
     private final LoanAdviceService loanAdviceService;
 
-    // TODO: 내일할일
-    // TODO: @VALID, ResponseDto 정비, Docs 구현
     // TODO: 1회성 유저 인증, 1회성유저 데이터 기존유저 편입..
 
 
