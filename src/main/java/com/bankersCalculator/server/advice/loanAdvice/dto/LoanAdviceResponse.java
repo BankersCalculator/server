@@ -16,30 +16,29 @@ public class LoanAdviceResponse {
     // 대출 상품 정보
     private String loanProductName;
     private String loanProductCode;
-    private double possibleLoanLimit;
-    private double expectedLoanRate;
+    private Double possibleLoanLimit;
+    private Double expectedLoanRate;
 
     // 소요 자금 상세
-    private long totalRentalDeposit;
-    private long loanAmount;
-    private long ownFunds;
+    private Long totalRentalDeposit;
+    private Long loanAmount;    // 대출금
+    private Long ownFunds;  // 자기자금
 
     // 실 주거 비용
-    private long monthlyInterestCost;
-    private long monthlyRent;
-    private long totalLivingCost;
+    private Long monthlyInterestCost;  // 월 이자 비용
+    private Long monthlyRent;  // 월세
+    private Long totalLivingCost;  // 총 주거 비용
 
     // 기회 비용
-    private long opportunityCostOwnFunds;
-    private double depositInterestRate;
-    private long calculatedCost;
+    private Long opportunityCostOwnFunds; // 기회비용
+    private Double depositInterestRate; // 예금 이자율
 
     // 부수 비용
-    private long guaranteeInsuranceFee;
-    private long stampDuty;
+    private Long guaranteeInsuranceFee; // 보증보험료
+    private Long stampDuty; // 인지세
 
     // 추천 사유
-    private String recommendationReason;
+    private String recommendationReason; // AI 추천 사유
 
     // 기타 추천 상품 리스트
     private List<RecommendedProductDto> recommendedProducts;
@@ -71,7 +70,6 @@ public class LoanAdviceResponse {
             .totalLivingCost(totalLivingCost)
             .opportunityCostOwnFunds(result.getOpportunityCostOwnFunds())
             .depositInterestRate(result.getDepositInterestRate())
-            .calculatedCost(calculatedCost)
             .guaranteeInsuranceFee(result.getGuaranteeInsuranceFee())
             .stampDuty(result.getStampDuty())
             .recommendationReason(result.getRecommendationReason())

@@ -1,4 +1,5 @@
 package com.bankersCalculator.server.advice.loanAdvice.dto;
+
 import com.bankersCalculator.server.common.enums.loanAdvise.ChildStatus;
 import com.bankersCalculator.server.common.enums.loanAdvise.MaritalStatus;
 import com.bankersCalculator.server.housingInfo.rentTransactionInquiry.common.RentHousingType;
@@ -64,6 +65,7 @@ public class LoanAdviceRequest {
 
 
     public LoanAdviceServiceRequest toServiceRequest() {
+
         return LoanAdviceServiceRequest.builder()
             .rentalDeposit(rentalDeposit)
             .monthlyRent(monthlyRent)
