@@ -22,6 +22,8 @@ include::api/oauth2/oauth2.adoc[]
 
 include::api/loan-advice/generate-loan-advice.adoc[]
 include::api/loan-advice/generate-loan-advice-on-specific-loan.adoc[]
+include::api/loan-advice/get-recent-loan-advices.adoc[]
+include::api/loan-advice/get-specific-loan-advice.adoc[]
 
 [[UserInputInfo-API]]
 == UserInputInfo API

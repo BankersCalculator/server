@@ -2,10 +2,7 @@ package com.bankersCalculator.server.docs;
 
 import com.bankersCalculator.server.RestDocsSupport;
 import com.bankersCalculator.server.advice.loanAdvice.controller.LoanAdviceApiController;
-import com.bankersCalculator.server.advice.loanAdvice.dto.LoanAdviceRequest;
-import com.bankersCalculator.server.advice.loanAdvice.dto.LoanAdviceResponse;
-import com.bankersCalculator.server.advice.loanAdvice.dto.RecommendedProductDto;
-import com.bankersCalculator.server.advice.loanAdvice.dto.SpecificLoanAdviceRequest;
+import com.bankersCalculator.server.advice.loanAdvice.dto.*;
 import com.bankersCalculator.server.advice.loanAdvice.service.LoanAdviceService;
 import com.bankersCalculator.server.common.enums.Bank;
 import com.bankersCalculator.server.common.enums.loanAdvise.ChildStatus;
@@ -17,14 +14,15 @@ import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 
 import java.util.Arrays;
+import java.util.List;
 
-import static com.bankersCalculator.server.common.enums.loanAdvise.UserType.MEMBER;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
@@ -43,7 +41,122 @@ public class LoanAdviceApiControllerDocsTest extends RestDocsSupport {
     }
 
 
-    @DisplayName("대출 상담 결과 생성")
+    @DisplayName("최근 대출추천 보고서 목록 조회")
+    @Test
+    void getRecentLoanAdvices() throws Exception{
+
+        List<LoanAdviceSummaryResponse> response = Arrays.asList(
+            LoanAdviceSummaryResponse.builder()
+                .loanAdviceResultId(1L)
+                .loanProductName("샘플 전세자금대출")
+                .loanProductCode("SAMPLE001")
+                .possibleLoanLimit(200000000.0)
+                .expectedLoanRate(3.5)
+                .build(),
+            LoanAdviceSummaryResponse.builder()
+                .loanAdviceResultId(2L)
+                .loanProductName("다른 은행 전세자금대출")
+                .loanProductCode("OTHER001")
+                .possibleLoanLimit(180000000.0)
+                .expectedLoanRate(3.7)
+                .build()
+        );
+
+        when(loanAdviceService.getRecentLoanAdvices()).thenReturn(response);
+
+        mockMvc.perform(get(BASE_URL)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .header("accessToken", "액세스 토큰")
+                .header("refreshToken", "리프레시 토큰")
+        )
+            .andExpect(status().isOk())
+            .andDo(document("loan-Advice/get-recent-loan-advices",
+                preprocessRequest(prettyPrint()),
+                preprocessResponse(prettyPrint()),
+                requestHeaders(
+                    headerWithName("accessToken")
+                        .description("액세스 토큰"),
+                    headerWithName("refreshToken")
+                        .description("리프레쉬 토큰")
+                ),
+                responseFields(
+                    fieldWithPath("code").type(JsonFieldType.NUMBER).description("응답 코드"),
+                    fieldWithPath("status").type(JsonFieldType.STRING).description("응답 상태"),
+                    fieldWithPath("message").type(JsonFieldType.STRING).description("응답 메시지"),
+                    fieldWithPath("data").type(JsonFieldType.ARRAY).description("응답 데이터"),
+                    fieldWithPath("data[].loanAdviceResultId").type(JsonFieldType.NUMBER).description("대출 상담 결과 ID"),
+                    fieldWithPath("data[].loanProductName").type(JsonFieldType.STRING).description("대출 상품명"),
+                    fieldWithPath("data[].loanProductCode").type(JsonFieldType.STRING).description("대출 상품 코드"),
+                    fieldWithPath("data[].possibleLoanLimit").type(JsonFieldType.NUMBER).description("가능한 대출 한도"),
+                    fieldWithPath("data[].expectedLoanRate").type(JsonFieldType.NUMBER).description("예상 대출 금리")
+                )
+            ));
+
+    }
+
+    @DisplayName("특정 대출추천 보고서 조회")
+    @Test
+    void getSpecificLoanAdvice() throws Exception {
+        LoanAdviceResponse response = createSampleLoanAdviceResponse();
+
+        when(loanAdviceService.getSpecificLoanAdvice(any())).thenReturn(response);
+
+        mockMvc.perform(get(BASE_URL + "/specific/{loanAdviceResultId}", 200L)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .header("accessToken", "액세스 토큰")
+                .header("refreshToken", "리프레시 토큰")
+            )
+            .andExpect(status().isOk())
+            .andDo(document("loan-advice/get-specific-loan-advice",
+                preprocessRequest(prettyPrint()),
+                preprocessResponse(prettyPrint()),
+                requestHeaders(
+                    headerWithName("accessToken")
+                        .description("액세스 토큰"),
+                    headerWithName("refreshToken")
+                        .description("리프레쉬 토큰")
+                ),
+                pathParameters(
+                    parameterWithName("loanAdviceResultId").description("대출 상담 결과 ID")
+                ),
+                responseFields(
+                    fieldWithPath("code").type(JsonFieldType.NUMBER).description("응답 코드"),
+                    fieldWithPath("status").type(JsonFieldType.STRING).description("응답 상태"),
+                    fieldWithPath("message").type(JsonFieldType.STRING).description("응답 메시지"),
+                    fieldWithPath("data").type(JsonFieldType.OBJECT).description("응답 데이터"),
+                    fieldWithPath("data.loanAdviceResultId").type(JsonFieldType.NUMBER).description("대출 상담 결과 ID"),
+                    fieldWithPath("data.loanProductName").type(JsonFieldType.STRING).description("대출 상품명"),
+                    fieldWithPath("data.loanProductCode").type(JsonFieldType.STRING).description("대출 상품 코드"),
+                    fieldWithPath("data.possibleLoanLimit").type(JsonFieldType.NUMBER).description("가능한 대출 한도"),
+                    fieldWithPath("data.expectedLoanRate").type(JsonFieldType.NUMBER).description("예상 대출 금리"),
+                    fieldWithPath("data.totalRentalDeposit").type(JsonFieldType.NUMBER).description("총 임대 보증금"),
+                    fieldWithPath("data.loanAmount").type(JsonFieldType.NUMBER).description("대출 금액"),
+                    fieldWithPath("data.ownFunds").type(JsonFieldType.NUMBER).description("자기 자금"),
+                    fieldWithPath("data.monthlyInterestCost").type(JsonFieldType.NUMBER).description("월 이자 비용"),
+                    fieldWithPath("data.monthlyRent").type(JsonFieldType.NUMBER).description("월 임대료"),
+                    fieldWithPath("data.totalLivingCost").type(JsonFieldType.NUMBER).description("총 주거 비용"),
+                    fieldWithPath("data.opportunityCostOwnFunds").type(JsonFieldType.NUMBER).description("자기 자금 기회 비용"),
+                    fieldWithPath("data.depositInterestRate").type(JsonFieldType.NUMBER).description("예금 이자율"),
+                    fieldWithPath("data.guaranteeInsuranceFee").type(JsonFieldType.NUMBER).description("보증 보험료"),
+                    fieldWithPath("data.stampDuty").type(JsonFieldType.NUMBER).description("인지세"),
+                    fieldWithPath("data.recommendationReason").type(JsonFieldType.STRING).description("추천 이유"),
+                    fieldWithPath("data.recommendedProducts").type(JsonFieldType.ARRAY).description("추천 상품 목록"),
+                    fieldWithPath("data.recommendedProducts[].rank").type(JsonFieldType.NUMBER).description("추천 순위"),
+                    fieldWithPath("data.recommendedProducts[].loanProductName").type(JsonFieldType.STRING).description("대출 상품명"),
+                    fieldWithPath("data.recommendedProducts[].loanProductCode").type(JsonFieldType.STRING).description("대출 상품 코드"),
+                    fieldWithPath("data.recommendedProducts[].possibleLoanLimit").type(JsonFieldType.NUMBER).description("가능한 대출 한도"),
+                    fieldWithPath("data.recommendedProducts[].expectedLoanRate").type(JsonFieldType.NUMBER).description("예상 대출 금리"),
+                    fieldWithPath("data.recommendedProducts[].notEligibleReason").type(JsonFieldType.STRING).optional().description("부적격 사유"),
+                    fieldWithPath("data.availableBanks").type(JsonFieldType.ARRAY).description("이용 가능한 은행 목록"),
+                    fieldWithPath("data.rentalLoanGuide").type(JsonFieldType.STRING).description("전세 대출 가이드")
+                )
+            ));
+    }
+
+
+    @DisplayName("전세대출 추천보고서 생성")
     @Test
     void generateLoanAdvice() throws Exception {
         LoanAdviceRequest request = createSampleLoanAdviceRequest();
@@ -60,7 +173,7 @@ public class LoanAdviceApiControllerDocsTest extends RestDocsSupport {
                 .header("tempUserId", "일회성 유저 ID")
             )
             .andExpect(status().isOk())
-            .andDo(document("loan-Advice/generate-loan-Advice",
+            .andDo(document("loan-advice/generate-loan-advice",
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint()),
                 requestHeaders(
@@ -108,7 +221,6 @@ public class LoanAdviceApiControllerDocsTest extends RestDocsSupport {
                     fieldWithPath("data.totalLivingCost").type(JsonFieldType.NUMBER).description("총 주거 비용"),
                     fieldWithPath("data.opportunityCostOwnFunds").type(JsonFieldType.NUMBER).description("자기 자금 기회 비용"),
                     fieldWithPath("data.depositInterestRate").type(JsonFieldType.NUMBER).description("예금 이자율"),
-                    fieldWithPath("data.calculatedCost").type(JsonFieldType.NUMBER).description("계산된 비용"),
                     fieldWithPath("data.guaranteeInsuranceFee").type(JsonFieldType.NUMBER).description("보증 보험료"),
                     fieldWithPath("data.stampDuty").type(JsonFieldType.NUMBER).description("인지세"),
                     fieldWithPath("data.recommendationReason").type(JsonFieldType.STRING).description("추천 이유"),
@@ -125,11 +237,9 @@ public class LoanAdviceApiControllerDocsTest extends RestDocsSupport {
             ));
     }
 
-    @DisplayName("특정 대출 상품에 대한 대출 상담 결과 생성")
+    @DisplayName("특정 대출상품에 대한 보고서 생성")
     @Test
     void generateLoanAdviceOnSpecificLoan() throws Exception {
-        Long userId = 1L;
-        Long loanAdviceResultId = 1L;
         LoanAdviceResponse response = createSampleLoanAdviceResponse();
 
         SpecificLoanAdviceRequest request = SpecificLoanAdviceRequest.builder()
@@ -147,7 +257,7 @@ public class LoanAdviceApiControllerDocsTest extends RestDocsSupport {
                 .header("refreshToken", "리프레시 토큰")
             )
             .andExpect(status().isOk())
-            .andDo(document("loan-Advice/generate-loan-Advice-on-specific-loan",
+            .andDo(document("loan-advice/generate-loan-advice-on-specific-loan",
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint()),
                 requestHeaders(
@@ -180,7 +290,6 @@ public class LoanAdviceApiControllerDocsTest extends RestDocsSupport {
                     fieldWithPath("data.totalLivingCost").type(JsonFieldType.NUMBER).description("총 주거 비용"),
                     fieldWithPath("data.opportunityCostOwnFunds").type(JsonFieldType.NUMBER).description("자기 자금 기회 비용"),
                     fieldWithPath("data.depositInterestRate").type(JsonFieldType.NUMBER).description("예금 이자율"),
-                    fieldWithPath("data.calculatedCost").type(JsonFieldType.NUMBER).description("계산된 비용"),
                     fieldWithPath("data.guaranteeInsuranceFee").type(JsonFieldType.NUMBER).description("보증 보험료"),
                     fieldWithPath("data.stampDuty").type(JsonFieldType.NUMBER).description("인지세"),
                     fieldWithPath("data.recommendationReason").type(JsonFieldType.STRING).description("추천 이유"),
@@ -235,7 +344,6 @@ public class LoanAdviceApiControllerDocsTest extends RestDocsSupport {
             .totalLivingCost(583333L)
             .opportunityCostOwnFunds(100000000L)
             .depositInterestRate(2.5)
-            .calculatedCost(2500000L)
             .guaranteeInsuranceFee(1000000L)
             .stampDuty(150000L)
             .recommendationReason("고객님의 소득과 신용도를 고려하여 가장 적합한 상품으로 선정되었습니다.")

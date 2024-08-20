@@ -1,0 +1,17 @@
+[[get-specific-loan-advice]]
+=== 특정 대출추천 보고서 조회 API
+
+==== HTTP Request
+
+include::{snippets}/loan-advice/get-specific-loan-advice/http-request.adoc[]
+
+==== Path Parameters
+include::{snippets}/loan-advice/get-specific-loan-advice/path-parameters.adoc[]
+==== Request Headers
+include::{snippets}/loan-advice/get-specific-loan-advice/request-headers.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/loan-advice/get-specific-loan-advice/http-response.adoc[]
+==== Response Fields
+include::{snippets}/loan-advice/get-specific-loan-advice/response-fields.adoc[]
