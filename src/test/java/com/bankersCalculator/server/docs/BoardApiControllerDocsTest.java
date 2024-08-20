@@ -27,6 +27,8 @@ import java.util.List;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
@@ -68,12 +70,20 @@ public class BoardApiControllerDocsTest extends RestDocsSupport {
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .param("page", "0")
-                .param("size", "10"))
+                .param("size", "10")
+                .header("accessToken", "액세스 토큰")
+                .header("refreshToken", "리프레시 토큰"))
             .andExpect(status().isOk())
             .andDo(print())
             .andDo(document("board/get-all-posts",
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint()),
+                requestHeaders(
+                    headerWithName("accessToken")
+                        .description("액세스 토큰"),
+                    headerWithName("refreshToken")
+                        .description("리프레쉬 토큰")
+                ),
                 queryParameters(
                     parameterWithName("page").description("페이지 번호"),
                     parameterWithName("size").description("페이지 크기")
@@ -114,12 +124,20 @@ public class BoardApiControllerDocsTest extends RestDocsSupport {
 
         mockMvc.perform(get(BASE_URL + "/posts/{postId}", 1L)
                 .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON))
+                .accept(MediaType.APPLICATION_JSON)
+                .header("accessToken", "액세스 토큰")
+                .header("refreshToken", "리프레시 토큰"))
             .andExpect(status().isOk())
             .andDo(print())
             .andDo(document("board/get-post-by-id",
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint()),
+                requestHeaders(
+                    headerWithName("accessToken")
+                        .description("액세스 토큰"),
+                    headerWithName("refreshToken")
+                        .description("리프레쉬 토큰")
+                ),
                 pathParameters(
                     parameterWithName("postId").description("게시글 ID")
                 ),
@@ -160,12 +178,20 @@ public class BoardApiControllerDocsTest extends RestDocsSupport {
         mockMvc.perform(post(BASE_URL + "/posts")
                 .content(objectMapper.writeValueAsString(request))
                 .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON))
+                .accept(MediaType.APPLICATION_JSON)
+                .header("accessToken", "액세스 토큰")
+                .header("refreshToken", "리프레시 토큰"))
             .andExpect(status().isOk())
             .andDo(print())
             .andDo(document("board/create-post",
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint()),
+                requestHeaders(
+                    headerWithName("accessToken")
+                        .description("액세스 토큰"),
+                    headerWithName("refreshToken")
+                        .description("리프레쉬 토큰")
+                ),
                 requestFields(
                     fieldWithPath("title").type(JsonFieldType.STRING).description("제목"),
                     fieldWithPath("content").type(JsonFieldType.STRING).description("내용"),
@@ -208,12 +234,20 @@ public class BoardApiControllerDocsTest extends RestDocsSupport {
         mockMvc.perform(put(BASE_URL + "/posts/{postId}", 1L)
                 .content(objectMapper.writeValueAsString(request))
                 .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON))
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("accessToken", "액세스 토큰")
+                .header("refreshToken", "리프레시 토큰"))
             .andExpect(status().isOk())
             .andDo(print())
             .andDo(document("board/update-post",
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint()),
+                requestHeaders(
+                    headerWithName("accessToken")
+                        .description("액세스 토큰"),
+                    headerWithName("refreshToken")
+                        .description("리프레쉬 토큰")
+                ),
                 pathParameters(
                     parameterWithName("postId").description("게시글 ID")
                 ),
@@ -242,12 +276,20 @@ public class BoardApiControllerDocsTest extends RestDocsSupport {
     void deletePost() throws Exception {
         mockMvc.perform(delete(BASE_URL + "/posts/{postId}", 1L)
                 .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON))
+                .accept(MediaType.APPLICATION_JSON)
+                .header("accessToken", "액세스 토큰")
+                .header("refreshToken", "리프레시 토큰"))
             .andExpect(status().isOk())
             .andDo(print())
             .andDo(document("board/delete-post",
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint()),
+                requestHeaders(
+                    headerWithName("accessToken")
+                        .description("액세스 토큰"),
+                    headerWithName("refreshToken")
+                        .description("리프레쉬 토큰")
+                ),
                 pathParameters(
                     parameterWithName("postId").description("게시글 ID")
                 ),

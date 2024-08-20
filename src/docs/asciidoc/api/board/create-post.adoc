@@ -1,0 +1,15 @@
+[[create-post]]
+=== 게시글 작성 API
+
+==== HTTP Request
+include::{snippets}/board/create-post/http-request.adoc[]
+==== Request Headers
+include::{snippets}/board/create-post/request-headers.adoc[]
+==== Request Fields
+include::{snippets}/board/create-post/request-fields.adoc[]
+
+
+==== HTTP Response
+include::{snippets}/board/create-post/http-response.adoc[]
+==== Response Fields
+include::{snippets}/board/create-post/response-fields.adoc[]

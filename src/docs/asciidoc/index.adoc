@@ -20,10 +20,10 @@ include::api/oauth2/oauth2.adoc[]
 [[Loanadvice-API]]
 == LoanAdvice API
 
-include::api/loan-advice/generate-loan-advice.adoc[]
-include::api/loan-advice/generate-loan-advice-on-specific-loan.adoc[]
 include::api/loan-advice/get-recent-loan-advices.adoc[]
 include::api/loan-advice/get-specific-loan-advice.adoc[]
+include::api/loan-advice/generate-loan-advice.adoc[]
+include::api/loan-advice/generate-loan-advice-on-specific-loan.adoc[]
 
 [[UserInputInfo-API]]
 == UserInputInfo API
@@ -33,7 +33,6 @@ include::api/user-input-info/get-recent-ten.adoc[]
 include::api/user-input-info/get-specific.adoc[]
 
 
-
 [[Calculator-API]]
 == Calculator API
 
@@ -41,6 +40,14 @@ include::api/calculator/repayment-calc.adoc[]
 include::api/calculator/ltv-calc.adoc[]
 include::api/calculator/dsr-calc.adoc[]
 
+[[Board-API]]
+== Board API
+
+include::api/board/get-all-posts.adoc[]
+include::api/board/get-post-by-id.adoc[]
+include::api/board/create-post.adoc[]
+include::api/board/update-post.adoc[]
+include::api/board/delete-post.adoc[]
 
 
 
