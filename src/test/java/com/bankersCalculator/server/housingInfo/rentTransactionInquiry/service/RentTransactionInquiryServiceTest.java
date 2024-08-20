@@ -1,8 +1,7 @@
-package com.bankersCalculator.server.rentTransactionInquiry.service;
+package com.bankersCalculator.server.housingInfo.rentTransactionInquiry.service;
 
 import com.bankersCalculator.server.housingInfo.rentTransactionInquiry.common.RentHousingType;
 import com.bankersCalculator.server.housingInfo.rentTransactionInquiry.dto.RentTransactionInquiryResponse;
-import com.bankersCalculator.server.housingInfo.rentTransactionInquiry.service.RentTransactionInquiryService;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

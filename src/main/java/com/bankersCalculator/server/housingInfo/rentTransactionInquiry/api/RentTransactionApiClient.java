@@ -50,7 +50,6 @@ import java.util.List;
  */
 @Service
 public class RentTransactionApiClient {
-
     private static final Logger logger = LoggerFactory.getLogger(RentTransactionApiClient.class);
     private final RentTransactionApiConfig apiConfig;
     private final XmlMapper xmlMapper;
@@ -110,23 +109,23 @@ public class RentTransactionApiClient {
             for (int i = 0; i < itemsArray.length(); i++) {
                 JSONObject itemObject = itemsArray.getJSONObject(i);
                 RentTransactionApiResponse.ApiResponseItem item = new RentTransactionApiResponse.ApiResponseItem();
-                item.setAptNm(itemObject.getString("aptNm"));
-                item.setBuildYear(itemObject.getString("buildYear"));
-                item.setContractTerm(itemObject.getString("contractTerm"));
-                item.setContractType(itemObject.getString("contractType"));
-                item.setDealDay(itemObject.getString("dealDay"));
-                item.setDealMonth(itemObject.getString("dealMonth"));
-                item.setDealYear(itemObject.getString("dealYear"));
-                item.setDeposit(itemObject.getString("deposit"));
-                item.setExcluUseAr(itemObject.getString("excluUseAr"));
-                item.setFloor(itemObject.getString("floor"));
-                item.setJibun(itemObject.getString("jibun"));
-                item.setMonthlyRent(itemObject.getString("monthlyRent"));
-                item.setPreDeposit(itemObject.getString("preDeposit"));
-                item.setPreMonthlyRent(itemObject.getString("preMonthlyRent"));
-                item.setSggCd(itemObject.getString("sggCd"));
-                item.setUmdNm(itemObject.getString("umdNm"));
-                item.setUseRRRight(itemObject.getString("useRRRight"));
+                item.setAptNm(itemObject.has("aptNm") ? itemObject.getString("aptNm") : null);
+                item.setBuildYear(itemObject.has("buildYear") ? itemObject.getString("buildYear") : null);
+                item.setContractTerm(itemObject.has("contractTerm") ? itemObject.getString("contractTerm") : null);
+                item.setContractType(itemObject.has("contractType") ? itemObject.getString("contractType") : null);
+                item.setDealDay(itemObject.has("dealDay") ? itemObject.getString("dealDay") : null);
+                item.setDealMonth(itemObject.has("dealMonth") ? itemObject.getString("dealMonth") : null);
+                item.setDealYear(itemObject.has("dealYear") ? itemObject.getString("dealYear") : null);
+                item.setDeposit(itemObject.has("deposit") ? itemObject.getString("deposit") : null);
+                item.setExcluUseAr(itemObject.has("excluUseAr") ? itemObject.getString("excluUseAr") : null);
+                item.setFloor(itemObject.has("floor") ? itemObject.getString("floor") : null);
+                item.setJibun(itemObject.has("jibun") ? itemObject.getString("jibun") : null);
+                item.setMonthlyRent(itemObject.has("monthlyRent") ? itemObject.getString("monthlyRent") : null);
+                item.setPreDeposit(itemObject.has("preDeposit") ? itemObject.getString("preDeposit") : null);
+                item.setPreMonthlyRent(itemObject.has("preMonthlyRent") ? itemObject.getString("preMonthlyRent") : null);
+                item.setSggCd(itemObject.has("sggCd") ? itemObject.getString("sggCd") : null);
+                item.setUmdNm(itemObject.has("umdNm") ? itemObject.getString("umdNm") : null);
+                item.setUseRRRight(itemObject.has("useRRRight") ? itemObject.getString("useRRRight") : null);
 
                 itemList.add(item);
             }

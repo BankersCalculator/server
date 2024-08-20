@@ -1,4 +1,4 @@
-package com.bankersCalculator.server.addressSearch.service;
+package com.bankersCalculator.server.housingInfo.addressSearch.service;
 
 import com.bankersCalculator.server.housingInfo.addressSearch.dto.AddressSearchApiResponse;
 import com.bankersCalculator.server.housingInfo.addressSearch.service.AddressSearchService;
