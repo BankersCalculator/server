@@ -11,5 +11,6 @@ public class HousingInfoApiResponse {
     private String rentHousingTypeName;
     private double exclusiveArea;
     private double averageDeposit;
+    private double averageMonthlyRent;
     private int transactionCount;
 }

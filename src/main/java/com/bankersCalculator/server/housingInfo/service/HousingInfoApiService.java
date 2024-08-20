@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class HousingInfoApiService {
@@ -28,8 +29,10 @@ public class HousingInfoApiService {
         // Step 1: districtCode와 jibun을 분리
         String districtCodeFirst5 = districtCode.substring(0, 5);
         String districtCodeLast5 = districtCode.substring(5);
-        String jibunMain = jibun.split("-")[0];
-        String jibunSub = jibun.split("-").length > 1 ? jibun.split("-")[1] : "0000";
+        String[] parsedJibun = parseJibun(jibun);
+
+        String jibunMain = parsedJibun[0];
+        String jibunSub = parsedJibun[1];
 
         // Step 2: 주택 유형 및 전용 면적 정보
         HousingTypeAndExclusiveAreaApiResponse housingTypeInfo = housingTypeApiClient.getApHsTpInfo(
@@ -68,18 +71,36 @@ public class HousingInfoApiService {
             RentTransactionInquiryResponse rentTransactionResponse = rentTransactionInquiryService.getRentTransactionsResult(
                     districtCodeFirst5, rentHousingType, 3, dongName, jibun);
 
-            // Step 5: 평균 보증금과 거래 건수를 추출
-            RentTransactionInquiryResponse.AverageInfo averageInfo = rentTransactionResponse.getAverageInfoByExcluUseAr()
-                    .get(String.valueOf(exclusiveArea));
+            // Step 5: 평균 보증금과 거래 건수를 추출하고, 정보를 활용
+            for (Map.Entry<String, RentTransactionInquiryResponse.AverageInfo> entry : rentTransactionResponse.getAverageInfoByExcluUseAr().entrySet()) {
+                String excluUseAr = entry.getKey();
+                RentTransactionInquiryResponse.AverageInfo avgInfo = entry.getValue();
 
-            result.add(new HousingInfoApiResponse(
-                    rentHousingTypeName,
-                    exclusiveArea,
-                    averageInfo.getAverageDeposit(),
-                    averageInfo.getTransactionCount()
-            ));
+                result.add(new HousingInfoApiResponse(
+                        rentHousingTypeName,
+                        Double.parseDouble(excluUseAr),
+                        avgInfo.getAverageDeposit(),
+                        avgInfo.getAverageMonthlyRent(),
+                        avgInfo.getTransactionCount()
+                ));
+            }
         }
 
         return result;
+    }
+
+    public static String[] parseJibun(String jibun) {
+        // 지번을 "-" 기준으로 분리
+        String[] parts = jibun.split("-");
+
+        // 메인 지번 (앞부분)
+        String main = parts[0];
+        main = String.format("%04d", Integer.parseInt(main)); // 4자리 맞추기, 앞에 0 채우기
+
+        // 서브 지번 (뒷부분)
+        String sub = (parts.length > 1) ? parts[1] : "0000";
+        sub = String.format("%04d", Integer.parseInt(sub));   // 4자리 맞추기, 앞에 0 채우기
+
+        return new String[]{main, sub};
     }
 }
