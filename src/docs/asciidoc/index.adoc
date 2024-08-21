@@ -46,7 +46,7 @@ include::api/calculator/dti-calc.adoc[]
 == HousingInfo API
 
 include::api/housing-info/address-search.adoc[]
-
+include::api/housing-info/housing-info-all.adoc[]
 
 
 

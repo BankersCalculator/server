@@ -19,12 +19,12 @@ public class HousingTypeAndExclusiveAreaApiClientTest {
     public void testGetApHsTpInfo() {
         // 테스트할 파라미터 설정
         String districtCodeFirst5 = "11680"; // 서울시 특정 시군구 코드
-        String districtCodeLast5 = "11200";  // 특정 법정동 코드
-        String landDivisionCode = "0";       // 지목 코드
-        String jibunMain = "0662";           // 지번 본번
-        String jibunSub = "";            // 지번 부번
-        String numOfRows = "10";             // 조회할 행 수
-        String pageNo = "1";                 // 페이지 번호
+        String districtCodeLast5 = "10100";  // 특정 법정동 코드
+
+        String jibunMain = "0603";           // 지번 본번
+        String jibunSub = "0005";            // 지번 부번
+
+
 
         // 실제 API 호출
         HousingTypeAndExclusiveAreaApiResponse response = housingTypeAndExclusiveAreaApiClient.getApHsTpInfo(
@@ -50,8 +50,6 @@ public class HousingTypeAndExclusiveAreaApiClientTest {
                 ", PageNo=" + response.getBody().getPageNo() +
                 ", TotalCount=" + response.getBody().getTotalCount());
 
-        // 아이템 리스트 검증 및 로그 출력
-        // 아이템 리스트 검증 및 로그 출력
         assertNotNull(response.getBody().getItems(), "The items should not be null");
         assertTrue(!response.getBody().getItems().getItemList().isEmpty(), "The items list should not be empty");
 

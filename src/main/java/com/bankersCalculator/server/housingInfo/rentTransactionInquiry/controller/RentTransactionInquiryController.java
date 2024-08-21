@@ -4,6 +4,7 @@ import com.bankersCalculator.server.housingInfo.rentTransactionInquiry.common.Re
 import com.bankersCalculator.server.housingInfo.rentTransactionInquiry.dto.RentTransactionInquiryResponse;
 import com.bankersCalculator.server.housingInfo.rentTransactionInquiry.service.RentTransactionInquiryService;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,7 +19,7 @@ public class RentTransactionInquiryController {
         this.inquiryService = inquiryService;
     }
 
-    @GetMapping("/rent-transactions")
+    @PostMapping("/rent-transactions")
     public RentTransactionInquiryResponse getRentTransactions(
             @RequestParam String lawdCd,
             @RequestParam RentHousingType rentHousingType,

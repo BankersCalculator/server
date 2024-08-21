@@ -1,6 +1,7 @@
 package com.bankersCalculator.server.housingInfo.buildingInfo.api;
 
 import com.bankersCalculator.server.housingInfo.buildingInfo.dto.HousingTypeAndExclusiveAreaApiResponse;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -53,8 +54,7 @@ public class HousingTypeAndExclusiveAreaApiClient {
             String districtCodeLast5,
             String jibunMain,
             String jibunSub
-            ) {
-
+    ) {
         String serviceKey = URLEncoder.encode("EOKGlRDintEZcHeH5tnMFZhkvd1WGjIPchUi1RHeI3pxw5e2y196Cijpr2zTwTZ4QnDJ7+pW3J2FnyVXkFfXTA==", StandardCharsets.UTF_8);
         String apiUrl = UriComponentsBuilder.fromHttpUrl("https://apis.data.go.kr/1613000/ArchPmsService_v2/getApHsTpInfo")
                 .queryParam("serviceKey", serviceKey)
@@ -83,7 +83,12 @@ public class HousingTypeAndExclusiveAreaApiClient {
             }
             br.close();
 
-            JSONObject jsonObject = new JSONObject(xmlMapper.readTree(sb.toString()).toString());
+            // XML을 JSON으로 변환
+            XmlMapper xmlMapper = new XmlMapper();
+            JsonNode jsonNode = xmlMapper.readTree(sb.toString());
+
+            // JSON 객체로 변환하여 기존 로직으로 전달
+            JSONObject jsonObject = new JSONObject(jsonNode.toString());
             return processApiResponse(jsonObject);
 
         } catch (Exception e) {
@@ -91,6 +96,7 @@ public class HousingTypeAndExclusiveAreaApiClient {
             throw new RuntimeException("Error occurred while calling the API", e);
         }
     }
+
 
     private HousingTypeAndExclusiveAreaApiResponse processApiResponse(JSONObject jsonObject) {
         HousingTypeAndExclusiveAreaApiResponse response = new HousingTypeAndExclusiveAreaApiResponse();
@@ -121,9 +127,7 @@ public class HousingTypeAndExclusiveAreaApiClient {
             responseBody.getItems().setItemList(itemList);
         }
 
-        responseBody.setNumOfRows(body.getInt("numOfRows"));
-        responseBody.setPageNo(body.getInt("pageNo"));
-        responseBody.setTotalCount(body.getInt("totalCount"));
+
         response.setBody(responseBody);
 
         return response;

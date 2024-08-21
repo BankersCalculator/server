@@ -1,5 +1,6 @@
 package com.bankersCalculator.server.housingInfo.buildingInfo.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
@@ -7,6 +8,7 @@ import java.util.List;
 
 @Getter
 @Setter
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class HousingTypeAndExclusiveAreaApiResponse {
 
     @JsonProperty("header")
@@ -51,7 +53,6 @@ public class HousingTypeAndExclusiveAreaApiResponse {
     @Getter
     @Setter
     public static class ApiResponseItem {
-
         @JsonProperty("hstpGbCd")
         private String rentHousingTypeCode;
 

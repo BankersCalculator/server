@@ -5,10 +5,7 @@ import com.bankersCalculator.server.housingInfo.buildingInfo.api.HousingTypeAndE
 import com.bankersCalculator.server.housingInfo.buildingInfo.dto.HousingTypeAndExclusiveAreaApiResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/building-info")
@@ -20,7 +17,7 @@ public class HousingTypeAndExclusiveAreaApiController {
     public HousingTypeAndExclusiveAreaApiController(HousingTypeAndExclusiveAreaApiClient housingTypeAndExclusiveAreaApiClient) {
         this.housingTypeAndExclusiveAreaApiClient = housingTypeAndExclusiveAreaApiClient;
     }
-    @GetMapping("/housing-type-and-exclusive-area")
+    @PostMapping("/housing-type-and-exclusive-area")
     public ApiResponse<HousingTypeAndExclusiveAreaApiResponse> getHousingTypeAndExclusiveArea(
             @RequestParam String districtCodeFirst5,
             @RequestParam String districtCodeLast5,
