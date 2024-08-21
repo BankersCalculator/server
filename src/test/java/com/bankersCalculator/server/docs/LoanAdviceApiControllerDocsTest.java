@@ -67,17 +67,17 @@ public class LoanAdviceApiControllerDocsTest extends RestDocsSupport {
         mockMvc.perform(get(BASE_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .header("accessToken", "액세스 토큰")
-                .header("refreshToken", "리프레시 토큰")
+                .header("AccessToken", "액세스 토큰")
+                .header("RefreshToken", "리프레시 토큰")
             )
             .andExpect(status().isOk())
             .andDo(document("loan-Advice/get-recent-loan-advices",
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint()),
                 requestHeaders(
-                    headerWithName("accessToken")
+                    headerWithName("AccessToken")
                         .description("액세스 토큰"),
-                    headerWithName("refreshToken")
+                    headerWithName("RefreshToken")
                         .description("리프레쉬 토큰")
                 ),
                 responseFields(
@@ -105,17 +105,17 @@ public class LoanAdviceApiControllerDocsTest extends RestDocsSupport {
         mockMvc.perform(get(BASE_URL + "/specific/{loanAdviceResultId}", 200L)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .header("accessToken", "액세스 토큰")
-                .header("refreshToken", "리프레시 토큰")
+                .header("AccessToken", "액세스 토큰")
+                .header("RefreshToken", "리프레시 토큰")
             )
             .andExpect(status().isOk())
             .andDo(document("loan-advice/get-specific-loan-advice",
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint()),
                 requestHeaders(
-                    headerWithName("accessToken")
+                    headerWithName("AccessToken")
                         .description("액세스 토큰"),
-                    headerWithName("refreshToken")
+                    headerWithName("RefreshToken")
                         .description("리프레쉬 토큰")
                 ),
                 pathParameters(
@@ -168,8 +168,8 @@ public class LoanAdviceApiControllerDocsTest extends RestDocsSupport {
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request))
-                .header("accessToken", "액세스 토큰")
-                .header("refreshToken", "리프레시 토큰")
+                .header("AccessToken", "액세스 토큰")
+                .header("RefreshToken", "리프레시 토큰")
                 .header("tempUserId", "일회성 유저 ID")
             )
             .andExpect(status().isOk())
@@ -177,9 +177,9 @@ public class LoanAdviceApiControllerDocsTest extends RestDocsSupport {
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint()),
                 requestHeaders(
-                    headerWithName("accessToken")
+                    headerWithName("AccessToken")
                         .description("액세스 토큰"),
-                    headerWithName("refreshToken")
+                    headerWithName("RefreshToken")
                         .description("리프레쉬 토큰"),
                     headerWithName("tempUserId")
                         .description("일회성 유저 ID")
@@ -254,17 +254,17 @@ public class LoanAdviceApiControllerDocsTest extends RestDocsSupport {
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request))
-                .header("accessToken", "액세스 토큰")
-                .header("refreshToken", "리프레시 토큰")
+                .header("AccessToken", "액세스 토큰")
+                .header("RefreshToken", "리프레시 토큰")
             )
             .andExpect(status().isOk())
             .andDo(document("loan-advice/generate-loan-advice-on-specific-loan",
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint()),
                 requestHeaders(
-                    headerWithName("accessToken")
+                    headerWithName("AccessToken")
                         .description("액세스 토큰"),
-                    headerWithName("refreshToken")
+                    headerWithName("RefreshToken")
                         .description("리프레쉬 토큰")
                 ),
                 requestFields(
