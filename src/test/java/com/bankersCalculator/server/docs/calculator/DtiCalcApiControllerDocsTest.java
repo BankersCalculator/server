@@ -1,4 +1,4 @@
-package com.bankersCalculator.server.docs;
+package com.bankersCalculator.server.docs.calculator;
 
 import com.bankersCalculator.server.RestDocsSupport;
 import com.bankersCalculator.server.calculator.dtiCalc.controller.DtiCalcApiController;
