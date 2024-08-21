@@ -13,13 +13,13 @@ import lombok.NoArgsConstructor;
 @Builder
 public class LtvCalcServiceRequest {
 
-    private double loanAmount;  // 대출금액
-    private double collateralValue; // 담보가치
-    private double priorMortgage;   // 선순위채권
-    private int numberOfRooms; // 방 수
+    private Double loanAmount;  // 대출금액
+    private Double collateralValue; // 담보가치
+    private Double priorMortgage;   // 선순위채권
+    private Integer numberOfRooms; // 방 수
     private HousingType housingType; // 주택유형
     private RegionType regionType; // 지역
-    private double currentLeaseDeposit; // 현재임차보증금
+    private Double currentLeaseDeposit; // 현재임차보증금
 //    private HouseOwnershipType houseOwnershipType;  // 주택보유유형
 //    private LoanPurpose loanPurpose;    // 대출목적
 

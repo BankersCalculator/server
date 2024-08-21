@@ -8,7 +8,7 @@ import java.util.List;
 @Getter
 @Builder
 public class RecommendedProductDto {
-    private int rank;
+    private Integer rank;
     private String loanProductName;
     private String loanProductCode;
     private Long possibleLoanLimit;

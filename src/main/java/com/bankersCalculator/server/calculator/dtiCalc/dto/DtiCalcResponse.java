@@ -10,8 +10,8 @@ import java.util.List;
 @Getter
 @Builder
 public class DtiCalcResponse {
-    private int annualIncome;
-    private int totalLoanCount;
+    private Integer annualIncome;
+    private Integer totalLoanCount;
     private List<DtiCalcResult> dtiCalcResultList;
-    private double finalDtiRatio;
+    private Double finalDtiRatio;
 }

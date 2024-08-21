@@ -9,11 +9,11 @@ import java.time.LocalDateTime;
 @Builder
 public class UserInputSummaryResponse {
 
-    private final Long userInputInfoId;
-    private final LocalDateTime inquiryDateTime; // 조회일시
+    private Long userInputInfoId;
+    private LocalDateTime inquiryDateTime; // 조회일시
     private String dongName;   // 읍명동이름
     private String buildingName;   // 건물명
-    private long rentalDeposit; // 임차보증금
-    private long monthlyRent;   // 월세
+    private Long rentalDeposit; // 임차보증금
+    private Long monthlyRent;   // 월세
 
 }

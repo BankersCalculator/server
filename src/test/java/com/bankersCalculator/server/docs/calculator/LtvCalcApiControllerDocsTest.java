@@ -15,8 +15,6 @@ import org.springframework.restdocs.payload.JsonFieldType;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
-import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
@@ -38,23 +36,23 @@ public class LtvCalcApiControllerDocsTest extends RestDocsSupport {
     @Test
     void calculateLtv() throws Exception {
         LtvCalcRequest request = LtvCalcRequest.builder()
-            .loanAmount(300000000)
-            .collateralValue(500000000)
-            .priorMortgage(50000000)
+            .loanAmount(300000000.0)
+            .collateralValue(500000000.0)
+            .priorMortgage(50000000.0)
             .numberOfRooms(3)
             .housingType(HousingType.APARTMENT)
             .regionType(RegionType.SEOUL)
-            .currentLeaseDeposit(20000000)
+            .currentLeaseDeposit(20000000.0)
             .build();
 
         LtvCalcResponse response = LtvCalcResponse.builder()
-            .loanAmount(300000000)
-            .collateralValue(500000000)
-            .priorMortgage(50000000)
+            .loanAmount(300000000.0)
+            .collateralValue(500000000.0)
+            .priorMortgage(50000000.0)
             .numbersOfRooms(3)
-            .smallAmountLeaseDeposit(55000000)
-            .topPriorityRepaymentAmount(105000000)
-            .totalLoanExposure(350000000)
+            .smallAmountLeaseDeposit(55000000.0)
+            .topPriorityRepaymentAmount(105000000.0)
+            .totalLoanExposure(350000000.0)
             .ltvRatio(70.0)
             .build();
 

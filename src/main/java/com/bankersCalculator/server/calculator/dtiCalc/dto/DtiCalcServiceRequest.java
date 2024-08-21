@@ -16,7 +16,7 @@ import java.util.List;
 @Builder
 public class DtiCalcServiceRequest {
     private List<LoanStatus> loanStatusList;
-    private int annualIncome;
+    private Integer annualIncome;
 
 
     @Getter
@@ -26,9 +26,9 @@ public class DtiCalcServiceRequest {
     public static class LoanStatus {
         private RepaymentType repaymentType;
         private LoanType loanType;
-        private double principal;
-        private int term;
-        private double interestRate;
+        private Double principal;
+        private Integer term;
+        private Double interestRate;
 
 
         public RepaymentCalcServiceRequest toRepaymentCalcServiceRequest() {

@@ -53,7 +53,7 @@ public class LoanAdviceRequest {
     // 주택정보
     private RentHousingType rentHousingType;  // 주택타입
 
-    private Long exclusiveArea; // 전용면적
+    private Double exclusiveArea; // 전용면적
 
     private String buildingName;   // 건물명
 

@@ -1,11 +1,11 @@
 package com.bankersCalculator.server.calculator.dtiCalc.calculator;
+
 import com.bankersCalculator.server.calculator.dtiCalc.domain.DtiCalcResult;
 import com.bankersCalculator.server.calculator.dtiCalc.dto.DtiCalcServiceRequest;
 import com.bankersCalculator.server.calculator.repaymentCalc.dto.RepaymentCalcResponse;
 import com.bankersCalculator.server.calculator.repaymentCalc.service.RepaymentCalcService;
 import com.bankersCalculator.server.common.enums.LoanType;
 import com.bankersCalculator.server.common.enums.RepaymentType;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component

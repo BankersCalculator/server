@@ -2,7 +2,6 @@ package com.bankersCalculator.server.calculator.dtiCalc.domain;
 
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 
 
 @Getter

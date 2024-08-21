@@ -17,8 +17,6 @@ import java.util.Arrays;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
-import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
@@ -54,8 +52,8 @@ public class RepaymentCalcApiControllerDocsTest extends RestDocsSupport {
                 new RepaymentSchedule(1, 1000000, 5000000, 500000, 295000000),
                 new RepaymentSchedule(2, 2000000, 7000000, 450000, 200000000)
             ))
-            .totalPrincipal(300000000)
-            .totalInterest(3500000)
+            .totalPrincipal(300000000.0)
+            .totalInterest(3500000.0)
             .totalInstallments(60)
             .build();
         when(repaymentCalcService.calculateRepayment(any()))

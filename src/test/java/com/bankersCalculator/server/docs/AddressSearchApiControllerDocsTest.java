@@ -2,9 +2,9 @@ package com.bankersCalculator.server.docs;
 
 import com.bankersCalculator.server.RestDocsSupport;
 import com.bankersCalculator.server.housingInfo.addressSearch.controller.AddressSearchApiController;
+import com.bankersCalculator.server.housingInfo.addressSearch.dto.AddressSearchApiResponse;
 import com.bankersCalculator.server.housingInfo.addressSearch.dto.AddressSearchRequest;
 import com.bankersCalculator.server.housingInfo.addressSearch.service.AddressSearchService;
-import com.bankersCalculator.server.housingInfo.addressSearch.dto.AddressSearchApiResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;

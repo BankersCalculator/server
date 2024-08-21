@@ -2,6 +2,7 @@ package com.bankersCalculator.server.docs.calculator;
 
 import com.bankersCalculator.server.RestDocsSupport;
 import com.bankersCalculator.server.calculator.dtiCalc.controller.DtiCalcApiController;
+import com.bankersCalculator.server.calculator.dtiCalc.domain.DtiCalcResult;
 import com.bankersCalculator.server.calculator.dtiCalc.dto.DtiCalcRequest;
 import com.bankersCalculator.server.calculator.dtiCalc.dto.DtiCalcResponse;
 import com.bankersCalculator.server.calculator.dtiCalc.service.DtiCalcService;
@@ -11,7 +12,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
-import com.bankersCalculator.server.calculator.dtiCalc.domain.DtiCalcResult;
 
 import java.util.Arrays;
 
@@ -43,7 +43,7 @@ public class DtiCalcApiControllerDocsTest extends RestDocsSupport {
         DtiCalcRequest.LoanStatus loanStatus = new DtiCalcRequest.LoanStatus();
         loanStatus.setRepaymentType(RepaymentType.AMORTIZING);
         loanStatus.setLoanType(LoanType.MORTGAGE);
-        loanStatus.setPrincipal(300000000);
+        loanStatus.setPrincipal(300000000.0);
         loanStatus.setTerm(360);
         loanStatus.setInterestRatePercentage(3.5);
         request.getLoanStatusList().add(loanStatus);

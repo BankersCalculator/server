@@ -10,8 +10,8 @@ import java.util.List;
 @Builder
 public class DsrCalcResponse {
 
-    private int annualIncome;
-    private int totalLoanCount;
+    private Integer annualIncome;
+    private Integer totalLoanCount;
     private List<DsrCalcResult> dsrCalcResultList;
-    private double finalDsrRatio;
+    private Double finalDsrRatio;
 }

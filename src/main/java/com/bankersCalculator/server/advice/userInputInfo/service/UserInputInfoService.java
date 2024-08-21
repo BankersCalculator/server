@@ -29,7 +29,7 @@ public class UserInputInfoService {
             .isSMEEmployee(true)        // 중소기업 재직 여부
             .isNetAssetOver345M(false)  // 순자산 3.45억 초과 여부
             .rentHousingType(RentHousingType.APARTMENT)
-            .exclusiveArea(85L)         // 85제곱미터 전용면적
+            .exclusiveArea(85.0)         // 85제곱미터 전용면적
             .buildingName("행복아파트")
             .districtCode("1168010100") // 서울특별시 강남구 삼성동
             .dongName("삼성동")
@@ -52,7 +52,7 @@ public class UserInputInfoService {
             .isSMEEmployee(true)        // 중소기업 재직 여부
             .isNetAssetOver345M(false)  // 순자산 3.45억 초과 여부
             .rentHousingType(RentHousingType.APARTMENT)
-            .exclusiveArea(85L)         // 85제곱미터 전용면적
+            .exclusiveArea(85.0)         // 85제곱미터 전용면적
             .buildingName("행복아파트")
             .districtCode("1168010100") // 서울특별시 강남구 삼성동
             .dongName("삼성동")

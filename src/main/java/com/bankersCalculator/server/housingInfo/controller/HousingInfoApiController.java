@@ -4,7 +4,10 @@ import com.bankersCalculator.server.common.api.ApiResponse;
 import com.bankersCalculator.server.housingInfo.dto.HousingInfoApiResponse;
 import com.bankersCalculator.server.housingInfo.dto.HousingInfoRequest;
 import com.bankersCalculator.server.housingInfo.service.HousingInfoApiService;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 

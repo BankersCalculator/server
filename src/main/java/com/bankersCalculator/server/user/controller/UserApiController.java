@@ -14,7 +14,7 @@ public class UserApiController {
 
     private final UserService userService;
 
-    @PostMapping
+    @PostMapping("/transfer")
     public void transferTempUserToLoginUser(@RequestBody String tempUserId) {
         userService.transferTempUserToLoginUser(tempUserId);
     }

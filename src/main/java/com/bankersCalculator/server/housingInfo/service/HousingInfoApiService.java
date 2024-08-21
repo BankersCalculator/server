@@ -2,10 +2,10 @@ package com.bankersCalculator.server.housingInfo.service;
 
 import com.bankersCalculator.server.housingInfo.buildingInfo.api.HousingTypeAndExclusiveAreaApiClient;
 import com.bankersCalculator.server.housingInfo.buildingInfo.dto.HousingTypeAndExclusiveAreaApiResponse;
+import com.bankersCalculator.server.housingInfo.dto.HousingInfoApiResponse;
 import com.bankersCalculator.server.housingInfo.rentTransactionInquiry.common.RentHousingType;
 import com.bankersCalculator.server.housingInfo.rentTransactionInquiry.dto.RentTransactionInquiryResponse;
 import com.bankersCalculator.server.housingInfo.rentTransactionInquiry.service.RentTransactionInquiryService;
-import com.bankersCalculator.server.housingInfo.dto.HousingInfoApiResponse;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
