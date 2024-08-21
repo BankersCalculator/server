@@ -1,4 +1,4 @@
-package com.bankersCalculator.server.housingInfo.rentTransactionInquiry.api;
+package com.bankersCalculator.server.api.housingInfo.rentTransactionInquiry.api;
 
 import com.bankersCalculator.server.housingInfo.rentTransactionInquiry.api.RentTransactionApiClient;
 import com.bankersCalculator.server.housingInfo.rentTransactionInquiry.common.RentHousingType;

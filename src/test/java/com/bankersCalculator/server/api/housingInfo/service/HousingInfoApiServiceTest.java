@@ -1,8 +1,9 @@
-package com.bankersCalculator.server.housingInfo.service;
+package com.bankersCalculator.server.api.housingInfo.service;
 import com.bankersCalculator.server.housingInfo.buildingInfo.api.HousingTypeAndExclusiveAreaApiClient;
 import com.bankersCalculator.server.housingInfo.rentTransactionInquiry.service.RentTransactionInquiryService;
 
 import com.bankersCalculator.server.housingInfo.dto.HousingInfoApiResponse;
+import com.bankersCalculator.server.housingInfo.service.HousingInfoApiService;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

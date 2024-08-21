@@ -1,5 +1,6 @@
-package com.bankersCalculator.server.housingInfo.buildingInfo.api;
+package com.bankersCalculator.server.api.housingInfo.buildingInfo.api;
 
+import com.bankersCalculator.server.housingInfo.buildingInfo.api.HousingTypeAndExclusiveAreaApiClient;
 import com.bankersCalculator.server.housingInfo.buildingInfo.dto.HousingTypeAndExclusiveAreaApiResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
