@@ -21,16 +21,16 @@ public class DtiCalcRequestTest {
         DtiCalcRequest.LoanStatus loanStatus2 = new DtiCalcRequest.LoanStatus();
         loanStatus.setRepaymentType(RepaymentType.BULLET);  //BULLET AMORTIZING EQUAL_PRINCIPAL
         loanStatus.setLoanType(LoanType.MORTGAGE);
-        loanStatus.setPrincipal(5000000);
+        loanStatus.setPrincipal(5000000.0);
         loanStatus.setTerm(300);
-        loanStatus.setInterestRatePercentage(3);
+        loanStatus.setInterestRatePercentage(3.0);
         request.getLoanStatusList().add(loanStatus);
         
         loanStatus2.setRepaymentType(RepaymentType.BULLET);  //BULLET AMORTIZING EQUAL_PRINCIPAL
         loanStatus2.setLoanType(LoanType.MORTGAGE);
-        loanStatus2.setPrincipal(5000000);
+        loanStatus2.setPrincipal(5000000.0);
         loanStatus2.setTerm(300);
-        loanStatus2.setInterestRatePercentage(2);
+        loanStatus2.setInterestRatePercentage(2.0);
         request.getLoanStatusList().add(loanStatus2);
         
 

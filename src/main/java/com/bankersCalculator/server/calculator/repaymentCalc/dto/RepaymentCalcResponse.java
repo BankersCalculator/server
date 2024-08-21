@@ -10,7 +10,7 @@ import java.util.List;
 @Builder
 public class RepaymentCalcResponse {
     private List<RepaymentSchedule> repaymentScheduleList;
-    private double totalPrincipal; // 총 원금
-    private double totalInterest; // 총 이자
-    private int totalInstallments; // 총 상환회차
+    private Double totalPrincipal; // 총 원금
+    private Double totalInterest; // 총 이자
+    private Integer totalInstallments; // 총 상환회차
 }

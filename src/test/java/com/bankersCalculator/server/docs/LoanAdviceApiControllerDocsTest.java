@@ -322,7 +322,7 @@ public class LoanAdviceApiControllerDocsTest extends RestDocsSupport {
             .isSMEEmployee(false)
             .isNetAssetOver345M(false)
             .rentHousingType(RentHousingType.APARTMENT)
-            .exclusiveArea(75L)
+            .exclusiveArea(75.0)
             .buildingName("Sample Apartment")
             .districtCode("1168010100")
             .dongName("삼성동")

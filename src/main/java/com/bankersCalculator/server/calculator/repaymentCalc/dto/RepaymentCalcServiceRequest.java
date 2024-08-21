@@ -9,15 +9,15 @@ public class RepaymentCalcServiceRequest {
 
     private RepaymentType repaymentType;
 
-    private double principal; // 원금
+    private Double principal; // 원금
 
-    private int term; // 기간(개월수)
+    private Integer term; // 기간(개월수)
 
-    private int gracePeriod; // 거치기간
+    private Integer gracePeriod; // 거치기간
 
-    private double interestRate; // 연이자율
+    private Double interestRate; // 연이자율
 
-    private double maturityPaymentAmount; // 만기상환액
+    private Double maturityPaymentAmount; // 만기상환액
 
 
     @Builder

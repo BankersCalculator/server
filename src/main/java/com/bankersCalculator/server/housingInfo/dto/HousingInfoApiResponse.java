@@ -9,8 +9,8 @@ import lombok.Setter;
 @AllArgsConstructor
 public class HousingInfoApiResponse {
     private String rentHousingTypeName;
-    private double exclusiveArea;
-    private double averageDeposit;
-    private double averageMonthlyRent;
-    private int transactionCount;
+    private Double exclusiveArea;
+    private Double averageDeposit;
+    private Double averageMonthlyRent;
+    private Integer transactionCount;
 }

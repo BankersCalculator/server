@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 @ToString
 public class DtiCalcRequest {
     private List<LoanStatus> loanStatusList = new ArrayList<>();
-    private int annualIncome;
+    private Integer annualIncome;
 
     @Getter
     @Setter
@@ -33,9 +33,9 @@ public class DtiCalcRequest {
     public static class LoanStatus {
         private RepaymentType repaymentType;
         private LoanType loanType;
-        private double principal;
-        private int term;
-        private double interestRatePercentage;
+        private Double principal;
+        private Integer term;
+        private Double interestRatePercentage;
     }
 
     public DtiCalcServiceRequest toServiceRequest() {

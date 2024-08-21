@@ -25,7 +25,7 @@ public class DtiCalcServiceTest {
         DtiCalcServiceRequest.LoanStatus loan1 = DtiCalcServiceRequest.LoanStatus.builder()
                 .loanType(LoanType.MORTGAGE)
                 .repaymentType(RepaymentType.AMORTIZING)
-                .principal(400000000)
+                .principal(400000000.0)
                 .term(120)
                 .interestRate(0.03)
                 .build();
@@ -33,7 +33,7 @@ public class DtiCalcServiceTest {
         DtiCalcServiceRequest.LoanStatus loan2 = DtiCalcServiceRequest.LoanStatus.builder()
                 .loanType(LoanType.OTHER_LOAN)
                 .repaymentType(RepaymentType.EQUAL_PRINCIPAL)
-                .principal(40000000)
+                .principal(40000000.0)
                 .term(360)
                 .interestRate(0.04)
                 .build();
@@ -41,7 +41,7 @@ public class DtiCalcServiceTest {
         DtiCalcServiceRequest.LoanStatus loan3 = DtiCalcServiceRequest.LoanStatus.builder()
                 .loanType(LoanType.PERSONAL_LOAN)
                 .repaymentType(RepaymentType.BULLET)
-                .principal(0)
+                .principal(0.0)
                 .term(12)
                 .interestRate(0.03)
                 .build();

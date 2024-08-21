@@ -43,7 +43,7 @@ public class DtiCalcApiControllerDocsTest extends RestDocsSupport {
         DtiCalcRequest.LoanStatus loanStatus = new DtiCalcRequest.LoanStatus();
         loanStatus.setRepaymentType(RepaymentType.AMORTIZING);
         loanStatus.setLoanType(LoanType.MORTGAGE);
-        loanStatus.setPrincipal(300000000);
+        loanStatus.setPrincipal(300000000.0);
         loanStatus.setTerm(360);
         loanStatus.setInterestRatePercentage(3.5);
         request.getLoanStatusList().add(loanStatus);

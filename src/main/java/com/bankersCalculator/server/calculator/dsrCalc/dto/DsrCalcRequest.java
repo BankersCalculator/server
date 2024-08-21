@@ -22,7 +22,7 @@ public class DsrCalcRequest {
 
     private List<LoanStatus> loanStatusList = new ArrayList<>();
 
-    private int annualIncome;
+    private Integer annualIncome;
 
     @Getter
     @Setter
@@ -31,11 +31,11 @@ public class DsrCalcRequest {
     public static class LoanStatus {
         private RepaymentType repaymentType;
         private LoanType loanType;
-        private double principal;
-        private double maturityPaymentAmount;
-        private int term;
-        private int gracePeriod;
-        private double interestRatePercentage;
+        private Double principal;
+        private Double maturityPaymentAmount;
+        private Integer term;
+        private Integer gracePeriod;
+        private Double interestRatePercentage;
     }
 
     public DsrCalcServiceRequest toServiceRequest() {

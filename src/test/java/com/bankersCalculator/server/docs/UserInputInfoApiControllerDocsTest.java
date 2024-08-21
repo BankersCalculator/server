@@ -199,7 +199,7 @@ public class UserInputInfoApiControllerDocsTest extends RestDocsSupport {
             .isSMEEmployee(true)
             .isNetAssetOver345M(false)
             .rentHousingType(RentHousingType.APARTMENT)
-            .exclusiveArea(85L)
+            .exclusiveArea(85.0)
             .buildingName("행복아파트")
             .districtCode("1168010100")
             .dongName("삼성동")

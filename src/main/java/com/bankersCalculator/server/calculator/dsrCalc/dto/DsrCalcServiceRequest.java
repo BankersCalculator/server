@@ -19,7 +19,7 @@ public class DsrCalcServiceRequest {
 
     private List<LoanStatus> loanStatusList;
 
-    private int annualIncome;
+    private Integer annualIncome;
 
     @Getter
     @NoArgsConstructor
@@ -28,11 +28,11 @@ public class DsrCalcServiceRequest {
     public static class LoanStatus {
         private RepaymentType repaymentType;
         private LoanType loanType;
-        private double principal;
-        private double maturityPaymentAmount;
-        private int term;
-        private int gracePeriod;
-        private double interestRate;
+        private Double principal;
+        private Double maturityPaymentAmount;
+        private Integer term;
+        private Integer gracePeriod;
+        private Double interestRate;
 
         public RepaymentCalcServiceRequest toRepaymentCalcServiceRequest() {
             return RepaymentCalcServiceRequest.builder()

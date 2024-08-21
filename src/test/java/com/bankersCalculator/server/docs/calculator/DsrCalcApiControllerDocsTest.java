@@ -44,8 +44,8 @@ public class DsrCalcApiControllerDocsTest extends RestDocsSupport {
         DsrCalcRequest.LoanStatus loanStatus = new DsrCalcRequest.LoanStatus();
         loanStatus.setRepaymentType(RepaymentType.AMORTIZING);
         loanStatus.setLoanType(LoanType.MORTGAGE);
-        loanStatus.setPrincipal(300000000);
-        loanStatus.setMaturityPaymentAmount(0);
+        loanStatus.setPrincipal(300000000.0);
+        loanStatus.setMaturityPaymentAmount(0.0);
         loanStatus.setTerm(360);
         loanStatus.setGracePeriod(0);
         loanStatus.setInterestRatePercentage(3.5);
