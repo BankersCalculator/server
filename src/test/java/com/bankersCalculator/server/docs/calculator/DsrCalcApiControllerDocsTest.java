@@ -1,4 +1,4 @@
-package com.bankersCalculator.server.docs;
+package com.bankersCalculator.server.docs.calculator;
 
 import com.bankersCalculator.server.RestDocsSupport;
 import com.bankersCalculator.server.calculator.dsrCalc.cotroller.DsrCalcApiController;
@@ -68,20 +68,12 @@ public class DsrCalcApiControllerDocsTest extends RestDocsSupport {
                 .content(objectMapper.writeValueAsString(request))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .header("AccessToken", "액세스 토큰")
-                .header("RefreshToken", "리프레시 토큰")
             )
             .andExpect(status().isOk())
             .andDo(print())
             .andDo(document("calculator/dsr-calc",
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint()),
-                requestHeaders(
-                    headerWithName("AccessToken")
-                        .description("액세스 토큰"),
-                    headerWithName("RefreshToken")
-                        .description("리프레쉬 토큰")
-                ),
                 requestFields(
                     fieldWithPath("loanStatusList").type(JsonFieldType.ARRAY)
                         .description("대출 상태 목록"),
