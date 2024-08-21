@@ -1,0 +1,14 @@
+[[dtiCalc]]
+=== DTI 계산기 API
+
+==== HTTP Request
+include::{snippets}/calculator/dti-calc/http-request.adoc[]
+
+==== Request Fields
+include::{snippets}/calculator/dti-calc/request-fields.adoc[]
+
+==== HTTP Response
+include::{snippets}/calculator/dti-calc/http-response.adoc[]
+
+==== Response Fields
+include::{snippets}/calculator/dti-calc/response-fields.adoc[]

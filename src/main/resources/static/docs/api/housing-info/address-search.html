@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.18">
-<title>상환 일정 계산기 API</title>
+<title>주소 검색 API</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /*! Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -441,57 +441,22 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="content">
 <div class="sect2">
-<h3 id="repaymentCalc">상환 일정 계산기 API</h3>
+<h3 id="addressSearch">주소 검색 API</h3>
 <div class="sect3">
 <h4 id="_http_request">HTTP Request</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">POST /api/v1/repaymentCalc HTTP/1.1
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">POST /api/v1/addressSearch HTTP/1.1
 Content-Type: application/json
 Accept: application/json
-accessToken: 액세스 토큰
-refreshToken: 리프레시 토큰
-Content-Length: 162
+Content-Length: 45
 Host: localhost:8080
 
 {
-  "repaymentType" : "AMORTIZING",
-  "principal" : 3.0E8,
-  "term" : 60,
-  "gracePeriod" : 0,
-  "interestRatePercentage" : 4.0,
-  "maturityPaymentAmount" : 0.0
+  "keyword" : "청라한내로 100번길"
 }</code></pre>
 </div>
 </div>
-</div>
-<div class="sect3">
-<h4 id="_request_headers">Request Headers</h4>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 50%;">
-<col style="width: 50%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Name</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>accessToken</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">액세스 토큰</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>refreshToken</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">리프레쉬 토큰</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect3">
-<h4 id="_request_fields">Request Fields</h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -507,34 +472,9 @@ Host: localhost:8080
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>repaymentType</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>keyword</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">상환 유형</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>principal</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">원금</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>term</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">기간(개월수)</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>gracePeriod</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">거치기간</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>interestRatePercentage</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">연이자율(%)</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>maturityPaymentAmount</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">만기상환금액</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">주소 검색을 위한 키워드</p></td>
 </tr>
 </tbody>
 </table>
@@ -545,36 +485,27 @@ Host: localhost:8080
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 568
+Content-Length: 532
 
 {
   "code" : 200,
   "status" : "OK",
   "message" : "OK",
   "data" : {
-    "repaymentScheduleList" : [ {
-      "installmentNumber" : 1,
-      "principalPayment" : 1000000.0,
-      "interestPayment" : 5000000.0,
-      "totalPayment" : 500000.0,
-      "remainingPrincipal" : 2.95E8
-    }, {
-      "installmentNumber" : 2,
-      "principalPayment" : 2000000.0,
-      "interestPayment" : 7000000.0,
-      "totalPayment" : 450000.0,
-      "remainingPrincipal" : 2.0E8
-    } ],
-    "totalPrincipal" : 3.0E8,
-    "totalInterest" : 3500000.0,
-    "totalInstallments" : 60
+    "apiResultCode" : "0",
+    "apiResultMessage" : "Success",
+    "addressInfoList" : [ {
+      "roadAddress" : "인천광역시 서구 청라한내로100번길 10 (청라동)",
+      "jibunAddress" : "인천광역시 서구 청라동 95-1 청라 큐브시그니처 1차 오피스텔",
+      "buildingName" : "청라 큐브시그니처 1차 오피스텔",
+      "districtCode" : "2826012200",
+      "dongName" : "청라동",
+      "jibun" : "95-1"
+    } ]
   }
 }</code></pre>
 </div>
 </div>
-</div>
-<div class="sect3">
-<h4 id="_response_fields">Response Fields</h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -610,49 +541,49 @@ Content-Length: 568
 <td class="tableblock halign-left valign-top"><p class="tableblock">응답 데이터</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.repaymentScheduleList</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.apiResultCode</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">API 결과 코드</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.apiResultMessage</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">API 결과 메시지</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.addressInfoList</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">상환 스케줄 목록</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">주소 정보 목록</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.repaymentScheduleList[].installmentNumber</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">할부 순번</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.addressInfoList[].roadAddress</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">전체 도로명 주소</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.repaymentScheduleList[].totalPayment</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">상환 총액</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.addressInfoList[].jibunAddress</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">전체 지번 주소</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.repaymentScheduleList[].principalPayment</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">원금 상환액</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.addressInfoList[].buildingName</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">건물명</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.repaymentScheduleList[].interestPayment</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">이자 상환액</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.addressInfoList[].districtCode</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">행정구역 코드</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.repaymentScheduleList[].remainingPrincipal</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">잔여 원금</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.addressInfoList[].dongName</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">읍/면/동 이름</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.totalPrincipal</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">총 원금</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.totalInterest</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">총 이자</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.totalInstallments</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">총 상환회차</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.addressInfoList[].jibun</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">지번(본번)-지번(부번)</p></td>
 </tr>
 </tbody>
 </table>
@@ -662,7 +593,7 @@ Content-Length: 568
 <div id="footer">
 <div id="footer-text">
 Version 1.0<br>
-Last updated 2024-08-19 19:33:20 +0900
+Last updated 2024-08-19 08:00:25 +0900
 </div>
 </div>
 </body>

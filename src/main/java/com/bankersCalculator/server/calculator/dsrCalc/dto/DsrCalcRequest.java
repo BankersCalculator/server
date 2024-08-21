@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 @Setter
 @NoArgsConstructor
 @ToString
+
 public class DsrCalcRequest {
 
     // TODO: @Valid 추가할 것.
