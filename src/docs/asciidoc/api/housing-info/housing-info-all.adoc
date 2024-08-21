@@ -1,0 +1,15 @@
+[[housingInfoAll]]
+=== 주택정보 API
+
+==== HTTP Request
+
+include::{snippets}/housing-info/all/http-request.adoc[]
+include::{snippets}/housing-info/all/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/housing-info/all/http-response.adoc[]
+include::{snippets}/housing-info/all/response-fields.adoc[]
+
+
+
