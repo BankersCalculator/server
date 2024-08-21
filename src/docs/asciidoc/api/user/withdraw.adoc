@@ -1,0 +1,12 @@
+[[withdraw]]
+=== 회원탈퇴 API
+
+==== HTTP Request
+
+include::{snippets}/user/withdraw/http-request.adoc[]
+==== Request Headers
+include::{snippets}/user/withdraw/request-headers.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/user/withdraw/http-response.adoc[]

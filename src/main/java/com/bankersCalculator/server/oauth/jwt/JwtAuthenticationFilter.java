@@ -22,8 +22,8 @@ import java.io.IOException;
 @Slf4j
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private static final String ACCESS_HEADER = "accessToken";
-    private static final String REFRESH_HEADER = "refreshToken";
+    private static final String ACCESS_HEADER = "AccessToken";
+    private static final String REFRESH_HEADER = "RefreshToken";
 
     private final TokenValidator tokenValidator;
     private final TokenProvider tokenProvider;

@@ -14,6 +14,9 @@ local.properties
 .loadpath
 .recommenders
 
+# 특정 디렉토리의 모든 HTML 파일 무시
+docs/*.html
+
 # External tool builders
 .externalToolBuilders/
 

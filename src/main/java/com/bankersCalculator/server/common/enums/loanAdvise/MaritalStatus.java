@@ -8,9 +8,9 @@ import lombok.Getter;
 public enum MaritalStatus {
 
     SINGLE("미혼"),
-    MARRIED("결혼 예정"),
+    ENGAGED("결혼 예정"),
     NEWLY_MARRIED("신혼"),
-    ENGAGED("기혼");
+    MARRIED("기혼");
 
     private final String description;
 }

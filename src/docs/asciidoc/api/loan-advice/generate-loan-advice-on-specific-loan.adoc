@@ -1,0 +1,16 @@
+[[generate-loan-advice-on-specific-loan]]
+=== 특정 전세대출 추천 서비스 API
+
+==== HTTP Request
+
+include::{snippets}/loan-advice/generate-loan-advice-on-specific-loan/http-request.adoc[]
+==== Request Headers
+include::{snippets}/loan-advice/generate-loan-advice-on-specific-loan/request-headers.adoc[]
+==== Request Fields
+include::{snippets}/loan-advice/generate-loan-advice-on-specific-loan/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/loan-advice/generate-loan-advice-on-specific-loan/http-response.adoc[]
+==== Response Fields
+include::{snippets}/loan-advice/generate-loan-advice-on-specific-loan/response-fields.adoc[]

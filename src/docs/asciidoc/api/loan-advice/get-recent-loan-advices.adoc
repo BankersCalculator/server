@@ -1,0 +1,14 @@
+[[get-recent-loan-advices]]
+=== 최근 대출추천 보고서 목록 조회 API
+
+==== HTTP Request
+
+include::{snippets}/loan-advice/get-recent-loan-advices/http-request.adoc[]
+==== Request Headers
+include::{snippets}/loan-advice/get-recent-loan-advices/request-headers.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/loan-advice/get-recent-loan-advices/http-response.adoc[]
+==== Response Fields
+include::{snippets}/loan-advice/get-recent-loan-advices/response-fields.adoc[]

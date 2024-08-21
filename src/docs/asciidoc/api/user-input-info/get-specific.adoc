@@ -4,8 +4,8 @@
 ==== HTTP Request
 
 include::{snippets}/user-input-info/get-specific/http-request.adoc[]
-==== Request Parameters
-include::{snippets}/user-input-info/get-specific/query-parameters.adoc[]
+==== Path Parameters
+include::{snippets}/user-input-info/get-specific/path-parameters.adoc[]
 ==== Request Headers
 include::{snippets}/user-input-info/get-specific/request-headers.adoc[]
 

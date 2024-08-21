@@ -1,0 +1,15 @@
+[[get-post-by-id]]
+=== 게시글 조회 API
+
+==== HTTP Request
+include::{snippets}/board/get-post-by-id/http-request.adoc[]
+==== Path Parameters
+include::{snippets}/board/get-post-by-id/path-parameters.adoc[]
+==== Request Headers
+include::{snippets}/board/get-post-by-id/request-headers.adoc[]
+
+
+==== HTTP Response
+include::{snippets}/board/get-post-by-id/http-response.adoc[]
+==== Response Fields
+include::{snippets}/board/get-post-by-id/response-fields.adoc[]

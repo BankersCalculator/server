@@ -65,8 +65,8 @@ public class RepaymentCalcApiControllerDocsTest extends RestDocsSupport {
                 .content(objectMapper.writeValueAsString(request))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .header("accessToken", "액세스 토큰")
-                .header("refreshToken", "리프레시 토큰")
+                .header("AccessToken", "액세스 토큰")
+                .header("RefreshToken", "리프레시 토큰")
             )
             .andExpect(status().isOk())
             .andDo(print())
@@ -74,9 +74,9 @@ public class RepaymentCalcApiControllerDocsTest extends RestDocsSupport {
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint()),
                 requestHeaders(
-                    headerWithName("accessToken")
+                    headerWithName("AccessToken")
                         .description("액세스 토큰"),
-                    headerWithName("refreshToken")
+                    headerWithName("RefreshToken")
                         .description("리프레쉬 토큰")
                 ),
                 requestFields(
