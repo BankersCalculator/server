@@ -1,5 +1,5 @@
 [[get-recently-submitted]]
-=== 마지막 유저투입정보 조회 API
+=== 마지막 유저투입정보 조회
 
 
 ==== HTTP Request

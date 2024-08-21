@@ -1,5 +1,5 @@
 [[generate-loan-advice]]
-=== 전세대출 추천 서비스 API
+=== 전세대출상품 추천 보고서 산출
 
 ==== HTTP Request
 

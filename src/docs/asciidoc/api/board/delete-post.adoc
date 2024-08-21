@@ -1,5 +1,5 @@
 [[delete-post]]
-=== 게시글 수정 API
+=== 게시글 수정
 
 ==== HTTP Request
 include::{snippets}/board/delete-post/http-request.adoc[]

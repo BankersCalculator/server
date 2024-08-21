@@ -1,5 +1,5 @@
 [[withdraw]]
-=== 회원탈퇴 API
+=== 회원탈퇴
 
 ==== HTTP Request
 
