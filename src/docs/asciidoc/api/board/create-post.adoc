@@ -1,5 +1,5 @@
 [[create-post]]
-=== 게시글 작성 API
+=== 게시글 작성
 
 ==== HTTP Request
 include::{snippets}/board/create-post/http-request.adoc[]

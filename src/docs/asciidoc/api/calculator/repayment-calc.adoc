@@ -1,5 +1,5 @@
-[[repaymentCalc]]
-=== 원리금 계산기 API
+[[repayment-calc]]
+=== 원리금 계산기
 
 ==== HTTP Request
 

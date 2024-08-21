@@ -39,16 +39,6 @@ include::api/user-input-info/get-recent-ten.adoc[]
 include::api/user-input-info/get-specific.adoc[]
 
 
-[[Calculator-API]]
-== Calculator API
-
-include::api/calculator/repayment-calc.adoc[]
-include::api/calculator/ltv-calc.adoc[]
-include::api/calculator/dsr-calc.adoc[]
-include::api/calculator/dti-calc.adoc[]
-
-
-
 [[HousingInfo-API]]
 == HousingInfo API
 
@@ -56,7 +46,13 @@ include::api/housing-info/address-search.adoc[]
 include::api/housing-info/housing-info-all.adoc[]
 
 
+[[Calculator-API]]
+== Calculator API
 
+include::api/calculator/repayment-calc.adoc[]
+include::api/calculator/ltv-calc.adoc[]
+include::api/calculator/dsr-calc.adoc[]
+include::api/calculator/dti-calc.adoc[]
 
 
 [[Board-API]]

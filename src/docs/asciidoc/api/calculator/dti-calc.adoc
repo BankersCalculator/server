@@ -1,5 +1,5 @@
-[[dtiCalc]]
-=== DTI 계산기 API
+[[dti-calc]]
+=== DTI 계산기
 
 ==== HTTP Request
 include::{snippets}/calculator/dti-calc/http-request.adoc[]

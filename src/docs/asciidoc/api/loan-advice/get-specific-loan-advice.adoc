@@ -1,5 +1,5 @@
 [[get-specific-loan-advice]]
-=== 특정 대출추천 보고서 조회 API
+=== 특정 대출추천 보고서 조회
 
 ==== HTTP Request
 

@@ -1,5 +1,5 @@
 [[logout]]
-=== 로그아웃 API
+=== 로그아웃
 
 ==== HTTP Request
 

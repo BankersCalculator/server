@@ -1,5 +1,5 @@
 [[update-post]]
-=== 게시글 삭제 API
+=== 게시글 삭제
 
 ==== HTTP Request
 include::{snippets}/board/update-post/http-request.adoc[]

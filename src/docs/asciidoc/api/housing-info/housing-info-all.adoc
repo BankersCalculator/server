@@ -1,5 +1,5 @@
-[[housingInfoAll]]
-=== 주택정보 API
+[[housing-info-all]]
+=== 주택 거래정보 조회
 
 ==== HTTP Request
 

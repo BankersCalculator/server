@@ -1,5 +1,5 @@
-[[addressSearch]]
-=== 주소 검색 API
+[[address-search]]
+=== 주소 검색
 
 ==== HTTP Request
 

@@ -1,5 +1,5 @@
-[[dsrCalc]]
-=== DSR 계산기 API
+[[dsr-calc]]
+=== DSR 계산기
 
 ==== HTTP Request
 
