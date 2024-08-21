@@ -1,35 +1,21 @@
 package com.bankersCalculator.server.docs;
 
 import com.bankersCalculator.server.RestDocsSupport;
-import com.bankersCalculator.server.board.Service.BoardService;
-import com.bankersCalculator.server.board.cotroller.BoardApiController;
-import com.bankersCalculator.server.board.dto.BoardRequest;
-import com.bankersCalculator.server.board.dto.BoardResponse;
-import com.bankersCalculator.server.common.api.SliceResponse;
 import com.bankersCalculator.server.user.UserService.UserService;
 import com.bankersCalculator.server.user.controller.UserApiController;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 
-import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.List;
-
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
-import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.request.RequestDocumentation.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class UserApiControllerDocsTest extends RestDocsSupport {

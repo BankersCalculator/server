@@ -1,13 +1,13 @@
 package com.bankersCalculator.server.housingInfo.rentTransactionInquiry.config;
-import com.bankersCalculator.server.housingInfo.rentTransactionInquiry.common.RentHousingType;
 
-import org.springframework.context.annotation.Configuration;
+import com.bankersCalculator.server.housingInfo.rentTransactionInquiry.common.RentHousingType;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
-import java.nio.charset.StandardCharsets;
 
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 @Configuration
 public class RentTransactionApiConfig {

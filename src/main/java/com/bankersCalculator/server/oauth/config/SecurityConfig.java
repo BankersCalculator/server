@@ -6,7 +6,6 @@ import com.bankersCalculator.server.oauth.jwt.JwtAuthenticationFailEntryPoint;
 import com.bankersCalculator.server.oauth.jwt.JwtAuthenticationFilter;
 import com.bankersCalculator.server.oauth.jwt.Oauth2SuccessHandler;
 import com.bankersCalculator.server.oauth.userInfo.KakaoUserDetailsService;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -18,7 +17,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer.FrameOptionsConfig;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 

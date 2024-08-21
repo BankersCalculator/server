@@ -1,24 +1,17 @@
 package com.bankersCalculator.server.docs;
 
 import com.bankersCalculator.server.RestDocsSupport;
-import com.bankersCalculator.server.board.cotroller.BoardApiController;
 import com.bankersCalculator.server.board.Service.BoardService;
+import com.bankersCalculator.server.board.cotroller.BoardApiController;
 import com.bankersCalculator.server.board.dto.BoardRequest;
 import com.bankersCalculator.server.board.dto.BoardResponse;
 import com.bankersCalculator.server.common.api.SliceResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
-import org.springframework.http.MediaType;
-import org.springframework.restdocs.RestDocumentationExtension;
-import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
-import org.springframework.restdocs.payload.JsonFieldType;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.MediaType;
+import org.springframework.restdocs.payload.JsonFieldType;
 
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -30,7 +23,6 @@ import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;

@@ -1,14 +1,7 @@
 package com.bankersCalculator.server.api.dtiCalc.controller;
 
 import com.bankersCalculator.server.ControllerTestSupport;
-import com.bankersCalculator.server.calculator.dtiCalc.controller.DtiCalcController;
-import com.bankersCalculator.server.calculator.dtiCalc.service.DtiCalcService;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;

@@ -3,7 +3,6 @@ package com.bankersCalculator.server.housingInfo.rentTransactionInquiry.controll
 import com.bankersCalculator.server.housingInfo.rentTransactionInquiry.common.RentHousingType;
 import com.bankersCalculator.server.housingInfo.rentTransactionInquiry.dto.RentTransactionInquiryResponse;
 import com.bankersCalculator.server.housingInfo.rentTransactionInquiry.service.RentTransactionInquiryService;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;

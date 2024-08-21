@@ -1,7 +1,7 @@
 package com.bankersCalculator.server.docs;
-import com.bankersCalculator.server.housingInfo.controller.HousingInfoApiController;
 
 import com.bankersCalculator.server.RestDocsSupport;
+import com.bankersCalculator.server.housingInfo.controller.HousingInfoApiController;
 import com.bankersCalculator.server.housingInfo.dto.HousingInfoApiResponse;
 import com.bankersCalculator.server.housingInfo.service.HousingInfoApiService;
 import org.junit.jupiter.api.DisplayName;
