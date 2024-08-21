@@ -1,5 +1,5 @@
 [[transfer-temp-user-to-login-user]]
-=== 일회성고객의 데이터 기존고객으로 편입
+=== 일회성고객 기존고객으로 편입
 
 ==== HTTP Request
 

@@ -50,7 +50,7 @@ public class UserApiControllerDocsTest extends RestDocsSupport {
         String content = String.format("{\"tempUserId\": \"%s\"}", tempUserId);
 
 
-        mockMvc.perform(post(BASE_URL)
+        mockMvc.perform(post(BASE_URL + "/transfer")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(content)
