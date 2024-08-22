@@ -17,7 +17,15 @@ public class SecurityPathConfig {
         "/login/oauth2/*",
         "/login/oauth2/kakao/reissue",
         "/docs/**",
-        "/api/v1/exception/**"
+        "/api/v1/exception/**",
+
+        "/api/v1/dsrCalc",
+        "/api/v1/dtiCalc",
+        "/api/v1/ltvCalc",
+        "/api/v1/repaymentCalc",
+        "/api/v1/housing-info/**",
+        "/api/v1/addressSearch"
+
     );
 
     public String[] getPublicPaths() {
