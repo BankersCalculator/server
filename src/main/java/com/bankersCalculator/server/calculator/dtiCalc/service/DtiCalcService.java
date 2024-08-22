@@ -37,7 +37,7 @@ public class DtiCalcService {
         return DtiCalcResponse.builder()
             .annualIncome(annualIncome)
             .totalLoanCount(totalLoanCount)
-            .dtiCalcResultList(dtiCalcResultList)
+            .dtiCalcResults(dtiCalcResultList)
             .finalDtiRatio(totalDtiRatio)
             .build();
     }

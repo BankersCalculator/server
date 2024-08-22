@@ -20,7 +20,7 @@ public class DsrCalcRequest {
 
     // TODO: @Valid 추가할 것.
 
-    private List<LoanStatus> loanStatusList = new ArrayList<>();
+    private List<LoanStatus> loanStatuses = new ArrayList<>();
 
     private Integer annualIncome;
 
@@ -39,7 +39,7 @@ public class DsrCalcRequest {
     }
 
     public DsrCalcServiceRequest toServiceRequest() {
-        List<DsrCalcServiceRequest.LoanStatus> serviceLoanStatusList = loanStatusList.stream()
+        List<DsrCalcServiceRequest.LoanStatus> serviceLoanStatusList = loanStatuses.stream()
             .map(loanStatus -> DsrCalcServiceRequest.LoanStatus.builder()
                 .repaymentType(loanStatus.getRepaymentType())
                 .loanType(loanStatus.getLoanType())

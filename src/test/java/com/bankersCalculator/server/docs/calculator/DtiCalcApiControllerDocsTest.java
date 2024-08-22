@@ -46,14 +46,14 @@ public class DtiCalcApiControllerDocsTest extends RestDocsSupport {
         loanStatus.setPrincipal(300000000.0);
         loanStatus.setTerm(360);
         loanStatus.setInterestRatePercentage(3.5);
-        request.getLoanStatusList().add(loanStatus);
+        request.getLoanStatuses().add(loanStatus);
         request.setAnnualIncome(50000000);
 
         // 응답 객체 생성
         DtiCalcResponse response = DtiCalcResponse.builder()
                 .annualIncome(50000000)
                 .totalLoanCount(1)
-                .dtiCalcResultList(Arrays.asList(
+                .dtiCalcResults(Arrays.asList(
                         DtiCalcResult.builder()
                                 .serial(1)
                                 .principal(300000000)
@@ -81,11 +81,11 @@ public class DtiCalcApiControllerDocsTest extends RestDocsSupport {
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         requestFields(
-                                fieldWithPath("loanStatusList").type(JsonFieldType.ARRAY)
+                                fieldWithPath("loanStatuses").type(JsonFieldType.ARRAY)
                                         .description("대출 상태 목록"),
-                                fieldWithPath("loanStatusList[].repaymentType").type(JsonFieldType.STRING)
+                                fieldWithPath("loanStatuses[].repaymentType").type(JsonFieldType.STRING)
                                         .description("상환 유형 (BULLET: 일시상환, AMORTIZING: 원리금균등분할상환, EQUAL_PRINCIPAL: 원금균등분할상환)"),
-                                fieldWithPath("loanStatusList[].loanType").type(JsonFieldType.STRING)
+                                fieldWithPath("loanStatuses[].loanType").type(JsonFieldType.STRING)
                                         .description("대출 유형 (MORTGAGE: 주택담보대출, INTERIM_PAYMENT_AND_MOVING: 중도금 및 이주비, " +
                                                 "OFFICETEL_MORTGAGE_LOAN: 오피스텔담보대출, JEONSE_LOAN: 전세대출, " +
                                                 "JEONSE_DEPOSIT_COLLATERAL_LOAN: 전세보증금담보대출, PERSONAL_LOAN: 신용대출, " +
@@ -94,11 +94,11 @@ public class DtiCalcApiControllerDocsTest extends RestDocsSupport {
                                                 "DEPOSIT_AND_INSURANCE_COLLATERAL_LOAN: 예적금 담보 및 보험계약 대출, " +
                                                 "SECURITIES_COLLATERAL_LOAN: 유가증권 담보대출, LONG_TERM_CARD_LOAN: 장기카드대출, " +
                                                 "OTHER_LOAN: 기타대출)"),
-                                fieldWithPath("loanStatusList[].principal").type(JsonFieldType.NUMBER)
+                                fieldWithPath("loanStatuses[].principal").type(JsonFieldType.NUMBER)
                                         .description("원금"),
-                                fieldWithPath("loanStatusList[].term").type(JsonFieldType.NUMBER)
+                                fieldWithPath("loanStatuses[].term").type(JsonFieldType.NUMBER)
                                         .description("기간(개월수)"),
-                                fieldWithPath("loanStatusList[].interestRatePercentage").type(JsonFieldType.NUMBER)
+                                fieldWithPath("loanStatuses[].interestRatePercentage").type(JsonFieldType.NUMBER)
                                         .description("연이자율(%)"),
                                 fieldWithPath("annualIncome").type(JsonFieldType.NUMBER)
                                         .description("연간 소득")
@@ -116,19 +116,19 @@ public class DtiCalcApiControllerDocsTest extends RestDocsSupport {
                                         .description("연간 소득"),
                                 fieldWithPath("data.totalLoanCount").type(JsonFieldType.NUMBER)
                                         .description("총 대출 건수"),
-                                fieldWithPath("data.dtiCalcResultList").type(JsonFieldType.ARRAY)
+                                fieldWithPath("data.dtiCalcResults").type(JsonFieldType.ARRAY)
                                         .description("DTI 계산 결과 목록"),
-                                fieldWithPath("data.dtiCalcResultList[].serial").type(JsonFieldType.NUMBER)
+                                fieldWithPath("data.dtiCalcResults[].serial").type(JsonFieldType.NUMBER)
                                         .description("일련번호"),
-                                fieldWithPath("data.dtiCalcResultList[].principal").type(JsonFieldType.NUMBER)
+                                fieldWithPath("data.dtiCalcResults[].principal").type(JsonFieldType.NUMBER)
                                         .description("원금"),
-                                fieldWithPath("data.dtiCalcResultList[].balance").type(JsonFieldType.NUMBER)
+                                fieldWithPath("data.dtiCalcResults[].balance").type(JsonFieldType.NUMBER)
                                         .description("잔액"),
-                                fieldWithPath("data.dtiCalcResultList[].term").type(JsonFieldType.NUMBER)
+                                fieldWithPath("data.dtiCalcResults[].term").type(JsonFieldType.NUMBER)
                                         .description("기간"),
-                                fieldWithPath("data.dtiCalcResultList[].annualPrincipalRepayment").type(JsonFieldType.NUMBER)
+                                fieldWithPath("data.dtiCalcResults[].annualPrincipalRepayment").type(JsonFieldType.NUMBER)
                                         .description("연간 원금 상환액"),
-                                fieldWithPath("data.dtiCalcResultList[].annualInterestRepayment").type(JsonFieldType.NUMBER)
+                                fieldWithPath("data.dtiCalcResults[].annualInterestRepayment").type(JsonFieldType.NUMBER)
                                         .description("연간 이자 상환액"),
                                 fieldWithPath("data.finalDtiRatio").type(JsonFieldType.NUMBER)
                                         .description("최종 DTI 비율")

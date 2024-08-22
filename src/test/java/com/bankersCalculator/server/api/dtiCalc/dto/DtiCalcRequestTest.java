@@ -24,14 +24,14 @@ public class DtiCalcRequestTest {
         loanStatus.setPrincipal(5000000.0);
         loanStatus.setTerm(300);
         loanStatus.setInterestRatePercentage(3.0);
-        request.getLoanStatusList().add(loanStatus);
+        request.getLoanStatuses().add(loanStatus);
         
         loanStatus2.setRepaymentType(RepaymentType.BULLET);  //BULLET AMORTIZING EQUAL_PRINCIPAL
         loanStatus2.setLoanType(LoanType.MORTGAGE);
         loanStatus2.setPrincipal(5000000.0);
         loanStatus2.setTerm(300);
         loanStatus2.setInterestRatePercentage(2.0);
-        request.getLoanStatusList().add(loanStatus2);
+        request.getLoanStatuses().add(loanStatus2);
         
 
         DtiCalcServiceRequest serviceRequest = request.toServiceRequest();

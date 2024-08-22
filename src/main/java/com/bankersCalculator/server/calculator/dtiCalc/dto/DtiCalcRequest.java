@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @ToString
 public class DtiCalcRequest {
-    private List<LoanStatus> loanStatusList = new ArrayList<>();
+    private List<LoanStatus> loanStatuses = new ArrayList<>();
     private Integer annualIncome;
 
     @Getter
@@ -39,7 +39,7 @@ public class DtiCalcRequest {
     }
 
     public DtiCalcServiceRequest toServiceRequest() {
-        List<DtiCalcServiceRequest.LoanStatus> serviceLoanStatusList = loanStatusList.stream()
+        List<DtiCalcServiceRequest.LoanStatus> serviceLoanStatuses = loanStatuses.stream()
             .map(loanStatus -> DtiCalcServiceRequest.LoanStatus.builder()
                 .repaymentType(loanStatus.getRepaymentType())
                 .loanType(loanStatus.getLoanType())
@@ -50,7 +50,7 @@ public class DtiCalcRequest {
             .collect(Collectors.toList());
 
         return DtiCalcServiceRequest.builder()
-            .loanStatusList(serviceLoanStatusList)
+            .loanStatusList(serviceLoanStatuses)
             .annualIncome(annualIncome)
             .build();
     }

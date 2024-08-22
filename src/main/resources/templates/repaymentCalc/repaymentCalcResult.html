@@ -32,7 +32,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="schedule : ${repaymentCalcResponse.repaymentScheduleList}">
+            <tr th:each="schedule : ${repaymentCalcResponse.getRepaymentSchedules}">
                 <td th:text="${schedule.installmentNumber}"></td>
                 <td th:text="${#numbers.formatDecimal(schedule.principalPayment, 0, 'COMMA', 0, 'POINT')}"></td>
                 <td th:text="${#numbers.formatDecimal(schedule.interestPayment, 0, 'COMMA', 0, 'POINT')}"></td>

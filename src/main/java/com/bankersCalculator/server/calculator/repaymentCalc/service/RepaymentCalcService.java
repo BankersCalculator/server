@@ -66,7 +66,7 @@ public class RepaymentCalcService {
         }
 
         return RepaymentCalcResponse.builder()
-            .repaymentScheduleList(repaymentScheduleList)
+            .repaymentSchedules(repaymentScheduleList)
             .totalPrincipal(principalAmount)
             .totalInterest(totalInterest)
             .totalInstallments(repaymentScheduleList.size())
@@ -114,7 +114,7 @@ public class RepaymentCalcService {
         }
 
         return RepaymentCalcResponse.builder()
-            .repaymentScheduleList(repaymentScheduleList)
+            .repaymentSchedules(repaymentScheduleList)
             .totalPrincipal(principalAmount)
             .totalInterest(totalInterest)
             .totalInstallments(repaymentScheduleList.size())
@@ -161,7 +161,7 @@ public class RepaymentCalcService {
             repaymentScheduleList.add(repaymentSchedule);
         }
         return RepaymentCalcResponse.builder()
-            .repaymentScheduleList(repaymentScheduleList)
+            .repaymentSchedules(repaymentScheduleList)
             .totalPrincipal(principalAmount)
             .totalInterest(totalInterest)
             .totalInstallments(repaymentScheduleList.size())

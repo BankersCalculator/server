@@ -62,7 +62,7 @@ public class DsrCalcService {
         return DsrCalcResponse.builder()
             .annualIncome(annualIncome)
             .totalLoanCount(totalLoanCount)
-            .dsrCalcResultList(dsrCalcResultList)
+            .dsrCalcResults(dsrCalcResultList)
             .finalDsrRatio(totalDsrRatio)
             .build();
     }
