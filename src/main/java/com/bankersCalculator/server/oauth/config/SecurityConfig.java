@@ -52,6 +52,7 @@ public class SecurityConfig {
         configuration.setAllowedOrigins(Arrays.asList("*"));  // 모든 오리진 허용
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));  // 모든 HTTP 메소드 허용
         configuration.setAllowedHeaders(Arrays.asList("*"));  // 모든 헤더 허용
+        configuration.setAllowedHeaders(Arrays.asList("AccessToken", "RefreshToken"));
         configuration.setAllowCredentials(true);  // 인증 정보 허용
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
