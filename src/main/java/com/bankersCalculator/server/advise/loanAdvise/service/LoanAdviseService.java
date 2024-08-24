@@ -11,7 +11,7 @@ import com.bankersCalculator.server.common.enums.loanAdvise.MaritalStatus;
 import com.bankersCalculator.server.common.enums.loanAdvise.RentalType;
 import com.bankersCalculator.server.common.enums.ltv.HousingType;
 import com.bankersCalculator.server.common.enums.ltv.RegionType;
-import com.bankersCalculator.server.housingInfo.rentTransactionInquiry.common.RentHousingType;
+import com.bankersCalculator.server.housingInfo.buildingInfo.common.RentHousingType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

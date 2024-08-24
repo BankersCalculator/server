@@ -5,7 +5,7 @@ import com.bankersCalculator.server.common.enums.loanAdvise.ChildStatus;
 import com.bankersCalculator.server.common.enums.loanAdvise.MaritalStatus;
 import com.bankersCalculator.server.common.enums.ltv.HousingType;
 import com.bankersCalculator.server.common.enums.ltv.RegionType;
-import com.bankersCalculator.server.housingInfo.rentTransactionInquiry.common.RentHousingType;
+import com.bankersCalculator.server.housingInfo.buildingInfo.common.RentHousingType;
 import lombok.Builder;
 import lombok.Getter;
 

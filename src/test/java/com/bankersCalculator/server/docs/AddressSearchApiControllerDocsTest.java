@@ -2,8 +2,8 @@ package com.bankersCalculator.server.docs;
 
 import com.bankersCalculator.server.RestDocsSupport;
 import com.bankersCalculator.server.housingInfo.addressSearch.controller.AddressSearchApiController;
-import com.bankersCalculator.server.housingInfo.addressSearch.dto.AddressSearchRequest;
-import com.bankersCalculator.server.housingInfo.addressSearch.service.AddressSearchService;
+import com.bankersCalculator.server.housingInfo.addressSearch.dto.AddressSearchApiRequest;
+import com.bankersCalculator.server.housingInfo.addressSearch.api.AddressSearchApiClient;
 import com.bankersCalculator.server.housingInfo.addressSearch.dto.AddressSearchApiResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -27,18 +27,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class AddressSearchApiControllerDocsTest extends RestDocsSupport {
 
     private static final String BASE_URL = "/api/v1/addressSearch";
-    private final AddressSearchService addressSearchService = mock(AddressSearchService.class);
+    private final AddressSearchApiClient addressSearchApiClient = mock(AddressSearchApiClient.class);
 
     @Override
     protected Object initController() {
-        return new AddressSearchApiController(addressSearchService);
+        return new AddressSearchApiController(addressSearchApiClient);
     }
 
     @DisplayName("주소 검색 API")
     @Test
     void searchAddress() throws Exception {
         // 요청 객체 설정
-        AddressSearchRequest request = new AddressSearchRequest();
+        AddressSearchApiRequest request = new AddressSearchApiRequest();
         request.setKeyword("청라한내로 100번길");
 
         // 응답 객체 설정
@@ -56,7 +56,7 @@ public class AddressSearchApiControllerDocsTest extends RestDocsSupport {
         response.put("apiResultMessage", "Success");
         response.put("addressInfoList", Collections.singletonList(addressSearchApiResponse));
 
-        when(addressSearchService.searchAddress(anyString())).thenReturn(response);
+        when(addressSearchApiClient.searchAddress(anyString())).thenReturn(response);
 
         mockMvc.perform(post(BASE_URL)
                         .content("{\"keyword\": \"청라한내로 100번길\"}")  // JSON 형식으로 요청 본문을 전달

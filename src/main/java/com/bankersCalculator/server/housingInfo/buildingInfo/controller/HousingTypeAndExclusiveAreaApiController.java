@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/v1/building-info")
 public class HousingTypeAndExclusiveAreaApiController {
-
-    private static final Logger logger = LoggerFactory.getLogger(HousingTypeAndExclusiveAreaApiController.class);
     private final HousingTypeAndExclusiveAreaApiClient housingTypeAndExclusiveAreaApiClient;
 
     public HousingTypeAndExclusiveAreaApiController(HousingTypeAndExclusiveAreaApiClient housingTypeAndExclusiveAreaApiClient) {

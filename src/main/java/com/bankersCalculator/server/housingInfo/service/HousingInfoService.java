@@ -2,10 +2,10 @@ package com.bankersCalculator.server.housingInfo.service;
 
 import com.bankersCalculator.server.housingInfo.buildingInfo.api.HousingTypeAndExclusiveAreaApiClient;
 import com.bankersCalculator.server.housingInfo.buildingInfo.dto.HousingTypeAndExclusiveAreaApiResponse;
-import com.bankersCalculator.server.housingInfo.rentTransactionInquiry.common.RentHousingType;
-import com.bankersCalculator.server.housingInfo.rentTransactionInquiry.dto.RentTransactionInquiryResponse;
-import com.bankersCalculator.server.housingInfo.rentTransactionInquiry.service.RentTransactionInquiryService;
-import com.bankersCalculator.server.housingInfo.dto.HousingInfoApiResponse;
+import com.bankersCalculator.server.housingInfo.buildingInfo.common.RentHousingType;
+import com.bankersCalculator.server.housingInfo.buildingInfo.dto.RentTransactionInquiryResponse;
+import com.bankersCalculator.server.housingInfo.buildingInfo.service.RentTransactionInquiryService;
+import com.bankersCalculator.server.housingInfo.dto.HousingInfoResponse;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -14,18 +14,18 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class HousingInfoApiService {
+public class HousingInfoService {
 
     private final HousingTypeAndExclusiveAreaApiClient housingTypeApiClient;
     private final RentTransactionInquiryService rentTransactionInquiryService;
 
-    public HousingInfoApiService(HousingTypeAndExclusiveAreaApiClient housingTypeApiClient,
-                                 RentTransactionInquiryService rentTransactionInquiryService) {
+    public HousingInfoService(HousingTypeAndExclusiveAreaApiClient housingTypeApiClient,
+                              RentTransactionInquiryService rentTransactionInquiryService) {
         this.housingTypeApiClient = housingTypeApiClient;
         this.rentTransactionInquiryService = rentTransactionInquiryService;
     }
 
-    public List<HousingInfoApiResponse> getHousingInfo(String districtCode, String jibun, String dongName) throws IOException {
+    public List<HousingInfoResponse> getHousingInfo(String districtCode, String jibun, String dongName) throws IOException {
         // Step 1: districtCode와 jibun을 분리
         String districtCodeFirst5 = districtCode.substring(0, 5);
         String districtCodeLast5 = districtCode.substring(5);
@@ -38,7 +38,7 @@ public class HousingInfoApiService {
         HousingTypeAndExclusiveAreaApiResponse housingTypeInfo = housingTypeApiClient.getApHsTpInfo(
                 districtCodeFirst5, districtCodeLast5, jibunMain, jibunSub);
 
-        List<HousingInfoApiResponse> result = new ArrayList<>();
+        List<HousingInfoResponse> result = new ArrayList<>();
 
         // Step 3: housingTypeInfo에서 필요한 정보를 추출하여 리스트에 추가
         for (HousingTypeAndExclusiveAreaApiResponse.ApiResponseItem item : housingTypeInfo.getBody().getItems().getItemList()) {
@@ -76,7 +76,7 @@ public class HousingInfoApiService {
                 String excluUseAr = entry.getKey();
                 RentTransactionInquiryResponse.AverageInfo avgInfo = entry.getValue();
 
-                result.add(new HousingInfoApiResponse(
+                result.add(new HousingInfoResponse(
                         rentHousingTypeName,
                         Double.parseDouble(excluUseAr),
                         avgInfo.getAverageDeposit(),

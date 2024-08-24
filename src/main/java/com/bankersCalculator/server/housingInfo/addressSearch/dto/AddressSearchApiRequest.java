@@ -5,6 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class AddressSearchRequest {
+public class AddressSearchApiRequest {
     private String keyword;
+
 }

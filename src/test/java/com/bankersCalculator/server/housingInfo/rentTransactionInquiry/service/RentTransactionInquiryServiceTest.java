@@ -1,7 +1,8 @@
     package com.bankersCalculator.server.housingInfo.rentTransactionInquiry.service;
 
-    import com.bankersCalculator.server.housingInfo.rentTransactionInquiry.common.RentHousingType;
-    import com.bankersCalculator.server.housingInfo.rentTransactionInquiry.dto.RentTransactionInquiryResponse;
+    import com.bankersCalculator.server.housingInfo.buildingInfo.common.RentHousingType;
+    import com.bankersCalculator.server.housingInfo.buildingInfo.dto.RentTransactionInquiryResponse;
+    import com.bankersCalculator.server.housingInfo.buildingInfo.service.RentTransactionInquiryService;
     import org.junit.jupiter.api.Test;
     import org.slf4j.Logger;
     import org.slf4j.LoggerFactory;
@@ -24,17 +25,17 @@
         @Test
         public void testGetRentTransactionsResult() throws IOException {
             // Given
-            String lawdCd = "11680";  // 예시 법정동 코드
+            String districtCodeFirst5 = "11680";  // 예시 법정동 코드
             RentHousingType rentHousingType = RentHousingType.APARTMENT;
             int months = 3;
-            String emdNm = "삼성동";
+            String dongName = "삼성동";
             String jibun = "189";
 
-            logger.info("테스트 시작 - 파라미터: lawdCd: {}, rentHousingType: {}, months: {}, emdNm: {}, jibun: {}",
-                    lawdCd, rentHousingType, months, emdNm, jibun);
+            logger.info("테스트 시작 - 파라미터: districtCodeFirst5: {}, rentHousingType: {}, months: {}, dongName: {}, jibun: {}",
+                    districtCodeFirst5, rentHousingType, months, dongName, jibun);
 
             // When
-            RentTransactionInquiryResponse response = inquiryService.getRentTransactionsResult(lawdCd, rentHousingType, months, emdNm, jibun);
+            RentTransactionInquiryResponse response = inquiryService.getRentTransactionsResult(districtCodeFirst5, rentHousingType, months, dongName, jibun);
 
             // Then
             assertNotNull(response, "응답은 null이 아니어야 합니다.");

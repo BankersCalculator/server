@@ -3,27 +3,19 @@ package com.bankersCalculator.server.docs;
 import com.bankersCalculator.server.RestDocsSupport;
 import com.bankersCalculator.server.advise.loanAdvise.controller.LoanAdviseApiController;
 import com.bankersCalculator.server.advise.loanAdvise.dto.*;
-import com.bankersCalculator.server.advise.userInputInfo.dto.UserInputInfoRequest;
-import com.bankersCalculator.server.advise.userInputInfo.dto.UserInputInfoResponse;
 import com.bankersCalculator.server.advise.loanAdvise.service.LoanAdviseService;
 import com.bankersCalculator.server.common.enums.Bank;
-import com.bankersCalculator.server.common.enums.loanAdvise.AreaSize;
 import com.bankersCalculator.server.common.enums.loanAdvise.ChildStatus;
 import com.bankersCalculator.server.common.enums.loanAdvise.MaritalStatus;
-import com.bankersCalculator.server.common.enums.loanAdvise.RentalType;
-import com.bankersCalculator.server.common.enums.ltv.HousingType;
-import com.bankersCalculator.server.common.enums.ltv.RegionType;
-import com.bankersCalculator.server.housingInfo.rentTransactionInquiry.common.RentHousingType;
+import com.bankersCalculator.server.housingInfo.buildingInfo.common.RentHousingType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 
-import java.time.LocalDate;
 import java.util.Arrays;
 
 import static com.bankersCalculator.server.common.enums.loanAdvise.UserType.MEMBER;
-import static com.bankersCalculator.server.common.enums.loanAdvise.UserType.NON_MEMBER;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;

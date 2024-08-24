@@ -1,5 +1,5 @@
-package com.bankersCalculator.server.housingInfo.rentTransactionInquiry.config;
-import com.bankersCalculator.server.housingInfo.rentTransactionInquiry.common.RentHousingType;
+package com.bankersCalculator.server.housingInfo.buildingInfo.config;
+import com.bankersCalculator.server.housingInfo.buildingInfo.common.RentHousingType;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Bean;
@@ -28,11 +28,11 @@ public class RentTransactionApiConfig {
         }
     }
 
-    public String getFullApiUrl(String lawdCd, String dealYmd, RentHousingType rentHousingType) throws IOException {
+    public String getFullApiUrl(String districtCodeFirst5, String dealYmd, RentHousingType rentHousingType) throws IOException {
         String encodedServiceKey = URLEncoder.encode(serviceKey, StandardCharsets.UTF_8);
         return endPointUrl
                 + endpointMethod(rentHousingType)
-                + "LAWD_CD=" + URLEncoder.encode(lawdCd, "UTF-8")
+                + "LAWD_CD=" + URLEncoder.encode(districtCodeFirst5, "UTF-8")
                 + "&DEAL_YMD=" + URLEncoder.encode(dealYmd, "UTF-8")
                 + "&numOfRows=" + "10000"
                 + "&serviceKey=" + encodedServiceKey;

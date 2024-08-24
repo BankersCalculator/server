@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class HousingInfoApiResponse {
+public class HousingInfoResponse {
     private String rentHousingTypeName;
     private double exclusiveArea;
     private double averageDeposit;

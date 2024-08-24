@@ -1,4 +1,4 @@
-package com.bankersCalculator.server.housingInfo.addressSearch.service;
+package com.bankersCalculator.server.housingInfo.addressSearch.api;
 
 import com.bankersCalculator.server.housingInfo.addressSearch.dto.AddressSearchApiResponse;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +20,7 @@ import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
-public class AddressSearchService {
+public class AddressSearchApiClient {
 
     private static final String API_URL = "https://business.juso.go.kr/addrlink/addrLinkApi.do";
     private static final String API_KEY = "devU01TX0FVVEgyMDI0MDgwNTIxMTIzNjExNDk4OTM=";

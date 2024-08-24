@@ -1,8 +1,8 @@
 package com.bankersCalculator.server.housingInfo.rentTransactionInquiry.api;
 
-import com.bankersCalculator.server.housingInfo.rentTransactionInquiry.api.RentTransactionApiClient;
-import com.bankersCalculator.server.housingInfo.rentTransactionInquiry.common.RentHousingType;
-import com.bankersCalculator.server.housingInfo.rentTransactionInquiry.dto.RentTransactionApiResponse;
+import com.bankersCalculator.server.housingInfo.buildingInfo.api.RentTransactionApiClient;
+import com.bankersCalculator.server.housingInfo.buildingInfo.common.RentHousingType;
+import com.bankersCalculator.server.housingInfo.buildingInfo.dto.RentTransactionApiResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,12 +28,12 @@ public class RentTransactionApiClientTest {
     @Test
     public void testRentTransactionCallApi() throws IOException {
         // 실제 API 호출을 위한 테스트 데이터 설정
-        String lawdCd = "11110"; // 예: 서울특별시 강남구
+        String districtCodeFirst5 = "11110"; // 예: 서울특별시 강남구
         String dealYmd = "202407"; // 예: 2024년 7월
         RentHousingType rentHousingType = RentHousingType.APARTMENT;
 
         // 실제 API 호출
-        RentTransactionApiResponse response = rentTransactionApiClient.RentTransactionCallApi(lawdCd, dealYmd, rentHousingType);
+        RentTransactionApiResponse response = rentTransactionApiClient.RentTransactionCallApi(districtCodeFirst5, dealYmd, rentHousingType);
 
         // 응답 데이터 검증
         assertNotNull(response);

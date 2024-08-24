@@ -1,8 +1,8 @@
-package com.bankersCalculator.server.housingInfo.rentTransactionInquiry.api;
+package com.bankersCalculator.server.housingInfo.buildingInfo.api;
 
-import com.bankersCalculator.server.housingInfo.rentTransactionInquiry.common.RentHousingType;
-import com.bankersCalculator.server.housingInfo.rentTransactionInquiry.config.RentTransactionApiConfig;
-import com.bankersCalculator.server.housingInfo.rentTransactionInquiry.dto.RentTransactionApiResponse;
+import com.bankersCalculator.server.housingInfo.buildingInfo.common.RentHousingType;
+import com.bankersCalculator.server.housingInfo.buildingInfo.config.RentTransactionApiConfig;
+import com.bankersCalculator.server.housingInfo.buildingInfo.dto.RentTransactionApiResponse;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -20,7 +20,7 @@ import java.util.List;
 
 /**
  * 국토교통부 전/월세 실거래가 조회 API
- * @param lawdCd 법정동 코드 (예: "11110" 서울의 특정 지역 코드)
+ * @param districtCodeFirst5 법정동 코드 (예: "11110" 서울의 특정 지역 코드)
  * @param dealYmd 거래 연월 (형식: "YYYYMM", 예: "202407")
  * @param rentHousingType 조회할 주택 유형 (예: APARTMENT, OFFICETEL)
  * @return 임대 거래 정보를 포함하는 {@link RentTransactionApiResponse} 객체.
@@ -59,8 +59,8 @@ public class RentTransactionApiClient {
         this.xmlMapper = new XmlMapper();
     }
 
-    public RentTransactionApiResponse RentTransactionCallApi(String lawdCd, String dealYmd, RentHousingType rentHousingType) throws IOException {
-        String apiUrl = apiConfig.getFullApiUrl(lawdCd, dealYmd, rentHousingType);
+    public RentTransactionApiResponse RentTransactionCallApi(String districtCodeFirst5, String dealYmd, RentHousingType rentHousingType) throws IOException {
+        String apiUrl = apiConfig.getFullApiUrl(districtCodeFirst5, dealYmd, rentHousingType);
         logger.info("Calling API with URL: {}", apiUrl);
 
         try {

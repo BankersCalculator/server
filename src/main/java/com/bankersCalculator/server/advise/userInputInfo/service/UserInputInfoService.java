@@ -5,7 +5,7 @@ import com.bankersCalculator.server.advise.userInputInfo.dto.UserInputInfoServic
 import com.bankersCalculator.server.advise.userInputInfo.dto.UserInputSummary;
 import com.bankersCalculator.server.common.enums.loanAdvise.ChildStatus;
 import com.bankersCalculator.server.common.enums.loanAdvise.MaritalStatus;
-import com.bankersCalculator.server.housingInfo.rentTransactionInquiry.common.RentHousingType;
+import com.bankersCalculator.server.housingInfo.buildingInfo.common.RentHousingType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

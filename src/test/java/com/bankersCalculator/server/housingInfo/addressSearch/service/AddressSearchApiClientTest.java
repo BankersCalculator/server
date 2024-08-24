@@ -1,7 +1,8 @@
 package com.bankersCalculator.server.housingInfo.addressSearch.service;
 
+import com.bankersCalculator.server.housingInfo.addressSearch.api.AddressSearchApiClient;
+import com.bankersCalculator.server.housingInfo.addressSearch.controller.AddressSearchApiController;
 import com.bankersCalculator.server.housingInfo.addressSearch.dto.AddressSearchApiResponse;
-import com.bankersCalculator.server.housingInfo.addressSearch.service.AddressSearchService;
 import org.json.JSONException;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,11 +14,11 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
-public class AddressSearchServiceTest {
+public class AddressSearchApiClientTest {
 
     @Test
     void testSearchAddress() throws IOException, JSONException {
-        AddressSearchService addressSearchService = new AddressSearchService();
+        AddressSearchApiClient addressSearchApiClient = new AddressSearchApiClient();
 
         // 사용할 키워드 설정
         String keyword0 = "청라한내로 100번길";
@@ -30,14 +31,14 @@ public class AddressSearchServiceTest {
         String keyword7 = "SELECT";
 
         // 실제 API 호출
-        Map<String, Object> result0 = addressSearchService.searchAddress(keyword0);
-        Map<String, Object> result1 = addressSearchService.searchAddress(keyword1);
-        Map<String, Object> result2 = addressSearchService.searchAddress(keyword2);
-        Map<String, Object> result3 = addressSearchService.searchAddress(keyword3);
-        Map<String, Object> result4 = addressSearchService.searchAddress(keyword4);
-        Map<String, Object> result5 = addressSearchService.searchAddress(keyword5);
-        Map<String, Object> result6 = addressSearchService.searchAddress(keyword6);
-        Map<String, Object> result7 = addressSearchService.searchAddress(keyword7);
+        Map<String, Object> result0 = addressSearchApiClient.searchAddress(keyword0);
+        Map<String, Object> result1 = addressSearchApiClient.searchAddress(keyword1);
+        Map<String, Object> result2 = addressSearchApiClient.searchAddress(keyword2);
+        Map<String, Object> result3 = addressSearchApiClient.searchAddress(keyword3);
+        Map<String, Object> result4 = addressSearchApiClient.searchAddress(keyword4);
+        Map<String, Object> result5 = addressSearchApiClient.searchAddress(keyword5);
+        Map<String, Object> result6 = addressSearchApiClient.searchAddress(keyword6);
+        Map<String, Object> result7 = addressSearchApiClient.searchAddress(keyword7);
 
         // 결과 검증
         @SuppressWarnings("unchecked")

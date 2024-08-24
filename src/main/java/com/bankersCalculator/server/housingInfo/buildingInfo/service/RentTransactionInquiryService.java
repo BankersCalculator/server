@@ -1,9 +1,10 @@
-package com.bankersCalculator.server.housingInfo.rentTransactionInquiry.service;
+package com.bankersCalculator.server.housingInfo.buildingInfo.service;
 
-import com.bankersCalculator.server.housingInfo.rentTransactionInquiry.api.RentTransactionApiClient;
-import com.bankersCalculator.server.housingInfo.rentTransactionInquiry.common.RentHousingType;
-import com.bankersCalculator.server.housingInfo.rentTransactionInquiry.dto.RentTransactionApiResponse;
-import com.bankersCalculator.server.housingInfo.rentTransactionInquiry.dto.RentTransactionInquiryResponse;
+import com.bankersCalculator.server.housingInfo.buildingInfo.api.RentTransactionApiClient;
+import com.bankersCalculator.server.housingInfo.buildingInfo.common.RentHousingType;
+import com.bankersCalculator.server.housingInfo.buildingInfo.controller.RentTransactionApiController;
+import com.bankersCalculator.server.housingInfo.buildingInfo.dto.RentTransactionApiResponse;
+import com.bankersCalculator.server.housingInfo.buildingInfo.dto.RentTransactionInquiryResponse;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -17,11 +18,9 @@ public class RentTransactionInquiryService {
 
     private final RentTransactionApiClient apiClient;
 
-    public RentTransactionInquiryService(RentTransactionApiClient apiClient) {
-        this.apiClient = apiClient;
-    }
+    public RentTransactionInquiryService(RentTransactionApiClient apiClient) { this.apiClient = apiClient;}
 
-    public RentTransactionInquiryResponse getRentTransactionsResult(String lawdCd, RentHousingType rentHousingType, int months, String emdNm, String jibun) throws IOException {
+    public RentTransactionInquiryResponse getRentTransactionsResult(String districtCodeFirst5, RentHousingType rentHousingType, int months, String dongName, String jibun) throws IOException {
         // 현재 날짜를 기준으로 조회할 월 리스트 생성
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMM");
         LocalDate currentDate = LocalDate.now();
@@ -31,9 +30,9 @@ public class RentTransactionInquiryService {
                 .map(date -> date.format(formatter))
                 .flatMap(dealYmd -> {
                     try {
-                        RentTransactionApiResponse apiResponse = apiClient.RentTransactionCallApi(lawdCd, dealYmd, rentHousingType);
+                        RentTransactionApiResponse apiResponse = apiClient.RentTransactionCallApi(districtCodeFirst5, dealYmd, rentHousingType);
                         return apiResponse.getBody().getItems().getItemList().stream()
-                                .filter(item -> item.getUmdNm().equals(emdNm) && item.getJibun().equals(jibun))
+                                .filter(item -> item.getUmdNm().equals(dongName) && item.getJibun().equals(jibun))
                                 .map(item -> new RentTransactionInquiryResponse.TransactionDetail(
                                         item.getAptNm(),
                                         item.getDealYear(),

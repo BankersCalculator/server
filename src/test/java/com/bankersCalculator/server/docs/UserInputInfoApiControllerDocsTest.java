@@ -1,21 +1,13 @@
 package com.bankersCalculator.server.docs;
 
 import com.bankersCalculator.server.RestDocsSupport;
-import com.bankersCalculator.server.advise.loanAdvise.controller.LoanAdviseApiController;
-import com.bankersCalculator.server.advise.loanAdvise.dto.LoanAdviseRequest;
-import com.bankersCalculator.server.advise.loanAdvise.dto.LoanAdviseResponse;
-import com.bankersCalculator.server.advise.loanAdvise.dto.RecommendedProductDto;
-import com.bankersCalculator.server.advise.loanAdvise.dto.SpecificLoanAdviseRequest;
-import com.bankersCalculator.server.advise.loanAdvise.service.LoanAdviseService;
 import com.bankersCalculator.server.advise.userInputInfo.controller.UserInputInfoApiController;
-import com.bankersCalculator.server.advise.userInputInfo.dto.UserInputInfoRequest;
 import com.bankersCalculator.server.advise.userInputInfo.dto.UserInputInfoResponse;
 import com.bankersCalculator.server.advise.userInputInfo.dto.UserInputSummary;
 import com.bankersCalculator.server.advise.userInputInfo.service.UserInputInfoService;
-import com.bankersCalculator.server.common.enums.Bank;
 import com.bankersCalculator.server.common.enums.loanAdvise.ChildStatus;
 import com.bankersCalculator.server.common.enums.loanAdvise.MaritalStatus;
-import com.bankersCalculator.server.housingInfo.rentTransactionInquiry.common.RentHousingType;
+import com.bankersCalculator.server.housingInfo.buildingInfo.common.RentHousingType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
@@ -25,9 +17,6 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.bankersCalculator.server.common.enums.loanAdvise.UserType.MEMBER;
-import static com.bankersCalculator.server.common.enums.loanAdvise.UserType.NON_MEMBER;
-import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;

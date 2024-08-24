@@ -1,32 +1,32 @@
 package com.bankersCalculator.server.housingInfo.service;
 import com.bankersCalculator.server.housingInfo.buildingInfo.api.HousingTypeAndExclusiveAreaApiClient;
-import com.bankersCalculator.server.housingInfo.rentTransactionInquiry.service.RentTransactionInquiryService;
 
-import com.bankersCalculator.server.housingInfo.dto.HousingInfoApiResponse;
+import com.bankersCalculator.server.housingInfo.buildingInfo.service.RentTransactionInquiryService;
+import com.bankersCalculator.server.housingInfo.dto.HousingInfoResponse;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import com.bankersCalculator.server.housingInfo.buildingInfo.dto.HousingTypeAndExclusiveAreaApiResponse;
-import com.bankersCalculator.server.housingInfo.rentTransactionInquiry.dto.RentTransactionInquiryResponse;
+import com.bankersCalculator.server.housingInfo.buildingInfo.dto.RentTransactionInquiryResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static com.bankersCalculator.server.housingInfo.service.HousingInfoApiService.parseJibun;
+import static com.bankersCalculator.server.housingInfo.service.HousingInfoService.parseJibun;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import com.bankersCalculator.server.housingInfo.rentTransactionInquiry.common.RentHousingType;
+import com.bankersCalculator.server.housingInfo.buildingInfo.common.RentHousingType;
 
 @SpringBootTest
-public class HousingInfoApiServiceTest {
+public class HousingInfoServiceTest {
 
-    private static final Logger logger = LoggerFactory.getLogger(HousingInfoApiServiceTest.class);
+    private static final Logger logger = LoggerFactory.getLogger(HousingInfoServiceTest.class);
 
     @Autowired
-    private HousingInfoApiService housingInfoApiService;
+    private HousingInfoService housingInfoService;
     @Autowired
     private HousingTypeAndExclusiveAreaApiClient housingTypeAndExclusiveAreaApiClient;
     @Autowired
@@ -60,7 +60,7 @@ public class HousingInfoApiServiceTest {
         logger.info("Step 2: HousingTypeInfo Response");
         logger.info("Total Items: {}", housingTypeInfo.getBody().getItems().getItemList().size());
 
-        List<HousingInfoApiResponse> result = new ArrayList<>();
+        List<HousingInfoResponse> result = new ArrayList<>();
 
         // Step 3: housingTypeInfo에서 필요한 정보를 추출하여 리스트에 추가
         for (HousingTypeAndExclusiveAreaApiResponse.ApiResponseItem item : housingTypeInfo.getBody().getItems().getItemList()) {
@@ -113,7 +113,7 @@ public class HousingInfoApiServiceTest {
                         excluUseAr, avgInfo.getAverageDeposit(), avgInfo.getAverageMonthlyRent(), avgInfo.getTransactionCount());
 
                 // 정보를 result 리스트에 추가
-                result.add(new HousingInfoApiResponse(
+                result.add(new HousingInfoResponse(
                         rentHousingTypeName,
                         Double.parseDouble(excluUseAr),
                         avgInfo.getAverageDeposit(),

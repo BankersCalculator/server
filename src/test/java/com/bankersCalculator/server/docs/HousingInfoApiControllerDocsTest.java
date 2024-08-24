@@ -2,8 +2,8 @@ package com.bankersCalculator.server.docs;
 import com.bankersCalculator.server.housingInfo.controller.HousingInfoApiController;
 
 import com.bankersCalculator.server.RestDocsSupport;
-import com.bankersCalculator.server.housingInfo.dto.HousingInfoApiResponse;
-import com.bankersCalculator.server.housingInfo.service.HousingInfoApiService;
+import com.bankersCalculator.server.housingInfo.dto.HousingInfoResponse;
+import com.bankersCalculator.server.housingInfo.service.HousingInfoService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -26,23 +26,23 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 public class HousingInfoApiControllerDocsTest extends RestDocsSupport {
 
-    private final HousingInfoApiService housingInfoApiService = mock(HousingInfoApiService.class);
+    private final HousingInfoService housingInfoService = mock(HousingInfoService.class);
 
     @Override
     protected Object initController() {
-        return new HousingInfoApiController(housingInfoApiService);
+        return new HousingInfoApiController(housingInfoService);
     }
 
     @DisplayName("주택 정보 조회 API")
     @Test
     void getHousingInfo() throws Exception {
         // Mock the service response
-        List<HousingInfoApiResponse> responseList = Arrays.asList(
-                new HousingInfoApiResponse("오피스텔", 20.98, 1000.0, 110.0, 2),
-                new HousingInfoApiResponse("오피스텔", 20.52, 1000.0, 107.5, 2)
+        List<HousingInfoResponse> responseList = Arrays.asList(
+                new HousingInfoResponse("오피스텔", 20.98, 1000.0, 110.0, 2),
+                new HousingInfoResponse("오피스텔", 20.52, 1000.0, 107.5, 2)
         );
 
-        when(housingInfoApiService.getHousingInfo(anyString(), anyString(), anyString()))
+        when(housingInfoService.getHousingInfo(anyString(), anyString(), anyString()))
                 .thenReturn(responseList);
 
         // Create request body

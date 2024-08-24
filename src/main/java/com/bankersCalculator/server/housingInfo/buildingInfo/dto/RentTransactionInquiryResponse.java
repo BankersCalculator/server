@@ -1,4 +1,4 @@
-package com.bankersCalculator.server.housingInfo.rentTransactionInquiry.dto;
+package com.bankersCalculator.server.housingInfo.buildingInfo.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
