@@ -13,6 +13,7 @@ import com.bankersCalculator.server.common.enums.Bank;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -30,8 +31,8 @@ public class LoanAdviceService {
     private final AiReportGenerator aiReportGenerator;
 
 
+    @Transactional  // TODO: 확인할 것.
     public LoanAdviceResponse generateLoanAdvice(LoanAdviceServiceRequest request) {
-
 
         // 대출상품 필터링
         List<FilterProductResultDto> filterResults = productFilter.filterProduct(request);

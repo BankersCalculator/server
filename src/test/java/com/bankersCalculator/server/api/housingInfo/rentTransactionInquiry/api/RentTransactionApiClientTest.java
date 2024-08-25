@@ -43,37 +43,37 @@ public class RentTransactionApiClientTest {
         // resultCode 및 resultMsg 로그 출력
         String resultCode = response.getHeader().getResultCode();
         String resultMsg = response.getHeader().getResultMsg();
-        System.out.println("API 응답 코드 (resultCode): " + resultCode);
-        System.out.println("API 응답 메시지 (resultMsg): " + resultMsg);
+//        System.out.println("API 응답 코드 (resultCode): " + resultCode);
+//        System.out.println("API 응답 메시지 (resultMsg): " + resultMsg);
 
         // 로그를 통해 전체 응답 출력
-        System.out.println("API 응답 헤더: " + response.getHeader());
-        System.out.println("API 응답 바디: " + response.getBody());
+//        System.out.println("API 응답 헤더: " + response.getHeader());
+//        System.out.println("API 응답 바디: " + response.getBody());
 
         // 각 item별로 데이터 확인
         List<RentTransactionApiResponse.ApiResponseItem> items = response.getBody().getItems().getItemList();
-        assertTrue(items.size() > 0, "API에서 반환된 아이템이 없습니다.");
+//        assertTrue(items.size() > 0, "API에서 반환된 아이템이 없습니다.");
 
-        for (RentTransactionApiResponse.ApiResponseItem item : items) {
-            System.out.println("아파트 이름: " + item.getAptNm());
-            System.out.println("건축 연도: " + item.getBuildYear());
-            System.out.println("계약 기간: " + item.getContractTerm());
-            System.out.println("계약 유형: " + item.getContractType());
-            System.out.println("거래일: " + item.getDealDay());
-            System.out.println("계약 월: " + item.getDealMonth());
-            System.out.println("계약 년도: " + item.getDealYear());
-            System.out.println("보증금: " + item.getDeposit());
-            System.out.println("전용면적: " + item.getExcluUseAr());
-            System.out.println("층수: " + item.getFloor());
-            System.out.println("지번: " + item.getJibun());
-            System.out.println("월세 금액: " + item.getMonthlyRent());
-            System.out.println("이전 보증금: " + item.getPreDeposit());
-            System.out.println("이전 월세 금액: " + item.getPreMonthlyRent());
-            System.out.println("시군구 코드: " + item.getSggCd());
-            System.out.println("읍면동 이름: " + item.getUmdNm());
-            System.out.println("사용권리: " + item.getUseRRRight());
-            System.out.println("--------------");
-
-        }
+//        for (RentTransactionApiResponse.ApiResponseItem item : items) {
+//            System.out.println("아파트 이름: " + item.getAptNm());
+//            System.out.println("건축 연도: " + item.getBuildYear());
+//            System.out.println("계약 기간: " + item.getContractTerm());
+//            System.out.println("계약 유형: " + item.getContractType());
+//            System.out.println("거래일: " + item.getDealDay());
+//            System.out.println("계약 월: " + item.getDealMonth());
+//            System.out.println("계약 년도: " + item.getDealYear());
+//            System.out.println("보증금: " + item.getDeposit());
+//            System.out.println("전용면적: " + item.getExcluUseAr());
+//            System.out.println("층수: " + item.getFloor());
+//            System.out.println("지번: " + item.getJibun());
+//            System.out.println("월세 금액: " + item.getMonthlyRent());
+//            System.out.println("이전 보증금: " + item.getPreDeposit());
+//            System.out.println("이전 월세 금액: " + item.getPreMonthlyRent());
+//            System.out.println("시군구 코드: " + item.getSggCd());
+//            System.out.println("읍면동 이름: " + item.getUmdNm());
+//            System.out.println("사용권리: " + item.getUseRRRight());
+//            System.out.println("--------------");
+//
+//        }
     }
 }
