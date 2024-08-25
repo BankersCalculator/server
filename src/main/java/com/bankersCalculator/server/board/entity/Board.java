@@ -1,4 +1,4 @@
-package com.bankersCalculator.server.board.domain;
+package com.bankersCalculator.server.board.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;

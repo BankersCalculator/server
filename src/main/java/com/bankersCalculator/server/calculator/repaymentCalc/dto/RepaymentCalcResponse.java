@@ -9,7 +9,7 @@ import java.util.List;
 @Getter
 @Builder
 public class RepaymentCalcResponse {
-    private List<RepaymentSchedule> repaymentScheduleList;
+    private List<RepaymentSchedule> repaymentSchedules;
     private Double totalPrincipal; // 총 원금
     private Double totalInterest; // 총 이자
     private Integer totalInstallments; // 총 상환회차

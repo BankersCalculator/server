@@ -48,7 +48,7 @@ public class RepaymentCalcApiControllerDocsTest extends RestDocsSupport {
             .build();
 
         RepaymentCalcResponse response = RepaymentCalcResponse.builder()
-            .repaymentScheduleList(Arrays.asList(
+            .repaymentSchedules(Arrays.asList(
                 new RepaymentSchedule(1, 1000000, 5000000, 500000, 295000000),
                 new RepaymentSchedule(2, 2000000, 7000000, 450000, 200000000)
             ))
@@ -92,17 +92,17 @@ public class RepaymentCalcApiControllerDocsTest extends RestDocsSupport {
                         .description("응답 메시지"),
                     fieldWithPath("data").type(JsonFieldType.OBJECT)
                         .description("응답 데이터"),
-                    fieldWithPath("data.repaymentScheduleList").type(JsonFieldType.ARRAY)
+                    fieldWithPath("data.repaymentSchedules").type(JsonFieldType.ARRAY)
                         .description("상환 스케줄 목록"),
-                    fieldWithPath("data.repaymentScheduleList[].installmentNumber").type(JsonFieldType.NUMBER)
+                    fieldWithPath("data.repaymentSchedules[].installmentNumber").type(JsonFieldType.NUMBER)
                         .description("할부 순번"),
-                    fieldWithPath("data.repaymentScheduleList[].totalPayment").type(JsonFieldType.NUMBER)
+                    fieldWithPath("data.repaymentSchedules[].totalPayment").type(JsonFieldType.NUMBER)
                         .description("상환 총액"),
-                    fieldWithPath("data.repaymentScheduleList[].principalPayment").type(JsonFieldType.NUMBER)
+                    fieldWithPath("data.repaymentSchedules[].principalPayment").type(JsonFieldType.NUMBER)
                         .description("원금 상환액"),
-                    fieldWithPath("data.repaymentScheduleList[].interestPayment").type(JsonFieldType.NUMBER)
+                    fieldWithPath("data.repaymentSchedules[].interestPayment").type(JsonFieldType.NUMBER)
                         .description("이자 상환액"),
-                    fieldWithPath("data.repaymentScheduleList[].remainingPrincipal").type(JsonFieldType.NUMBER)
+                    fieldWithPath("data.repaymentSchedules[].remainingPrincipal").type(JsonFieldType.NUMBER)
                         .description("잔여 원금"),
                     fieldWithPath("data.totalPrincipal").type(JsonFieldType.NUMBER)
                         .description("총 원금"),

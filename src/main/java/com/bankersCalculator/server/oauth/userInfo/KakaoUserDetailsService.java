@@ -1,7 +1,7 @@
 package com.bankersCalculator.server.oauth.userInfo;
 
 import com.bankersCalculator.server.common.enums.RoleType;
-import com.bankersCalculator.server.user.domain.User;
+import com.bankersCalculator.server.user.entity.User;
 import com.bankersCalculator.server.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,11 +36,7 @@ public class KakaoUserDetailsService extends DefaultOAuth2UserService {
 
         User user = userRepository.findByOauthProviderAndEmail(PROVIDER, email)
             .orElseGet(() -> userRepository.save(
-                User.builder()
-                    .oauthProvider(PROVIDER)
-                    .email(email)
-                    .roleType(RoleType.USER)
-                    .build()
+                User.create("KAKAO", "", email, "", RoleType.USER)
             ));
 
         SimpleGrantedAuthority authority = new SimpleGrantedAuthority(user.getRoleType().getCode());

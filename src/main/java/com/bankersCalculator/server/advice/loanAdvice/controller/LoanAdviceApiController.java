@@ -1,9 +1,9 @@
 package com.bankersCalculator.server.advice.loanAdvice.controller;
 
-import com.bankersCalculator.server.advice.loanAdvice.dto.LoanAdviceRequest;
-import com.bankersCalculator.server.advice.loanAdvice.dto.LoanAdviceResponse;
-import com.bankersCalculator.server.advice.loanAdvice.dto.LoanAdviceSummaryResponse;
-import com.bankersCalculator.server.advice.loanAdvice.dto.SpecificLoanAdviceRequest;
+import com.bankersCalculator.server.advice.loanAdvice.dto.request.LoanAdviceRequest;
+import com.bankersCalculator.server.advice.loanAdvice.dto.response.LoanAdviceResponse;
+import com.bankersCalculator.server.advice.loanAdvice.dto.response.LoanAdviceSummaryResponse;
+import com.bankersCalculator.server.advice.loanAdvice.dto.request.SpecificLoanAdviceRequest;
 import com.bankersCalculator.server.advice.loanAdvice.service.LoanAdviceService;
 import com.bankersCalculator.server.common.api.ApiResponse;
 import jakarta.validation.Valid;
@@ -18,8 +18,6 @@ import java.util.List;
 public class LoanAdviceApiController {
 
     private final LoanAdviceService loanAdviceService;
-
-    // TODO: 1회성 유저 인증, 1회성유저 데이터 기존유저 편입..
 
 
     @GetMapping

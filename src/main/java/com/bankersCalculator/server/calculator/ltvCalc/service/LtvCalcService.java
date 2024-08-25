@@ -13,6 +13,16 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class LtvCalcService {
 
+    /***
+     *
+     * @param request
+     * @return LtvCalcResponse
+     *
+     * TODO: 개발이 필요한 사항
+     * 1. 지역별 LTV/DTI 기준 최신화
+     * 2. 부동산별 방수 차감 기준 확인 및 개선
+     */
+
     public LtvCalcResponse ltvCalculate(LtvCalcServiceRequest request) {
 
         double topPriorityRepaymentAmount = getTopPriorityRepaymentAmount(request);
@@ -23,7 +33,6 @@ public class LtvCalcService {
     }
 
 
-    // TODO: 방수차감기준 확인/수정할 것.
     private double getTopPriorityRepaymentAmount(LtvCalcServiceRequest request) {
         double totalSmallAmountLeaseDeposit = getTotalSmallAmountLeaseDeposit(request);
         double collateralValue = request.getCollateralValue();

@@ -2,17 +2,22 @@ package com.bankersCalculator.server.docs;
 
 import com.bankersCalculator.server.RestDocsSupport;
 import com.bankersCalculator.server.advice.loanAdvice.controller.LoanAdviceApiController;
-import com.bankersCalculator.server.advice.loanAdvice.dto.*;
+import com.bankersCalculator.server.advice.loanAdvice.dto.request.*;
+import com.bankersCalculator.server.advice.loanAdvice.dto.response.LoanAdviceResponse;
+import com.bankersCalculator.server.advice.loanAdvice.dto.response.LoanAdviceSummaryResponse;
+import com.bankersCalculator.server.advice.loanAdvice.dto.response.RecommendedProductDto;
 import com.bankersCalculator.server.advice.loanAdvice.service.LoanAdviceService;
 import com.bankersCalculator.server.common.enums.Bank;
 import com.bankersCalculator.server.common.enums.loanAdvise.ChildStatus;
 import com.bankersCalculator.server.common.enums.loanAdvise.MaritalStatus;
+import com.bankersCalculator.server.common.enums.ltv.HouseOwnershipType;
 import com.bankersCalculator.server.housingInfo.rentTransactionInquiry.common.RentHousingType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 
@@ -194,6 +199,8 @@ public class LoanAdviceApiControllerDocsTest extends RestDocsSupport {
                     fieldWithPath("spouseAnnualIncome").type(JsonFieldType.NUMBER).description("배우자연소득"),
                     fieldWithPath("childStatus").type(JsonFieldType.STRING).description("자녀 상태 (NO_CHILD, ONE_CHILD, TWO_CHILD, THREE_OR_MORE_CHILDREN)"),
                     fieldWithPath("hasNewborn").type(JsonFieldType.BOOLEAN).description("신생아여부"),
+                    fieldWithPath("houseOwnershipType").type(JsonFieldType.STRING)
+                        .description("주택 소유 형태 (NO_HOUSE: 무주택, SINGLE_HOUSE: 1주택, MULTI_HOUSE: 다주택"),
                     fieldWithPath("isSMEEmployee").type(JsonFieldType.BOOLEAN).description("중소기업재직여부"),
                     fieldWithPath("isNetAssetOver345M").type(JsonFieldType.BOOLEAN).description("순자산 3.45억 초과 여부"),
                     fieldWithPath("rentHousingType").type(JsonFieldType.STRING)
@@ -310,15 +317,16 @@ public class LoanAdviceApiControllerDocsTest extends RestDocsSupport {
 
     private LoanAdviceRequest createSampleLoanAdviceRequest() {
         return LoanAdviceRequest.builder()
-            .rentalDeposit(200000000L)
-            .monthlyRent(0L)
-            .cashOnHand(20000000L)
+            .rentalDeposit(BigDecimal.valueOf(200000000))
+            .monthlyRent(BigDecimal.valueOf(0))
+            .cashOnHand(BigDecimal.valueOf(20000000))
             .age(30)
             .maritalStatus(MaritalStatus.MARRIED)
-            .annualIncome(50000000L)
-            .spouseAnnualIncome(40000000L)
+            .annualIncome(BigDecimal.valueOf(50000000))
+            .spouseAnnualIncome(BigDecimal.valueOf(40000000))
             .childStatus(ChildStatus.ONE_CHILD)
             .hasNewborn(true)
+            .houseOwnershipType(HouseOwnershipType.NO_HOUSE)
             .isSMEEmployee(false)
             .isNetAssetOver345M(false)
             .rentHousingType(RentHousingType.APARTMENT)
@@ -335,34 +343,34 @@ public class LoanAdviceApiControllerDocsTest extends RestDocsSupport {
             .loanAdviceResultId(1L)
             .loanProductName("샘플 전세자금대출")
             .loanProductCode("SAMPLE001")
-            .possibleLoanLimit(200000000L)
-            .expectedLoanRate(3.5)
-            .totalRentalDeposit(300000000L)
-            .loanAmount(200000000L)
-            .ownFunds(100000000L)
-            .monthlyInterestCost(583333L)
-            .monthlyRent(0L)
-            .totalLivingCost(583333L)
-            .opportunityCostOwnFunds(100000000L)
-            .depositInterestRate(2.5)
-            .guaranteeInsuranceFee(1000000L)
-            .stampDuty(150000L)
+            .possibleLoanLimit(BigDecimal.valueOf(200000000))
+            .expectedLoanRate(BigDecimal.valueOf(3.5))
+            .totalRentalDeposit(BigDecimal.valueOf(300000000))
+            .loanAmount(BigDecimal.valueOf(200000000))
+            .ownFunds(BigDecimal.valueOf(100000000))
+            .monthlyInterestCost(BigDecimal.valueOf(583333))
+            .monthlyRent(BigDecimal.valueOf(0L))
+            .totalLivingCost(BigDecimal.valueOf(583333L))
+            .opportunityCostOwnFunds(BigDecimal.valueOf(100000000))
+            .depositInterestRate(BigDecimal.valueOf(2.5))
+            .guaranteeInsuranceFee(BigDecimal.valueOf(1000000))
+            .stampDuty(BigDecimal.valueOf(150000))
             .recommendationReason("고객님의 소득과 신용도를 고려하여 가장 적합한 상품으로 선정되었습니다.")
             .recommendedProducts(Arrays.asList(
                 RecommendedProductDto.builder()
                     .rank(2)
                     .loanProductName("신혼부부전용전세자금대출")
                     .loanProductCode("HF-001")
-                    .possibleLoanLimit(180000000L)
-                    .expectedLoanRate(3.7)
+                    .possibleLoanLimit(BigDecimal.valueOf(180000000))
+                    .expectedLoanRate(BigDecimal.valueOf(3.7))
                     .notEligibleReasons(List.of())
                     .build(),
                 RecommendedProductDto.builder()
                     .rank(3)
                     .loanProductName("서울시신혼부부임차보증금대출")
                     .loanProductCode("HF-002")
-                    .possibleLoanLimit(220000000L)
-                    .expectedLoanRate(3.8)
+                    .possibleLoanLimit(BigDecimal.valueOf(220000000))
+                    .expectedLoanRate(BigDecimal.valueOf(3.8))
                     .notEligibleReasons(List.of("임차목적지가 서울시가 아닙니다."))
                     .build()
             ))

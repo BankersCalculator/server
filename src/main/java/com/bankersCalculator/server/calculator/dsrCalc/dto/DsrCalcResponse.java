@@ -12,6 +12,6 @@ public class DsrCalcResponse {
 
     private Integer annualIncome;
     private Integer totalLoanCount;
-    private List<DsrCalcResult> dsrCalcResultList;
+    private List<DsrCalcResult> dsrCalcResults;
     private Double finalDsrRatio;
 }
