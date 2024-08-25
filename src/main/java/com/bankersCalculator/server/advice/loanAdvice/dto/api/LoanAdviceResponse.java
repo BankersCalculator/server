@@ -5,6 +5,7 @@ import com.bankersCalculator.server.common.enums.Bank;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -18,26 +19,26 @@ public class LoanAdviceResponse {
     // 대출 상품 정보
     private String loanProductName;
     private String loanProductCode;
-    private Long possibleLoanLimit;
-    private Double expectedLoanRate;
+    private BigDecimal possibleLoanLimit;
+    private BigDecimal expectedLoanRate;
 
     // 소요 자금 상세
-    private Long totalRentalDeposit;
-    private Long loanAmount;    // 대출금
-    private Long ownFunds;  // 자기자금
+    private BigDecimal totalRentalDeposit;
+    private BigDecimal loanAmount;    // 대출금
+    private BigDecimal ownFunds;  // 자기자금
 
     // 실 주거 비용
-    private Long monthlyInterestCost;  // 월 이자 비용
-    private Long monthlyRent;  // 월세
-    private Long totalLivingCost;  // 총 주거 비용
+    private BigDecimal monthlyInterestCost;  // 월 이자 비용
+    private BigDecimal monthlyRent;  // 월세
+    private BigDecimal totalLivingCost;  // 총 주거 비용
 
     // 기회 비용
-    private Long opportunityCostOwnFunds; // 기회비용
-    private Double depositInterestRate; // 예금 이자율
+    private BigDecimal opportunityCostOwnFunds; // 기회비용
+    private BigDecimal depositInterestRate; // 예금 이자율
 
     // 부수 비용
-    private Long guaranteeInsuranceFee; // 보증보험료
-    private Long stampDuty; // 인지세
+    private BigDecimal guaranteeInsuranceFee; // 보증보험료
+    private BigDecimal stampDuty; // 인지세
 
     // 추천 사유
     private String recommendationReason; // AI 추천 사유
@@ -55,8 +56,8 @@ public class LoanAdviceResponse {
 
     public static LoanAdviceResponse of(LoanAdviceResult result) {
 
-        long totalLivingCost = result.getMonthlyRent() + result.getMonthlyRent();
-        long calculatedCost = (long) (result.getOpportunityCostOwnFunds() * result.getDepositInterestRate());
+        BigDecimal totalLivingCost = result.getMonthlyRent().add(result.getMonthlyRent());
+        BigDecimal calculatedCost = result.getOpportunityCostOwnFunds().multiply(result.getDepositInterestRate());
 
         return LoanAdviceResponse.builder()
             .loanAdviceResultId(result.getId())

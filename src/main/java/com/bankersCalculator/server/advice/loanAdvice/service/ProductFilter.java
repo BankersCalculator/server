@@ -15,8 +15,6 @@ import java.util.List;
 @Component
 public class ProductFilter {
 
-    private final LoanProductRepository loanProductRepository;
-
     private final List<LoanProduct> loanProducts;
 
     public List<FilterProductResultDto> filterProduct(LoanAdviceServiceRequest request) {

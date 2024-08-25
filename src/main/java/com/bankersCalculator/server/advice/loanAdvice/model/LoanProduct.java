@@ -2,9 +2,8 @@ package com.bankersCalculator.server.advice.loanAdvice.model;
 
 import com.bankersCalculator.server.advice.loanAdvice.dto.api.LoanAdviceServiceRequest;
 import com.bankersCalculator.server.advice.loanAdvice.dto.service.FilterProductResultDto;
+import com.bankersCalculator.server.advice.loanAdvice.dto.service.LoanLimitAndRateResultDto;
 import com.bankersCalculator.server.common.enums.JeonseLoanProductType;
-
-import java.util.List;
 
 public interface LoanProduct {
 
@@ -41,6 +40,6 @@ public interface LoanProduct {
 
     FilterProductResultDto filtering(LoanAdviceServiceRequest request);
 
-    double calculateLoanLimit();
+    LoanLimitAndRateResultDto calculateLoanLimitAndRate(LoanAdviceServiceRequest request);
 
 }

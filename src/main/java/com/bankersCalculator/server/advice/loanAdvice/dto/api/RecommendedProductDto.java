@@ -3,6 +3,7 @@ package com.bankersCalculator.server.advice.loanAdvice.dto.api;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Getter
@@ -11,7 +12,7 @@ public class RecommendedProductDto {
     private Integer rank;
     private String loanProductName;
     private String loanProductCode;
-    private Long possibleLoanLimit;
-    private Double expectedLoanRate;
+    private BigDecimal possibleLoanLimit;
+    private BigDecimal expectedLoanRate;
     private List<String> notEligibleReasons;
 }

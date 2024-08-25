@@ -11,6 +11,8 @@ import lombok.Builder;
 import lombok.Getter;
 import org.hibernate.validator.constraints.Range;
 
+import java.math.BigDecimal;
+
 
 @Getter
 @Builder
@@ -19,13 +21,13 @@ public class LoanAdviceRequest {
     // 고객 정보
     @NotNull(message = "임차보증금은 필수 입력값입니다.")
     @Min(value = 1000000, message = "임차보증금은 1백만원 이상이어야 합니다.")
-    private Long rentalDeposit; // 임차보증금
+    private BigDecimal rentalDeposit; // 임차보증금
 
     @PositiveOrZero(message = "월세는 0 이상이어야 합니다.")
-    private Long monthlyRent;   // 월세
+    private BigDecimal monthlyRent;   // 월세
 
     @PositiveOrZero(message = "보유현금은 0 이상이어야 합니다.")
-    private Long cashOnHand;    // 보유현금
+    private BigDecimal cashOnHand;    // 보유현금
 
     @NotNull(message = "나이는 필수 입력값입니다.")
     @Range(min = 15, max = 100, message = "나이는 15세 이상 100세 이하여야 합니다.")
@@ -36,10 +38,10 @@ public class LoanAdviceRequest {
 
     @NotNull(message = "연소득은 필수 입력값입니다.")
     @PositiveOrZero(message = "연소득은 0 이상이어야 합니다.")
-    private Long annualIncome;  //연소득
+    private BigDecimal annualIncome;  //연소득
 
     @PositiveOrZero(message = "배우자 연소득은 0 이상이어야 합니다.")
-    private Long spouseAnnualIncome;    // 배우자연소득
+    private BigDecimal spouseAnnualIncome;    // 배우자연소득
 
     @NotNull(message = "자녀상태는 필수 입력값입니다.")
     private ChildStatus childStatus;    // 자녀상태

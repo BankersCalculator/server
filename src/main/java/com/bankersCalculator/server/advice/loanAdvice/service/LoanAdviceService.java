@@ -5,14 +5,14 @@ import com.bankersCalculator.server.advice.loanAdvice.dto.api.LoanAdviceSummaryR
 import com.bankersCalculator.server.advice.loanAdvice.dto.api.RecommendedProductDto;
 import com.bankersCalculator.server.advice.loanAdvice.dto.service.AdditionalInformation;
 import com.bankersCalculator.server.advice.loanAdvice.dto.service.FilterProductResultDto;
-import com.bankersCalculator.server.advice.loanAdvice.dto.service.LoanLimitAndRateResult;
+import com.bankersCalculator.server.advice.loanAdvice.dto.service.LoanLimitAndRateResultDto;
 import com.bankersCalculator.server.advice.loanAdvice.dto.service.OptimalLoanProductResult;
-import com.bankersCalculator.server.advice.loanAdvice.model.LoanProduct;
 import com.bankersCalculator.server.common.enums.Bank;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 
@@ -34,10 +34,10 @@ public class LoanAdviceService {
         List<FilterProductResultDto> filterResults = productFilter.filterProduct(request);
 
         // 대출한도 및 금리 계산
-        List<LoanLimitAndRateResult> loanLimitAndRateResults = loanLimitAndRateCalculator.calculateLoanLimitAndRate(request, filterResults);
+        List<LoanLimitAndRateResultDto> loanLimitAndRateResultDtos = loanLimitAndRateCalculator.calculateLoanLimitAndRate(request, filterResults);
 
         // 대출상품 비교
-        OptimalLoanProductResult optimalLoanProduct = productComparator.compareProducts(loanLimitAndRateResults);
+        OptimalLoanProductResult optimalLoanProduct = productComparator.compareProducts(loanLimitAndRateResultDtos);
 
         // 추가정보 생성
         AdditionalInformation additionalInformation = additionalInfoGenerator.generateAdditionalInfo();
@@ -52,34 +52,34 @@ public class LoanAdviceService {
             .loanAdviceResultId(1L)
             .loanProductName("샘플 전세자금대출")
             .loanProductCode("SAMPLE001")
-            .possibleLoanLimit(200000000L)
-            .expectedLoanRate(3.5)
-            .totalRentalDeposit(300000000L)
-            .loanAmount(200000000L)
-            .ownFunds(100000000L)
-            .monthlyInterestCost(583333L)
-            .monthlyRent(0L)
-            .totalLivingCost(583333L)
-            .opportunityCostOwnFunds(100000000L)
-            .depositInterestRate(2.5)
-            .guaranteeInsuranceFee(1000000L)
-            .stampDuty(150000L)
+            .possibleLoanLimit(BigDecimal.valueOf(200000000))
+            .expectedLoanRate(BigDecimal.valueOf(3.5))
+            .totalRentalDeposit(BigDecimal.valueOf(300000000))
+            .loanAmount(BigDecimal.valueOf(200000000))
+            .ownFunds(BigDecimal.valueOf(100000000))
+            .monthlyInterestCost(BigDecimal.valueOf(583333))
+            .monthlyRent(BigDecimal.valueOf(0L))
+            .totalLivingCost(BigDecimal.valueOf(583333L))
+            .opportunityCostOwnFunds(BigDecimal.valueOf(100000000))
+            .depositInterestRate(BigDecimal.valueOf(2.5))
+            .guaranteeInsuranceFee(BigDecimal.valueOf(1000000))
+            .stampDuty(BigDecimal.valueOf(150000))
             .recommendationReason("고객님의 소득과 신용도를 고려하여 가장 적합한 상품으로 선정되었습니다.")
             .recommendedProducts(Arrays.asList(
                 RecommendedProductDto.builder()
                     .rank(2)
                     .loanProductName("신혼부부전용전세자금대출")
                     .loanProductCode("HF-001")
-                    .possibleLoanLimit(180000000L)
-                    .expectedLoanRate(3.7)
+                    .possibleLoanLimit(BigDecimal.valueOf(180000000))
+                    .expectedLoanRate(BigDecimal.valueOf(3.7))
                     .notEligibleReasons(List.of())
                     .build(),
                 RecommendedProductDto.builder()
                     .rank(3)
                     .loanProductName("서울시신혼부부임차보증금대출")
                     .loanProductCode("HF-002")
-                    .possibleLoanLimit(220000000L)
-                    .expectedLoanRate(3.8)
+                    .possibleLoanLimit(BigDecimal.valueOf(220000000))
+                    .expectedLoanRate(BigDecimal.valueOf(3.8))
                     .notEligibleReasons(List.of("임차목적지가 서울시가 아닙니다."))
                     .build()
             ))
@@ -95,34 +95,34 @@ public class LoanAdviceService {
             .loanAdviceResultId(1L)
             .loanProductName("샘플 전세자금대출")
             .loanProductCode("SAMPLE001")
-            .possibleLoanLimit(200000000L)
-            .expectedLoanRate(3.5)
-            .totalRentalDeposit(300000000L)
-            .loanAmount(200000000L)
-            .ownFunds(100000000L)
-            .monthlyInterestCost(583333L)
-            .monthlyRent(0L)
-            .totalLivingCost(583333L)
-            .opportunityCostOwnFunds(100000000L)
-            .depositInterestRate(2.5)
-            .guaranteeInsuranceFee(1000000L)
-            .stampDuty(150000L)
+            .possibleLoanLimit(BigDecimal.valueOf(200000000))
+            .expectedLoanRate(BigDecimal.valueOf(3.5))
+            .totalRentalDeposit(BigDecimal.valueOf(300000000))
+            .loanAmount(BigDecimal.valueOf(200000000))
+            .ownFunds(BigDecimal.valueOf(100000000))
+            .monthlyInterestCost(BigDecimal.valueOf(583333))
+            .monthlyRent(BigDecimal.valueOf(0L))
+            .totalLivingCost(BigDecimal.valueOf(583333L))
+            .opportunityCostOwnFunds(BigDecimal.valueOf(100000000))
+            .depositInterestRate(BigDecimal.valueOf(2.5))
+            .guaranteeInsuranceFee(BigDecimal.valueOf(1000000))
+            .stampDuty(BigDecimal.valueOf(150000))
             .recommendationReason("고객님의 소득과 신용도를 고려하여 가장 적합한 상품으로 선정되었습니다.")
             .recommendedProducts(Arrays.asList(
                 RecommendedProductDto.builder()
                     .rank(2)
                     .loanProductName("신혼부부전용전세자금대출")
                     .loanProductCode("HF-001")
-                    .possibleLoanLimit(180000000L)
-                    .expectedLoanRate(3.7)
+                    .possibleLoanLimit(BigDecimal.valueOf(180000000))
+                    .expectedLoanRate(BigDecimal.valueOf(3.7))
                     .notEligibleReasons(List.of())
                     .build(),
                 RecommendedProductDto.builder()
                     .rank(3)
                     .loanProductName("서울시신혼부부임차보증금대출")
                     .loanProductCode("HF-002")
-                    .possibleLoanLimit(220000000L)
-                    .expectedLoanRate(3.8)
+                    .possibleLoanLimit(BigDecimal.valueOf(220000000))
+                    .expectedLoanRate(BigDecimal.valueOf(3.8))
                     .notEligibleReasons(List.of("임차목적지가 서울시가 아닙니다."))
                     .build()
             ))
