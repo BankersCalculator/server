@@ -7,6 +7,7 @@ import lombok.Getter;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Getter
@@ -81,7 +82,7 @@ public class LoanAdviceResponse {
                     .loanProductCode(ap.getLoanProductCode())
                     .possibleLoanLimit(ap.getPossibleLoanLimit())
                     .expectedLoanRate(ap.getExpectedLoanRate())
-                    .notEligibleReasons(Arrays.stream(ap.getNotEligibleReasons().split(",")).toList()) // TODO: 수정요망
+                    .notEligibleReasons(Arrays.stream(ap.getNotEligibleReasons().split(Pattern.quote("|"))).toList())
                     .build())
                 .collect(Collectors.toList()))
             .availableBanks(result.getAvailableBanks())

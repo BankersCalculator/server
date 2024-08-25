@@ -9,7 +9,6 @@ import java.util.List;
 @Getter
 @Entity
 public class LoanAdviceResult {
-    // TODO: 검토 및 수정할 것. alternativeProducts 를 굳이 저장해야하는지 등.
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

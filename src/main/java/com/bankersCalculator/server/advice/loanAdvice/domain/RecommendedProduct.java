@@ -28,6 +28,6 @@ public class RecommendedProduct {
     private String loanProductCode; // 대출 상품코드
     private Long possibleLoanLimit; // 가능한 대출 한도
     private Double expectedLoanRate; // 예상 대출 금리
-    private String notEligibleReasons; // 부적격 사유 (해당되는 경우) TODO: LIST로 저장하려는데.. 어떻게 해야할지 고민해보기 우선 Docs에는 parse로 분할함
+    private String notEligibleReasons; // 부적격 사유. 각 사유를 |(파이프라인)으로 구분지어서 적재
 
 }

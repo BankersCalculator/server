@@ -19,8 +19,6 @@ public class LoanAdviceApiController {
 
     private final LoanAdviceService loanAdviceService;
 
-    // TODO: 1회성 유저 인증, 1회성유저 데이터 기존유저 편입..
-
 
     @GetMapping
     public ApiResponse<List<LoanAdviceSummaryResponse>> getRecentLoanAdvices() {
