@@ -44,7 +44,7 @@ public class LoanAdviceService {
         OptimalLoanProductResult optimalLoanProduct = productComparator.compareProducts(rentalDeposit, loanLimitAndRateResultDto);
 
         // 추가정보 생성
-        AdditionalInformation additionalInformation = additionalInfoGenerator.generateAdditionalInfo();
+        AdditionalInformation additionalInformation = additionalInfoGenerator.generateAdditionalInfo(request, optimalLoanProduct);
 
         // 보고서 생성
         String aiReport = aiReportGenerator.generateAiReport();

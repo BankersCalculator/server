@@ -4,24 +4,25 @@ import com.bankersCalculator.server.common.enums.Bank;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Getter
 @Builder
 public class AdditionalInformation {
 
-    // 실 주거 비용
-    private Long monthlyInterestCost;  // 월 이자 비용
-    private Long monthlyRent;  // 월세
-    private Long totalLivingCost;  // 총 주거 비용
+    // 실주거 비용
+    private BigDecimal ownFunds;  // 소요 자기 자금
+    private BigDecimal monthlyInterestCost;  // 월 이자 비용
+    private BigDecimal totalLivingCost;  // 총 주거 비용
 
     // 기회 비용
-    private Long opportunityCostOwnFunds; // 기회비용
-    private Double depositInterestRate; // 예금 이자율
+    private BigDecimal opportunityCostOwnFunds; // 기회비용
+    private BigDecimal depositInterestRate; // 예금 이자율
 
     // 부수 비용
-    private Long guaranteeInsuranceFee; // 보증보험료
-    private Long stampDuty; // 인지세
+    private BigDecimal guaranteeInsuranceFee; // 보증보험료
+    private BigDecimal stampDuty; // 인지세
 
     // 취급 가능 은행
     private List<Bank> availableBanks;

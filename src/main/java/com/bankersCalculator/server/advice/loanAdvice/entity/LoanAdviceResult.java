@@ -54,7 +54,7 @@ public class LoanAdviceResult {
     private List<Bank> availableBanks;          // 이용 가능한 은행 목록
 
     @Column(length = 4000)
-    private String rentalLoanGuide;             // 임대 대출 가이드
+    private String rentalLoanGuide;             // 대출 가이드
 
     public static LoanAdviceResult create(User user, String loanProductName,
                                           String loanProductCode, BigDecimal possibleLoanLimit,

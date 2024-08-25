@@ -4,6 +4,7 @@ import com.bankersCalculator.server.advice.loanAdvice.dto.request.LoanAdviceServ
 import com.bankersCalculator.server.advice.loanAdvice.dto.internal.FilterProductResultDto;
 import com.bankersCalculator.server.advice.loanAdvice.dto.internal.LoanLimitAndRateResultDto;
 import com.bankersCalculator.server.advice.loanAdvice.model.LoanProduct;
+import com.bankersCalculator.server.common.enums.Bank;
 import com.bankersCalculator.server.common.enums.JeonseLoanProductType;
 import com.bankersCalculator.server.common.enums.loanAdvise.ChildStatus;
 import com.bankersCalculator.server.common.enums.loanAdvise.MaritalStatus;
@@ -94,8 +95,14 @@ public class SeoulNewlyWedLeaseDepositLoan implements LoanProduct {
     // 기타비용산출(보증요율, 인지세, 보증보험료 등)
 
     @Override
-    public BigDecimal getGuaranteeInsuranceFee() {
-        return null;
+    public BigDecimal getGuaranteeInsuranceFee(BigDecimal loanAmount) {
+        // 신한은행 홈피 기준 보증료 0.05% * 2년치
+        return loanAmount.multiply(new BigDecimal("0.001"));
+    }
+
+    @Override
+    public List<Bank> getAvailableBanks() {
+        return List.of(Bank.HANA, Bank.SHINHAN, Bank.KOOMIN);
     }
 
     private BigDecimal calculateLoanLimit(LoanAdviceServiceRequest request) {
@@ -153,8 +160,6 @@ public class SeoulNewlyWedLeaseDepositLoan implements LoanProduct {
 
         return discountRate;
     }
-
-
 
     private boolean isEligibleMaritalStatus(MaritalStatus maritalStatus) {
         return maritalStatus == MaritalStatus.ENGAGED || maritalStatus == MaritalStatus.MARRIED;

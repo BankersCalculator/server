@@ -9,7 +9,8 @@ import org.springframework.stereotype.Component;
 public class AiReportGenerator {
 
     public String generateAiReport() {
-        // AI 리포트를 생성하는 로직
+
+        // TODO: GPT4.0o 호출해서 AI 리포트 생성할 것.
         return null;
     }
 }

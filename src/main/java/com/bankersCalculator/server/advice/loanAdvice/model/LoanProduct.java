@@ -3,7 +3,11 @@ package com.bankersCalculator.server.advice.loanAdvice.model;
 import com.bankersCalculator.server.advice.loanAdvice.dto.request.LoanAdviceServiceRequest;
 import com.bankersCalculator.server.advice.loanAdvice.dto.internal.FilterProductResultDto;
 import com.bankersCalculator.server.advice.loanAdvice.dto.internal.LoanLimitAndRateResultDto;
+import com.bankersCalculator.server.common.enums.Bank;
 import com.bankersCalculator.server.common.enums.JeonseLoanProductType;
+
+import java.math.BigDecimal;
+import java.util.List;
 
 public interface LoanProduct {
 
@@ -40,5 +44,9 @@ public interface LoanProduct {
     FilterProductResultDto filtering(LoanAdviceServiceRequest request);
 
     LoanLimitAndRateResultDto calculateLoanLimitAndRate(LoanAdviceServiceRequest request);
+
+    BigDecimal getGuaranteeInsuranceFee(BigDecimal loanAmount);
+
+    List<Bank> getAvailableBanks();
 
 }
