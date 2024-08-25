@@ -9,7 +9,7 @@ import java.util.List;
 @Getter
 @Builder
 public class RecommendedProductDto {
-    private Integer rank;
+
     private String loanProductName;
     private String loanProductCode;
     private BigDecimal possibleLoanLimit;

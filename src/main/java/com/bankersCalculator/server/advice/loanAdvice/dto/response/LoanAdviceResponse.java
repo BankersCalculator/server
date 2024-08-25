@@ -77,7 +77,6 @@ public class LoanAdviceResponse {
             .recommendationReason(result.getRecommendationReason())
             .recommendedProducts(result.getRecommendedProducts().stream()
                 .map(ap -> RecommendedProductDto.builder()
-                    .rank(ap.getRank())
                     .loanProductName(ap.getLoanProductName())
                     .loanProductCode(ap.getLoanProductCode())
                     .possibleLoanLimit(ap.getPossibleLoanLimit())

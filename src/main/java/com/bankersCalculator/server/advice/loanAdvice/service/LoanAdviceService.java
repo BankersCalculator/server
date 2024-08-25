@@ -9,6 +9,7 @@ import com.bankersCalculator.server.advice.loanAdvice.dto.internal.LoanLimitAndR
 import com.bankersCalculator.server.advice.loanAdvice.dto.internal.OptimalLoanProductResult;
 import com.bankersCalculator.server.advice.loanAdvice.service.component.*;
 import com.bankersCalculator.server.common.enums.Bank;
+import com.bankersCalculator.server.oauth.userInfo.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -28,6 +29,7 @@ public class LoanAdviceService {
     private final AdditionalInfoGenerator additionalInfoGenerator;
     private final AiReportGenerator aiReportGenerator;
 
+
     public LoanAdviceResponse generateLoanAdvice(LoanAdviceServiceRequest request) {
 
 
@@ -38,7 +40,8 @@ public class LoanAdviceService {
         List<LoanLimitAndRateResultDto> loanLimitAndRateResultDto = loanLimitAndRateCalculator.calculateLoanLimitAndRate(request, filterResults);
 
         // 대출상품 비교
-        OptimalLoanProductResult optimalLoanProduct = productComparator.compareProducts(loanLimitAndRateResultDto);
+        BigDecimal rentalDeposit = request.getRentalDeposit();
+        OptimalLoanProductResult optimalLoanProduct = productComparator.compareProducts(rentalDeposit, loanLimitAndRateResultDto);
 
         // 추가정보 생성
         AdditionalInformation additionalInformation = additionalInfoGenerator.generateAdditionalInfo();
@@ -47,7 +50,8 @@ public class LoanAdviceService {
         String aiReport = aiReportGenerator.generateAiReport();
 
 
-
+        // UserInputInfo 저장
+        // LoanAdviceResult 저장
 
         return LoanAdviceResponse.builder()
             .loanAdviceResultId(1L)
@@ -68,7 +72,6 @@ public class LoanAdviceService {
             .recommendationReason("고객님의 소득과 신용도를 고려하여 가장 적합한 상품으로 선정되었습니다.")
             .recommendedProducts(Arrays.asList(
                 RecommendedProductDto.builder()
-                    .rank(2)
                     .loanProductName("신혼부부전용전세자금대출")
                     .loanProductCode("HF-001")
                     .possibleLoanLimit(BigDecimal.valueOf(180000000))
@@ -76,7 +79,6 @@ public class LoanAdviceService {
                     .notEligibleReasons(List.of())
                     .build(),
                 RecommendedProductDto.builder()
-                    .rank(3)
                     .loanProductName("서울시신혼부부임차보증금대출")
                     .loanProductCode("HF-002")
                     .possibleLoanLimit(BigDecimal.valueOf(220000000))
@@ -111,7 +113,6 @@ public class LoanAdviceService {
             .recommendationReason("고객님의 소득과 신용도를 고려하여 가장 적합한 상품으로 선정되었습니다.")
             .recommendedProducts(Arrays.asList(
                 RecommendedProductDto.builder()
-                    .rank(2)
                     .loanProductName("신혼부부전용전세자금대출")
                     .loanProductCode("HF-001")
                     .possibleLoanLimit(BigDecimal.valueOf(180000000))
@@ -119,7 +120,6 @@ public class LoanAdviceService {
                     .notEligibleReasons(List.of())
                     .build(),
                 RecommendedProductDto.builder()
-                    .rank(3)
                     .loanProductName("서울시신혼부부임차보증금대출")
                     .loanProductCode("HF-002")
                     .possibleLoanLimit(BigDecimal.valueOf(220000000))

@@ -9,6 +9,7 @@ public interface LoanProduct {
 
     /*
      * 구현 예정 전세상품 정리
+     * (enum: JeonseLoanProductType)
      *
      * - 주택금융공사 -
      * 서울시신혼부부임차보증금대출
@@ -35,8 +36,6 @@ public interface LoanProduct {
      */
 
     JeonseLoanProductType getProductType();
-
-    String getProperty();
 
     FilterProductResultDto filtering(LoanAdviceServiceRequest request);
 

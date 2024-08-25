@@ -46,7 +46,7 @@ public class LoanAdviceResult {
     private String recommendationReason;        // 추천 이유
 
     @OneToMany(mappedBy = "loanAdviceResult", cascade = CascadeType.ALL, orphanRemoval = true)
-    @OrderBy("rank ASC")
+    @OrderBy("possibleLoanLimit ASC")
     private List<RecommendedProduct> recommendedProducts; // 추천상품 리스트
 
     @ElementCollection(targetClass = Bank.class)

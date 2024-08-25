@@ -25,7 +25,6 @@ public class RecommendedProduct {
     @JoinColumn(name = "loan_advice_result_id")
     private LoanAdviceResult loanAdviceResult;
 
-    private int rank; // 추천 순위
 
     private String loanProductName; // 대출 상품명
     private String loanProductCode; // 대출 상품코드
@@ -37,7 +36,6 @@ public class RecommendedProduct {
         return RecommendedProduct.builder()
             .user(user)
             .loanAdviceResult(loanAdviceResult)
-            .rank(rank)
             .loanProductName(loanProductName)
             .loanProductCode(loanProductCode)
             .possibleLoanLimit(possibleLoanLimit)

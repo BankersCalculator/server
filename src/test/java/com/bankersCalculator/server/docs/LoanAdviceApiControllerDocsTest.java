@@ -148,7 +148,6 @@ public class LoanAdviceApiControllerDocsTest extends RestDocsSupport {
                     fieldWithPath("data.stampDuty").type(JsonFieldType.NUMBER).description("인지세"),
                     fieldWithPath("data.recommendationReason").type(JsonFieldType.STRING).description("추천 이유"),
                     fieldWithPath("data.recommendedProducts").type(JsonFieldType.ARRAY).description("추천 상품 목록"),
-                    fieldWithPath("data.recommendedProducts[].rank").type(JsonFieldType.NUMBER).description("추천 순위"),
                     fieldWithPath("data.recommendedProducts[].loanProductName").type(JsonFieldType.STRING).description("대출 상품명"),
                     fieldWithPath("data.recommendedProducts[].loanProductCode").type(JsonFieldType.STRING).description("대출 상품 코드"),
                     fieldWithPath("data.recommendedProducts[].possibleLoanLimit").type(JsonFieldType.NUMBER).description("가능한 대출 한도"),
@@ -233,7 +232,6 @@ public class LoanAdviceApiControllerDocsTest extends RestDocsSupport {
                     fieldWithPath("data.stampDuty").type(JsonFieldType.NUMBER).description("인지세"),
                     fieldWithPath("data.recommendationReason").type(JsonFieldType.STRING).description("추천 이유"),
                     fieldWithPath("data.recommendedProducts").type(JsonFieldType.ARRAY).description("추천 상품 목록"),
-                    fieldWithPath("data.recommendedProducts[].rank").type(JsonFieldType.NUMBER).description("추천 순위"),
                     fieldWithPath("data.recommendedProducts[].loanProductName").type(JsonFieldType.STRING).description("대출 상품명"),
                     fieldWithPath("data.recommendedProducts[].loanProductCode").type(JsonFieldType.STRING).description("대출 상품 코드"),
                     fieldWithPath("data.recommendedProducts[].possibleLoanLimit").type(JsonFieldType.NUMBER).description("가능한 대출 한도"),
@@ -302,7 +300,6 @@ public class LoanAdviceApiControllerDocsTest extends RestDocsSupport {
                     fieldWithPath("data.stampDuty").type(JsonFieldType.NUMBER).description("인지세"),
                     fieldWithPath("data.recommendationReason").type(JsonFieldType.STRING).description("추천 이유"),
                     fieldWithPath("data.recommendedProducts").type(JsonFieldType.ARRAY).description("추천 상품 목록"),
-                    fieldWithPath("data.recommendedProducts[].rank").type(JsonFieldType.NUMBER).description("추천 순위"),
                     fieldWithPath("data.recommendedProducts[].loanProductName").type(JsonFieldType.STRING).description("대출 상품명"),
                     fieldWithPath("data.recommendedProducts[].loanProductCode").type(JsonFieldType.STRING).description("대출 상품 코드"),
                     fieldWithPath("data.recommendedProducts[].possibleLoanLimit").type(JsonFieldType.NUMBER).description("가능한 대출 한도"),
@@ -358,7 +355,6 @@ public class LoanAdviceApiControllerDocsTest extends RestDocsSupport {
             .recommendationReason("고객님의 소득과 신용도를 고려하여 가장 적합한 상품으로 선정되었습니다.")
             .recommendedProducts(Arrays.asList(
                 RecommendedProductDto.builder()
-                    .rank(2)
                     .loanProductName("신혼부부전용전세자금대출")
                     .loanProductCode("HF-001")
                     .possibleLoanLimit(BigDecimal.valueOf(180000000))
@@ -366,7 +362,6 @@ public class LoanAdviceApiControllerDocsTest extends RestDocsSupport {
                     .notEligibleReasons(List.of())
                     .build(),
                 RecommendedProductDto.builder()
-                    .rank(3)
                     .loanProductName("서울시신혼부부임차보증금대출")
                     .loanProductCode("HF-002")
                     .possibleLoanLimit(BigDecimal.valueOf(220000000))

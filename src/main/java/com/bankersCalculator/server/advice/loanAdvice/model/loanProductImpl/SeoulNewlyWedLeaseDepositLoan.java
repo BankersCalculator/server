@@ -29,11 +29,6 @@ public class SeoulNewlyWedLeaseDepositLoan implements LoanProduct {
     }
 
     @Override
-    public String getProperty() {
-        return null;
-    }
-
-    @Override
     public FilterProductResultDto filtering(LoanAdviceServiceRequest request) {
         /*
           서울시신혼부부임차보증금대출
