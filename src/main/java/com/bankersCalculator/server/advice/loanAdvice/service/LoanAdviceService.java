@@ -35,10 +35,10 @@ public class LoanAdviceService {
         List<FilterProductResultDto> filterResults = productFilter.filterProduct(request);
 
         // 대출한도 및 금리 계산
-        List<LoanLimitAndRateResultDto> loanLimitAndRateResultDtos = loanLimitAndRateCalculator.calculateLoanLimitAndRate(request, filterResults);
+        List<LoanLimitAndRateResultDto> loanLimitAndRateResultDto = loanLimitAndRateCalculator.calculateLoanLimitAndRate(request, filterResults);
 
         // 대출상품 비교
-        OptimalLoanProductResult optimalLoanProduct = productComparator.compareProducts(loanLimitAndRateResultDtos);
+        OptimalLoanProductResult optimalLoanProduct = productComparator.compareProducts(loanLimitAndRateResultDto);
 
         // 추가정보 생성
         AdditionalInformation additionalInformation = additionalInfoGenerator.generateAdditionalInfo();

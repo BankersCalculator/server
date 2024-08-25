@@ -11,7 +11,7 @@ import java.util.List;
 @Component
 public class ProductComparator {
 
-    public OptimalLoanProductResult compareProducts(List<LoanLimitAndRateResultDto> loanLimitAndRateResultDtos) {
+    public OptimalLoanProductResult compareProducts(List<LoanLimitAndRateResultDto> loanLimitAndRateResultDto) {
 
         return null;
     }
