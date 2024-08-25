@@ -1,8 +1,8 @@
 package com.bankersCalculator.server.board.Service;
 
-import com.bankersCalculator.server.board.entity.Board;
 import com.bankersCalculator.server.board.dto.BoardRequest;
 import com.bankersCalculator.server.board.dto.BoardResponse;
+import com.bankersCalculator.server.board.entity.Board;
 import com.bankersCalculator.server.board.repository.BoardRepository;
 import com.bankersCalculator.server.common.api.SliceResponse;
 import org.springframework.beans.factory.annotation.Autowired;
