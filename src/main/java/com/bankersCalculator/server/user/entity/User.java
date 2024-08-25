@@ -1,4 +1,4 @@
-package com.bankersCalculator.server.user.domain;
+package com.bankersCalculator.server.user.entity;
 
 import com.bankersCalculator.server.common.domain.BaseTimeEntity;
 import com.bankersCalculator.server.common.enums.RoleType;

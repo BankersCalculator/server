@@ -1,6 +1,5 @@
 package com.bankersCalculator.server.advice.loanAdvice.service;
 
-import com.bankersCalculator.server.advice.loanAdvice.domain.LoanAdviceResult;
 import com.bankersCalculator.server.advice.loanAdvice.dto.LoanAdviceResponse;
 import com.bankersCalculator.server.advice.loanAdvice.dto.LoanAdviceServiceRequest;
 import com.bankersCalculator.server.advice.loanAdvice.dto.LoanAdviceSummaryResponse;

@@ -1,6 +1,6 @@
 package com.bankersCalculator.server.user.repository;
 
-import com.bankersCalculator.server.user.domain.User;
+import com.bankersCalculator.server.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,7 +1,7 @@
-package com.bankersCalculator.server.advice.loanAdvice.domain;
+package com.bankersCalculator.server.advice.loanAdvice.entity;
 
 import com.bankersCalculator.server.common.enums.Bank;
-import com.bankersCalculator.server.user.domain.User;
+import com.bankersCalculator.server.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 

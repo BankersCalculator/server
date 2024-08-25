@@ -1,6 +1,6 @@
 package com.bankersCalculator.server.advice.loanAdvice.dto;
 
-import com.bankersCalculator.server.advice.loanAdvice.domain.LoanAdviceResult;
+import com.bankersCalculator.server.advice.loanAdvice.entity.LoanAdviceResult;
 import com.bankersCalculator.server.common.enums.Bank;
 import lombok.Builder;
 import lombok.Getter;

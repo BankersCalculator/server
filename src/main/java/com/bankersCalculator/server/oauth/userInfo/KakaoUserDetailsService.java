@@ -1,7 +1,7 @@
 package com.bankersCalculator.server.oauth.userInfo;
 
 import com.bankersCalculator.server.common.enums.RoleType;
-import com.bankersCalculator.server.user.domain.User;
+import com.bankersCalculator.server.user.entity.User;
 import com.bankersCalculator.server.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
