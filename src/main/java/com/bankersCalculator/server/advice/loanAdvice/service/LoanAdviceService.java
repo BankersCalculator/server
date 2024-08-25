@@ -1,5 +1,6 @@
 package com.bankersCalculator.server.advice.loanAdvice.service;
 
+import com.bankersCalculator.server.advice.loanAdvice.domain.LoanAdviceResult;
 import com.bankersCalculator.server.advice.loanAdvice.dto.LoanAdviceResponse;
 import com.bankersCalculator.server.advice.loanAdvice.dto.LoanAdviceServiceRequest;
 import com.bankersCalculator.server.advice.loanAdvice.dto.LoanAdviceSummaryResponse;
@@ -32,6 +33,7 @@ public class LoanAdviceService {
         List<LoanProduct> loanProductsAfterLoanLimitCalc = loanLimitCalculator.calculateLoanLimit(availableLoanProducts);
         // 가능 상품 중 추천 상품을 선정한다. 마찬가지로 DTO 변환..?
         List<LoanProduct> selectedLoanProducts = productComparator.compareProducts(loanProductsAfterLoanLimitCalc);
+
 
         /*
         AdditionalInformationService 와 ReportGenerationService 도 추가할 것.

@@ -1,11 +1,15 @@
 package com.bankersCalculator.server.advice.loanAdvice.domain;
 
 import com.bankersCalculator.server.common.enums.Bank;
+import com.bankersCalculator.server.user.domain.User;
 import jakarta.persistence.*;
-import lombok.Getter;
+import lombok.*;
 
 import java.util.List;
 
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
+@Builder(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
 public class LoanAdviceResult {
@@ -13,6 +17,10 @@ public class LoanAdviceResult {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;                            // 대출상담결과 ID
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 
     private String loanProductName;             // 대출 상품명
     private String loanProductCode;             // 대출 상품코드
@@ -47,4 +55,34 @@ public class LoanAdviceResult {
     @Column(length = 4000)
     private String rentalLoanGuide;             // 임대 대출 가이드
 
+    public static LoanAdviceResult create(User user, String loanProductName,
+                                          String loanProductCode, Long possibleLoanLimit,
+                                          Double expectedLoanRate, Long totalRentalDeposit,
+                                          Long loanAmount, Long ownFunds,
+                                          Long monthlyInterestCost, Long monthlyRent,
+                                          Long opportunityCostOwnFunds, Double depositInterestRate,
+                                          Long guaranteeInsuranceFee, Long stampDuty,
+                                          String recommendationReason, List<RecommendedProduct> recommendedProducts,
+                                          List<Bank> availableBanks, String rentalLoanGuide) {
+        return LoanAdviceResult.builder()
+            .user(user)
+            .loanProductName(loanProductName)
+            .loanProductCode(loanProductCode)
+            .possibleLoanLimit(possibleLoanLimit)
+            .expectedLoanRate(expectedLoanRate)
+            .totalRentalDeposit(totalRentalDeposit)
+            .loanAmount(loanAmount)
+            .ownFunds(ownFunds)
+            .monthlyInterestCost(monthlyInterestCost)
+            .monthlyRent(monthlyRent)
+            .opportunityCostOwnFunds(opportunityCostOwnFunds)
+            .depositInterestRate(depositInterestRate)
+            .guaranteeInsuranceFee(guaranteeInsuranceFee)
+            .stampDuty(stampDuty)
+            .recommendationReason(recommendationReason)
+            .recommendedProducts(recommendedProducts)
+            .availableBanks(availableBanks)
+            .rentalLoanGuide(rentalLoanGuide)
+            .build();
+    }
 }
