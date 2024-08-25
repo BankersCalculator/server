@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -16,14 +17,18 @@ public class ProductFilter {
 
     private final LoanProductRepository loanProductRepository;
 
+    private final List<LoanProduct> loanProducts;
+
     public List<FilterProductResultDto> filterProduct(LoanAdviceServiceRequest request) {
 
-        // 전세대출 상품들을 불러와서 필터링을 수행. 값을 DTO에 저장하자
-        List<LoanProduct> loanProducts = loanProductRepository.findAll();
+        // 전세대출 상품들을 불러와서 필터링을 수행
+        List<FilterProductResultDto> result = new ArrayList<>();
+
         for (LoanProduct loanProduct : loanProducts) {
-            loanProduct.filtering();
+            FilterProductResultDto filteringResult = loanProduct.filtering(request);
+            result.add(filteringResult);
         }
 
-        return null;
+        return result;
     }
 }

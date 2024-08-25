@@ -1,5 +1,6 @@
 package com.bankersCalculator.server.advice.loanAdvice.dto.service;
 
+import com.bankersCalculator.server.common.enums.JeonseLoanProductType;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -9,7 +10,7 @@ import java.util.List;
 @Builder
 public class FilterProductResultDto {
 
-    private String LoanProductCode;
+    private JeonseLoanProductType productType;
     private boolean isEligible;
     private List<String> notEligibleReasons;
 }
