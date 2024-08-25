@@ -1,9 +1,9 @@
 package com.bankersCalculator.server.advice.loanAdvice.controller;
 
-import com.bankersCalculator.server.advice.loanAdvice.dto.api.LoanAdviceRequest;
-import com.bankersCalculator.server.advice.loanAdvice.dto.api.LoanAdviceResponse;
-import com.bankersCalculator.server.advice.loanAdvice.dto.api.LoanAdviceSummaryResponse;
-import com.bankersCalculator.server.advice.loanAdvice.dto.api.SpecificLoanAdviceRequest;
+import com.bankersCalculator.server.advice.loanAdvice.dto.request.LoanAdviceRequest;
+import com.bankersCalculator.server.advice.loanAdvice.dto.response.LoanAdviceResponse;
+import com.bankersCalculator.server.advice.loanAdvice.dto.response.LoanAdviceSummaryResponse;
+import com.bankersCalculator.server.advice.loanAdvice.dto.request.SpecificLoanAdviceRequest;
 import com.bankersCalculator.server.advice.loanAdvice.service.LoanAdviceService;
 import com.bankersCalculator.server.common.api.ApiResponse;
 import jakarta.validation.Valid;

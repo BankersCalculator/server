@@ -1,8 +1,8 @@
 package com.bankersCalculator.server.advice.loanAdvice.model.loanProductImpl;
 
-import com.bankersCalculator.server.advice.loanAdvice.dto.api.LoanAdviceServiceRequest;
-import com.bankersCalculator.server.advice.loanAdvice.dto.service.FilterProductResultDto;
-import com.bankersCalculator.server.advice.loanAdvice.dto.service.LoanLimitAndRateResultDto;
+import com.bankersCalculator.server.advice.loanAdvice.dto.request.LoanAdviceServiceRequest;
+import com.bankersCalculator.server.advice.loanAdvice.dto.internal.FilterProductResultDto;
+import com.bankersCalculator.server.advice.loanAdvice.dto.internal.LoanLimitAndRateResultDto;
 import com.bankersCalculator.server.advice.loanAdvice.model.LoanProduct;
 import com.bankersCalculator.server.common.enums.JeonseLoanProductType;
 import com.bankersCalculator.server.common.enums.loanAdvise.MaritalStatus;
