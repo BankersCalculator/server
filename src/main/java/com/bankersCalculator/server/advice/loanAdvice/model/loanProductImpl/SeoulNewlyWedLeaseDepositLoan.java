@@ -5,6 +5,7 @@ import com.bankersCalculator.server.advice.loanAdvice.dto.internal.FilterProduct
 import com.bankersCalculator.server.advice.loanAdvice.dto.internal.LoanLimitAndRateResultDto;
 import com.bankersCalculator.server.advice.loanAdvice.model.LoanProduct;
 import com.bankersCalculator.server.common.enums.JeonseLoanProductType;
+import com.bankersCalculator.server.common.enums.loanAdvise.ChildStatus;
 import com.bankersCalculator.server.common.enums.loanAdvise.MaritalStatus;
 import com.bankersCalculator.server.common.enums.ltv.HouseOwnershipType;
 import org.springframework.stereotype.Component;
@@ -78,17 +79,9 @@ public class SeoulNewlyWedLeaseDepositLoan implements LoanProduct {
     @Override
     public LoanLimitAndRateResultDto calculateLoanLimitAndRate(LoanAdviceServiceRequest request) {
         // 한도산출
-        BigDecimal rentalDeposit = request.getRentalDeposit();
-        BigDecimal calculatedLimit = rentalDeposit.multiply(new BigDecimal("0.9"));
-        BigDecimal possibleLoanLimit = calculatedLimit.compareTo(LOAN_LIMIT) > 0 ? LOAN_LIMIT : calculatedLimit;
-
+        BigDecimal possibleLoanLimit = calculateLoanLimit(request);
         // 금리산출
-        BigDecimal combinedIncome = request.getAnnualIncome().add(request.getSpouseAnnualIncome());
-
-        BigDecimal baseRate = new BigDecimal("3.00"); // TODO: 기준금리 조회하는 공통모듈 개발할 것.
-        BigDecimal marginRate = new BigDecimal("1.45");
-        BigDecimal discountRate = calculateDiscountRate(combinedIncome);
-        BigDecimal finalRate = baseRate.add(marginRate).subtract(discountRate);
+        BigDecimal finalRate = calculateFinalRate(request);
 
         return LoanLimitAndRateResultDto.builder()
             .productType(getProductType())
@@ -100,20 +93,65 @@ public class SeoulNewlyWedLeaseDepositLoan implements LoanProduct {
 
     // 기타비용산출(보증요율, 인지세, 보증보험료 등)
 
-    private BigDecimal calculateDiscountRate(BigDecimal combinedIncome) {
-        if (combinedIncome.compareTo(new BigDecimal("30000000")) <= 0) {
-            return new BigDecimal("3.0");
-        } else if (combinedIncome.compareTo(new BigDecimal("60000000")) <= 0) {
-            return new BigDecimal("2.5");
-        } else if (combinedIncome.compareTo(new BigDecimal("90000000")) <= 0) {
-            return new BigDecimal("2.0");
-        } else if (combinedIncome.compareTo(new BigDecimal("110000000")) <= 0) {
-            return new BigDecimal("1.5");
-        } else if (combinedIncome.compareTo(new BigDecimal("130000000")) <= 0) {
-            return new BigDecimal("1.0");
-        } else {
-            return BigDecimal.ZERO; // 1억 3천만원 초과시 감면 없음
+    @Override
+    public BigDecimal getGuaranteeInsuranceFee() {
+        return null;
+    }
+
+    private BigDecimal calculateLoanLimit(LoanAdviceServiceRequest request) {
+        BigDecimal rentalDeposit = request.getRentalDeposit();
+        BigDecimal calculatedLimit = rentalDeposit.multiply(new BigDecimal("0.9"));
+
+        return calculatedLimit.compareTo(LOAN_LIMIT) > 0 ? LOAN_LIMIT : calculatedLimit;
+
+    }
+
+    private BigDecimal calculateFinalRate(LoanAdviceServiceRequest request) {
+        BigDecimal combinedIncome = request.getAnnualIncome().add(request.getSpouseAnnualIncome());
+
+        // 신잔액기준COFIX6개월물
+        BigDecimal baseRate = new BigDecimal("3.00"); // TODO: 기준금리 조회하는 공통모듈 개발할 것.
+        BigDecimal marginRate = new BigDecimal("1.45");
+        BigDecimal discountRate = calculateDiscountRate(combinedIncome, request.getMaritalStatus(), request.getChildStatus());
+        BigDecimal finalRate = baseRate.add(marginRate).subtract(discountRate);
+        if (finalRate.compareTo(BigDecimal.ZERO) < 0) {
+            finalRate = BigDecimal.ZERO;
         }
+
+        return finalRate;
+    }
+
+    private BigDecimal calculateDiscountRate(BigDecimal combinedIncome, MaritalStatus maritalStatus, ChildStatus childStatus) {
+
+        BigDecimal discountRate = BigDecimal.ZERO;
+
+        if (combinedIncome.compareTo(new BigDecimal("30000000")) <= 0) {
+            discountRate.add(new BigDecimal("3.0"));
+        } else if (combinedIncome.compareTo(new BigDecimal("60000000")) <= 0) {
+            discountRate.add(new BigDecimal("2.5"));
+        } else if (combinedIncome.compareTo(new BigDecimal("90000000")) <= 0) {
+            discountRate.add(new BigDecimal("2."));
+        } else if (combinedIncome.compareTo(new BigDecimal("110000000")) <= 0) {
+            discountRate.add(new BigDecimal("1.5"));
+        } else if (combinedIncome.compareTo(new BigDecimal("130000000")) <= 0) {
+            discountRate.add(new BigDecimal("1.0"));
+        }
+
+        // 자녀당 0.5% 추가할인
+        if (childStatus == ChildStatus.ONE_CHILD) {
+            discountRate.add(new BigDecimal("0.5"));
+        } else if (childStatus == ChildStatus.TWO_CHILD) {
+            discountRate.add(new BigDecimal("1.0"));
+        } else if (childStatus == ChildStatus.THREE_OR_MORE_CHILDREN) {
+            discountRate.add(new BigDecimal("1.5"));
+        }
+
+        // 결혼예정자 0.2% 추가할인
+        if (maritalStatus == MaritalStatus.ENGAGED) {
+            discountRate.add(new BigDecimal("0.2"));
+        }
+
+        return discountRate;
     }
 
 
