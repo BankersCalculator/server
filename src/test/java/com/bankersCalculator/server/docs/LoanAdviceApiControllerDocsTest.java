@@ -7,6 +7,7 @@ import com.bankersCalculator.server.advice.loanAdvice.service.LoanAdviceService;
 import com.bankersCalculator.server.common.enums.Bank;
 import com.bankersCalculator.server.common.enums.loanAdvise.ChildStatus;
 import com.bankersCalculator.server.common.enums.loanAdvise.MaritalStatus;
+import com.bankersCalculator.server.common.enums.ltv.HouseOwnershipType;
 import com.bankersCalculator.server.housingInfo.rentTransactionInquiry.common.RentHousingType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -194,6 +195,8 @@ public class LoanAdviceApiControllerDocsTest extends RestDocsSupport {
                     fieldWithPath("spouseAnnualIncome").type(JsonFieldType.NUMBER).description("배우자연소득"),
                     fieldWithPath("childStatus").type(JsonFieldType.STRING).description("자녀 상태 (NO_CHILD, ONE_CHILD, TWO_CHILD, THREE_OR_MORE_CHILDREN)"),
                     fieldWithPath("hasNewborn").type(JsonFieldType.BOOLEAN).description("신생아여부"),
+                    fieldWithPath("houseOwnershipType").type(JsonFieldType.STRING)
+                        .description("주택 소유 형태 (NO_HOUSE: 무주택, SINGLE_HOUSE: 1주택, MULTI_HOUSE: 다주택"),
                     fieldWithPath("isSMEEmployee").type(JsonFieldType.BOOLEAN).description("중소기업재직여부"),
                     fieldWithPath("isNetAssetOver345M").type(JsonFieldType.BOOLEAN).description("순자산 3.45억 초과 여부"),
                     fieldWithPath("rentHousingType").type(JsonFieldType.STRING)
@@ -319,6 +322,7 @@ public class LoanAdviceApiControllerDocsTest extends RestDocsSupport {
             .spouseAnnualIncome(40000000L)
             .childStatus(ChildStatus.ONE_CHILD)
             .hasNewborn(true)
+            .houseOwnershipType(HouseOwnershipType.NO_HOUSE)
             .isSMEEmployee(false)
             .isNetAssetOver345M(false)
             .rentHousingType(RentHousingType.APARTMENT)

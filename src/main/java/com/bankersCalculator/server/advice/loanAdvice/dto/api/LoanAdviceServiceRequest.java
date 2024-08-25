@@ -2,6 +2,7 @@ package com.bankersCalculator.server.advice.loanAdvice.dto.api;
 
 import com.bankersCalculator.server.common.enums.loanAdvise.ChildStatus;
 import com.bankersCalculator.server.common.enums.loanAdvise.MaritalStatus;
+import com.bankersCalculator.server.common.enums.ltv.HouseOwnershipType;
 import com.bankersCalculator.server.housingInfo.rentTransactionInquiry.common.RentHousingType;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,10 +22,11 @@ public class LoanAdviceServiceRequest {
     private Long spouseAnnualIncome;    // 배우자연소득
     private ChildStatus childStatus;    // 자녀상태
     private Boolean hasNewborn; // 신생아여부
+    private HouseOwnershipType houseOwnershipType; // 주택소유형태
     private Boolean isSMEEmployee; // 중소기업재직여부(SME: SmallMediumEnterprise);
     private Boolean isNetAssetOver345M; // 순자산 3.45억 초과 여부
 
-    // 주택정보
+    // 주택정보부
     private RentHousingType rentHousingType;  // 주택타입
     private Double exclusiveArea; // 전용면적
     private String buildingName;   // 건물명
