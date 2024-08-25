@@ -1,9 +1,12 @@
 package com.bankersCalculator.server.advice.loanAdvice.service;
-
-import com.bankersCalculator.server.advice.loanAdvice.dto.LoanAdviceResponse;
-import com.bankersCalculator.server.advice.loanAdvice.dto.LoanAdviceServiceRequest;
-import com.bankersCalculator.server.advice.loanAdvice.dto.LoanAdviceSummaryResponse;
-import com.bankersCalculator.server.advice.loanAdvice.dto.RecommendedProductDto;
+import com.bankersCalculator.server.advice.loanAdvice.dto.api.LoanAdviceResponse;
+import com.bankersCalculator.server.advice.loanAdvice.dto.api.LoanAdviceServiceRequest;
+import com.bankersCalculator.server.advice.loanAdvice.dto.api.LoanAdviceSummaryResponse;
+import com.bankersCalculator.server.advice.loanAdvice.dto.api.RecommendedProductDto;
+import com.bankersCalculator.server.advice.loanAdvice.dto.service.AdditionalInformation;
+import com.bankersCalculator.server.advice.loanAdvice.dto.service.FilterProductResultDto;
+import com.bankersCalculator.server.advice.loanAdvice.dto.service.LoanLimitAndRateResult;
+import com.bankersCalculator.server.advice.loanAdvice.dto.service.OptimalLoanProductResult;
 import com.bankersCalculator.server.advice.loanAdvice.model.LoanProduct;
 import com.bankersCalculator.server.common.enums.Bank;
 import lombok.RequiredArgsConstructor;
@@ -19,25 +22,32 @@ import java.util.List;
 public class LoanAdviceService {
 
     private final ProductFilter productFilter;
-    private final LoanLimitCalculator loanLimitCalculator;
+    private final LoanLimitAndRateCalculator loanLimitAndRateCalculator;
     private final ProductComparator productComparator;
+    private final AdditionalInfoGenerator additionalInfoGenerator;
+    private final AiReportGenerator aiReportGenerator;
 
     public LoanAdviceResponse generateLoanAdvice(LoanAdviceServiceRequest request) {
 
 
-        // TODO: List<LoanProduct> 부분 전부 전용 DTO로 변환할 것.. LoanProduct는 각 개별 서비스 안에서 사용하는 것으로 할 것임.
-        // 대출 가능 상품을 필터링한다. 불가능한 상품은 filter 사유를 반환한다.
-        List<LoanProduct> availableLoanProducts = productFilter.filterProduct(request);
-        // 가능한 상품들 대상으로 한도산출을 진행한다. LoanProduct 는 새로운 DTO 로 변경할까?
-        List<LoanProduct> loanProductsAfterLoanLimitCalc = loanLimitCalculator.calculateLoanLimit(availableLoanProducts);
-        // 가능 상품 중 추천 상품을 선정한다. 마찬가지로 DTO 변환..?
-        List<LoanProduct> selectedLoanProducts = productComparator.compareProducts(loanProductsAfterLoanLimitCalc);
+        // 대출상품 필터링
+        List<FilterProductResultDto> filterResults = productFilter.filterProduct(request);
+
+        // 대출한도 및 금리 계산
+        List<LoanLimitAndRateResult> loanLimitAndRateResults = loanLimitAndRateCalculator.calculateLoanLimitAndRate(request, filterResults);
+
+        // 대출상품 비교
+        OptimalLoanProductResult optimalLoanProduct = productComparator.compareProducts(loanLimitAndRateResults);
+
+        // 추가정보 생성
+        AdditionalInformation additionalInformation = additionalInfoGenerator.generateAdditionalInfo();
+
+        // 보고서 생성
+        String aiReport = aiReportGenerator.generateAiReport();
 
 
-        /*
-        AdditionalInformationService 와 ReportGenerationService 도 추가할 것.
-        AdditionalInformationService 는 ReportGenerationService 의 하위 개념으로 보아도 괜찮을 거 같기도?
-         */
+
+
         return LoanAdviceResponse.builder()
             .loanAdviceResultId(1L)
             .loanProductName("샘플 전세자금대출")
@@ -77,6 +87,8 @@ public class LoanAdviceService {
             .rentalLoanGuide("전세자금대출 이용 시 주의사항:\n1. 대출 기간 동안 이자를 꾸준히 납부해야 합니다.\n2. 전세 계약 만료 시 대출금 상환 계획을 미리 세워야 합니다.")
             .build();
     }
+
+
 
     public LoanAdviceResponse generateLoanAdviceOnSpecificLoan(Long loanAdviceResultId, String productCode) {
         return LoanAdviceResponse.builder()

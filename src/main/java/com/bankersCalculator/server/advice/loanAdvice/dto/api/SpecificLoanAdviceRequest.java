@@ -1,4 +1,4 @@
-package com.bankersCalculator.server.advice.loanAdvice.dto;
+package com.bankersCalculator.server.advice.loanAdvice.dto.api;
 
 import lombok.Builder;
 import lombok.Getter;

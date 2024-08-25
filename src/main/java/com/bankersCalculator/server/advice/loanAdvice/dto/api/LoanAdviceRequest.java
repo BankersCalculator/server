@@ -1,4 +1,4 @@
-package com.bankersCalculator.server.advice.loanAdvice.dto;
+package com.bankersCalculator.server.advice.loanAdvice.dto.api;
 
 import com.bankersCalculator.server.common.enums.loanAdvise.ChildStatus;
 import com.bankersCalculator.server.common.enums.loanAdvise.MaritalStatus;

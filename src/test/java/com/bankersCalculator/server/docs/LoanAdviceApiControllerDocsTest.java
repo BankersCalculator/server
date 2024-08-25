@@ -2,7 +2,7 @@ package com.bankersCalculator.server.docs;
 
 import com.bankersCalculator.server.RestDocsSupport;
 import com.bankersCalculator.server.advice.loanAdvice.controller.LoanAdviceApiController;
-import com.bankersCalculator.server.advice.loanAdvice.dto.*;
+import com.bankersCalculator.server.advice.loanAdvice.dto.api.*;
 import com.bankersCalculator.server.advice.loanAdvice.service.LoanAdviceService;
 import com.bankersCalculator.server.common.enums.Bank;
 import com.bankersCalculator.server.common.enums.loanAdvise.ChildStatus;

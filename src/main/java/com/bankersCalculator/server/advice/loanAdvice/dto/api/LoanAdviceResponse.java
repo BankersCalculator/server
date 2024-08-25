@@ -1,4 +1,4 @@
-package com.bankersCalculator.server.advice.loanAdvice.dto;
+package com.bankersCalculator.server.advice.loanAdvice.dto.api;
 
 import com.bankersCalculator.server.advice.loanAdvice.entity.LoanAdviceResult;
 import com.bankersCalculator.server.common.enums.Bank;
