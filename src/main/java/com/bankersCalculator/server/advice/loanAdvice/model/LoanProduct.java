@@ -1,10 +1,14 @@
 package com.bankersCalculator.server.advice.loanAdvice.model;
 
+import com.bankersCalculator.server.advice.loanAdvice.dto.api.LoanAdviceServiceRequest;
+import com.bankersCalculator.server.advice.loanAdvice.dto.service.FilterProductResultDto;
+import com.bankersCalculator.server.common.enums.JeonseLoanProductType;
+
 import java.util.List;
 
 public interface LoanProduct {
 
-    /**
+    /*
      * 구현 예정 전세상품 정리
      *
      * - 주택금융공사 -
@@ -16,7 +20,6 @@ public interface LoanProduct {
      * (특례)다자녀가구
      * 고정금리 협약전세자금보증
      * 주택도시보증공사
-     * 전세안심대출
      *
      * - 주택도시기금 -
      * 신생아특례버팀목전세자금대출
@@ -32,10 +35,11 @@ public interface LoanProduct {
      * 전세금안심대출
      */
 
-    // 개별 구현체에서 한도산출과 필터링을 구현하자.
+    JeonseLoanProductType getProductType();
+
     String getProperty();
 
-    List<String> filtering();
+    FilterProductResultDto filtering(LoanAdviceServiceRequest request);
 
     double calculateLoanLimit();
 
