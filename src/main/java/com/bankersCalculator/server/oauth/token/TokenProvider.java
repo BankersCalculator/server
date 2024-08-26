@@ -49,7 +49,7 @@ public class TokenProvider {
         this.jwtKey = Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public TokenDto createToken(String email, String role) {
+    public TokenDto createToken(Long providerId, String role) {
         long now = new Date().getTime();
 
         long accessTokenValidityMilliSeconds = accessTokenValiditySeconds * 1000L;
@@ -60,13 +60,14 @@ public class TokenProvider {
         Date refreshValidity = new Date(now + refreshTokenValidityMilliSeconds);
 
         String accessToken = Jwts.builder()
+            .addClaims(Map.of(AUTH_ID, providerId))
             .addClaims(Map.of(AUTH_KEY, role))
             .signWith(jwtKey, SignatureAlgorithm.HS256)
             .setExpiration(accessValidity)
             .compact();
 
         String refreshToken = Jwts.builder()
-            .addClaims(Map.of(AUTH_ID, email))
+            .addClaims(Map.of(AUTH_ID, providerId))
             .addClaims(Map.of(AUTH_KEY, role))
             .signWith(jwtKey, SignatureAlgorithm.HS256)
             .setExpiration(refreshValidity)
@@ -83,10 +84,10 @@ public class TokenProvider {
         RefreshToken findToken = refreshTokenRedisRepository.findByRefreshToken(refreshToken);
 
 
-        TokenDto newTokenDto = createToken(findToken.getEmail(), findToken.getAuthority());
+        TokenDto newTokenDto = createToken(findToken.getProviderId(), findToken.getAuthority());
 
         refreshTokenRedisRepository.save(RefreshToken.builder()
-            .email(findToken.getEmail())
+            .providerId(findToken.getProviderId())
             .authorities(findToken.getAuthorities())
             .refreshToken(newTokenDto.getRefreshToken())
             .build());

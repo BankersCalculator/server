@@ -11,14 +11,14 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class KakaoUserDetails implements OAuth2User {
 
-    private final String email;
+    private final String providerId;
     private final List<? extends GrantedAuthority> authorities;
     private final Map<String, Object> attributes;
 
 
     @Override
     public String getName() {
-        return email;
+        return providerId;
     }
 
     @Override

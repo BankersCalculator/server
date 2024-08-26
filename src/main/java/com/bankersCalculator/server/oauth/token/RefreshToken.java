@@ -20,7 +20,7 @@ public class RefreshToken {
 
     private Long id;
 
-    private String email;
+    private Long providerId;
     private Collection<? extends GrantedAuthority> authorities;
 
     @Indexed

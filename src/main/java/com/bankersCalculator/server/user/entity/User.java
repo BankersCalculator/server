@@ -30,7 +30,7 @@ public class User extends BaseTimeEntity {
     @Column
     private RoleType roleType;
 
-    public static User create(String oauthProvider, String oauthProviderId, String email, String refreshToken, RoleType roleType) {
+    public static User create(String oauthProvider, String oauthProviderId, String email, RoleType roleType) {
         return User.builder()
             .oauthProvider(oauthProvider)
             .oauthProviderId(oauthProviderId)

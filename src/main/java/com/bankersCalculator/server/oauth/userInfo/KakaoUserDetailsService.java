@@ -33,10 +33,11 @@ public class KakaoUserDetailsService extends DefaultOAuth2UserService {
         OAuth2User oAuth2User = super.loadUser(userRequest);
         KakaoUserInfo kakaoUserInfo = new KakaoUserInfo(oAuth2User.getAttributes());
         String email = kakaoUserInfo.getEmail();
+        String providerId = kakaoUserInfo.getProviderId();
 
-        User user = userRepository.findByOauthProviderAndEmail(PROVIDER, email)
+        User user = userRepository.findByOauthProviderAndOauthProviderId(PROVIDER, providerId)
             .orElseGet(() -> userRepository.save(
-                User.create("KAKAO", "", email, "", RoleType.USER)
+                User.create("KAKAO", providerId, email, RoleType.USER)
             ));
 
         SimpleGrantedAuthority authority = new SimpleGrantedAuthority(user.getRoleType().getCode());

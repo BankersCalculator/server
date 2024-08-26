@@ -29,6 +29,11 @@ public class KakaoUserInfo {
         return PROVIDER;
     }
 
+    public String getProviderId() {
+        Object id = attributes.get(KAKAO_ID);
+        return id != null ? id.toString() : null;
+    }
+
     private Map<String, Object> getObjectMap() {
         ObjectMapper objectMapper = new ObjectMapper();
         TypeReference<Map<String, Object>> typeReference = new TypeReference<Map<String, Object>>() {};

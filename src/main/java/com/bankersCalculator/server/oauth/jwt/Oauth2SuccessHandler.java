@@ -44,13 +44,16 @@ public class Oauth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
         String provider = kakaoUserInfo.getProvider();
         String email = kakaoUserInfo.getEmail();
+        String providerId = kakaoUserInfo.getProviderId();
 
-        // TODO: exception 커스텀할 것.
-        User user = userRepository.findByOauthProviderAndEmail(provider, email)
+//        User user = userRepository.findByOauthProviderAndEmail(provider, email)
+//            .orElseThrow(ServletException::new);
+        User user = userRepository.findByOauthProviderAndOauthProviderId(provider, providerId)
             .orElseThrow(ServletException::new);
 
 
-        TokenDto tokenDto = tokenProvider.createToken(email, user.getRoleType().getCode());
+
+        TokenDto tokenDto = tokenProvider.createToken(providerId, user.getRoleType().getCode());
 
         saveRefreshTokenOnRedis(user, tokenDto);
 
@@ -65,7 +68,7 @@ public class Oauth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         authorities.add(new SimpleGrantedAuthority(user.getRoleType().getCode()));
 
         refreshTokenRedisRepository.save(RefreshToken.builder()
-            .email(user.getEmail())
+            .providerId(user.getOauthProviderId())
             .authorities(authorities)
             .refreshToken(tokenDto.getRefreshToken())
             .build());
