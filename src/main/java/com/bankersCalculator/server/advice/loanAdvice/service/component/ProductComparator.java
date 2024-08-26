@@ -13,10 +13,19 @@ import java.util.List;
 @Component
 public class ProductComparator {
 
+    /**
+     *
+     * // TODO: 대출상품 비교 로직 다시 검토하고 고도화 필요함.
+     * 대출상품 비교
+     * - 대출한도 점수: 대출한도가 높을 수록 높은 점수를 부여한다.
+     * - 금리 점수: 금리가 낮을 수록 높은 점수를 부여한다.
+     * - 필요금액과 보유금액 간 차이 점수: 필요금액과 대출한도의 차이가 적을 수록 높은 점수를 부여한다.
+     */
 
-    private static final BigDecimal LOAN_LIMIT_WEIGHT = new BigDecimal("0.3");
-    private static final BigDecimal RATE_WEIGHT = new BigDecimal("0.5");
-    private static final BigDecimal NEED_GAP_WEIGHT = new BigDecimal("0.2");
+
+    private static final BigDecimal LOAN_LIMIT_WEIGHT = new BigDecimal("0.3"); // 대출한도 점수 가중치
+    private static final BigDecimal RATE_WEIGHT = new BigDecimal("0.5"); // 금리 점수 가중치
+    private static final BigDecimal NEED_GAP_WEIGHT = new BigDecimal("0.2"); // 필요금액과 보유금액 간 차이 점수 가중치
     private static final BigDecimal MIN_LOAN_LIMIT = new BigDecimal("10000000"); // 천만원
     private static final BigDecimal MAX_LOAN_LIMIT = new BigDecimal("1000000000"); // 십억원
 
@@ -76,7 +85,8 @@ public class ProductComparator {
     }
 
     private BigDecimal calculateNeedGapScore(BigDecimal loanLimit, BigDecimal neededAmount) {
-        // 최소값과 최대값을 기준으로 0~1점 사이의 값으로 정규화한다.
+        // 대출한도와 필요금액의 차이를 최대 가능한 차이로 정규화한 후,
+        // 1에서 빼서 0~1점 사이의 값으로 변환한다.
         // 필요금액과 대출한도의 차이가 적을 수록 높은 점수를 부여한다.
         BigDecimal gap = loanLimit.subtract(neededAmount).abs();
         BigDecimal maxGap = MAX_LOAN_LIMIT.subtract(MIN_LOAN_LIMIT);

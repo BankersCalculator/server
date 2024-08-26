@@ -6,7 +6,7 @@ import com.bankersCalculator.server.calculator.repaymentCalc.domain.RepaymentSch
 import com.bankersCalculator.server.calculator.repaymentCalc.dto.RepaymentCalcRequest;
 import com.bankersCalculator.server.calculator.repaymentCalc.dto.RepaymentCalcResponse;
 import com.bankersCalculator.server.calculator.repaymentCalc.service.RepaymentCalcService;
-import com.bankersCalculator.server.common.enums.RepaymentType;
+import com.bankersCalculator.server.common.enums.calculator.RepaymentType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;

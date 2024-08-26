@@ -5,8 +5,8 @@ import com.bankersCalculator.server.calculator.ltvCalc.controller.LtvCalcControl
 import com.bankersCalculator.server.calculator.ltvCalc.dto.LtvCalcRequest;
 import com.bankersCalculator.server.calculator.ltvCalc.dto.LtvCalcResponse;
 import com.bankersCalculator.server.calculator.ltvCalc.service.LtvCalcService;
-import com.bankersCalculator.server.common.enums.ltv.HousingType;
-import com.bankersCalculator.server.common.enums.ltv.RegionType;
+import com.bankersCalculator.server.common.enums.calculator.HousingType;
+import com.bankersCalculator.server.common.enums.calculator.RegionType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;

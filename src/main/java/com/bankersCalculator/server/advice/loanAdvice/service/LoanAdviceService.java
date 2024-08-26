@@ -8,6 +8,7 @@ import com.bankersCalculator.server.advice.loanAdvice.dto.request.LoanAdviceServ
 import com.bankersCalculator.server.advice.loanAdvice.dto.response.LoanAdviceResponse;
 import com.bankersCalculator.server.advice.loanAdvice.dto.response.LoanAdviceSummaryResponse;
 import com.bankersCalculator.server.advice.loanAdvice.dto.response.RecommendedProductDto;
+import com.bankersCalculator.server.advice.loanAdvice.entity.LoanAdviceResult;
 import com.bankersCalculator.server.advice.loanAdvice.service.component.*;
 import com.bankersCalculator.server.common.enums.Bank;
 import lombok.RequiredArgsConstructor;
@@ -51,12 +52,13 @@ public class LoanAdviceService {
         String aiReport = aiReportGenerator.generateAiReport();
 
 
+
+
         // UserInputInfo 저장
         // LoanAdviceResult 저장
 
         return null;
     }
-
 
 
     public LoanAdviceResponse generateLoanAdviceOnSpecificLoan(Long loanAdviceResultId, String productCode) {

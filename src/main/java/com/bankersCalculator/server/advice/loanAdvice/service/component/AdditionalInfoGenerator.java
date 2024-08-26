@@ -22,26 +22,6 @@ public class AdditionalInfoGenerator {
 
     public AdditionalInformation generateAdditionalInfo(LoanAdviceServiceRequest request,
                                                         OptimalLoanProductResult optimalLoanProduct) {
-        /*
-         *     // 실주거 비용
-         *     private BigDecimal ownFunds;  // 소요 자기 자금
-         *     private BigDecimal monthlyInterestCost;  // 월 이자 비용
-         *     private BigDecimal totalLivingCost;  // 총 주거 비용
-         *
-         *     // 기회 비용
-         *     private BigDecimal opportunityCostOwnFunds; // 기회비용
-         *     private BigDecimal depositInterestRate; // 예금 이자율
-         *
-         *     // 부수 비용
-         *     private BigDecimal guaranteeInsuranceFee; // 보증보험료
-         *     private BigDecimal stampDuty; // 인지세
-         *
-         *     // 취급 가능 은행
-         *     private List<Bank> availableBanks;
-         *
-         *     // 전세 대출 가이드
-         *     private String rentalLoanGuide;
-         */
 
         // 소요자기자금
         BigDecimal rentalDeposit = request.getRentalDeposit();
@@ -50,12 +30,12 @@ public class AdditionalInfoGenerator {
 
         // 월이자비용
         BigDecimal monthlyInterestCost = loanAmount.multiply(optimalLoanProduct.getExpectedLoanRate()
-                .divide(BigDecimal.valueOf(100))).divide(BigDecimal.valueOf(12), 0, BigDecimal.ROUND_HALF_UP);
+            .divide(BigDecimal.valueOf(100))).divide(BigDecimal.valueOf(12), 0, BigDecimal.ROUND_HALF_UP);
 
         // 총 주거 비용
         BigDecimal totalLivingCost = monthlyInterestCost.add(request.getMonthlyRent());
 
-         // 예금 이자율
+        // 예금 이자율
         BigDecimal depositInterestRate = BigDecimal.valueOf(0.03);
         // 기회비용
         BigDecimal opportunityCostOwnFunds = ownFunds.multiply(depositInterestRate.divide(BigDecimal.valueOf(12), 0, BigDecimal.ROUND_HALF_UP));
@@ -68,19 +48,19 @@ public class AdditionalInfoGenerator {
         BigDecimal stampDuty = calculateStampDuty(loanAmount);
 
         // 취급 가능 은행
-         List<Bank> availableBanks = loanProduct.getAvailableBanks();
+        List<Bank> availableBanks = loanProduct.getAvailableBanks();
 
         return AdditionalInformation.builder()
-                .ownFunds(ownFunds)
-                .monthlyInterestCost(monthlyInterestCost)
-                .totalLivingCost(totalLivingCost)
-                .opportunityCostOwnFunds(opportunityCostOwnFunds)
-                .depositInterestRate(depositInterestRate)
-                .guaranteeInsuranceFee(guaranteeInsuranceFee)
-                .stampDuty(stampDuty)
-                .availableBanks(availableBanks)
-                .rentalLoanGuide("전세대출 가이드")    // TODO: 어떻게 구현하는 게 좋을지.. 고민 필요
-                .build();
+            .ownFunds(ownFunds)
+            .monthlyInterestCost(monthlyInterestCost)
+            .totalLivingCost(totalLivingCost)
+            .opportunityCostOwnFunds(opportunityCostOwnFunds)
+            .depositInterestRate(depositInterestRate)
+            .guaranteeInsuranceFee(guaranteeInsuranceFee)
+            .stampDuty(stampDuty)
+            .availableBanks(availableBanks)
+            .rentalLoanGuide("전세대출 가이드")    // TODO: 어떻게 구현하는 게 좋을지.. 고민 필요
+            .build();
     }
 
     public BigDecimal calculateStampDuty(BigDecimal loanAmount) {

@@ -2,7 +2,7 @@ package com.bankersCalculator.server.api.repaymentCalc.controller;
 
 import com.bankersCalculator.server.ControllerTestSupport;
 import com.bankersCalculator.server.calculator.repaymentCalc.dto.RepaymentCalcRequest;
-import com.bankersCalculator.server.common.enums.RepaymentType;
+import com.bankersCalculator.server.common.enums.calculator.RepaymentType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;

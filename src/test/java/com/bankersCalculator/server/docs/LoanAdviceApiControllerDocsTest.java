@@ -9,9 +9,9 @@ import com.bankersCalculator.server.advice.loanAdvice.dto.response.LoanAdviceSum
 import com.bankersCalculator.server.advice.loanAdvice.dto.response.RecommendedProductDto;
 import com.bankersCalculator.server.advice.loanAdvice.service.LoanAdviceService;
 import com.bankersCalculator.server.common.enums.Bank;
-import com.bankersCalculator.server.common.enums.loanAdvise.ChildStatus;
-import com.bankersCalculator.server.common.enums.loanAdvise.MaritalStatus;
-import com.bankersCalculator.server.common.enums.ltv.HouseOwnershipType;
+import com.bankersCalculator.server.common.enums.loanAdvice.ChildStatus;
+import com.bankersCalculator.server.common.enums.loanAdvice.MaritalStatus;
+import com.bankersCalculator.server.common.enums.calculator.HouseOwnershipType;
 import com.bankersCalculator.server.housingInfo.rentTransactionInquiry.common.RentHousingType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

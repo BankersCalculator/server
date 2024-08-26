@@ -4,7 +4,7 @@ import com.bankersCalculator.server.advice.loanAdvice.dto.internal.FilterProduct
 import com.bankersCalculator.server.advice.loanAdvice.dto.internal.LoanLimitAndRateResultDto;
 import com.bankersCalculator.server.advice.loanAdvice.dto.request.LoanAdviceServiceRequest;
 import com.bankersCalculator.server.common.enums.Bank;
-import com.bankersCalculator.server.common.enums.JeonseLoanProductType;
+import com.bankersCalculator.server.common.enums.loanAdvice.JeonseLoanProductType;
 
 import java.math.BigDecimal;
 import java.util.List;

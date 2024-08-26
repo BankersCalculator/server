@@ -4,11 +4,14 @@ import com.bankersCalculator.server.advice.loanAdvice.dto.internal.FilterProduct
 import com.bankersCalculator.server.advice.loanAdvice.dto.internal.LoanLimitAndRateResultDto;
 import com.bankersCalculator.server.advice.loanAdvice.dto.request.LoanAdviceServiceRequest;
 import com.bankersCalculator.server.advice.loanAdvice.model.LoanProduct;
+import com.bankersCalculator.server.advice.rateProvider.service.RateProviderService;
 import com.bankersCalculator.server.common.enums.Bank;
-import com.bankersCalculator.server.common.enums.JeonseLoanProductType;
-import com.bankersCalculator.server.common.enums.loanAdvise.ChildStatus;
-import com.bankersCalculator.server.common.enums.loanAdvise.MaritalStatus;
-import com.bankersCalculator.server.common.enums.ltv.HouseOwnershipType;
+import com.bankersCalculator.server.common.enums.loanAdvice.BaseRate;
+import com.bankersCalculator.server.common.enums.loanAdvice.JeonseLoanProductType;
+import com.bankersCalculator.server.common.enums.loanAdvice.ChildStatus;
+import com.bankersCalculator.server.common.enums.loanAdvice.MaritalStatus;
+import com.bankersCalculator.server.common.enums.calculator.HouseOwnershipType;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -17,8 +20,11 @@ import java.util.List;
 
 
 
+@RequiredArgsConstructor
 @Component
 public class SeoulNewlyWedLeaseDepositLoan implements LoanProduct {
+
+    private final RateProviderService rateProviderService;
 
     private static final BigDecimal INCOME_LIMIT = new BigDecimal("130000000");
     private static final BigDecimal LOAN_LIMIT = new BigDecimal("300000000");
@@ -116,8 +122,8 @@ public class SeoulNewlyWedLeaseDepositLoan implements LoanProduct {
     private BigDecimal calculateFinalRate(LoanAdviceServiceRequest request) {
         BigDecimal combinedIncome = request.getAnnualIncome().add(request.getSpouseAnnualIncome());
 
-        // 신잔액기준COFIX6개월물
-        BigDecimal baseRate = new BigDecimal("3.00"); // TODO: 기준금리 조회하는 공통모듈 개발할 것.
+
+        BigDecimal baseRate = rateProviderService.getBaseRate(BaseRate.COFIX_NEW_BALANCE); // 신잔액기준COFIX
         BigDecimal marginRate = new BigDecimal("1.45");
         BigDecimal discountRate = calculateDiscountRate(combinedIncome, request.getMaritalStatus(), request.getChildStatus());
         BigDecimal finalRate = baseRate.add(marginRate).subtract(discountRate);
@@ -132,6 +138,7 @@ public class SeoulNewlyWedLeaseDepositLoan implements LoanProduct {
 
         BigDecimal discountRate = BigDecimal.ZERO;
 
+        // 소득에 따른 감면
         if (combinedIncome.compareTo(new BigDecimal("30000000")) <= 0) {
             discountRate.add(new BigDecimal("3.0"));
         } else if (combinedIncome.compareTo(new BigDecimal("60000000")) <= 0) {
@@ -144,7 +151,7 @@ public class SeoulNewlyWedLeaseDepositLoan implements LoanProduct {
             discountRate.add(new BigDecimal("1.0"));
         }
 
-        // 자녀당 0.5% 추가할인
+        // 자녀당 0.5% 감면
         if (childStatus == ChildStatus.ONE_CHILD) {
             discountRate.add(new BigDecimal("0.5"));
         } else if (childStatus == ChildStatus.TWO_CHILD) {
@@ -153,7 +160,7 @@ public class SeoulNewlyWedLeaseDepositLoan implements LoanProduct {
             discountRate.add(new BigDecimal("1.5"));
         }
 
-        // 결혼예정자 0.2% 추가할인
+        // 결혼예정자 0.2% 추가 감면
         if (maritalStatus == MaritalStatus.ENGAGED) {
             discountRate.add(new BigDecimal("0.2"));
         }

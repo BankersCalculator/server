@@ -1,6 +1,6 @@
 package com.bankersCalculator.server.advice.loanAdvice.model;
 
-import com.bankersCalculator.server.common.enums.JeonseLoanProductType;
+import com.bankersCalculator.server.common.enums.loanAdvice.JeonseLoanProductType;
 import org.springframework.stereotype.Component;
 
 import java.util.EnumMap;

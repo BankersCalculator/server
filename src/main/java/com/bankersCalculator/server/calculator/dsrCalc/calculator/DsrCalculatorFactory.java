@@ -1,6 +1,6 @@
 package com.bankersCalculator.server.calculator.dsrCalc.calculator;
 
-import com.bankersCalculator.server.common.enums.LoanType;
+import com.bankersCalculator.server.common.enums.calculator.LoanType;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 

@@ -1,7 +1,7 @@
 package com.bankersCalculator.server.calculator.dsrCalc.dto;
 
-import com.bankersCalculator.server.common.enums.LoanType;
-import com.bankersCalculator.server.common.enums.RepaymentType;
+import com.bankersCalculator.server.common.enums.calculator.LoanType;
+import com.bankersCalculator.server.common.enums.calculator.RepaymentType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

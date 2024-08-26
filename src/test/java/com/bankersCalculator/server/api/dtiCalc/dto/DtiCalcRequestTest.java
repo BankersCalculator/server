@@ -2,8 +2,8 @@ package com.bankersCalculator.server.api.dtiCalc.dto;
 
 import com.bankersCalculator.server.calculator.dtiCalc.dto.DtiCalcRequest;
 import com.bankersCalculator.server.calculator.dtiCalc.dto.DtiCalcServiceRequest;
-import com.bankersCalculator.server.common.enums.LoanType;
-import com.bankersCalculator.server.common.enums.RepaymentType;
+import com.bankersCalculator.server.common.enums.calculator.LoanType;
+import com.bankersCalculator.server.common.enums.calculator.RepaymentType;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
