@@ -1,12 +1,20 @@
 package com.bankersCalculator.server.advice.loanAdvice.entity;
 
+import com.bankersCalculator.server.advice.loanAdvice.dto.internal.AdditionalInformation;
+import com.bankersCalculator.server.advice.loanAdvice.dto.internal.OptimalLoanProductResult;
+import com.bankersCalculator.server.advice.loanAdvice.dto.response.LoanAdviceResponse;
+import com.bankersCalculator.server.advice.loanAdvice.dto.response.RecommendedProductDto;
+import com.bankersCalculator.server.advice.userInputInfo.domain.UserInputInfo;
 import com.bankersCalculator.server.common.enums.Bank;
 import com.bankersCalculator.server.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
@@ -22,6 +30,10 @@ public class LoanAdviceResult {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_input_info_id")
+    private UserInputInfo userInputInfo;
 
     private String loanProductName;             // 대출 상품명
     private String loanProductCode;             // 대출 상품코드
@@ -56,17 +68,45 @@ public class LoanAdviceResult {
     @Column(length = 4000)
     private String rentalLoanGuide;             // 대출 가이드
 
-    public static LoanAdviceResult create(User user, String loanProductName,
-                                          String loanProductCode, BigDecimal possibleLoanLimit,
-                                          BigDecimal expectedLoanRate, BigDecimal totalRentalDeposit,
-                                          BigDecimal loanAmount, BigDecimal ownFunds,
-                                          BigDecimal monthlyInterestCost, BigDecimal monthlyRent,
-                                          BigDecimal opportunityCostOwnFunds, BigDecimal depositInterestRate,
-                                          BigDecimal guaranteeInsuranceFee, BigDecimal stampDuty,
-                                          String recommendationReason, List<RecommendedProduct> recommendedProducts,
-                                          List<Bank> availableBanks, String rentalLoanGuide) {
-        return LoanAdviceResult.builder()
+    public static LoanAdviceResult create(User user, UserInputInfo userInputInfo,
+                                          OptimalLoanProductResult optimalLoanProductResult,
+                                          AdditionalInformation additionalInformation, List<RecommendedProduct> recommendedProducts,
+                                          String aiReport) {
+
+        BigDecimal totalRentalDeposit = optimalLoanProductResult.getPossibleLoanLimit()
+            .add(additionalInformation.getOwnFunds());
+
+        LoanAdviceResult result = LoanAdviceResult.builder()
             .user(user)
+            .loanProductName(optimalLoanProductResult.getProductType().getProductName())
+            .loanProductCode(optimalLoanProductResult.getProductType().getProductCode())
+            .possibleLoanLimit(optimalLoanProductResult.getPossibleLoanLimit())
+            .expectedLoanRate(optimalLoanProductResult.getExpectedLoanRate())
+            .totalRentalDeposit(totalRentalDeposit)
+            .loanAmount(optimalLoanProductResult.getPossibleLoanLimit())
+            .ownFunds(additionalInformation.getOwnFunds())
+            .monthlyInterestCost(additionalInformation.getMonthlyInterestCost())
+            .monthlyRent(additionalInformation.getMonthlyRent())
+            .opportunityCostOwnFunds(additionalInformation.getOpportunityCostOwnFunds())
+            .depositInterestRate(additionalInformation.getDepositInterestRate())
+            .guaranteeInsuranceFee(additionalInformation.getGuaranteeInsuranceFee())
+            .stampDuty(additionalInformation.getStampDuty())
+            .recommendationReason(aiReport)
+            .recommendedProducts(recommendedProducts)
+            .availableBanks(additionalInformation.getAvailableBanks())
+            .rentalLoanGuide(additionalInformation.getRentalLoanGuide())
+            .build();
+
+        userInputInfo.setLoanAdviceResult(result);
+        recommendedProducts.forEach(recommendedProduct -> recommendedProduct.setLoanAdviceResult(result));
+
+        return result;
+    }
+
+
+    public LoanAdviceResponse toLoanAdviceResponse() {
+        return LoanAdviceResponse.builder()
+            .loanAdviceResultId(id)
             .loanProductName(loanProductName)
             .loanProductCode(loanProductCode)
             .possibleLoanLimit(possibleLoanLimit)
@@ -81,9 +121,26 @@ public class LoanAdviceResult {
             .guaranteeInsuranceFee(guaranteeInsuranceFee)
             .stampDuty(stampDuty)
             .recommendationReason(recommendationReason)
-            .recommendedProducts(recommendedProducts)
+            .recommendedProducts(convertToRecommendedProductDtoList(recommendedProducts))
             .availableBanks(availableBanks)
             .rentalLoanGuide(rentalLoanGuide)
+            .build();
+    }
+
+    private List<RecommendedProductDto> convertToRecommendedProductDtoList(List<RecommendedProduct> recommendedProducts) {
+        return recommendedProducts.stream()
+            .map(this::convertToRecommendedProductDto)
+            .collect(Collectors.toList());
+    }
+
+    private RecommendedProductDto convertToRecommendedProductDto(RecommendedProduct recommendedProduct) {
+        return RecommendedProductDto.builder()
+            .loanProductName(recommendedProduct.getLoanProductName())
+            .loanProductCode(recommendedProduct.getLoanProductCode())
+            .possibleLoanLimit(recommendedProduct.getPossibleLoanLimit())
+            .expectedLoanRate(recommendedProduct.getExpectedLoanRate())
+            .notEligibleReasons(Arrays.stream(recommendedProduct.getNotEligibleReasons()
+                .split(Pattern.quote("|"))).toList())
             .build();
     }
 }

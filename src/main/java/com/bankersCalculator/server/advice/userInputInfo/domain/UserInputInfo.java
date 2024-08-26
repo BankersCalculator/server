@@ -1,8 +1,11 @@
 package com.bankersCalculator.server.advice.userInputInfo.domain;
 
+import com.bankersCalculator.server.advice.loanAdvice.dto.request.LoanAdviceServiceRequest;
+import com.bankersCalculator.server.advice.loanAdvice.entity.LoanAdviceResult;
 import com.bankersCalculator.server.common.enums.loanAdvice.ChildStatus;
 import com.bankersCalculator.server.common.enums.loanAdvice.MaritalStatus;
 import com.bankersCalculator.server.housingInfo.rentTransactionInquiry.common.RentHousingType;
+import com.bankersCalculator.server.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,6 +22,13 @@ public class UserInputInfo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @OneToOne(mappedBy = "userInputInfo", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private LoanAdviceResult loanAdviceResult;
 
     // 고객 정보
     private Long rentalDeposit;  // 임차보증금
@@ -48,4 +58,31 @@ public class UserInputInfo {
     private String districtCode; // 법정동 코드
     private String dongName;     // 읍명동이름
     private String jibun;        // 지번
+
+    public static UserInputInfo create(User user, LoanAdviceServiceRequest request) {
+        return UserInputInfo.builder()
+            .user(user)
+            .rentalDeposit(request.getRentalDeposit().longValue())
+            .monthlyRent(request.getMonthlyRent().longValue())
+            .cashOnHand(request.getCashOnHand().longValue())
+            .age(request.getAge())
+            .maritalStatus(request.getMaritalStatus())
+            .annualIncome(request.getAnnualIncome().longValue())
+            .spouseAnnualIncome(request.getSpouseAnnualIncome().longValue())
+            .childStatus(request.getChildStatus())
+            .hasNewborn(request.getHasNewborn())
+            .isSMEEmployee(request.getIsSMEEmployee())
+            .isNetAssetOver345M(request.getIsNetAssetOver345M())
+            .rentHousingType(request.getRentHousingType())
+            .exclusiveArea(request.getExclusiveArea())
+            .buildingName(request.getBuildingName())
+            .districtCode(request.getDistrictCode())
+            .dongName(request.getDongName())
+            .jibun(request.getJibun())
+            .build();
+    }
+
+    public void setLoanAdviceResult(LoanAdviceResult loanAdviceResult) {
+        this.loanAdviceResult = loanAdviceResult;
+    }
 }

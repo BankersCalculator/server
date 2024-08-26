@@ -32,6 +32,9 @@ public class AdditionalInfoGenerator {
         BigDecimal monthlyInterestCost = loanAmount.multiply(optimalLoanProduct.getExpectedLoanRate()
             .divide(BigDecimal.valueOf(100))).divide(BigDecimal.valueOf(12), 0, BigDecimal.ROUND_HALF_UP);
 
+        // 월 임대료
+        BigDecimal monthlyRent = request.getMonthlyRent();
+
         // 총 주거 비용
         BigDecimal totalLivingCost = monthlyInterestCost.add(request.getMonthlyRent());
 
@@ -54,6 +57,7 @@ public class AdditionalInfoGenerator {
             .ownFunds(ownFunds)
             .monthlyInterestCost(monthlyInterestCost)
             .totalLivingCost(totalLivingCost)
+            .monthlyRent(monthlyRent)
             .opportunityCostOwnFunds(opportunityCostOwnFunds)
             .depositInterestRate(depositInterestRate)
             .guaranteeInsuranceFee(guaranteeInsuranceFee)

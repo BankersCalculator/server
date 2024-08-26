@@ -15,6 +15,7 @@ public class AdditionalInformation {
     private BigDecimal ownFunds;  // 소요 자기 자금
     private BigDecimal monthlyInterestCost;  // 월 이자 비용
     private BigDecimal totalLivingCost;  // 총 주거 비용
+    private BigDecimal monthlyRent;  // 월 임대료
 
     // 기회 비용
     private BigDecimal opportunityCostOwnFunds; // 기회비용

@@ -27,7 +27,7 @@ import java.util.Map;
 public class TokenProvider {
 
     private static final String AUTH_KEY = "AUTHORITY";
-    private static final String AUTH_ID = "EMAIL";
+    private static final String AUTH_ID = "PROVIDER_ID";
 
     @Value("${jwt.secret-key}")
     private String secretKey;
@@ -49,7 +49,7 @@ public class TokenProvider {
         this.jwtKey = Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public TokenDto createToken(Long providerId, String role) {
+    public TokenDto createToken(String providerId, String role) {
         long now = new Date().getTime();
 
         long accessTokenValidityMilliSeconds = accessTokenValiditySeconds * 1000L;
