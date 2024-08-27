@@ -2,15 +2,16 @@ package com.bankersCalculator.server.docs;
 
 import com.bankersCalculator.server.RestDocsSupport;
 import com.bankersCalculator.server.advice.loanAdvice.controller.LoanAdviceApiController;
-import com.bankersCalculator.server.advice.loanAdvice.dto.request.*;
+import com.bankersCalculator.server.advice.loanAdvice.dto.request.LoanAdviceRequest;
+import com.bankersCalculator.server.advice.loanAdvice.dto.request.SpecificLoanAdviceRequest;
 import com.bankersCalculator.server.advice.loanAdvice.dto.response.LoanAdviceResponse;
 import com.bankersCalculator.server.advice.loanAdvice.dto.response.LoanAdviceSummaryResponse;
 import com.bankersCalculator.server.advice.loanAdvice.dto.response.RecommendedProductDto;
 import com.bankersCalculator.server.advice.loanAdvice.service.LoanAdviceService;
 import com.bankersCalculator.server.common.enums.Bank;
-import com.bankersCalculator.server.common.enums.loanAdvise.ChildStatus;
-import com.bankersCalculator.server.common.enums.loanAdvise.MaritalStatus;
-import com.bankersCalculator.server.common.enums.ltv.HouseOwnershipType;
+import com.bankersCalculator.server.common.enums.loanAdvice.ChildStatus;
+import com.bankersCalculator.server.common.enums.loanAdvice.MaritalStatus;
+import com.bankersCalculator.server.common.enums.calculator.HouseOwnershipType;
 import com.bankersCalculator.server.housingInfo.rentTransactionInquiry.common.RentHousingType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -148,7 +149,6 @@ public class LoanAdviceApiControllerDocsTest extends RestDocsSupport {
                     fieldWithPath("data.stampDuty").type(JsonFieldType.NUMBER).description("인지세"),
                     fieldWithPath("data.recommendationReason").type(JsonFieldType.STRING).description("추천 이유"),
                     fieldWithPath("data.recommendedProducts").type(JsonFieldType.ARRAY).description("추천 상품 목록"),
-                    fieldWithPath("data.recommendedProducts[].rank").type(JsonFieldType.NUMBER).description("추천 순위"),
                     fieldWithPath("data.recommendedProducts[].loanProductName").type(JsonFieldType.STRING).description("대출 상품명"),
                     fieldWithPath("data.recommendedProducts[].loanProductCode").type(JsonFieldType.STRING).description("대출 상품 코드"),
                     fieldWithPath("data.recommendedProducts[].possibleLoanLimit").type(JsonFieldType.NUMBER).description("가능한 대출 한도"),
@@ -233,7 +233,6 @@ public class LoanAdviceApiControllerDocsTest extends RestDocsSupport {
                     fieldWithPath("data.stampDuty").type(JsonFieldType.NUMBER).description("인지세"),
                     fieldWithPath("data.recommendationReason").type(JsonFieldType.STRING).description("추천 이유"),
                     fieldWithPath("data.recommendedProducts").type(JsonFieldType.ARRAY).description("추천 상품 목록"),
-                    fieldWithPath("data.recommendedProducts[].rank").type(JsonFieldType.NUMBER).description("추천 순위"),
                     fieldWithPath("data.recommendedProducts[].loanProductName").type(JsonFieldType.STRING).description("대출 상품명"),
                     fieldWithPath("data.recommendedProducts[].loanProductCode").type(JsonFieldType.STRING).description("대출 상품 코드"),
                     fieldWithPath("data.recommendedProducts[].possibleLoanLimit").type(JsonFieldType.NUMBER).description("가능한 대출 한도"),
@@ -302,7 +301,6 @@ public class LoanAdviceApiControllerDocsTest extends RestDocsSupport {
                     fieldWithPath("data.stampDuty").type(JsonFieldType.NUMBER).description("인지세"),
                     fieldWithPath("data.recommendationReason").type(JsonFieldType.STRING).description("추천 이유"),
                     fieldWithPath("data.recommendedProducts").type(JsonFieldType.ARRAY).description("추천 상품 목록"),
-                    fieldWithPath("data.recommendedProducts[].rank").type(JsonFieldType.NUMBER).description("추천 순위"),
                     fieldWithPath("data.recommendedProducts[].loanProductName").type(JsonFieldType.STRING).description("대출 상품명"),
                     fieldWithPath("data.recommendedProducts[].loanProductCode").type(JsonFieldType.STRING).description("대출 상품 코드"),
                     fieldWithPath("data.recommendedProducts[].possibleLoanLimit").type(JsonFieldType.NUMBER).description("가능한 대출 한도"),
@@ -330,7 +328,7 @@ public class LoanAdviceApiControllerDocsTest extends RestDocsSupport {
             .isSMEEmployee(false)
             .isNetAssetOver345M(false)
             .rentHousingType(RentHousingType.APARTMENT)
-            .exclusiveArea(75.0)
+            .exclusiveArea(BigDecimal.valueOf(75.0))
             .buildingName("Sample Apartment")
             .districtCode("1168010100")
             .dongName("삼성동")
@@ -358,7 +356,6 @@ public class LoanAdviceApiControllerDocsTest extends RestDocsSupport {
             .recommendationReason("고객님의 소득과 신용도를 고려하여 가장 적합한 상품으로 선정되었습니다.")
             .recommendedProducts(Arrays.asList(
                 RecommendedProductDto.builder()
-                    .rank(2)
                     .loanProductName("신혼부부전용전세자금대출")
                     .loanProductCode("HF-001")
                     .possibleLoanLimit(BigDecimal.valueOf(180000000))
@@ -366,7 +363,6 @@ public class LoanAdviceApiControllerDocsTest extends RestDocsSupport {
                     .notEligibleReasons(List.of())
                     .build(),
                 RecommendedProductDto.builder()
-                    .rank(3)
                     .loanProductName("서울시신혼부부임차보증금대출")
                     .loanProductCode("HF-002")
                     .possibleLoanLimit(BigDecimal.valueOf(220000000))
@@ -374,7 +370,7 @@ public class LoanAdviceApiControllerDocsTest extends RestDocsSupport {
                     .notEligibleReasons(List.of("임차목적지가 서울시가 아닙니다."))
                     .build()
             ))
-            .availableBanks(Arrays.asList(Bank.KOOMIN, Bank.SHINHAN, Bank.WOORI))
+            .availableBanks(Arrays.asList(Bank.KB, Bank.SHINHAN, Bank.WOORI))
             .rentalLoanGuide("전세자금대출 이용 시 주의사항:\n1. 대출 기간 동안 이자를 꾸준히 납부해야 합니다.\n2. 전세 계약 만료 시 대출금 상환 계획을 미리 세워야 합니다.")
             .build();
     }

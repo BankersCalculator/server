@@ -3,7 +3,7 @@ package com.bankersCalculator.server.calculator.repaymentCalc.service;
 import com.bankersCalculator.server.calculator.repaymentCalc.domain.RepaymentSchedule;
 import com.bankersCalculator.server.calculator.repaymentCalc.dto.RepaymentCalcResponse;
 import com.bankersCalculator.server.calculator.repaymentCalc.dto.RepaymentCalcServiceRequest;
-import com.bankersCalculator.server.common.enums.RepaymentType;
+import com.bankersCalculator.server.common.enums.calculator.RepaymentType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

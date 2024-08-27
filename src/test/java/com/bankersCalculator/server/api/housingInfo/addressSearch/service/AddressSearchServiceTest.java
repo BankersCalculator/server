@@ -45,12 +45,12 @@ public class AddressSearchServiceTest {
         AddressSearchApiResponse firstAddress = addressInfoList.get(0);
 
         // 검증 로직
-        System.out.println("도로명 주소: " + firstAddress.getRoadAddress());
-        System.out.println("지번 주소: " + firstAddress.getJibunAddress());
-        System.out.println("행정구역 코드: " + firstAddress.getDistrictCode());
-        System.out.println("건물명: " + firstAddress.getBuildingName());
-        System.out.println("읍면동명: " + firstAddress.getDongName());
-        System.out.println("지번(본번- 부번): " + firstAddress.getJibun());
+//        System.out.println("도로명 주소: " + firstAddress.getRoadAddress());
+//        System.out.println("지번 주소: " + firstAddress.getJibunAddress());
+//        System.out.println("행정구역 코드: " + firstAddress.getDistrictCode());
+//        System.out.println("건물명: " + firstAddress.getBuildingName());
+//        System.out.println("읍면동명: " + firstAddress.getDongName());
+//        System.out.println("지번(본번- 부번): " + firstAddress.getJibun());
 
 
         // 에러 코드 및 메시지 검증
@@ -72,14 +72,14 @@ public class AddressSearchServiceTest {
         String apiResultMessage6 = (String) result6.get("apiResultMessage");
         String apiResultMessage7 = (String) result7.get("apiResultMessage");
 
-        System.out.println("Error Code0: " + apiResultCode0 + ", Error Message0: " + apiResultMessage0);
-        System.out.println("Error Code1: " + apiResultCode1 + ", Error Message1: " + apiResultMessage1);
-        System.out.println("Error Code2: " + apiResultCode2 + ", Error Message2: " + apiResultMessage2);
-        System.out.println("Error Code3: " + apiResultCode3 + ", Error Message3: " + apiResultMessage3);
-        System.out.println("Error Code4: " + apiResultCode4 + ", Error Message4: " + apiResultMessage4);
-        System.out.println("Error Code5: " + apiResultCode5 + ", Error Message5: " + apiResultMessage5);
-        System.out.println("Error Code6: " + apiResultCode6 + ", Error Message6: " + apiResultMessage6);
-        System.out.println("Error Code7: " + apiResultCode7 + ", Error Message7: " + apiResultMessage7);
+//        System.out.println("Error Code0: " + apiResultCode0 + ", Error Message0: " + apiResultMessage0);
+//        System.out.println("Error Code1: " + apiResultCode1 + ", Error Message1: " + apiResultMessage1);
+//        System.out.println("Error Code2: " + apiResultCode2 + ", Error Message2: " + apiResultMessage2);
+//        System.out.println("Error Code3: " + apiResultCode3 + ", Error Message3: " + apiResultMessage3);
+//        System.out.println("Error Code4: " + apiResultCode4 + ", Error Message4: " + apiResultMessage4);
+//        System.out.println("Error Code5: " + apiResultCode5 + ", Error Message5: " + apiResultMessage5);
+//        System.out.println("Error Code6: " + apiResultCode6 + ", Error Message6: " + apiResultMessage6);
+//        System.out.println("Error Code7: " + apiResultCode7 + ", Error Message7: " + apiResultMessage7);
 
         assertEquals("E0005", apiResultCode1);
         assertEquals("E0008", apiResultCode2);

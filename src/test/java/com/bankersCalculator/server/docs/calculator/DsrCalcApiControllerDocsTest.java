@@ -6,14 +6,13 @@ import com.bankersCalculator.server.calculator.dsrCalc.domain.DsrCalcResult;
 import com.bankersCalculator.server.calculator.dsrCalc.dto.DsrCalcRequest;
 import com.bankersCalculator.server.calculator.dsrCalc.dto.DsrCalcResponse;
 import com.bankersCalculator.server.calculator.dsrCalc.service.DsrCalcService;
-import com.bankersCalculator.server.common.enums.LoanType;
-import com.bankersCalculator.server.common.enums.RepaymentType;
+import com.bankersCalculator.server.common.enums.calculator.LoanType;
+import com.bankersCalculator.server.common.enums.calculator.RepaymentType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;

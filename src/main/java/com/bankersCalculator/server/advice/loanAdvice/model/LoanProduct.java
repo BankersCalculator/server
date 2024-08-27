@@ -1,14 +1,19 @@
 package com.bankersCalculator.server.advice.loanAdvice.model;
 
-import com.bankersCalculator.server.advice.loanAdvice.dto.request.LoanAdviceServiceRequest;
 import com.bankersCalculator.server.advice.loanAdvice.dto.internal.FilterProductResultDto;
 import com.bankersCalculator.server.advice.loanAdvice.dto.internal.LoanLimitAndRateResultDto;
-import com.bankersCalculator.server.common.enums.JeonseLoanProductType;
+import com.bankersCalculator.server.advice.loanAdvice.dto.request.LoanAdviceServiceRequest;
+import com.bankersCalculator.server.common.enums.Bank;
+import com.bankersCalculator.server.common.enums.loanAdvice.JeonseLoanProductType;
+
+import java.math.BigDecimal;
+import java.util.List;
 
 public interface LoanProduct {
 
     /*
      * 구현 예정 전세상품 정리
+     * (enum: JeonseLoanProductType)
      *
      * - 주택금융공사 -
      * 서울시신혼부부임차보증금대출
@@ -36,10 +41,12 @@ public interface LoanProduct {
 
     JeonseLoanProductType getProductType();
 
-    String getProperty();
-
     FilterProductResultDto filtering(LoanAdviceServiceRequest request);
 
     LoanLimitAndRateResultDto calculateLoanLimitAndRate(LoanAdviceServiceRequest request);
+
+    BigDecimal getGuaranteeInsuranceFee(BigDecimal loanAmount);
+
+    List<Bank> getAvailableBanks();
 
 }

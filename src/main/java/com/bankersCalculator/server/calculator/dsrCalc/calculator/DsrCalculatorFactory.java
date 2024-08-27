@@ -1,7 +1,6 @@
-package com.bankersCalculator.server.calculator.dsrCalc.service;
+package com.bankersCalculator.server.calculator.dsrCalc.calculator;
 
-import com.bankersCalculator.server.calculator.dsrCalc.calculator.DsrCalculator;
-import com.bankersCalculator.server.common.enums.LoanType;
+import com.bankersCalculator.server.common.enums.calculator.LoanType;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -27,7 +26,7 @@ public class DsrCalculatorFactory {
     public DsrCalculator getCalculator(LoanType loanType) {
         DsrCalculator calculator = calculators.get(loanType);
         if (calculator == null) {
-            throw new RuntimeException(NO_SUCH_CALCULATOR); // TODO: exception 생성
+            throw new RuntimeException(NO_SUCH_CALCULATOR);
         }
         return calculator;
     }

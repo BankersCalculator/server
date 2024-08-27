@@ -2,8 +2,8 @@ package com.bankersCalculator.server.calculator.ltvCalc.service;
 
 import com.bankersCalculator.server.calculator.ltvCalc.dto.LtvCalcResponse;
 import com.bankersCalculator.server.calculator.ltvCalc.dto.LtvCalcServiceRequest;
-import com.bankersCalculator.server.common.enums.ltv.HousingType;
-import com.bankersCalculator.server.common.enums.ltv.RegionType;
+import com.bankersCalculator.server.common.enums.calculator.HousingType;
+import com.bankersCalculator.server.common.enums.calculator.RegionType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

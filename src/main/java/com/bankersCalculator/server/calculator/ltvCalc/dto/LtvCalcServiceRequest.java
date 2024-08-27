@@ -1,7 +1,7 @@
 package com.bankersCalculator.server.calculator.ltvCalc.dto;
 
-import com.bankersCalculator.server.common.enums.ltv.HousingType;
-import com.bankersCalculator.server.common.enums.ltv.RegionType;
+import com.bankersCalculator.server.common.enums.calculator.HousingType;
+import com.bankersCalculator.server.common.enums.calculator.RegionType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

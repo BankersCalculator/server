@@ -1,8 +1,8 @@
 package com.bankersCalculator.server.advice.loanAdvice.dto.request;
 
-import com.bankersCalculator.server.common.enums.loanAdvise.ChildStatus;
-import com.bankersCalculator.server.common.enums.loanAdvise.MaritalStatus;
-import com.bankersCalculator.server.common.enums.ltv.HouseOwnershipType;
+import com.bankersCalculator.server.common.enums.loanAdvice.ChildStatus;
+import com.bankersCalculator.server.common.enums.loanAdvice.MaritalStatus;
+import com.bankersCalculator.server.common.enums.calculator.HouseOwnershipType;
 import com.bankersCalculator.server.housingInfo.rentTransactionInquiry.common.RentHousingType;
 import lombok.Builder;
 import lombok.Getter;
@@ -30,7 +30,7 @@ public class LoanAdviceServiceRequest {
 
     // 주택정보부
     private RentHousingType rentHousingType;  // 주택타입
-    private Double exclusiveArea; // 전용면적
+    private BigDecimal exclusiveArea; // 전용면적
     private String buildingName;   // 건물명
     private String districtCode; // 법정동 코드
     private String dongName;   // 읍명동이름
