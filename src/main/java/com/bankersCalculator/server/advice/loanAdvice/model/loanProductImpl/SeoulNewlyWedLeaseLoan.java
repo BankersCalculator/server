@@ -115,8 +115,11 @@ public class SeoulNewlyWedLeaseLoan implements LoanProduct {
         BigDecimal rentalDeposit = request.getRentalDeposit();
         BigDecimal calculatedLimit = rentalDeposit.multiply(new BigDecimal("0.9"));
 
-        return calculatedLimit.compareTo(LOAN_LIMIT) > 0 ? LOAN_LIMIT : calculatedLimit;
+        BigDecimal combinedIncome = request.getAnnualIncome().add(request.getSpouseAnnualIncome());
+        BigDecimal baseOnIncome = combinedIncome.multiply(new BigDecimal("5"));
 
+        // 셋중 min 값을 반환
+        return calculatedLimit.min(baseOnIncome).min(LOAN_LIMIT);
     }
 
     private BigDecimal calculateFinalRate(LoanAdviceServiceRequest request) {

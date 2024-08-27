@@ -31,4 +31,47 @@ public class RateProviderService {
 
         return rate;
     }
+
+    public BigDecimal getNewBornSpecialLeaseLoanRate(BigDecimal rentalDeposit, BigDecimal combinedIncome) {
+
+        int depositRangeIndex = 0;
+        if (rentalDeposit.compareTo(new BigDecimal("20000000")) > 0) {
+            depositRangeIndex++;
+        }
+        if (rentalDeposit.compareTo(new BigDecimal("40000000")) > 0) {
+            depositRangeIndex++;
+        }
+        if (rentalDeposit.compareTo(new BigDecimal("60000000")) > 0) {
+            depositRangeIndex++;
+        }
+        if (rentalDeposit.compareTo(new BigDecimal("75000000")) > 0) {
+            depositRangeIndex++;
+        }
+        if (rentalDeposit.compareTo(new BigDecimal("100000000")) > 0) {
+            depositRangeIndex++;
+        }
+
+        int incomeRangeIndex = 0;
+        if (combinedIncome.compareTo(new BigDecimal("50000000")) > 0) {
+            incomeRangeIndex++;
+        }
+        if (combinedIncome.compareTo(new BigDecimal("100000000")) > 0) {
+            incomeRangeIndex++;
+        }
+        if (combinedIncome.compareTo(new BigDecimal("150000000")) > 0) {
+            incomeRangeIndex++;
+        }
+
+        BigDecimal[][] interestRates = {
+            {new BigDecimal("1.10"), new BigDecimal("1.20"), new BigDecimal("1.30"), new BigDecimal("1.40")},
+            {new BigDecimal("1.40"), new BigDecimal("1.50"), new BigDecimal("1.60"), new BigDecimal("1.70")},
+            {new BigDecimal("1.70"), new BigDecimal("1.80"), new BigDecimal("1.90"), new BigDecimal("2.00")},
+            {new BigDecimal("2.00"), new BigDecimal("2.10"), new BigDecimal("2.20"), new BigDecimal("2.30")},
+            {new BigDecimal("2.35"), new BigDecimal("2.45"), new BigDecimal("2.55"), new BigDecimal("2.65")},
+            {new BigDecimal("2.70"), new BigDecimal("2.80"), new BigDecimal("2.90"), new BigDecimal("3.00")}
+        };
+
+        BigDecimal finalRate = interestRates[depositRangeIndex][incomeRangeIndex];
+        return finalRate.divide(new BigDecimal("100"));
+    }
 }

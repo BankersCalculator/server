@@ -60,8 +60,8 @@ public class SmeYouthMonthlyRentLoan implements LoanProduct {
         }
 
         // 3. 단독세대주 소득 35백만원 이하 여부
-        if (request.getMaritalStatus() == MaritalStatus.SINGLE &&
-            request.getAnnualIncome().compareTo(SINGLE_INCOME_LIMIT) > 0) {
+        if (request.getMaritalStatus() == MaritalStatus.SINGLE
+            && request.getAnnualIncome().compareTo(SINGLE_INCOME_LIMIT) > 0) {
             notEligibleReasons.add("단독세대주 소득 35백만원 이하만 가능합니다.");
         }
 
