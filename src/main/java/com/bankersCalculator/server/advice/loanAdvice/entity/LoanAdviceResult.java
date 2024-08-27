@@ -65,7 +65,7 @@ public class LoanAdviceResult {
 
     @ElementCollection(targetClass = Bank.class)
     @Enumerated(EnumType.STRING)
-    private List<Bank> availableBanks;          // 이용 가능한 은행 목록
+    private List<Bank> availableBanks = new ArrayList<>();  // 이용 가능한 은행 목록
 
     @Column(length = 4000)
     private String rentalLoanGuide;             // 대출 가이드
@@ -99,24 +99,31 @@ public class LoanAdviceResult {
             .depositInterestRate(additionalInformation.getDepositInterestRate())
             .guaranteeInsuranceFee(additionalInformation.getGuaranteeInsuranceFee())
             .stampDuty(additionalInformation.getStampDuty())
+            .recommendedProducts(new ArrayList<>())
             .recommendationReason(aiReport)
             .availableBanks(additionalInformation.getAvailableBanks())
             .rentalLoanGuide(additionalInformation.getRentalLoanGuide())
             .build();
 
-        log.info("lgw create result: {}", result);
-        log.info("lgw create recommendedProductDtos: {}", recommendedProductDtos);
-
-
-        result.setRecommendedProducts(recommendedProducts);
+        result.updateRecommendedProducts(recommendedProducts);
         userInputInfo.setLoanAdviceResult(result);
 
         return result;
     }
 
-    public void setRecommendedProducts(List<RecommendedProduct> recommendedProducts) {
-        this.recommendedProducts = new ArrayList<>(recommendedProducts);
+    public void updateRecommendedProducts(List<RecommendedProduct> newRecommendedProducts) {
+        if (this.recommendedProducts == null) {
+            this.recommendedProducts = new ArrayList<>();
+        }
+        this.recommendedProducts.clear();
+        for (RecommendedProduct product : newRecommendedProducts) {
+            addRecommendedProduct(product);
+        }
+    }
 
+    public void addRecommendedProduct(RecommendedProduct product) {
+        this.recommendedProducts.add(product);
+        product.setLoanAdviceResult(this);
     }
 
 

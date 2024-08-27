@@ -1,5 +1,7 @@
 package com.bankersCalculator.server;
 
+import com.bankersCalculator.server.advice.loanAdvice.controller.LoanAdviceApiController;
+import com.bankersCalculator.server.advice.loanAdvice.service.LoanAdviceService;
 import com.bankersCalculator.server.calculator.dtiCalc.controller.DtiCalcController;
 import com.bankersCalculator.server.calculator.dtiCalc.service.DtiCalcService;
 import com.bankersCalculator.server.calculator.repaymentCalc.controller.RepaymentCalcApiController;
@@ -27,7 +29,7 @@ import static org.springframework.security.test.web.servlet.setup.SecurityMockMv
 
 @WithMockUser(roles = "USER")
 @WebMvcTest(controllers = {
-    RepaymentCalcApiController.class, DtiCalcController.class})
+    RepaymentCalcApiController.class, DtiCalcController.class, LoanAdviceApiController.class})
 public abstract class ControllerTestSupport {
 
 
@@ -49,6 +51,10 @@ public abstract class ControllerTestSupport {
     protected RepaymentCalcService repaymentCalcService;
     @MockBean
     protected DtiCalcService dtiCalcService;
+    @MockBean
+    protected LoanAdviceService loanAdviceService;
+
+
     @MockBean
     protected JwtAuthenticationFilter jwtAuthenticationFilter;
     @MockBean

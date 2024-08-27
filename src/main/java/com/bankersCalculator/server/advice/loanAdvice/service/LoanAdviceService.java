@@ -17,6 +17,7 @@ import com.bankersCalculator.server.common.enums.loanAdvice.JeonseLoanProductTyp
 import com.bankersCalculator.server.oauth.userInfo.SecurityUtils;
 import com.bankersCalculator.server.user.entity.User;
 import com.bankersCalculator.server.user.repository.UserRepository;
+import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -40,6 +41,7 @@ public class LoanAdviceService {
     private final ProductComparator productComparator;
     private final AdditionalInfoGenerator additionalInfoGenerator;
     private final AiReportGenerator aiReportGenerator;
+    private final EntityManager entityManager;
 
     private final UserRepository userRepository;
     private final LoanAdviceResultRepository loanAdviceResultRepository;
@@ -48,7 +50,6 @@ public class LoanAdviceService {
 
     public LoanAdviceResponse generateLoanAdvice(LoanAdviceServiceRequest request) {
 
-        log.info("대출상품 추천 요청: {}", request);
 
         // 대출상품 필터링
         List<FilterProductResultDto> filterResults = productFilter.filterProduct(request);
@@ -71,7 +72,7 @@ public class LoanAdviceService {
         UserInputInfo userInputInfo = UserInputInfo.create(user, request);
         LoanAdviceResult loanAdviceResult = LoanAdviceResult.create(user, userInputInfo, optimalLoanProduct, additionalInformation, recommendedProductDtos, aiReport);
         userInputInfoRepository.save(userInputInfo);
-        loanAdviceResultRepository.save(loanAdviceResult);
+        entityManager.persist(loanAdviceResult);
 
         return loanAdviceResult.toLoanAdviceResponse();
     }
@@ -115,9 +116,7 @@ public class LoanAdviceService {
                                                                   List<LoanLimitAndRateResultDto> loanLimitAndRateResultDto,
                                                                   OptimalLoanProductResult optimalLoanProduct) {
 
-        log.info("lgw recommend 시작");
         List<RecommendedProductDto> recommendedProductDtos = new ArrayList<>();
-
         Map<JeonseLoanProductType, LoanLimitAndRateResultDto> loanLimitAndRateMap = loanLimitAndRateResultDto.stream()
             .collect(Collectors.toMap(LoanLimitAndRateResultDto::getProductType, Function.identity()));
 

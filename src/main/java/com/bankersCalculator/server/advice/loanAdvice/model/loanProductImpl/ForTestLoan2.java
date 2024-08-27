@@ -25,14 +25,14 @@ public class ForTestLoan2 implements LoanProduct {
 
     private final RateProviderService rateProviderService;
 
-    private static final BigDecimal INCOME_LIMIT = new BigDecimal("5000000000");
-    private static final BigDecimal LOAN_LIMIT = new BigDecimal("300000000");
+    private static final BigDecimal INCOME_LIMIT = new BigDecimal("5000");
+    private static final BigDecimal LOAN_LIMIT = new BigDecimal("3000000");
 
 
 
     @Override
     public JeonseLoanProductType getProductType() {
-        return JeonseLoanProductType.FIXED_RATE_LEASE_DEPOSIT;
+        return JeonseLoanProductType.HUG_LEASE_SAFETY_LOAN;
     }
 
     @Override
