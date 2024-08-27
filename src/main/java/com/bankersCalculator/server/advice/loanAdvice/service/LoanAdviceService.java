@@ -48,32 +48,30 @@ public class LoanAdviceService {
     private final UserInputInfoRepository userInputInfoRepository;
 
 
+    /**
+     * 대출상품 추천을 위한 전체 프로세스를 수행한다.
+     *
+     * @param request
+     * @return LoanAdviceResponse
+     */
     public LoanAdviceResponse generateLoanAdvice(LoanAdviceServiceRequest request) {
-
 
         // 대출상품 필터링
         List<FilterProductResultDto> filterResults = productFilter.filterProduct(request);
         // 대출한도 및 금리 계산
         List<LoanLimitAndRateResultDto> loanLimitAndRateResultDto = loanLimitAndRateCalculator.calculateLoanLimitAndRate(request, filterResults);
         // 대출상품 비교
-        BigDecimal rentalDeposit = request.getRentalDeposit();
-        OptimalLoanProductResult optimalLoanProduct = productComparator.compareProducts(rentalDeposit, loanLimitAndRateResultDto);
+        OptimalLoanProductResult optimalLoanProduct = productComparator.compareProducts(request.getRentalDeposit(), loanLimitAndRateResultDto);
         // 추가정보 생성
         AdditionalInformation additionalInformation = additionalInfoGenerator.generateAdditionalInfo(request, optimalLoanProduct);
         // 보고서 생성
         String aiReport = aiReportGenerator.generateAiReport();
         // 최적상품 외 추천상품목록 생성
-        List<RecommendedProductDto> recommendedProductDtos = generateRecommendProducts(filterResults, loanLimitAndRateResultDto, optimalLoanProduct);
+        List<RecommendedProductDto> recommendedProductDtos = generateRecommendProductDtos(filterResults, loanLimitAndRateResultDto, optimalLoanProduct);
 
-
-
-        // DB 저장
         User user = getCurrentUser();
-        UserInputInfo userInputInfo = UserInputInfo.create(user, request);
-        LoanAdviceResult loanAdviceResult = LoanAdviceResult.create(user, userInputInfo, optimalLoanProduct, additionalInformation, recommendedProductDtos, aiReport);
-        userInputInfoRepository.save(userInputInfo);
-        entityManager.persist(loanAdviceResult);
-
+        UserInputInfo userInputInfo = getUserInputInfo(request, user);
+        LoanAdviceResult loanAdviceResult = getLoanAdviceResult(optimalLoanProduct, additionalInformation, aiReport, recommendedProductDtos, user, userInputInfo);
         return loanAdviceResult.toLoanAdviceResponse();
     }
 
@@ -90,17 +88,30 @@ public class LoanAdviceService {
         return null;
     }
 
-    /**
-     * 현재 로그인한 사용자 정보를 가져온다.
-     *
-     * @return User
-     */
     private User getCurrentUser() {
         String providerId = SecurityUtils.getProviderId();
         User user = userRepository.findByOauthProviderId(providerId)
             .orElseThrow(() -> new IllegalArgumentException("사용자 정보가 없습니다."));
-
         return user;
+    }
+
+    private UserInputInfo getUserInputInfo(LoanAdviceServiceRequest request, User user) {
+        UserInputInfo userInputInfo = UserInputInfo.create(user, request);
+        userInputInfoRepository.save(userInputInfo);
+        return userInputInfo;
+    }
+
+    private LoanAdviceResult getLoanAdviceResult(OptimalLoanProductResult optimalLoanProduct,
+                                                 AdditionalInformation additionalInformation,
+                                                 String aiReport,
+                                                 List<RecommendedProductDto> recommendedProductDtos,
+                                                 User user,
+                                                 UserInputInfo userInputInfo) {
+        LoanAdviceResult loanAdviceResult = LoanAdviceResult.create(user, userInputInfo, optimalLoanProduct,
+            additionalInformation, recommendedProductDtos, aiReport);
+//        loanAdviceResultRepository.save(loanAdviceResult); // TODO: UnsupportedOperationException 발생. 원인 파악 필요. 우선 em.persist로 대체
+        entityManager.persist(loanAdviceResult);
+        return loanAdviceResult;
     }
 
     /**
@@ -112,11 +123,13 @@ public class LoanAdviceService {
      * @param optimalLoanProduct
      * @return List<RecommendedProduct>
      */
-    private List<RecommendedProductDto> generateRecommendProducts(List<FilterProductResultDto> filterResults,
-                                                                  List<LoanLimitAndRateResultDto> loanLimitAndRateResultDto,
-                                                                  OptimalLoanProductResult optimalLoanProduct) {
+    private List<RecommendedProductDto> generateRecommendProductDtos(List<FilterProductResultDto> filterResults,
+                                                                     List<LoanLimitAndRateResultDto> loanLimitAndRateResultDto,
+                                                                     OptimalLoanProductResult optimalLoanProduct) {
 
         List<RecommendedProductDto> recommendedProductDtos = new ArrayList<>();
+
+        // 간편한 조인을 위해 한도산출/금리 결과를 Map으로 변환
         Map<JeonseLoanProductType, LoanLimitAndRateResultDto> loanLimitAndRateMap = loanLimitAndRateResultDto.stream()
             .collect(Collectors.toMap(LoanLimitAndRateResultDto::getProductType, Function.identity()));
 
@@ -125,25 +138,26 @@ public class LoanAdviceService {
             LoanLimitAndRateResultDto loanLimitAndRate = loanLimitAndRateMap.get(productType);
 
             if (productType == optimalLoanProduct.getProductType()) {
-                continue;
+                continue;   // 최적상품은 제외
             }
-
-            BigDecimal loanLimit = loanLimitAndRate.getPossibleLoanLimit() == null ? BigDecimal.ZERO : loanLimitAndRate.getPossibleLoanLimit();
-            BigDecimal expectedLoanRate = loanLimitAndRate.getExpectedLoanRate() == null ? BigDecimal.ZERO : loanLimitAndRate.getExpectedLoanRate();
-
-            RecommendedProductDto recommendedProductDto = RecommendedProductDto.create(
-                productType.getProductName(),
-                productType.getProductCode(),
-                loanLimit,
-                expectedLoanRate,
-                filterResult.getNotEligibleReasons()
-            );
-
-            log.info("lgw recommend product: {}", recommendedProductDto);
+            RecommendedProductDto recommendedProductDto = getRecommendedProductDto(filterResult, productType, loanLimitAndRate);
             recommendedProductDtos.add(recommendedProductDto);
-
         }
         return recommendedProductDtos;
+    }
+
+    private static RecommendedProductDto getRecommendedProductDto(FilterProductResultDto filterResult, JeonseLoanProductType productType, LoanLimitAndRateResultDto loanLimitAndRate) {
+        BigDecimal loanLimit = loanLimitAndRate.getPossibleLoanLimit() == null ? BigDecimal.ZERO : loanLimitAndRate.getPossibleLoanLimit();
+        BigDecimal expectedLoanRate = loanLimitAndRate.getExpectedLoanRate() == null ? BigDecimal.ZERO : loanLimitAndRate.getExpectedLoanRate();
+
+        RecommendedProductDto recommendedProductDto = RecommendedProductDto.create(
+            productType.getProductName(),
+            productType.getProductCode(),
+            loanLimit,
+            expectedLoanRate,
+            filterResult.getNotEligibleReasons()
+        );
+        return recommendedProductDto;
     }
 
 
