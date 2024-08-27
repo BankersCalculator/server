@@ -3,11 +3,13 @@ package com.bankersCalculator.server.advice.loanAdvice.dto.internal;
 import com.bankersCalculator.server.common.enums.loanAdvice.JeonseLoanProductType;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.ToString;
 
 import java.math.BigDecimal;
 
 @Getter
 @Builder
+@ToString
 public class LoanLimitAndRateResultDto {
 
     private JeonseLoanProductType productType;

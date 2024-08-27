@@ -1,5 +1,6 @@
 package com.bankersCalculator.server.advice.loanAdvice.dto.response;
 
+import com.bankersCalculator.server.advice.loanAdvice.entity.RecommendedProduct;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -15,4 +16,16 @@ public class RecommendedProductDto {
     private BigDecimal possibleLoanLimit;
     private BigDecimal expectedLoanRate;
     private List<String> notEligibleReasons;
+
+    public static RecommendedProductDto create(String loanProductName, String loanProductCode,
+                                            BigDecimal possibleLoanLimit, BigDecimal expectedLoanRate,
+                                               List<String> notEligibleReasons) {
+        return RecommendedProductDto.builder()
+            .loanProductName(loanProductName)
+            .loanProductCode(loanProductCode)
+            .possibleLoanLimit(possibleLoanLimit)
+            .expectedLoanRate(expectedLoanRate)
+            .notEligibleReasons(notEligibleReasons)
+            .build();
+    }
 }

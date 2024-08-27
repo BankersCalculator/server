@@ -3,12 +3,14 @@ package com.bankersCalculator.server.advice.loanAdvice.dto.internal;
 import com.bankersCalculator.server.common.enums.Bank;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.ToString;
 
 import java.math.BigDecimal;
 import java.util.List;
 
 @Getter
 @Builder
+@ToString
 public class AdditionalInformation {
 
     // 실주거 비용

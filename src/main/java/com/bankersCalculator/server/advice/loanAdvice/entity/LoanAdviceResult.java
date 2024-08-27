@@ -9,8 +9,10 @@ import com.bankersCalculator.server.common.enums.Bank;
 import com.bankersCalculator.server.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -21,6 +23,7 @@ import java.util.stream.Collectors;
 @Builder(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
+@Slf4j
 public class LoanAdviceResult {
 
     @Id
@@ -58,8 +61,7 @@ public class LoanAdviceResult {
     private String recommendationReason;        // 추천 이유
 
     @OneToMany(mappedBy = "loanAdviceResult", cascade = CascadeType.ALL, orphanRemoval = true)
-    @OrderBy("possibleLoanLimit ASC")
-    private List<RecommendedProduct> recommendedProducts; // 추천상품 리스트
+    private List<RecommendedProduct> recommendedProducts = new ArrayList<>();
 
     @ElementCollection(targetClass = Bank.class)
     @Enumerated(EnumType.STRING)
@@ -70,11 +72,17 @@ public class LoanAdviceResult {
 
     public static LoanAdviceResult create(User user, UserInputInfo userInputInfo,
                                           OptimalLoanProductResult optimalLoanProductResult,
-                                          AdditionalInformation additionalInformation, List<RecommendedProduct> recommendedProducts,
+                                          AdditionalInformation additionalInformation,
+                                          List<RecommendedProductDto> recommendedProductDtos,
                                           String aiReport) {
 
         BigDecimal totalRentalDeposit = optimalLoanProductResult.getPossibleLoanLimit()
             .add(additionalInformation.getOwnFunds());
+
+        List<RecommendedProduct> recommendedProducts = recommendedProductDtos.stream()
+            .map(RecommendedProduct::fromDto)
+            .collect(Collectors.toList());
+
 
         LoanAdviceResult result = LoanAdviceResult.builder()
             .user(user)
@@ -92,15 +100,23 @@ public class LoanAdviceResult {
             .guaranteeInsuranceFee(additionalInformation.getGuaranteeInsuranceFee())
             .stampDuty(additionalInformation.getStampDuty())
             .recommendationReason(aiReport)
-            .recommendedProducts(recommendedProducts)
             .availableBanks(additionalInformation.getAvailableBanks())
             .rentalLoanGuide(additionalInformation.getRentalLoanGuide())
             .build();
 
+        log.info("lgw create result: {}", result);
+        log.info("lgw create recommendedProductDtos: {}", recommendedProductDtos);
+
+
+        result.setRecommendedProducts(recommendedProducts);
         userInputInfo.setLoanAdviceResult(result);
-        recommendedProducts.forEach(recommendedProduct -> recommendedProduct.setLoanAdviceResult(result));
 
         return result;
+    }
+
+    public void setRecommendedProducts(List<RecommendedProduct> recommendedProducts) {
+        this.recommendedProducts = new ArrayList<>(recommendedProducts);
+
     }
 
 
@@ -121,26 +137,12 @@ public class LoanAdviceResult {
             .guaranteeInsuranceFee(guaranteeInsuranceFee)
             .stampDuty(stampDuty)
             .recommendationReason(recommendationReason)
-            .recommendedProducts(convertToRecommendedProductDtoList(recommendedProducts))
+            .recommendedProducts(recommendedProducts.stream()
+                .map(RecommendedProduct::toDto)
+                .collect(Collectors.toList()))
             .availableBanks(availableBanks)
             .rentalLoanGuide(rentalLoanGuide)
             .build();
     }
 
-    private List<RecommendedProductDto> convertToRecommendedProductDtoList(List<RecommendedProduct> recommendedProducts) {
-        return recommendedProducts.stream()
-            .map(this::convertToRecommendedProductDto)
-            .collect(Collectors.toList());
-    }
-
-    private RecommendedProductDto convertToRecommendedProductDto(RecommendedProduct recommendedProduct) {
-        return RecommendedProductDto.builder()
-            .loanProductName(recommendedProduct.getLoanProductName())
-            .loanProductCode(recommendedProduct.getLoanProductCode())
-            .possibleLoanLimit(recommendedProduct.getPossibleLoanLimit())
-            .expectedLoanRate(recommendedProduct.getExpectedLoanRate())
-            .notEligibleReasons(Arrays.stream(recommendedProduct.getNotEligibleReasons()
-                .split(Pattern.quote("|"))).toList())
-            .build();
-    }
 }

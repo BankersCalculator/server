@@ -42,6 +42,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
 
+
+
+
+
         String accessToken = request.getHeader(ACCESS_HEADER);
 
         if (tokenValidator.validateExpire(accessToken) && tokenValidator.validateToken(accessToken)) {
