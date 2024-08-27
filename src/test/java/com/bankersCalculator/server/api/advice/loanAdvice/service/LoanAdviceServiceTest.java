@@ -65,7 +65,7 @@ class LoanAdviceServiceTest extends IntegrationTestSupport {
             .isSMEEmployee(true)
             .isNetAssetOver345M(false)
             .rentHousingType(RentHousingType.APARTMENT)
-            .exclusiveArea(84.5)
+            .exclusiveArea(new BigDecimal(84.5))
             .buildingName("행복아파트")
             .districtCode("1111011700")
             .dongName("역삼동")
@@ -103,7 +103,7 @@ class LoanAdviceServiceTest extends IntegrationTestSupport {
         assertNotNull(response.getAvailableBanks());
         assertTrue(response.getAvailableBanks().contains(Bank.HANA));
         assertTrue(response.getAvailableBanks().contains(Bank.SHINHAN));
-        assertTrue(response.getAvailableBanks().contains(Bank.KOOMIN));
+        assertTrue(response.getAvailableBanks().contains(Bank.KB));
 
         assertEquals("전세대출 가이드", response.getRentalLoanGuide());
     }

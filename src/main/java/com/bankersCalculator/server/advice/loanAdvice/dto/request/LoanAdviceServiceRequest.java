@@ -30,7 +30,7 @@ public class LoanAdviceServiceRequest {
 
     // 주택정보부
     private RentHousingType rentHousingType;  // 주택타입
-    private Double exclusiveArea; // 전용면적
+    private BigDecimal exclusiveArea; // 전용면적
     private String buildingName;   // 건물명
     private String districtCode; // 법정동 코드
     private String dongName;   // 읍명동이름

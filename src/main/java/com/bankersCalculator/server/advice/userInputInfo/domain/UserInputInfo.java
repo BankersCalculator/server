@@ -12,6 +12,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 @Entity
 @Table(name = "user_input_info")
 @Getter
@@ -31,16 +33,16 @@ public class UserInputInfo {
     private LoanAdviceResult loanAdviceResult;
 
     // 고객 정보
-    private Long rentalDeposit;  // 임차보증금
-    private Long monthlyRent;    // 월세
-    private Long cashOnHand;     // 보유현금
+    private BigDecimal rentalDeposit;  // 임차보증금
+    private BigDecimal monthlyRent;    // 월세
+    private BigDecimal cashOnHand;     // 보유현금
     private Integer age;             // 만나이
 
     @Enumerated(EnumType.STRING)
     private MaritalStatus maritalStatus;  // 혼인상태
 
-    private Long annualIncome;        // 연소득
-    private Long spouseAnnualIncome;  // 배우자연소득
+    private BigDecimal annualIncome;        // 연소득
+    private BigDecimal spouseAnnualIncome;  // 배우자연소득
 
     @Enumerated(EnumType.STRING)
     private ChildStatus childStatus;  // 자녀상태
@@ -53,7 +55,7 @@ public class UserInputInfo {
     @Enumerated(EnumType.STRING)
     private RentHousingType rentHousingType;  // 주택타입
 
-    private Double exclusiveArea;  // 전용면적
+    private BigDecimal exclusiveArea;  // 전용면적
     private String buildingName; // 건물명
     private String districtCode; // 법정동 코드
     private String dongName;     // 읍명동이름
@@ -62,13 +64,13 @@ public class UserInputInfo {
     public static UserInputInfo create(User user, LoanAdviceServiceRequest request) {
         return UserInputInfo.builder()
             .user(user)
-            .rentalDeposit(request.getRentalDeposit().longValue())
-            .monthlyRent(request.getMonthlyRent().longValue())
-            .cashOnHand(request.getCashOnHand().longValue())
+            .rentalDeposit(request.getRentalDeposit())
+            .monthlyRent(request.getMonthlyRent())
+            .cashOnHand(request.getCashOnHand())
             .age(request.getAge())
             .maritalStatus(request.getMaritalStatus())
-            .annualIncome(request.getAnnualIncome().longValue())
-            .spouseAnnualIncome(request.getSpouseAnnualIncome().longValue())
+            .annualIncome(request.getAnnualIncome())
+            .spouseAnnualIncome(request.getSpouseAnnualIncome())
             .childStatus(request.getChildStatus())
             .hasNewborn(request.getHasNewborn())
             .isSMEEmployee(request.getIsSMEEmployee())

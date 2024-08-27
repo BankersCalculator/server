@@ -107,7 +107,7 @@ public class ForTestLoan2 implements LoanProduct {
 
     @Override
     public List<Bank> getAvailableBanks() {
-        return List.of(Bank.HANA, Bank.SHINHAN, Bank.KOOMIN);
+        return List.of(Bank.HANA, Bank.SHINHAN, Bank.KB);
     }
 
     private BigDecimal calculateLoanLimit(LoanAdviceServiceRequest request) {

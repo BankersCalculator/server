@@ -22,7 +22,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Component
-public class SeoulNewlyWedLeaseDepositLoan implements LoanProduct {
+public class SeoulNewlyWedLeaseLoan implements LoanProduct {
 
     private final RateProviderService rateProviderService;
 
@@ -33,7 +33,7 @@ public class SeoulNewlyWedLeaseDepositLoan implements LoanProduct {
 
     @Override
     public JeonseLoanProductType getProductType() {
-        return JeonseLoanProductType.SEOUL_NEWLYWED_LEASE_DEPOSIT;
+        return JeonseLoanProductType.SEOUL_NEWLYWED_LEASE_LOAN;
     }
 
     @Override
@@ -83,6 +83,19 @@ public class SeoulNewlyWedLeaseDepositLoan implements LoanProduct {
             .build();
     }
 
+
+    // 기타비용산출(보증요율, 보증보험료 등)
+    @Override
+    public BigDecimal getGuaranteeInsuranceFee(BigDecimal loanAmount) {
+        // 신한은행 홈피 기준 보증료 연 0.05%
+        return loanAmount.multiply(new BigDecimal("0.0005"));
+    }
+
+    @Override
+    public List<Bank> getAvailableBanks() {
+        return List.of(Bank.HANA, Bank.SHINHAN, Bank.KB);
+    }
+
     @Override
     public LoanLimitAndRateResultDto calculateLoanLimitAndRate(LoanAdviceServiceRequest request) {
         // 한도산출
@@ -96,19 +109,6 @@ public class SeoulNewlyWedLeaseDepositLoan implements LoanProduct {
             .expectedLoanRate(finalRate)
             .build();
 
-    }
-
-    // 기타비용산출(보증요율, 인지세, 보증보험료 등)
-
-    @Override
-    public BigDecimal getGuaranteeInsuranceFee(BigDecimal loanAmount) {
-        // 신한은행 홈피 기준 보증료 0.05% * 2년치
-        return loanAmount.multiply(new BigDecimal("0.001"));
-    }
-
-    @Override
-    public List<Bank> getAvailableBanks() {
-        return List.of(Bank.HANA, Bank.SHINHAN, Bank.KOOMIN);
     }
 
     private BigDecimal calculateLoanLimit(LoanAdviceServiceRequest request) {

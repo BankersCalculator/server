@@ -40,7 +40,7 @@ class LoanAdviceApiControllerTest extends ControllerTestSupport {
             .isSMEEmployee(true)
             .isNetAssetOver345M(false)
             .rentHousingType(RentHousingType.APARTMENT)
-            .exclusiveArea(84.5)
+            .exclusiveArea(BigDecimal.valueOf(84.5))
             .buildingName("행복아파트")
             .districtCode("1111011700")
             .dongName("역삼동")

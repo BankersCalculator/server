@@ -328,7 +328,7 @@ public class LoanAdviceApiControllerDocsTest extends RestDocsSupport {
             .isSMEEmployee(false)
             .isNetAssetOver345M(false)
             .rentHousingType(RentHousingType.APARTMENT)
-            .exclusiveArea(75.0)
+            .exclusiveArea(BigDecimal.valueOf(75.0))
             .buildingName("Sample Apartment")
             .districtCode("1168010100")
             .dongName("삼성동")
@@ -370,7 +370,7 @@ public class LoanAdviceApiControllerDocsTest extends RestDocsSupport {
                     .notEligibleReasons(List.of("임차목적지가 서울시가 아닙니다."))
                     .build()
             ))
-            .availableBanks(Arrays.asList(Bank.KOOMIN, Bank.SHINHAN, Bank.WOORI))
+            .availableBanks(Arrays.asList(Bank.KB, Bank.SHINHAN, Bank.WOORI))
             .rentalLoanGuide("전세자금대출 이용 시 주의사항:\n1. 대출 기간 동안 이자를 꾸준히 납부해야 합니다.\n2. 전세 계약 만료 시 대출금 상환 계획을 미리 세워야 합니다.")
             .build();
     }
