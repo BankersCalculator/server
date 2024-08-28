@@ -1,7 +1,7 @@
 package com.bankersCalculator.server.advice.loanAdvice.service.component;
 
 import com.bankersCalculator.server.advice.loanAdvice.dto.internal.LoanLimitAndRateResultDto;
-import com.bankersCalculator.server.advice.loanAdvice.dto.internal.OptimalLoanProductResult;
+import com.bankersCalculator.server.advice.loanAdvice.dto.internal.BestLoanProductResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -29,7 +29,7 @@ public class ProductComparator {
     private static final BigDecimal MIN_LOAN_LIMIT = new BigDecimal("10000000"); // 천만원
     private static final BigDecimal MAX_LOAN_LIMIT = new BigDecimal("1000000000"); // 십억원
 
-    public OptimalLoanProductResult compareProducts( BigDecimal rentalDeposit, List<LoanLimitAndRateResultDto> loanLimitAndRateResultDto) {
+    public BestLoanProductResult compareProducts(BigDecimal rentalDeposit, List<LoanLimitAndRateResultDto> loanLimitAndRateResultDto) {
         if (loanLimitAndRateResultDto == null || loanLimitAndRateResultDto.isEmpty()) {
             return null;
         }
@@ -37,10 +37,16 @@ public class ProductComparator {
             return buildOptimalResult(loanLimitAndRateResultDto.get(0));
         }
 
-        LoanLimitAndRateResultDto bestProduct = loanLimitAndRateResultDto.get(0);
-        BigDecimal bestScore = calculateScore(bestProduct, rentalDeposit);
+        LoanLimitAndRateResultDto bestProduct = LoanLimitAndRateResultDto.builder()
+            .possibleLoanLimit(BigDecimal.ZERO)
+            .expectedLoanRate(BigDecimal.ZERO)
+            .build();
+        BigDecimal bestScore = BigDecimal.ZERO;
 
         for (LoanLimitAndRateResultDto product : loanLimitAndRateResultDto) {
+
+            if (!product.isEligible()) continue;
+
             BigDecimal currentScore = calculateScore(product, rentalDeposit);
             if (currentScore.compareTo(bestScore) > 0) {
                 bestScore = currentScore;
@@ -95,8 +101,8 @@ public class ProductComparator {
         return normalizedGap.multiply(NEED_GAP_WEIGHT);
     }
 
-    private OptimalLoanProductResult buildOptimalResult(LoanLimitAndRateResultDto product) {
-        return OptimalLoanProductResult.builder()
+    private BestLoanProductResult buildOptimalResult(LoanLimitAndRateResultDto product) {
+        return BestLoanProductResult.builder()
             .productType(product.getProductType())
             .possibleLoanLimit(product.getPossibleLoanLimit())
             .expectedLoanRate(product.getExpectedLoanRate())

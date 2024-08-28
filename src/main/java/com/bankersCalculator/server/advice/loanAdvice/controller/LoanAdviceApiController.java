@@ -9,6 +9,7 @@ import com.bankersCalculator.server.advice.loanAdvice.service.LoanAdviceService;
 import com.bankersCalculator.server.common.api.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/loanAdvice")
 @RestController
+@Slf4j
 public class LoanAdviceApiController {
 
     private final LoanAdviceService loanAdviceService;
@@ -38,7 +40,9 @@ public class LoanAdviceApiController {
 
     @PostMapping
     public ApiResponse<LoanAdviceResponse> generateLoanAdvice(@RequestBody @Valid LoanAdviceRequest request) {
-        LoanAdviceResponse loanAdviceResponse = loanAdviceService.generateLoanAdvice(request.toServiceRequest());
+
+        log.info("lgw request: {}", request.getHasNewborn());
+        LoanAdviceResponse loanAdviceResponse = loanAdviceService.createLoanAdvice(request.toServiceRequest());
 
         if (!loanAdviceResponse.getHasEligibleProduct()) {
             return ApiResponse.failToMakeAdvice(loanAdviceResponse);

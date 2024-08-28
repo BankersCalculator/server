@@ -13,6 +13,11 @@ import java.math.BigDecimal;
 public class LoanLimitAndRateResultDto {
 
     private JeonseLoanProductType productType;
+    private boolean isEligible;
     private BigDecimal possibleLoanLimit;
     private BigDecimal expectedLoanRate;
+
+    public void setIsEligible(boolean isEligible) {
+        this.isEligible = isEligible;
+    }
 }

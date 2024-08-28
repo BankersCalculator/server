@@ -167,7 +167,7 @@ public class LoanAdviceApiControllerDocsTest extends RestDocsSupport {
         LoanAdviceRequest request = createSampleLoanAdviceRequest();
         LoanAdviceResponse response = createSampleLoanAdviceResponse();
 
-        when(loanAdviceService.generateLoanAdvice(any())).thenReturn(response);
+        when(loanAdviceService.createLoanAdvice(any())).thenReturn(response);
 
         mockMvc.perform(post(BASE_URL)
                 .contentType(MediaType.APPLICATION_JSON)

@@ -4,7 +4,6 @@ import com.bankersCalculator.server.IntegrationTestSupport;
 import com.bankersCalculator.server.advice.loanAdvice.dto.request.LoanAdviceServiceRequest;
 import com.bankersCalculator.server.advice.loanAdvice.dto.response.LoanAdviceResponse;
 import com.bankersCalculator.server.advice.loanAdvice.service.LoanAdviceService;
-import com.bankersCalculator.server.common.enums.Bank;
 import com.bankersCalculator.server.common.enums.RoleType;
 import com.bankersCalculator.server.common.enums.loanAdvice.ChildStatus;
 import com.bankersCalculator.server.common.enums.loanAdvice.MaritalStatus;
@@ -73,7 +72,7 @@ class LoanAdviceServiceTest extends IntegrationTestSupport {
             .build();
 
         // when
-        LoanAdviceResponse response = loanAdviceService.generateLoanAdvice(request);
+        LoanAdviceResponse response = loanAdviceService.createLoanAdvice(request);
 
         // then
         assertNotNull(response);

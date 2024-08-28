@@ -25,6 +25,7 @@ public class LoanLimitAndRateCalculator {
         for (FilterProductResultDto filteredProduct : filteredProducts) {
             LoanProduct loanProduct = loanProductFactory.getLoanProduct(filteredProduct.getProductType());
             LoanLimitAndRateResultDto loanLimitAndRateResult = loanProduct.calculateLoanLimitAndRate(request);
+            loanLimitAndRateResult.setIsEligible(filteredProduct.isEligible());
             result.add(loanLimitAndRateResult);
         }
 
