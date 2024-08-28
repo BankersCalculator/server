@@ -4,6 +4,7 @@ import com.bankersCalculator.server.advice.loanAdvice.dto.request.LoanAdviceRequ
 import com.bankersCalculator.server.advice.loanAdvice.dto.request.SpecificLoanAdviceRequest;
 import com.bankersCalculator.server.advice.loanAdvice.dto.response.LoanAdviceResponse;
 import com.bankersCalculator.server.advice.loanAdvice.dto.response.LoanAdviceSummaryResponse;
+import com.bankersCalculator.server.advice.loanAdvice.service.LoanAdviceQueryService;
 import com.bankersCalculator.server.advice.loanAdvice.service.LoanAdviceService;
 import com.bankersCalculator.server.common.api.ApiResponse;
 import jakarta.validation.Valid;
@@ -18,18 +19,19 @@ import java.util.List;
 public class LoanAdviceApiController {
 
     private final LoanAdviceService loanAdviceService;
+    private final LoanAdviceQueryService loanAdviceQueryService;
 
 
     @GetMapping
     public ApiResponse<List<LoanAdviceSummaryResponse>> getRecentLoanAdvices() {
-        List<LoanAdviceSummaryResponse> recentLoanAdvices = loanAdviceService.getRecentLoanAdvices();
+        List<LoanAdviceSummaryResponse> recentLoanAdvices = loanAdviceQueryService.getRecentLoanAdvices();
 
         return ApiResponse.ok(recentLoanAdvices);
     }
 
     @GetMapping("/specific/{loanAdviceResultId}")
     public ApiResponse<LoanAdviceResponse> getSpecificLoanAdvice(@PathVariable Long loanAdviceResultId) {
-        LoanAdviceResponse specificLoanAdvice = loanAdviceService.getSpecificLoanAdvice(loanAdviceResultId);
+        LoanAdviceResponse specificLoanAdvice = loanAdviceQueryService.getSpecificLoanAdvice(loanAdviceResultId);
 
         return ApiResponse.ok(specificLoanAdvice);
     }

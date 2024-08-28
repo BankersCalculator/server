@@ -64,7 +64,7 @@ public class LoanAdviceService {
         // 필터링 을 통과한 상품이 하나도 없는 경우
         if (!hasEligibleProducts) {
             List<RecommendedProductDto> recommendedProductDtos = generateRecommendProductDtosWithNoEligibleProducts(filterResults);
-            return  LoanAdviceResponse.ofEmpty(recommendedProductDtos);
+            return LoanAdviceResponse.ofEmpty(recommendedProductDtos);
         }
 
         // 대출한도 및 금리 계산
@@ -84,34 +84,11 @@ public class LoanAdviceService {
         return loanAdviceResult.toLoanAdviceResponse();
     }
 
-    private List<RecommendedProductDto> generateRecommendProductDtosWithNoEligibleProducts(List<FilterProductResultDto> filterResults) {
-        List<RecommendedProductDto> recommendedProductDtos = new ArrayList<>();
-        for (FilterProductResultDto filterResult : filterResults) {
-            JeonseLoanProductType productType = filterResult.getProductType();
-            RecommendedProductDto recommendedProductDto = RecommendedProductDto.create(
-                productType.getProductName(),
-                productType.getProductCode(),
-                BigDecimal.ZERO,
-                BigDecimal.ZERO,
-                filterResult.getNotEligibleReasons()
-            );
-            recommendedProductDtos.add(recommendedProductDto);
-        }
-        return recommendedProductDtos;
-    }
-
 
     public LoanAdviceResponse generateLoanAdviceOnSpecificLoan(Long loanAdviceResultId, String productCode) {
         return null;
     }
 
-    public List<LoanAdviceSummaryResponse> getRecentLoanAdvices() {
-        return null;
-    }
-
-    public LoanAdviceResponse getSpecificLoanAdvice(Long loanAdviceResultId) {
-        return null;
-    }
 
     private User getCurrentUser() {
         String providerId = SecurityUtils.getProviderId();
@@ -183,6 +160,22 @@ public class LoanAdviceService {
             filterResult.getNotEligibleReasons()
         );
         return recommendedProductDto;
+    }
+
+    private List<RecommendedProductDto> generateRecommendProductDtosWithNoEligibleProducts(List<FilterProductResultDto> filterResults) {
+        List<RecommendedProductDto> recommendedProductDtos = new ArrayList<>();
+        for (FilterProductResultDto filterResult : filterResults) {
+            JeonseLoanProductType productType = filterResult.getProductType();
+            RecommendedProductDto recommendedProductDto = RecommendedProductDto.create(
+                productType.getProductName(),
+                productType.getProductCode(),
+                BigDecimal.ZERO,
+                BigDecimal.ZERO,
+                filterResult.getNotEligibleReasons()
+            );
+            recommendedProductDtos.add(recommendedProductDto);
+        }
+        return recommendedProductDtos;
     }
 
 
