@@ -1,6 +1,7 @@
 package com.bankersCalculator.server.oauth.token;
 
 import com.bankersCalculator.server.oauth.repository.RefreshTokenRedisRepository;
+import com.bankersCalculator.server.oauth.repository.TempUserTokenRedisRepository;
 import com.bankersCalculator.server.oauth.userInfo.KakaoUserDetails;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -42,6 +43,7 @@ public class TokenProvider {
     private Key jwtKey;
 
     private final RefreshTokenRedisRepository refreshTokenRedisRepository;
+    private final TempUserTokenRedisRepository tempUserTokenRedisRepository;
 
     @PostConstruct
     public void intiKey() {
@@ -113,5 +115,24 @@ public class TokenProvider {
         KakaoUserDetails principal = new KakaoUserDetails((String) claims.get(AUTH_ID), simpleGrantedAuthorities, Map.of());
 
         return new UsernamePasswordAuthenticationToken(principal, token, simpleGrantedAuthorities);
+    }
+
+    public Authentication getTempUserAuthentication(String tempUserId) {
+
+        TempUserToken byTempUserId = tempUserTokenRedisRepository.findByTempUserId(tempUserId);
+        if (byTempUserId != null) {
+            throw new IllegalArgumentException("이미 1회 산출한 TempUserId 입니다.");
+        }
+
+        tempUserTokenRedisRepository.save(TempUserToken.builder()
+            .tempUserId(tempUserId)
+            .build());
+
+        List<SimpleGrantedAuthority> simpleGrantedAuthorities = List.of(new SimpleGrantedAuthority("ROLE_TEMP_USER"));
+
+
+        KakaoUserDetails principal = new KakaoUserDetails(tempUserId, simpleGrantedAuthorities, Map.of());
+
+        return new UsernamePasswordAuthenticationToken(principal, tempUserId, simpleGrantedAuthorities);
     }
 }

@@ -24,6 +24,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private static final String ACCESS_HEADER = "AccessToken";
     private static final String REFRESH_HEADER = "RefreshToken";
+    private static final String TEMP_USER_HEADER = "TempUserId";
 
     private final TokenValidator tokenValidator;
     private final TokenProvider tokenProvider;
@@ -42,8 +43,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
 
+        String TempUserIdToken = request.getHeader(TEMP_USER_HEADER);
 
+        if (request.getRequestURI().equals("/api/v1/loanAdvice")
+            && TempUserIdToken != null) {
 
+            SecurityContextHolder.getContext().setAuthentication(tokenProvider.getTempUserAuthentication(TempUserIdToken));
+
+            filterChain.doFilter(request, response);
+            return;
+        }
 
 
         String accessToken = request.getHeader(ACCESS_HEADER);

@@ -42,7 +42,7 @@ public class User extends BaseTimeEntity {
     public static User createTempUser(String tempUserId) {
         return User.builder()
             .oauthProvider("temp")
-            .oauthProviderId(null)
+            .oauthProviderId(tempUserId)
             .email(tempUserId)
             .roleType(RoleType.USER)
             .build();
