@@ -168,8 +168,14 @@ public class LoanAdviceService {
 
     private User fetchCurrentUser() {
         String providerId = SecurityUtils.getProviderId();
-        User user = userRepository.findByOauthProviderId(providerId)
-            .orElseThrow(() -> new IllegalArgumentException("사용자 정보가 없습니다."));
+
+        User user;
+        if (providerId.startsWith("temp")) {
+            user = userRepository.save(User.createTempUser(providerId));
+        } else {
+            user = userRepository.findByOauthProviderId(providerId)
+                .orElseThrow(() -> new IllegalArgumentException("사용자 정보가 없습니다."));
+        }
         return user;
     }
 

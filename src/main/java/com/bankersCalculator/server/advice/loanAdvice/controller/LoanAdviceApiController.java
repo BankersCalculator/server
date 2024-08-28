@@ -41,7 +41,6 @@ public class LoanAdviceApiController {
     @PostMapping
     public ApiResponse<LoanAdviceResponse> generateLoanAdvice(@RequestBody @Valid LoanAdviceRequest request) {
 
-        log.info("lgw request: {}", request.getHasNewborn());
         LoanAdviceResponse loanAdviceResponse = loanAdviceService.createLoanAdvice(request.toServiceRequest());
 
         if (!loanAdviceResponse.getHasEligibleProduct()) {
