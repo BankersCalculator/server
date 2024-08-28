@@ -16,6 +16,8 @@ import java.util.stream.Collectors;
 public class LoanAdviceResponse {
 
     private Long loanAdviceResultId;
+
+    private Boolean hasEligibleProduct;
     // 대출 상품 정보
     private String loanProductName;
     private String loanProductCode;
@@ -53,6 +55,15 @@ public class LoanAdviceResponse {
     private String rentalLoanGuide;
 
 
+    // Eilgible 상품이 없는 경우
+    public static LoanAdviceResponse ofEmpty(List<RecommendedProductDto> recommendedProductDto) {
+        return LoanAdviceResponse.builder()
+            .hasEligibleProduct(false)
+            .recommendedProducts(recommendedProductDto)
+            .build();
+    }
+
+
 
     public static LoanAdviceResponse of(LoanAdviceResult result) {
 
@@ -60,6 +71,7 @@ public class LoanAdviceResponse {
 
         return LoanAdviceResponse.builder()
             .loanAdviceResultId(result.getId())
+            .hasEligibleProduct(true)
             .loanProductName(result.getLoanProductName())
             .loanProductCode(result.getLoanProductCode())
             .possibleLoanLimit(result.getPossibleLoanLimit())

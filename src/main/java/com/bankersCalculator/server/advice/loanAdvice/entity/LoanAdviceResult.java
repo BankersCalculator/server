@@ -111,6 +111,7 @@ public class LoanAdviceResult {
         return result;
     }
 
+
     public void updateRecommendedProducts(List<RecommendedProduct> newRecommendedProducts) {
         if (this.recommendedProducts == null) {
             this.recommendedProducts = new ArrayList<>();
@@ -130,6 +131,7 @@ public class LoanAdviceResult {
     public LoanAdviceResponse toLoanAdviceResponse() {
         return LoanAdviceResponse.builder()
             .loanAdviceResultId(id)
+            .hasEligibleProduct(true)
             .loanProductName(loanProductName)
             .loanProductCode(loanProductCode)
             .possibleLoanLimit(possibleLoanLimit)

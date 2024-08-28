@@ -13,6 +13,7 @@ import com.bankersCalculator.server.advice.loanAdvice.repository.LoanAdviceResul
 import com.bankersCalculator.server.advice.loanAdvice.service.component.*;
 import com.bankersCalculator.server.advice.userInputInfo.domain.UserInputInfo;
 import com.bankersCalculator.server.advice.userInputInfo.repository.UserInputInfoRepository;
+import com.bankersCalculator.server.common.api.ApiResponse;
 import com.bankersCalculator.server.common.enums.loanAdvice.JeonseLoanProductType;
 import com.bankersCalculator.server.oauth.userInfo.SecurityUtils;
 import com.bankersCalculator.server.user.entity.User;
@@ -58,6 +59,14 @@ public class LoanAdviceService {
 
         // 대출상품 필터링
         List<FilterProductResultDto> filterResults = productFilter.filterProduct(request);
+        boolean hasEligibleProducts = filterResults.stream().anyMatch(FilterProductResultDto::isEligible);
+
+        // 필터링 을 통과한 상품이 하나도 없는 경우
+        if (!hasEligibleProducts) {
+            List<RecommendedProductDto> recommendedProductDtos = generateRecommendProductDtosWithNoEligibleProducts(filterResults);
+            return  LoanAdviceResponse.ofEmpty(recommendedProductDtos);
+        }
+
         // 대출한도 및 금리 계산
         List<LoanLimitAndRateResultDto> loanLimitAndRateResultDto = loanLimitAndRateCalculator.calculateLoanLimitAndRate(request, filterResults);
         // 대출상품 비교
@@ -73,6 +82,22 @@ public class LoanAdviceService {
         UserInputInfo userInputInfo = getUserInputInfo(request, user);
         LoanAdviceResult loanAdviceResult = getLoanAdviceResult(optimalLoanProduct, additionalInformation, aiReport, recommendedProductDtos, user, userInputInfo);
         return loanAdviceResult.toLoanAdviceResponse();
+    }
+
+    private List<RecommendedProductDto> generateRecommendProductDtosWithNoEligibleProducts(List<FilterProductResultDto> filterResults) {
+        List<RecommendedProductDto> recommendedProductDtos = new ArrayList<>();
+        for (FilterProductResultDto filterResult : filterResults) {
+            JeonseLoanProductType productType = filterResult.getProductType();
+            RecommendedProductDto recommendedProductDto = RecommendedProductDto.create(
+                productType.getProductName(),
+                productType.getProductCode(),
+                BigDecimal.ZERO,
+                BigDecimal.ZERO,
+                filterResult.getNotEligibleReasons()
+            );
+            recommendedProductDtos.add(recommendedProductDto);
+        }
+        return recommendedProductDtos;
     }
 
 

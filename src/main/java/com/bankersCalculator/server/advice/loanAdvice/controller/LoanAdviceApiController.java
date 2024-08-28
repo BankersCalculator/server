@@ -38,6 +38,9 @@ public class LoanAdviceApiController {
     public ApiResponse<LoanAdviceResponse> generateLoanAdvice(@RequestBody @Valid LoanAdviceRequest request) {
         LoanAdviceResponse loanAdviceResponse = loanAdviceService.generateLoanAdvice(request.toServiceRequest());
 
+        if (!loanAdviceResponse.getHasEligibleProduct()) {
+            return ApiResponse.failToMakeAdvice(loanAdviceResponse);
+        }
         return ApiResponse.ok(loanAdviceResponse);
     }
 
