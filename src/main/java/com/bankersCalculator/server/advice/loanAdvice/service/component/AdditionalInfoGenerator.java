@@ -2,7 +2,7 @@ package com.bankersCalculator.server.advice.loanAdvice.service.component;
 
 
 import com.bankersCalculator.server.advice.loanAdvice.dto.internal.AdditionalInformation;
-import com.bankersCalculator.server.advice.loanAdvice.dto.internal.OptimalLoanProductResult;
+import com.bankersCalculator.server.advice.loanAdvice.dto.internal.BestLoanProductResult;
 import com.bankersCalculator.server.advice.loanAdvice.dto.request.LoanAdviceServiceRequest;
 import com.bankersCalculator.server.advice.loanAdvice.model.LoanProduct;
 import com.bankersCalculator.server.advice.loanAdvice.model.LoanProductFactory;
@@ -21,7 +21,7 @@ public class AdditionalInfoGenerator {
     private final LoanProductFactory loanProductFactory;
 
     public AdditionalInformation generateAdditionalInfo(LoanAdviceServiceRequest request,
-                                                        OptimalLoanProductResult optimalLoanProduct) {
+                                                        BestLoanProductResult optimalLoanProduct) {
 
         // 소요자기자금
         BigDecimal rentalDeposit = request.getRentalDeposit();

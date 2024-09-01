@@ -12,6 +12,7 @@ import com.bankersCalculator.server.common.enums.loanAdvice.ChildStatus;
 import com.bankersCalculator.server.common.enums.loanAdvice.JeonseLoanProductType;
 import com.bankersCalculator.server.common.enums.loanAdvice.MaritalStatus;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -37,7 +38,6 @@ public class NewbornSpecialLeaseLoan implements LoanProduct {
 
     @Override
     public FilterProductResultDto filtering(LoanAdviceServiceRequest request) {
-
         /**
          * 검증할 목록
          *
@@ -95,9 +95,7 @@ public class NewbornSpecialLeaseLoan implements LoanProduct {
             .build();
     }
 
-
-    // 기타비용산출(보증요율, 인지세, 보증보험료 등)
-
+    // 기타비용산출(보증요율, 보증보험료 등)
     @Override
     public BigDecimal getGuaranteeInsuranceFee(BigDecimal loanAmount) {
         // 신한은행 홈피 기준 보증료 0.05% * 2년치

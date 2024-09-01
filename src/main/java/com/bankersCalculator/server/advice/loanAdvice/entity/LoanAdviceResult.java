@@ -1,7 +1,7 @@
 package com.bankersCalculator.server.advice.loanAdvice.entity;
 
 import com.bankersCalculator.server.advice.loanAdvice.dto.internal.AdditionalInformation;
-import com.bankersCalculator.server.advice.loanAdvice.dto.internal.OptimalLoanProductResult;
+import com.bankersCalculator.server.advice.loanAdvice.dto.internal.BestLoanProductResult;
 import com.bankersCalculator.server.advice.loanAdvice.dto.response.LoanAdviceResponse;
 import com.bankersCalculator.server.advice.loanAdvice.dto.response.RecommendedProductDto;
 import com.bankersCalculator.server.advice.userInputInfo.domain.UserInputInfo;
@@ -13,9 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -60,9 +58,11 @@ public class LoanAdviceResult {
     @Column(length = 4000)
     private String recommendationReason;        // 추천 이유
 
+    @Builder.Default
     @OneToMany(mappedBy = "loanAdviceResult", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<RecommendedProduct> recommendedProducts = new ArrayList<>();
 
+    @Builder.Default
     @ElementCollection(targetClass = Bank.class)
     @Enumerated(EnumType.STRING)
     private List<Bank> availableBanks = new ArrayList<>();  // 이용 가능한 은행 목록
@@ -71,12 +71,12 @@ public class LoanAdviceResult {
     private String rentalLoanGuide;             // 대출 가이드
 
     public static LoanAdviceResult create(User user, UserInputInfo userInputInfo,
-                                          OptimalLoanProductResult optimalLoanProductResult,
+                                          BestLoanProductResult bestLoanProductResult,
                                           AdditionalInformation additionalInformation,
                                           List<RecommendedProductDto> recommendedProductDtos,
                                           String aiReport) {
 
-        BigDecimal totalRentalDeposit = optimalLoanProductResult.getPossibleLoanLimit()
+        BigDecimal totalRentalDeposit = bestLoanProductResult.getPossibleLoanLimit()
             .add(additionalInformation.getOwnFunds());
 
         List<RecommendedProduct> recommendedProducts = recommendedProductDtos.stream()
@@ -86,12 +86,12 @@ public class LoanAdviceResult {
 
         LoanAdviceResult result = LoanAdviceResult.builder()
             .user(user)
-            .loanProductName(optimalLoanProductResult.getProductType().getProductName())
-            .loanProductCode(optimalLoanProductResult.getProductType().getProductCode())
-            .possibleLoanLimit(optimalLoanProductResult.getPossibleLoanLimit())
-            .expectedLoanRate(optimalLoanProductResult.getExpectedLoanRate())
+            .loanProductName(bestLoanProductResult.getProductType().getProductName())
+            .loanProductCode(bestLoanProductResult.getProductType().getProductCode())
+            .possibleLoanLimit(bestLoanProductResult.getPossibleLoanLimit())
+            .expectedLoanRate(bestLoanProductResult.getExpectedLoanRate())
             .totalRentalDeposit(totalRentalDeposit)
-            .loanAmount(optimalLoanProductResult.getPossibleLoanLimit())
+            .loanAmount(bestLoanProductResult.getPossibleLoanLimit())
             .ownFunds(additionalInformation.getOwnFunds())
             .monthlyInterestCost(additionalInformation.getMonthlyInterestCost())
             .monthlyRent(additionalInformation.getMonthlyRent())
@@ -110,6 +110,7 @@ public class LoanAdviceResult {
 
         return result;
     }
+
 
     public void updateRecommendedProducts(List<RecommendedProduct> newRecommendedProducts) {
         if (this.recommendedProducts == null) {
@@ -130,6 +131,7 @@ public class LoanAdviceResult {
     public LoanAdviceResponse toLoanAdviceResponse() {
         return LoanAdviceResponse.builder()
             .loanAdviceResultId(id)
+            .hasEligibleProduct(true)
             .loanProductName(loanProductName)
             .loanProductCode(loanProductCode)
             .possibleLoanLimit(possibleLoanLimit)

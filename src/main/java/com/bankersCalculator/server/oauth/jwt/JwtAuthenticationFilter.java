@@ -1,9 +1,12 @@
 package com.bankersCalculator.server.oauth.jwt;
 
+import com.bankersCalculator.server.common.api.ApiResponse;
+import com.bankersCalculator.server.common.exception.customException.AuthException;
 import com.bankersCalculator.server.oauth.config.SecurityPathConfig;
 import com.bankersCalculator.server.oauth.token.TokenDto;
 import com.bankersCalculator.server.oauth.token.TokenProvider;
 import com.bankersCalculator.server.oauth.token.TokenValidator;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,6 +14,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -24,6 +29,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private static final String ACCESS_HEADER = "AccessToken";
     private static final String REFRESH_HEADER = "RefreshToken";
+    private static final String TEMP_USER_HEADER = "TempUserId";
 
     private final TokenValidator tokenValidator;
     private final TokenProvider tokenProvider;
@@ -37,13 +43,26 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     FilterChain filterChain) throws ServletException, IOException {
 
 
+        // 토큰이 필요없는 URI
         if (securityPathConfig.isPublicPath(request.getRequestURI())) {
             filterChain.doFilter(request, response);
             return;
         }
 
+        // 1회성 유저 패스 로직
+        String TempUserIdToken = request.getHeader(TEMP_USER_HEADER);
+        if (request.getRequestURI().equals("/api/v1/loanAdvice")
+            && TempUserIdToken != null) {
 
+            try {
+                SecurityContextHolder.getContext().setAuthentication(tokenProvider.getTempUserAuthentication(TempUserIdToken));
+            } catch (AuthException e) {
+                sendErrorResponse(response, e.getMessage());
+            }
 
+            filterChain.doFilter(request, response);
+            return;
+        }
 
 
         String accessToken = request.getHeader(ACCESS_HEADER);
@@ -54,7 +73,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         if (!tokenValidator.validateExpire(accessToken) && tokenValidator.validateToken(accessToken)) {
             String refreshToken = request.getHeader(REFRESH_HEADER);
-            if (tokenValidator.validateExpire(refreshToken) && tokenValidator.validateToken(refreshToken)){
+            if (tokenValidator.validateExpire(refreshToken) && tokenValidator.validateToken(refreshToken)) {
 
                 TokenDto newTokenDto = tokenProvider.reissueAccessToken(refreshToken);
 
@@ -71,5 +90,20 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         session.setAttribute("accessToken", newTokenDto.getAccessToken());
         session.setAttribute("refreshToken", newTokenDto.getRefreshToken());
         response.sendRedirect("/login/oauth2/kakao/reissue");
+    }
+
+    private void sendErrorResponse(HttpServletResponse response, String message) throws IOException {
+        response.setStatus(HttpStatus.UNAUTHORIZED.value());
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        response.setCharacterEncoding("UTF-8");
+
+        ApiResponse<Object> apiResponse = ApiResponse.of(
+            HttpStatus.UNAUTHORIZED,
+            message,
+            null
+        );
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.writeValue(response.getWriter(), apiResponse);
     }
 }

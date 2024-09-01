@@ -3,6 +3,7 @@ package com.bankersCalculator.server.common.api;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
+import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.HttpStatus.OK;
 
 /***
@@ -34,5 +35,9 @@ public class ApiResponse<T> {
 
     public static <T> ApiResponse<T> success(T data) {
         return new ApiResponse<>(OK, "SUCCESS", data);
+    }
+
+    public static <T> ApiResponse<T> failToMakeAdvice(T data) {
+        return new ApiResponse<>(NO_CONTENT, "FAIL_TO_MAKE_ADVICE", data);
     }
 }

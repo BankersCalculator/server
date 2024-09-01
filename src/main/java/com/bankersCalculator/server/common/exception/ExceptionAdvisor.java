@@ -1,6 +1,7 @@
 package com.bankersCalculator.server.common.exception;
 
 import com.bankersCalculator.server.common.api.ApiResponse;
+import com.bankersCalculator.server.common.exception.customException.AuthException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.BindException;
@@ -43,9 +44,19 @@ public class ExceptionAdvisor {
         );
     }
 
-    @ExceptionHandler(AccessDeniedException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler(AccessDeniedException.class)
     public ApiResponse<Object> accessDeniedException(AccessDeniedException e) {
+        return ApiResponse.of(
+            HttpStatus.UNAUTHORIZED,
+            e.getMessage(),
+            null
+        );
+    }
+
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler(AuthException.class)
+    public ApiResponse<Object> authException(AuthException e) {
         return ApiResponse.of(
             HttpStatus.UNAUTHORIZED,
             e.getMessage(),

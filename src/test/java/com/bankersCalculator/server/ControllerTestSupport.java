@@ -1,6 +1,7 @@
 package com.bankersCalculator.server;
 
 import com.bankersCalculator.server.advice.loanAdvice.controller.LoanAdviceApiController;
+import com.bankersCalculator.server.advice.loanAdvice.service.LoanAdviceQueryService;
 import com.bankersCalculator.server.advice.loanAdvice.service.LoanAdviceService;
 import com.bankersCalculator.server.calculator.dtiCalc.controller.DtiCalcController;
 import com.bankersCalculator.server.calculator.dtiCalc.service.DtiCalcService;
@@ -53,7 +54,8 @@ public abstract class ControllerTestSupport {
     protected DtiCalcService dtiCalcService;
     @MockBean
     protected LoanAdviceService loanAdviceService;
-
+    @MockBean
+    protected LoanAdviceQueryService loanAdviceQueryService;
 
     @MockBean
     protected JwtAuthenticationFilter jwtAuthenticationFilter;

@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 @Builder
 @Getter
 @ToString
-public class OptimalLoanProductResult {
+public class BestLoanProductResult {
 
     private JeonseLoanProductType productType;
     private BigDecimal possibleLoanLimit;
