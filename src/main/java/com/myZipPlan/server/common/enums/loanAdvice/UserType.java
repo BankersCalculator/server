@@ -1,0 +1,16 @@
+package com.myZipPlan.server.common.enums.loanAdvice;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@Getter
+@AllArgsConstructor
+public enum UserType {
+
+    MEMBER("회원"),
+    NON_MEMBER("비회원");
+
+    private String description;
+
+
+}

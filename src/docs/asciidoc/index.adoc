@@ -1,7 +1,7 @@
 ifndef::snippets[]
 :snippets: ./build/generated-snippets
 endif::[]
-= BankersCalculator REST API 문서
+= MyZipPlan REST API 문서
 :doctype: book
 :icons: font
 :source-highlighter: highlightjs
