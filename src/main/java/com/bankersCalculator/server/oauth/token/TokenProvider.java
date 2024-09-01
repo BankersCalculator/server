@@ -1,5 +1,6 @@
 package com.bankersCalculator.server.oauth.token;
 
+import com.bankersCalculator.server.common.exception.customException.AuthException;
 import com.bankersCalculator.server.oauth.repository.RefreshTokenRedisRepository;
 import com.bankersCalculator.server.oauth.repository.TempUserTokenRedisRepository;
 import com.bankersCalculator.server.oauth.userInfo.KakaoUserDetails;
@@ -121,7 +122,7 @@ public class TokenProvider {
 
         TempUserToken byTempUserId = tempUserTokenRedisRepository.findByTempUserId(tempUserId);
         if (byTempUserId != null) {
-            throw new IllegalArgumentException("이미 1회 산출한 TempUserId 입니다.");
+            throw new AuthException("이미 1회 산출한 TempUserId 입니다.");
         }
 
         tempUserTokenRedisRepository.save(TempUserToken.builder()

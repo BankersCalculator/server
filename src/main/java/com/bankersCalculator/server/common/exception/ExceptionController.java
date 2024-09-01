@@ -19,4 +19,5 @@ public class ExceptionController {
     public void accessDeniedException() {
         throw new AccessDeniedException("로그인이 필요한 요청입니다.");
     }
+
 }

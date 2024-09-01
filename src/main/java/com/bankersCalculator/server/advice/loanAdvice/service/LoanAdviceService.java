@@ -13,6 +13,7 @@ import com.bankersCalculator.server.advice.loanAdvice.service.component.*;
 import com.bankersCalculator.server.advice.userInputInfo.domain.UserInputInfo;
 import com.bankersCalculator.server.advice.userInputInfo.repository.UserInputInfoRepository;
 import com.bankersCalculator.server.common.enums.loanAdvice.JeonseLoanProductType;
+import com.bankersCalculator.server.common.exception.customException.AuthException;
 import com.bankersCalculator.server.oauth.userInfo.SecurityUtils;
 import com.bankersCalculator.server.user.entity.User;
 import com.bankersCalculator.server.user.repository.UserRepository;
@@ -76,6 +77,7 @@ public class LoanAdviceService {
         return LoanAdviceResponse.ofEmpty(recommendedProductDtos);
     }
 
+    // 필터링 통과 못한 상품들의 사유를 반환하기 위한 메서드
     private List<RecommendedProductDto> createIneligibleProductList(List<FilterProductResultDto> filterResults) {
         List<RecommendedProductDto> recommendedProductDtos = new ArrayList<>();
         for (FilterProductResultDto filterResult : filterResults) {
@@ -99,6 +101,7 @@ public class LoanAdviceService {
         return result.toLoanAdviceResponse();
     }
 
+    // 대출상품 추천을 위한 전체 프로세스를 수행한다.
     private LoanAdviceComponents prepareLoanAdviceComponents(LoanAdviceServiceRequest request, List<FilterProductResultDto> filterResults) {
         List<LoanLimitAndRateResultDto> loanTerms = calculateLoanTerms(request, filterResults);
         BestLoanProductResult bestProduct = findBestLoanProduct(request, loanTerms);
@@ -144,7 +147,7 @@ public class LoanAdviceService {
 
             // Best 상품을 제외한 나머지 추천상품 목록을 생성한다.
             if (productType == optimalLoanProduct.getProductType()) {
-                continue;   // 최적상품은 제외
+                continue;
             }
             RecommendedProductDto recommendedProductDto = createRecommendedProduct(filterResult, productType, loanLimitAndRate);
             recommendedProductDtos.add(recommendedProductDto);
@@ -156,14 +159,13 @@ public class LoanAdviceService {
         BigDecimal loanLimit = loanLimitAndRate.getPossibleLoanLimit() == null ? BigDecimal.ZERO : loanLimitAndRate.getPossibleLoanLimit();
         BigDecimal expectedLoanRate = loanLimitAndRate.getExpectedLoanRate() == null ? BigDecimal.ZERO : loanLimitAndRate.getExpectedLoanRate();
 
-        RecommendedProductDto recommendedProductDto = RecommendedProductDto.create(
+        return RecommendedProductDto.create(
             productType.getProductName(),
             productType.getProductCode(),
             loanLimit,
             expectedLoanRate,
             filterResult.getNotEligibleReasons()
         );
-        return recommendedProductDto;
     }
 
     private User fetchCurrentUser() {
@@ -174,7 +176,7 @@ public class LoanAdviceService {
             user = userRepository.save(User.createTempUser(providerId));
         } else {
             user = userRepository.findByOauthProviderId(providerId)
-                .orElseThrow(() -> new IllegalArgumentException("사용자 정보가 없습니다."));
+                .orElseThrow(() -> new AuthException("사용자 정보가 없습니다."));
         }
         return user;
     }

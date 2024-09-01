@@ -58,9 +58,11 @@ public class LoanAdviceResult {
     @Column(length = 4000)
     private String recommendationReason;        // 추천 이유
 
+    @Builder.Default
     @OneToMany(mappedBy = "loanAdviceResult", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<RecommendedProduct> recommendedProducts = new ArrayList<>();
 
+    @Builder.Default
     @ElementCollection(targetClass = Bank.class)
     @Enumerated(EnumType.STRING)
     private List<Bank> availableBanks = new ArrayList<>();  // 이용 가능한 은행 목록
