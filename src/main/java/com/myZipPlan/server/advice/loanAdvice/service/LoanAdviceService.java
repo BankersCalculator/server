@@ -132,7 +132,7 @@ public class LoanAdviceService {
 
     private List<RecommendedProductDto> createRecommendedProductListExcludingBestLoan(List<FilterProductResultDto> filterResults,
                                                                                       List<LoanLimitAndRateResultDto> loanLimitAndRateResultDto,
-                                                                                      BestLoanProductResult optimalLoanProduct) {
+                                                                                      BestLoanProductResult bestLoanProduct) {
 
 
         List<RecommendedProductDto> recommendedProductDtos = new ArrayList<>();
@@ -146,7 +146,7 @@ public class LoanAdviceService {
             LoanLimitAndRateResultDto loanLimitAndRate = loanLimitAndRateMap.get(productType);
 
             // Best 상품을 제외한 나머지 추천상품 목록을 생성한다.
-            if (productType == optimalLoanProduct.getProductType()) {
+            if (productType == bestLoanProduct.getProductType()) {
                 continue;
             }
             RecommendedProductDto recommendedProductDto = createRecommendedProduct(filterResult, productType, loanLimitAndRate);

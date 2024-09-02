@@ -29,6 +29,10 @@ public class RateProviderService {
             rate = new BigDecimal("3.69");
         }
 
+        if (baseRate == BaseRate.FINANCIAL_BOND_6M) {
+            rate = new BigDecimal("3.44");
+        }
+
         return rate;
     }
 
