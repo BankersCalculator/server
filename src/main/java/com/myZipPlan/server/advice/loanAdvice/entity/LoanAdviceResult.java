@@ -5,6 +5,7 @@ import com.myZipPlan.server.advice.loanAdvice.dto.internal.BestLoanProductResult
 import com.myZipPlan.server.advice.loanAdvice.dto.response.LoanAdviceResponse;
 import com.myZipPlan.server.advice.loanAdvice.dto.response.RecommendedProductDto;
 import com.myZipPlan.server.advice.userInputInfo.domain.UserInputInfo;
+import com.myZipPlan.server.common.domain.BaseTimeEntity;
 import com.myZipPlan.server.common.enums.Bank;
 import com.myZipPlan.server.user.entity.User;
 import jakarta.persistence.*;
@@ -22,7 +23,7 @@ import java.util.stream.Collectors;
 @Getter
 @Entity
 @Slf4j
-public class LoanAdviceResult {
+public class LoanAdviceResult extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

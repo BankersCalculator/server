@@ -3,6 +3,8 @@ package com.myZipPlan.server.advice.loanAdvice.dto.response;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.math.BigDecimal;
+
 @Getter
 @Builder
 public class LoanAdviceSummaryResponse {
@@ -10,6 +12,6 @@ public class LoanAdviceSummaryResponse {
     private Long loanAdviceResultId;
     private String loanProductName;
     private String loanProductCode;
-    private Long possibleLoanLimit;
-    private Double expectedLoanRate;
+    private BigDecimal possibleLoanLimit;
+    private BigDecimal expectedLoanRate;
 }

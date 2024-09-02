@@ -37,7 +37,7 @@ public class ApiResponse<T> {
         return new ApiResponse<>(OK, "SUCCESS", data);
     }
 
-    public static <T> ApiResponse<T> failToMakeAdvice(T data) {
-        return new ApiResponse<>(NO_CONTENT, "FAIL_TO_MAKE_ADVICE", data);
+    public static <T> ApiResponse<T> noContent(T data) {
+        return new ApiResponse<>(NO_CONTENT, "NO_CONTENT", data);
     }
 }
