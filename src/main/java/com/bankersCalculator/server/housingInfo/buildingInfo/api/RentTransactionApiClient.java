@@ -103,9 +103,10 @@ public class RentTransactionApiClient {
         JSONObject body = jsonObject.getJSONObject("body");
         RentTransactionApiResponse.ApiResponseBody responseBody = new RentTransactionApiResponse.ApiResponseBody();
 
-        if (!body.isNull("items")) {
+        Object itemsObj = body.get("items");
+        List<RentTransactionApiResponse.ApiResponseItem> itemList = new ArrayList<>();
+        if (itemsObj instanceof JSONObject) {
             JSONArray itemsArray = body.getJSONObject("items").getJSONArray("item");
-            List<RentTransactionApiResponse.ApiResponseItem> itemList = new ArrayList<>();
             for (int i = 0; i < itemsArray.length(); i++) {
                 JSONObject itemObject = itemsArray.getJSONObject(i);
                 RentTransactionApiResponse.ApiResponseItem item = new RentTransactionApiResponse.ApiResponseItem();
@@ -126,13 +127,11 @@ public class RentTransactionApiClient {
                 item.setSggCd(itemObject.has("sggCd") ? itemObject.getString("sggCd") : null);
                 item.setUmdNm(itemObject.has("umdNm") ? itemObject.getString("umdNm") : null);
                 item.setUseRRRight(itemObject.has("useRRRight") ? itemObject.getString("useRRRight") : null);
-
                 itemList.add(item);
             }
-            responseBody.setItems(new RentTransactionApiResponse.ApiResponseItems());
-            responseBody.getItems().setItemList(itemList);
         }
-
+        responseBody.setItems(new RentTransactionApiResponse.ApiResponseItems());
+        responseBody.getItems().setItemList(itemList);
         response.setBody(responseBody);
         return response;
     }

@@ -25,8 +25,9 @@ public class RentTransactionInquiryService {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMM");
         LocalDate currentDate = LocalDate.now();
 
-        List<RentTransactionInquiryResponse.TransactionDetail> transactions = currentDate.minusMonths(months - 1)
-                .datesUntil(currentDate.plusMonths(1), java.time.Period.ofMonths(1))
+        List<RentTransactionInquiryResponse.TransactionDetail> transactions = currentDate.minusMonths(1)
+                .minusMonths(months - 1)
+                .datesUntil(currentDate.minusMonths(1).plusMonths(1), java.time.Period.ofMonths(1))
                 .map(date -> date.format(formatter))
                 .flatMap(dealYmd -> {
                     try {

@@ -1,6 +1,5 @@
-package com.bankersCalculator.server.housingInfo.rentTransactionInquiry.api;
+package com.bankersCalculator.server.housingInfo.buildingInfo.api;
 
-import com.bankersCalculator.server.housingInfo.buildingInfo.api.RentTransactionApiClient;
 import com.bankersCalculator.server.housingInfo.buildingInfo.common.RentHousingType;
 import com.bankersCalculator.server.housingInfo.buildingInfo.dto.RentTransactionApiResponse;
 import org.junit.jupiter.api.BeforeEach;
