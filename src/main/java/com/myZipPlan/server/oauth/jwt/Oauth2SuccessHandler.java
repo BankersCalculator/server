@@ -29,7 +29,8 @@ import java.util.List;
 public class Oauth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     // 인증 완료 후 Client에게 토큰반환할 Controller 주소
-    private static final String REDIRECT_URI = "/login/oauth2/kakao?accessToken=%s&refreshToken=%s";
+//    private static final String REDIRECT_URI = "/login/oauth2/kakao?accessToken=%s&refreshToken=%s";
+    private static final String REDIRECT_URI = "http://localhost:5173/login-result?accessToken=%s&refreshToken=%s";
 
     private final TokenProvider tokenProvider;
     private final UserRepository userRepository;
@@ -46,8 +47,6 @@ public class Oauth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         String email = kakaoUserInfo.getEmail();
         String providerId = kakaoUserInfo.getProviderId();
 
-//        User user = userRepository.findByOauthProviderAndEmail(provider, email)
-//            .orElseThrow(ServletException::new);
         User user = userRepository.findByOauthProviderAndOauthProviderId(provider, providerId)
             .orElseThrow(ServletException::new);
 

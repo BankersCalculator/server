@@ -87,8 +87,8 @@ public class SeoulNewlyWedLeaseLoan implements LoanProduct {
     // 기타비용산출(보증요율, 보증보험료 등)
     @Override
     public BigDecimal getGuaranteeInsuranceFee(BigDecimal loanAmount) {
-        // 신한은행 홈피 기준 보증료 연 0.05%
-        return loanAmount.multiply(new BigDecimal("0.0005"));
+        // 신한은행 홈피 기준 보증료 연 0.05% * 2년치
+        return loanAmount.multiply(new BigDecimal("0.1"));
     }
 
     @Override

@@ -28,6 +28,10 @@ public class LoanAdviceApiController {
     public ApiResponse<List<LoanAdviceSummaryResponse>> getRecentLoanAdvices() {
         List<LoanAdviceSummaryResponse> recentLoanAdvices = loanAdviceQueryService.getRecentLoanAdvices();
 
+        if (recentLoanAdvices == null) {
+            return ApiResponse.noContent(recentLoanAdvices);
+        }
+
         return ApiResponse.ok(recentLoanAdvices);
     }
 
@@ -44,7 +48,7 @@ public class LoanAdviceApiController {
         LoanAdviceResponse loanAdviceResponse = loanAdviceService.createLoanAdvice(request.toServiceRequest());
 
         if (!loanAdviceResponse.getHasEligibleProduct()) {
-            return ApiResponse.failToMakeAdvice(loanAdviceResponse);
+            return ApiResponse.noContent(loanAdviceResponse);
         }
         return ApiResponse.ok(loanAdviceResponse);
     }

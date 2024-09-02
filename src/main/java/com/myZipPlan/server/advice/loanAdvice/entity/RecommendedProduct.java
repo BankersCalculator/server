@@ -1,6 +1,7 @@
 package com.myZipPlan.server.advice.loanAdvice.entity;
 
 import com.myZipPlan.server.advice.loanAdvice.dto.response.RecommendedProductDto;
+import com.myZipPlan.server.common.domain.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -14,7 +15,7 @@ import java.util.regex.Pattern;
 @Getter
 @Entity
 @ToString
-public class RecommendedProduct {
+public class RecommendedProduct extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
