@@ -8,14 +8,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1/building-info")
+@RequestMapping("/api/v1/housingTypeAndExclusiveAreaApi")
 public class HousingTypeAndExclusiveAreaApiController {
     private final HousingTypeAndExclusiveAreaApiClient housingTypeAndExclusiveAreaApiClient;
 
     public HousingTypeAndExclusiveAreaApiController(HousingTypeAndExclusiveAreaApiClient housingTypeAndExclusiveAreaApiClient) {
         this.housingTypeAndExclusiveAreaApiClient = housingTypeAndExclusiveAreaApiClient;
     }
-    @PostMapping("/housing-type-and-exclusive-area")
+    @PostMapping
     public ApiResponse<HousingTypeAndExclusiveAreaApiResponse> getHousingTypeAndExclusiveArea(
             @RequestParam String districtCodeFirst5,
             @RequestParam String districtCodeLast5,

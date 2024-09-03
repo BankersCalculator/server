@@ -83,53 +83,57 @@ public class HousingTypeAndExclusiveAreaApiClient {
             }
             br.close();
 
-            // XML을 JSON으로 변환
             XmlMapper xmlMapper = new XmlMapper();
             JsonNode jsonNode = xmlMapper.readTree(sb.toString());
 
             // JSON 객체로 변환하여 기존 로직으로 전달
             JSONObject jsonObject = new JSONObject(jsonNode.toString());
-            return parseRentTransactionInfoResponse(jsonObject);
 
+
+            return parseRentTransactionInfoResponse(jsonObject);
         } catch (Exception e) {
             logger.error("Error occurred while calling the API", e);
             throw new RuntimeException("Error occurred while calling the API", e);
         }
     }
 
-
     private HousingTypeAndExclusiveAreaApiResponse parseRentTransactionInfoResponse(JSONObject jsonObject) {
         HousingTypeAndExclusiveAreaApiResponse response = new HousingTypeAndExclusiveAreaApiResponse();
 
-        JSONObject header = jsonObject.getJSONObject("header");
         HousingTypeAndExclusiveAreaApiResponse.ApiResponseHeader responseHeader = new HousingTypeAndExclusiveAreaApiResponse.ApiResponseHeader();
-        responseHeader.setResultCode(header.getString("resultCode"));
-        responseHeader.setResultMsg(header.getString("resultMsg"));
-        response.setHeader(responseHeader);
-
-        JSONObject body = jsonObject.getJSONObject("body");
-        HousingTypeAndExclusiveAreaApiResponse.ApiResponseBody responseBody = new HousingTypeAndExclusiveAreaApiResponse.ApiResponseBody();
-
-        if (!body.isNull("items")) {
-            JSONArray itemsArray = body.getJSONObject("items").getJSONArray("item");
-            List<HousingTypeAndExclusiveAreaApiResponse.ApiResponseItem> itemList = new ArrayList<>();
-            for (int i = 0; i < itemsArray.length(); i++) {
-                JSONObject itemObject = itemsArray.getJSONObject(i);
-                HousingTypeAndExclusiveAreaApiResponse.ApiResponseItem item = new HousingTypeAndExclusiveAreaApiResponse.ApiResponseItem();
-                item.setRentHousingTypeCode(itemObject.getString("hstpGbCd"));
-                item.setRentHousingTypeName(itemObject.getString("hstpGbCdNm"));
-                item.setHouseHoldCount(itemObject.getInt("silHoHhldCnt"));
-                item.setExclusiveArea(itemObject.getDouble("silHoHhldArea"));
-
-                itemList.add(item);
-            }
-            responseBody.setItems(new HousingTypeAndExclusiveAreaApiResponse.ApiResponseItems());
-            responseBody.getItems().setItemList(itemList);
+        if (jsonObject.has("header")) {
+            JSONObject header = jsonObject.getJSONObject("header");
+            responseHeader.setResultCode(header.getString("resultCode"));
+            responseHeader.setResultMsg(header.getString("resultMsg"));
+            response.setHeader(responseHeader);
+        } else {
+            JSONObject cmmMsgHeader = jsonObject.getJSONObject("cmmMsgHeader");
+            responseHeader.setResultCode(cmmMsgHeader.getString("returnReasonCode"));
+            responseHeader.setResultMsg(cmmMsgHeader.getString("returnAuthMsg"));
+            response.setHeader(responseHeader);
         }
+        HousingTypeAndExclusiveAreaApiResponse.ApiResponseBody responseBody = new HousingTypeAndExclusiveAreaApiResponse.ApiResponseBody();
+        List<HousingTypeAndExclusiveAreaApiResponse.ApiResponseItem> itemList = new ArrayList<>();
 
+        if (jsonObject.has("body")) {
+            JSONObject body = jsonObject.getJSONObject("body");
+            if (!body.isNull("items")) {
+                JSONArray itemsArray = body.getJSONObject("items").getJSONArray("item");
+                for (int i = 0; i < itemsArray.length(); i++) {
+                    JSONObject itemObject = itemsArray.getJSONObject(i);
+                    HousingTypeAndExclusiveAreaApiResponse.ApiResponseItem item = new HousingTypeAndExclusiveAreaApiResponse.ApiResponseItem();
+                    item.setRentHousingTypeCode(itemObject.getString("hstpGbCd"));
+                    item.setRentHousingTypeName(itemObject.getString("hstpGbCdNm"));
+                    item.setHouseHoldCount(itemObject.getInt("silHoHhldCnt"));
+                    item.setExclusiveArea(itemObject.getDouble("silHoHhldArea"));
 
+                    itemList.add(item);
+                }
+                responseBody.setItems(new HousingTypeAndExclusiveAreaApiResponse.ApiResponseItems());
+                responseBody.getItems().setItemList(itemList);
+            }
+        }
         response.setBody(responseBody);
-
         return response;
     }
 }
