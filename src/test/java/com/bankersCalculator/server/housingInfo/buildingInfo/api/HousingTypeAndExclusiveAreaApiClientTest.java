@@ -24,8 +24,6 @@ public class HousingTypeAndExclusiveAreaApiClientTest {
         String jibunMain = "0603";           // 지번 본번
         String jibunSub = "0005";            // 지번 부번
 
-
-
         // 실제 API 호출
         HousingTypeAndExclusiveAreaApiResponse response = housingTypeAndExclusiveAreaApiClient.getApHsTpInfo(
                 districtCodeFirst5,

@@ -4,8 +4,10 @@ import com.bankersCalculator.server.housingInfo.buildingInfo.api.RentTransaction
 import com.bankersCalculator.server.housingInfo.buildingInfo.dto.RentTransactionApiRequest;
 import com.bankersCalculator.server.housingInfo.buildingInfo.dto.RentTransactionApiResponse;
 import lombok.RequiredArgsConstructor;
+import org.json.JSONException;
 import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/rentTransactionApi")
@@ -14,11 +16,11 @@ public class RentTransactionApiController {
     private final RentTransactionApiClient rentTransactionApiClient;
 
     @PostMapping
-    public ApiResponse<RentTransactionApiResponse> RentTransactionCallApi(@RequestBody RentTransactionApiRequest request) throws IOException {
-        RentTransactionApiResponse rentTransactionApiResponse = rentTransactionApiClient.RentTransactionCallApi(request.getDistrictCodeFirst5()
-                                                                                                                , request.getDealYmd()
-                                                                                                                , request.getRentHousingType()
-                                                                                                                );
-       return ApiResponse.ok(rentTransactionApiResponse);
+    public ApiResponse<Map<String, Object>> inquiryRentTransaction(@RequestBody RentTransactionApiRequest request) throws IOException, JSONException {
+        Map<String, Object> response = rentTransactionApiClient.inquiryRentTransaction(request.getDistrictCodeFirst5()
+                                                                        , request.getDealYmd()
+                                                                        , request.getRentHousingType()
+                                                                        );
+       return ApiResponse.ok(response);
     }
 }

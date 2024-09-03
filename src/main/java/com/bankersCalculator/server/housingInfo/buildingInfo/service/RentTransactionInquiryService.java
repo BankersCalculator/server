@@ -31,8 +31,13 @@ public class RentTransactionInquiryService {
                 .map(date -> date.format(formatter))
                 .flatMap(dealYmd -> {
                     try {
-                        RentTransactionApiResponse apiResponse = apiClient.RentTransactionCallApi(districtCodeFirst5, dealYmd, rentHousingType);
-                        return apiResponse.getBody().getItems().getItemList().stream()
+
+                        // 변경된 메서드 호출
+                        Map<String, Object> apiResponse = apiClient.inquiryRentTransaction(districtCodeFirst5, dealYmd, rentHousingType);
+                        List<RentTransactionApiResponse.ApiResponseItem> itemList = (List<RentTransactionApiResponse.ApiResponseItem>) apiResponse.get("rentTransactionInfoList");
+
+
+                        return itemList.stream()
                                 .filter(item -> item.getUmdNm().equals(dongName) && item.getJibun().equals(jibun))
                                 .map(item -> new RentTransactionInquiryResponse.TransactionDetail(
                                         item.getAptNm(),

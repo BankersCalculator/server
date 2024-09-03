@@ -89,7 +89,7 @@ public class HousingTypeAndExclusiveAreaApiClient {
 
             // JSON 객체로 변환하여 기존 로직으로 전달
             JSONObject jsonObject = new JSONObject(jsonNode.toString());
-            return processApiResponse(jsonObject);
+            return parseRentTransactionInfoResponse(jsonObject);
 
         } catch (Exception e) {
             logger.error("Error occurred while calling the API", e);
@@ -98,7 +98,7 @@ public class HousingTypeAndExclusiveAreaApiClient {
     }
 
 
-    private HousingTypeAndExclusiveAreaApiResponse processApiResponse(JSONObject jsonObject) {
+    private HousingTypeAndExclusiveAreaApiResponse parseRentTransactionInfoResponse(JSONObject jsonObject) {
         HousingTypeAndExclusiveAreaApiResponse response = new HousingTypeAndExclusiveAreaApiResponse();
 
         JSONObject header = jsonObject.getJSONObject("header");

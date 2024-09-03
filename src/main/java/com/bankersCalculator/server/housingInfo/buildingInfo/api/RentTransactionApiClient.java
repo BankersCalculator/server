@@ -1,10 +1,12 @@
 package com.bankersCalculator.server.housingInfo.buildingInfo.api;
 
+import com.bankersCalculator.server.housingInfo.addressSearch.dto.AddressSearchApiResponse;
 import com.bankersCalculator.server.housingInfo.buildingInfo.common.RentHousingType;
 import com.bankersCalculator.server.housingInfo.buildingInfo.config.RentTransactionApiConfig;
 import com.bankersCalculator.server.housingInfo.buildingInfo.dto.RentTransactionApiResponse;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +18,9 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 국토교통부 전/월세 실거래가 조회 API
@@ -59,7 +63,7 @@ public class RentTransactionApiClient {
         this.xmlMapper = new XmlMapper();
     }
 
-    public RentTransactionApiResponse RentTransactionCallApi(String districtCodeFirst5, String dealYmd, RentHousingType rentHousingType) throws IOException {
+    public String callRentTransactionApi(String districtCodeFirst5, String dealYmd, RentHousingType rentHousingType) throws IOException {
         String apiUrl = apiConfig.getFullApiUrl(districtCodeFirst5, dealYmd, rentHousingType);
         logger.info("Calling API with URL: {}", apiUrl);
 
@@ -71,19 +75,20 @@ public class RentTransactionApiClient {
 
             // 응답 읽기
             BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
-            StringBuilder sb = new StringBuilder();
+            StringBuilder response = new StringBuilder();
             String line;
+
             while ((line = br.readLine()) != null) {
-                sb.append(line);
+                response.append(line);
             }
             br.close();
 
             // XML을 JSON으로 변환
-            JSONObject jsonObject = new JSONObject(xmlMapper.readTree(sb.toString()).toString());
+            JSONObject jsonObject = new JSONObject(xmlMapper.readTree(response.toString()).toString());
             //logger.info("Converted XML to JSON: {}", jsonObject);
 
             // 결과 처리 및 DTO 매핑
-            return processApiResponse(jsonObject);
+            return jsonObject.toString();
 
         } catch (Exception e) {
             logger.error("Error occurred while calling the API", e);
@@ -91,9 +96,10 @@ public class RentTransactionApiClient {
         }
     }
 
-    private RentTransactionApiResponse processApiResponse(JSONObject jsonObject) {
+    public RentTransactionApiResponse parseRentTransactionInfoResponse(String apiResponse) {
         RentTransactionApiResponse response = new RentTransactionApiResponse();
 
+        JSONObject jsonObject = new JSONObject(apiResponse);
         JSONObject header = jsonObject.getJSONObject("header");
         RentTransactionApiResponse.ApiResponseHeader responseHeader = new RentTransactionApiResponse.ApiResponseHeader();
         responseHeader.setResultCode(header.getString("resultCode"));
@@ -106,6 +112,9 @@ public class RentTransactionApiClient {
         Object itemsObj = body.get("items");
         List<RentTransactionApiResponse.ApiResponseItem> itemList = new ArrayList<>();
         if (itemsObj instanceof JSONObject) {
+            responseHeader.setResultCode("0");
+            responseHeader.setResultMsg("Success");
+
             JSONArray itemsArray = body.getJSONObject("items").getJSONArray("item");
             for (int i = 0; i < itemsArray.length(); i++) {
                 JSONObject itemObject = itemsArray.getJSONObject(i);
@@ -129,10 +138,27 @@ public class RentTransactionApiClient {
                 item.setUseRRRight(itemObject.has("useRRRight") ? itemObject.getString("useRRRight") : null);
                 itemList.add(item);
             }
+        } else {
+            responseHeader.setResultCode("1");
+            responseHeader.setResultMsg("조회결과가 없습니다.");
         }
         responseBody.setItems(new RentTransactionApiResponse.ApiResponseItems());
         responseBody.getItems().setItemList(itemList);
         response.setBody(responseBody);
         return response;
+    }
+
+    public Map<String, Object> inquiryRentTransaction(String districtCodeFirst5, String dealYmd, RentHousingType rentHousingType) throws IOException, JSONException {
+        String apiResponse = callRentTransactionApi(districtCodeFirst5, dealYmd, rentHousingType);
+        RentTransactionApiResponse rentTransactionInfoResponse = parseRentTransactionInfoResponse(apiResponse);
+
+        Map<String, Object> inquiryRentTransactionResult = new HashMap<>();
+        inquiryRentTransactionResult.put("apiResultCode", rentTransactionInfoResponse.getHeader().getResultCode());
+        inquiryRentTransactionResult.put("apiResultMessage", rentTransactionInfoResponse.getHeader().getResultMsg());
+
+        List<RentTransactionApiResponse.ApiResponseItem> rentTransactionInfoList = rentTransactionInfoResponse.getBody().getItems().getItemList();
+        inquiryRentTransactionResult.put("rentTransactionInfoList", rentTransactionInfoList);
+
+        return inquiryRentTransactionResult;
     }
 }

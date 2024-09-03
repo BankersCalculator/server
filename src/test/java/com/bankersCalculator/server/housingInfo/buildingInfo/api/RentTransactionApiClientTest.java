@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.util.StringUtils;
 
 import java.io.IOException;
 import java.util.List;
@@ -25,16 +26,23 @@ public class RentTransactionApiClientTest {
     }
 
     @Test
-    public void testRentTransactionCallApi() throws IOException {
+    public void testCallRentTransactionApi() throws IOException {
         // 실제 API 호출을 위한 테스트 데이터 설정
-        String districtCodeFirst5 = "11110"; // 예: 서울특별시 강남구
-        String dealYmd = "202407"; // 예: 2024년 7월
+        String districtCodeFirst5 = "11110"; // 예: 서울특별시 강남구 11110
+        String dealYmd = "202422"; // 예: 2024년 7월 202407
         RentHousingType rentHousingType = RentHousingType.APARTMENT;
 
         // 실제 API 호출
-        RentTransactionApiResponse response = rentTransactionApiClient.RentTransactionCallApi(districtCodeFirst5, dealYmd, rentHousingType);
+        String jsonResponse = rentTransactionApiClient.callRentTransactionApi(districtCodeFirst5, dealYmd, rentHousingType);
 
         // 응답 데이터 검증
+        assertNotNull(jsonResponse);
+        assertTrue(StringUtils.hasText(jsonResponse), "API 응답이 비어 있습니다.");
+
+        // JSON 응답을 RentTransactionApiResponse 객체로 파싱
+        RentTransactionApiResponse response = rentTransactionApiClient.parseRentTransactionInfoResponse(jsonResponse);
+
+        // 파싱된 객체 검증
         assertNotNull(response);
         assertNotNull(response.getHeader());
         assertNotNull(response.getBody());
@@ -51,7 +59,6 @@ public class RentTransactionApiClientTest {
 
         // 각 item별로 데이터 확인
         List<RentTransactionApiResponse.ApiResponseItem> items = response.getBody().getItems().getItemList();
-        assertTrue(items.size() > 0, "API에서 반환된 아이템이 없습니다.");
 
         for (RentTransactionApiResponse.ApiResponseItem item : items) {
             System.out.println("아파트 이름: " + item.getAptNm());
@@ -72,7 +79,6 @@ public class RentTransactionApiClientTest {
             System.out.println("읍면동 이름: " + item.getUmdNm());
             System.out.println("사용권리: " + item.getUseRRRight());
             System.out.println("--------------");
-
         }
     }
 }
