@@ -1,5 +1,6 @@
 package com.myZipPlan.server.advice.loanAdvice.dto.request;
 
+import com.myZipPlan.server.advice.userInputInfo.domain.UserInputInfo;
 import com.myZipPlan.server.common.enums.loanAdvice.ChildStatus;
 import com.myZipPlan.server.common.enums.loanAdvice.MaritalStatus;
 import com.myZipPlan.server.common.enums.calculator.HouseOwnershipType;
@@ -36,5 +37,30 @@ public class LoanAdviceServiceRequest {
     private String dongName;   // 읍명동이름
     private String jibun;   // 지번
 
+    private String specificRequestProductCode; // 특정 상품 요청 코드
+
+    public static LoanAdviceServiceRequest fromUserInputInfo(UserInputInfo info, String productCode) {
+        return LoanAdviceServiceRequest.builder()
+            .rentalDeposit(info.getRentalDeposit())
+            .monthlyRent(info.getMonthlyRent())
+            .cashOnHand(info.getCashOnHand())
+            .age(info.getAge())
+            .maritalStatus(info.getMaritalStatus())
+            .annualIncome(info.getAnnualIncome())
+            .spouseAnnualIncome(info.getSpouseAnnualIncome())
+            .childStatus(info.getChildStatus())
+            .hasNewborn(info.getHasNewborn())
+            .houseOwnershipType(info.getHouseOwnershipType())
+            .isSMEEmployee(info.getIsSMEEmployee())
+            .isNetAssetOver345M(info.getIsNetAssetOver345M())
+            .rentHousingType(info.getRentHousingType())
+            .exclusiveArea(info.getExclusiveArea())
+            .buildingName(info.getBuildingName())
+            .districtCode(info.getDistrictCode())
+            .dongName(info.getDongName())
+            .jibun(info.getJibun())
+            .specificRequestProductCode(productCode)
+            .build();
+    }
 
 }

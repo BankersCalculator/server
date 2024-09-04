@@ -89,7 +89,7 @@ public class YouthLeaseLoan implements LoanProduct {
     public BigDecimal getGuaranteeInsuranceFee(BigDecimal loanAmount) {
         // TODO: 보증료 근거자료 찾을 수 없음.
         // 우선 임의로 최저보증료 0.02%로 설정 * 2년치
-        return loanAmount.multiply(new BigDecimal("0.04"));
+        return loanAmount.multiply(new BigDecimal("0.0004"));
     }
 
     @Override

@@ -27,4 +27,23 @@ public class ProductFilter {
 
         return result;
     }
+
+    public List<FilterProductResultDto> filterSpecificProduct(LoanAdviceServiceRequest request) {
+
+        String productCode = request.getSpecificRequestProductCode();
+        List<FilterProductResultDto> result = new ArrayList<>();
+
+        for (LoanProduct loanProduct : loanProducts) {
+            FilterProductResultDto filteringResult = loanProduct.filtering(request);
+            if (filteringResult.getProductType().getProductCode().equals(productCode)) {
+                if (!filteringResult.isEligible()){
+                    throw new IllegalArgumentException("해당 상품은 대출 가능한 상품이 아닙니다.");
+                }
+            }
+            result.add(filteringResult);
+        }
+
+        return result;
+    }
+
 }

@@ -103,7 +103,7 @@ public class SmeYouthMonthlyRentLoan implements LoanProduct {
     public BigDecimal getGuaranteeInsuranceFee(BigDecimal loanAmount) {
         // TODO: HUG 반환보증일 경우 0.31% 추가. 어떻게 안내할 것인지 고민
         // 하나은행 홈피 기준 보증료 연 0.154% * 2년치
-        return loanAmount.multiply(new BigDecimal("0.308"));
+        return loanAmount.multiply(new BigDecimal("0.00308"));
     }
 
     @Override

@@ -12,6 +12,7 @@ import com.myZipPlan.server.advice.loanAdvice.repository.LoanAdviceResultReposit
 import com.myZipPlan.server.advice.loanAdvice.service.component.*;
 import com.myZipPlan.server.advice.userInputInfo.domain.UserInputInfo;
 import com.myZipPlan.server.advice.userInputInfo.repository.UserInputInfoRepository;
+import com.myZipPlan.server.common.enums.Bank;
 import com.myZipPlan.server.common.enums.loanAdvice.JeonseLoanProductType;
 import com.myZipPlan.server.common.exception.customException.AuthException;
 import com.myZipPlan.server.oauth.userInfo.SecurityUtils;
@@ -47,12 +48,7 @@ public class LoanAdviceService {
     private final UserInputInfoRepository userInputInfoRepository;
 
 
-    /**
-     * 대출상품 추천을 위한 전체 프로세스를 수행한다.
-     *
-     * @param request
-     * @return LoanAdviceResponse
-     */
+    // 대출추천 서비스
     public LoanAdviceResponse createLoanAdvice(LoanAdviceServiceRequest request) {
 
         // 대출상품 필터링
@@ -64,14 +60,26 @@ public class LoanAdviceService {
         return createFullLoanAdviceResponse(request, filterResults);
     }
 
-    public LoanAdviceResponse generateLoanAdviceOnSpecificLoan(Long loanAdviceResultId, String productCode) {
-        return null;
+    // 특정 대출상품 추천 서비스
+    public LoanAdviceResponse generateLoanAdviceOnSpecificLoan(Long userInputInfoId, String productCode) {
+        UserInputInfo userInputInfo = userInputInfoRepository.findById(userInputInfoId)
+            .orElseThrow(() -> new IllegalArgumentException("입력된 유저투입정보가 유효하지 않습니다."));
+
+        LoanAdviceServiceRequest request = LoanAdviceServiceRequest.fromUserInputInfo(userInputInfo, productCode);
+
+        List<FilterProductResultDto> filterResults = productFilter.filterSpecificProduct(request);
+        // 필터링을 통과한 상품이 하나도 없는 경우
+        if (!hasEligibleProducts(filterResults)) {
+            return createEmptyLoanAdviceResponse(filterResults);
+        }
+        return createFullLoanAdviceResponse(request, filterResults);
     }
 
     private static boolean hasEligibleProducts(List<FilterProductResultDto> filterResults) {
         return filterResults.stream().anyMatch(FilterProductResultDto::isEligible);
     }
 
+    // 적합한 상품이 하나도 없는 경우 부적합 사유를 반환하기 위한 메서드
     private LoanAdviceResponse createEmptyLoanAdviceResponse(List<FilterProductResultDto> filterResults) {
         List<RecommendedProductDto> recommendedProductDtos = createIneligibleProductList(filterResults);
         return LoanAdviceResponse.ofEmpty(recommendedProductDtos);
@@ -94,14 +102,18 @@ public class LoanAdviceService {
         return recommendedProductDtos;
     }
 
+    // 추천 결과를 생성하기 위한 메서드
     private LoanAdviceResponse createFullLoanAdviceResponse(LoanAdviceServiceRequest request, List<FilterProductResultDto> filterResults) {
         LoanAdviceComponents components = prepareLoanAdviceComponents(request, filterResults);
         LoanAdviceResult result = assembleAndCreateResult(components);
+
+        Long userInputInfoId = components.userInputInfo.getId();
+        List<Bank> availableBanks = components.additionalInfo.getAvailableBanks();
         loanAdviceResultRepository.save(result);
-        return result.toLoanAdviceResponse();
+        return LoanAdviceResponse.of(result, userInputInfoId, availableBanks);
     }
 
-    // 대출상품 추천을 위한 전체 프로세스를 수행한다.
+    // 대출상품 추천을 위한 전체 프로세스를 수행
     private LoanAdviceComponents prepareLoanAdviceComponents(LoanAdviceServiceRequest request, List<FilterProductResultDto> filterResults) {
         List<LoanLimitAndRateResultDto> loanTerms = calculateLoanTerms(request, filterResults);
         BestLoanProductResult bestProduct = findBestLoanProduct(request, loanTerms);
@@ -119,7 +131,7 @@ public class LoanAdviceService {
     }
 
     private BestLoanProductResult findBestLoanProduct(LoanAdviceServiceRequest request, List<LoanLimitAndRateResultDto> loanTerms) {
-        return productComparator.compareProducts(request.getRentalDeposit(), loanTerms);
+        return productComparator.compareProducts(request.getRentalDeposit(), request.getSpecificRequestProductCode(), loanTerms);
     }
 
     private AdditionalInformation generateAdditionalInfo(LoanAdviceServiceRequest request, BestLoanProductResult bestProduct) {
@@ -130,6 +142,7 @@ public class LoanAdviceService {
         return aiReportGenerator.generateAiReport();
     }
 
+    // 최적상품 외의 상품들도 한도와 금리, 부적합사유를 만들어서 반환
     private List<RecommendedProductDto> createRecommendedProductListExcludingBestLoan(List<FilterProductResultDto> filterResults,
                                                                                       List<LoanLimitAndRateResultDto> loanLimitAndRateResultDto,
                                                                                       BestLoanProductResult bestLoanProduct) {
@@ -155,7 +168,8 @@ public class LoanAdviceService {
         return recommendedProductDtos;
     }
 
-    private static RecommendedProductDto createRecommendedProduct(FilterProductResultDto filterResult, JeonseLoanProductType productType, LoanLimitAndRateResultDto loanLimitAndRate) {
+    private static RecommendedProductDto createRecommendedProduct(FilterProductResultDto filterResult, JeonseLoanProductType productType,
+                                                                  LoanLimitAndRateResultDto loanLimitAndRate) {
         BigDecimal loanLimit = loanLimitAndRate.getPossibleLoanLimit() == null ? BigDecimal.ZERO : loanLimitAndRate.getPossibleLoanLimit();
         BigDecimal expectedLoanRate = loanLimitAndRate.getExpectedLoanRate() == null ? BigDecimal.ZERO : loanLimitAndRate.getExpectedLoanRate();
 
@@ -188,6 +202,7 @@ public class LoanAdviceService {
     }
 
     private LoanAdviceResult assembleAndCreateResult(LoanAdviceComponents components) {
+
         return LoanAdviceResult.create(
             components.getUser(),
             components.getUserInputInfo(),

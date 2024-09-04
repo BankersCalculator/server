@@ -1,5 +1,6 @@
 package com.myZipPlan.server.advice.loanAdvice.model;
 
+import com.myZipPlan.server.common.enums.Bank;
 import com.myZipPlan.server.common.enums.loanAdvice.JeonseLoanProductType;
 import org.springframework.stereotype.Component;
 
@@ -25,5 +26,10 @@ public class LoanProductFactory {
             throw new RuntimeException("해당 상품이 존재하지 않습니다.");
         }
         return loanProduct;
+    }
+
+    public List<Bank> getAvailableBanks(String productCode) {
+        JeonseLoanProductType productType = JeonseLoanProductType.findByProductCode(productCode);
+        return getLoanProduct(productType).getAvailableBanks();
     }
 }
