@@ -52,15 +52,15 @@ public class LoanAdviceApiQueryControllerDocsTest extends RestDocsSupport {
                 .loanAdviceResultId(1L)
                 .loanProductName("서울시신혼부부임차보증금대출")
                 .loanProductCode("HF-001")
-                .possibleLoanLimit(300000000L)
-                .expectedLoanRate(2.5)
+                .possibleLoanLimit(BigDecimal.valueOf(300000000L))
+                .expectedLoanRate(BigDecimal.valueOf(2.5))
                 .build(),
             LoanAdviceSummaryResponse.builder()
                 .loanAdviceResultId(2L)
                 .loanProductName("신혼부부전용전세자금대출")
                 .loanProductCode("NHUF-001")
-                .possibleLoanLimit(180000000L)
-                .expectedLoanRate(2.1)
+                .possibleLoanLimit(BigDecimal.valueOf(180000000L))
+                .expectedLoanRate(BigDecimal.valueOf(2.1))
                 .build()
         );
 
@@ -104,7 +104,7 @@ public class LoanAdviceApiQueryControllerDocsTest extends RestDocsSupport {
 
         when(loanAdviceQueryService.getSpecificLoanAdvice(any())).thenReturn(response);
 
-        mockMvc.perform(get(BASE_URL + "/specific/{loanAdviceResultId}", 200L)
+        mockMvc.perform(get(BASE_URL + "/{loanAdviceResultId}", 200L)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .header("AccessToken", "액세스 토큰")
@@ -129,6 +129,7 @@ public class LoanAdviceApiQueryControllerDocsTest extends RestDocsSupport {
                     fieldWithPath("message").type(JsonFieldType.STRING).description("응답 메시지"),
                     fieldWithPath("data").type(JsonFieldType.OBJECT).description("응답 데이터"),
                     fieldWithPath("data.loanAdviceResultId").type(JsonFieldType.NUMBER).description("대출 상담 결과 ID"),
+                    fieldWithPath("data.userInputInfoId").type(JsonFieldType.NUMBER).description("유저 인풋 정보 ID"),
                     fieldWithPath("data.hasEligibleProduct").type(JsonFieldType.BOOLEAN).description("대출 상품 추천 가능 여부"),
                     fieldWithPath("data.loanProductName").type(JsonFieldType.STRING).description("대출 상품명"),
                     fieldWithPath("data.loanProductCode").type(JsonFieldType.STRING).description("대출 상품 코드"),
@@ -160,6 +161,7 @@ public class LoanAdviceApiQueryControllerDocsTest extends RestDocsSupport {
     private LoanAdviceResponse createSampleLoanAdviceResponse() {
         return LoanAdviceResponse.builder()
             .loanAdviceResultId(1L)
+            .userInputInfoId(1L)
             .hasEligibleProduct(true)
             .loanProductName("샘플 전세자금대출")
             .loanProductCode("SAMPLE001")
