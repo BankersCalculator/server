@@ -188,6 +188,7 @@ public class LoanAdviceService {
     }
 
     private LoanAdviceResult assembleAndCreateResult(LoanAdviceComponents components) {
+
         return LoanAdviceResult.create(
             components.getUser(),
             components.getUserInputInfo(),

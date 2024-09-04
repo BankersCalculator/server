@@ -87,6 +87,7 @@ public class LoanAdviceResult extends BaseTimeEntity {
 
         LoanAdviceResult result = LoanAdviceResult.builder()
             .user(user)
+            .userInputInfo(userInputInfo)
             .loanProductName(bestLoanProductResult.getProductType().getProductName())
             .loanProductCode(bestLoanProductResult.getProductType().getProductCode())
             .possibleLoanLimit(bestLoanProductResult.getPossibleLoanLimit())
