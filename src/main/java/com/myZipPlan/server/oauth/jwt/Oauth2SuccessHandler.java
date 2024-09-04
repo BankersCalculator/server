@@ -8,6 +8,7 @@ import com.myZipPlan.server.oauth.userInfo.KakaoUserInfo;
 import com.myZipPlan.server.user.entity.User;
 import com.myZipPlan.server.user.repository.UserRepository;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -28,9 +29,9 @@ import java.util.List;
 @Component
 public class Oauth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
-    // 인증 완료 후 Client에게 토큰반환할 Controller 주소
-//    private static final String REDIRECT_URI = "/login/oauth2/kakao?accessToken=%s&refreshToken=%s";
-    private static final String REDIRECT_URI = "http://localhost:5173/login-result?accessToken=%s&refreshToken=%s";
+    private static final int COOKIE_MAX_AGE = 7 * 24 * 60 * 60; // 7일
+    // 인증 완료 후 Client에게 토큰반환할 URI
+    private static final String REDIRECT_URI = "http://localhost:5173/login-result";
 
     private final TokenProvider tokenProvider;
     private final UserRepository userRepository;
@@ -56,10 +57,19 @@ public class Oauth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
         saveRefreshTokenOnRedis(user, tokenDto);
 
-        String redirectURI = String.format(REDIRECT_URI,
-            tokenDto.getAccessToken(), tokenDto.getRefreshToken());
+        addTokenCookie(response, "accessToken", tokenDto.getAccessToken());
+        addTokenCookie(response, "refreshToken", tokenDto.getRefreshToken());
 
-        getRedirectStrategy().sendRedirect(request, response, redirectURI);
+        getRedirectStrategy().sendRedirect(request, response, REDIRECT_URI);
+    }
+
+    private void addTokenCookie(HttpServletResponse response, String name, String value) {
+        Cookie cookie = new Cookie(name, value);
+        cookie.setHttpOnly(true);
+        cookie.setSecure(true);
+        cookie.setMaxAge(COOKIE_MAX_AGE);
+        cookie.setPath("/");
+        response.addCookie(cookie);
     }
 
     private void saveRefreshTokenOnRedis(User user, TokenDto tokenDto) {
