@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -76,26 +77,27 @@ public class LoanAdviceResponse {
             .hasEligibleProduct(true)
             .loanProductName(result.getLoanProductName())
             .loanProductCode(result.getLoanProductCode())
-            .possibleLoanLimit(result.getPossibleLoanLimit())
-            .expectedLoanRate(result.getExpectedLoanRate())
-            .totalRentalDeposit(result.getTotalRentalDeposit())
-            .loanAmount(result.getLoanAmount())
-            .ownFunds(result.getOwnFunds())
-            .monthlyInterestCost(result.getMonthlyInterestCost())
-            .monthlyRent(result.getMonthlyRent())
-            .totalLivingCost(totalLivingCost)
-            .opportunityCostOwnFunds(result.getOpportunityCostOwnFunds())
-            .depositInterestRate(result.getDepositInterestRate())
-            .guaranteeInsuranceFee(result.getGuaranteeInsuranceFee())
-            .stampDuty(result.getStampDuty())
+            .possibleLoanLimit(result.getPossibleLoanLimit().setScale(0, RoundingMode.DOWN))
+            .expectedLoanRate(result.getExpectedLoanRate())  // rate는 그대로 유지
+            .totalRentalDeposit(result.getTotalRentalDeposit().setScale(0, RoundingMode.DOWN))
+            .loanAmount(result.getLoanAmount().setScale(0, RoundingMode.DOWN))
+            .ownFunds(result.getOwnFunds().setScale(0, RoundingMode.DOWN))
+            .monthlyInterestCost(result.getMonthlyInterestCost().setScale(0, RoundingMode.DOWN))
+            .monthlyRent(result.getMonthlyRent().setScale(0, RoundingMode.DOWN))
+            .totalLivingCost(totalLivingCost.setScale(0, RoundingMode.DOWN))
+            .opportunityCostOwnFunds(result.getOpportunityCostOwnFunds().setScale(0, RoundingMode.DOWN))
+            .depositInterestRate(result.getDepositInterestRate())  // rate는 그대로 유지
+            .guaranteeInsuranceFee(result.getGuaranteeInsuranceFee().setScale(0, RoundingMode.DOWN))
+            .stampDuty(result.getStampDuty().setScale(0, RoundingMode.DOWN))
             .recommendationReason(result.getRecommendationReason())
             .recommendedProducts(result.getRecommendedProducts().stream()
                 .map(ap -> RecommendedProductDto.builder()
                     .loanProductName(ap.getLoanProductName())
                     .loanProductCode(ap.getLoanProductCode())
-                    .possibleLoanLimit(ap.getPossibleLoanLimit())
-                    .expectedLoanRate(ap.getExpectedLoanRate())
-                    .notEligibleReasons(Arrays.stream(ap.getNotEligibleReasons().split(Pattern.quote("|"))).toList())
+                    .possibleLoanLimit(ap.getPossibleLoanLimit().setScale(0, RoundingMode.DOWN))
+                    .expectedLoanRate(ap.getExpectedLoanRate())  // rate는 그대로 유지
+                    .notEligibleReasons(Arrays.stream(ap.getNotEligibleReasons().split(Pattern.quote("|")))
+                        .collect(Collectors.toList()))
                     .build())
                 .collect(Collectors.toList()))
             .availableBanks(availableBanks)
