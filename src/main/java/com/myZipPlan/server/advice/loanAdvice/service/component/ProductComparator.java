@@ -14,7 +14,6 @@ import java.util.List;
 public class ProductComparator {
 
     /**
-     *
      * // TODO: 대출상품 비교 로직 다시 검토하고 고도화 필요함.
      * 대출상품 비교
      * - 대출한도 점수: 대출한도가 높을 수록 높은 점수를 부여한다.
@@ -29,7 +28,8 @@ public class ProductComparator {
     private static final BigDecimal MIN_LOAN_LIMIT = new BigDecimal("10000000"); // 천만원
     private static final BigDecimal MAX_LOAN_LIMIT = new BigDecimal("1000000000"); // 십억원
 
-    public BestLoanProductResult compareProducts(BigDecimal rentalDeposit, List<LoanLimitAndRateResultDto> loanLimitAndRateResultDto) {
+    public BestLoanProductResult compareProducts(BigDecimal rentalDeposit, String specificRequestProductCode,
+                                                 List<LoanLimitAndRateResultDto> loanLimitAndRateResultDto) {
         if (loanLimitAndRateResultDto == null || loanLimitAndRateResultDto.isEmpty()) {
             return null;
         }
@@ -47,7 +47,7 @@ public class ProductComparator {
 
             if (!product.isEligible()) continue;
 
-            BigDecimal currentScore = calculateScore(product, rentalDeposit);
+            BigDecimal currentScore = calculateScore(product, rentalDeposit, specificRequestProductCode);
             if (currentScore.compareTo(bestScore) > 0) {
                 bestScore = currentScore;
                 bestProduct = product;
@@ -57,7 +57,7 @@ public class ProductComparator {
         return buildOptimalResult(bestProduct);
     }
 
-    private BigDecimal calculateScore(LoanLimitAndRateResultDto product, BigDecimal neededAmount) {
+    private BigDecimal calculateScore(LoanLimitAndRateResultDto product, BigDecimal neededAmount, String specificRequestProductCode) {
         /*
          * 대출상품의 점수 계산식
          * 점수 = 대출한도 점수 + 금리 점수 + 필요금액과 보유금액 간 차이 점수
@@ -65,6 +65,12 @@ public class ProductComparator {
         BigDecimal loanLimitScore = calculateLoanLimitScore(product.getPossibleLoanLimit());
         BigDecimal rateScore = calculateRateScore(product.getExpectedLoanRate());
         BigDecimal needGapScore = calculateNeedGapScore(product.getPossibleLoanLimit(), neededAmount);
+
+        // 특정 상품 요청이 있을 경우, 해당 상품의 점수를 10000점으로 설정한다.
+        if (specificRequestProductCode != null
+            && specificRequestProductCode.equals(product.getProductType().getProductCode())) {
+            return BigDecimal.valueOf(10000);
+        }
 
         return loanLimitScore.add(rateScore).add(needGapScore);
     }

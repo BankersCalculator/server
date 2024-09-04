@@ -66,7 +66,17 @@ public class LoanAdviceService {
     }
 
     public LoanAdviceResponse generateLoanAdviceOnSpecificLoan(Long userInputInfoId, String productCode) {
-        return null;
+        UserInputInfo userInputInfo = userInputInfoRepository.findById(userInputInfoId)
+            .orElseThrow(() -> new IllegalArgumentException("입력된 유저투입정보가 유효하지 않습니다."));
+
+        LoanAdviceServiceRequest request = LoanAdviceServiceRequest.fromUserInputInfo(userInputInfo, productCode);
+
+        List<FilterProductResultDto> filterResults = productFilter.filterSpecificProduct(request);
+        // 필터링을 통과한 상품이 하나도 없는 경우
+        if (!hasEligibleProducts(filterResults)) {
+            return createEmptyLoanAdviceResponse(filterResults);
+        }
+        return createFullLoanAdviceResponse(request, filterResults);
     }
 
     private static boolean hasEligibleProducts(List<FilterProductResultDto> filterResults) {
@@ -123,7 +133,7 @@ public class LoanAdviceService {
     }
 
     private BestLoanProductResult findBestLoanProduct(LoanAdviceServiceRequest request, List<LoanLimitAndRateResultDto> loanTerms) {
-        return productComparator.compareProducts(request.getRentalDeposit(), loanTerms);
+        return productComparator.compareProducts(request.getRentalDeposit(), request.getSpecificRequestProductCode(), loanTerms);
     }
 
     private AdditionalInformation generateAdditionalInfo(LoanAdviceServiceRequest request, BestLoanProductResult bestProduct) {

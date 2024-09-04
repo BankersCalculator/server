@@ -2,6 +2,7 @@ package com.myZipPlan.server.advice.userInputInfo.domain;
 
 import com.myZipPlan.server.advice.loanAdvice.dto.request.LoanAdviceServiceRequest;
 import com.myZipPlan.server.advice.loanAdvice.entity.LoanAdviceResult;
+import com.myZipPlan.server.common.enums.calculator.HouseOwnershipType;
 import com.myZipPlan.server.common.enums.loanAdvice.ChildStatus;
 import com.myZipPlan.server.common.enums.loanAdvice.MaritalStatus;
 import com.myZipPlan.server.housingInfo.rentTransactionInquiry.common.RentHousingType;
@@ -46,8 +47,10 @@ public class UserInputInfo {
 
     @Enumerated(EnumType.STRING)
     private ChildStatus childStatus;  // 자녀상태
-
     private Boolean hasNewborn;       // 신생아여부
+
+    private HouseOwnershipType houseOwnershipType; // 주택소유형태
+
     private Boolean isSMEEmployee;      // 중소기업재직여부
     private Boolean isNetAssetOver345M;  // 순자산 3.45억 초과 여부
 
@@ -73,6 +76,7 @@ public class UserInputInfo {
             .spouseAnnualIncome(request.getSpouseAnnualIncome())
             .childStatus(request.getChildStatus())
             .hasNewborn(request.getHasNewborn())
+            .houseOwnershipType(request.getHouseOwnershipType())
             .isSMEEmployee(request.getIsSMEEmployee())
             .isNetAssetOver345M(request.getIsNetAssetOver345M())
             .rentHousingType(request.getRentHousingType())
