@@ -52,14 +52,12 @@ public class LoanAdviceQueryService {
 
     public LoanAdviceResponse getSpecificLoanAdvice(Long loanAdviceResultId) {
 
-        Optional<LoanAdviceResult> loanAdviceResult = loanAdviceResultRepository.findById(loanAdviceResultId);
+        LoanAdviceResult loanAdviceResult = loanAdviceResultRepository.findById(loanAdviceResultId)
+            .orElseThrow(() -> new IllegalArgumentException("대출 상품 추천 결과가 없습니다."));
 
-        if (loanAdviceResult.isEmpty()) {
-            return null;
-        }
-
-        List<Bank> availableBanks = getAvailableBanks(loanAdviceResult.get().getLoanProductCode());
-        return LoanAdviceResponse.of(loanAdviceResult.get(), availableBanks);
+        List<Bank> availableBanks = getAvailableBanks(loanAdviceResult.getLoanProductCode());
+        Long userInputInfoId = loanAdviceResult.getUserInputInfo().getId();
+        return LoanAdviceResponse.of(loanAdviceResult, userInputInfoId, availableBanks);
     }
 
 

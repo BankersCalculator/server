@@ -7,7 +7,7 @@ import lombok.Getter;
 @Builder
 public class SpecificLoanAdviceRequest {
 
-    private Long loanAdviceResultId;
+    private Long userInputInfoId;
     private String productCode;
 
 

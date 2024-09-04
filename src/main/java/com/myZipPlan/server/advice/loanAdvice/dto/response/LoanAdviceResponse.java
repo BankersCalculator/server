@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 public class LoanAdviceResponse {
 
     private Long loanAdviceResultId;
+    private Long userInputInfoId;
 
     private Boolean hasEligibleProduct;
     // 대출 상품 정보
@@ -65,12 +66,13 @@ public class LoanAdviceResponse {
 
 
 
-    public static LoanAdviceResponse of(LoanAdviceResult result, List<Bank> availableBanks) {
+    public static LoanAdviceResponse of(LoanAdviceResult result, Long userInputInfoId, List<Bank> availableBanks) {
 
         BigDecimal totalLivingCost = result.getMonthlyRent().add(result.getMonthlyRent());
 
         return LoanAdviceResponse.builder()
             .loanAdviceResultId(result.getId())
+            .userInputInfoId(userInputInfoId)
             .hasEligibleProduct(true)
             .loanProductName(result.getLoanProductName())
             .loanProductCode(result.getLoanProductCode())

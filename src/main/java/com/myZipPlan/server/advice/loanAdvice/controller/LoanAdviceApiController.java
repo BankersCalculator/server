@@ -29,13 +29,13 @@ public class LoanAdviceApiController {
         List<LoanAdviceSummaryResponse> recentLoanAdvices = loanAdviceQueryService.getRecentLoanAdvices();
 
         if (recentLoanAdvices == null) {
-            return ApiResponse.noContent(recentLoanAdvices);
+            return ApiResponse.noContent(null);
         }
 
         return ApiResponse.ok(recentLoanAdvices);
     }
 
-    @GetMapping("/specific/{loanAdviceResultId}")
+    @GetMapping("/{loanAdviceResultId}")
     public ApiResponse<LoanAdviceResponse> getSpecificLoanAdvice(@PathVariable Long loanAdviceResultId) {
         LoanAdviceResponse specificLoanAdvice = loanAdviceQueryService.getSpecificLoanAdvice(loanAdviceResultId);
 
@@ -55,7 +55,7 @@ public class LoanAdviceApiController {
 
     @PostMapping("/specific")
     public ApiResponse<LoanAdviceResponse> generateLoanAdviceOnSpecificLoan(@RequestBody SpecificLoanAdviceRequest request) {
-        LoanAdviceResponse loanAdviceResponse = loanAdviceService.generateLoanAdviceOnSpecificLoan(request.getLoanAdviceResultId(), request.getProductCode());
+        LoanAdviceResponse loanAdviceResponse = loanAdviceService.generateLoanAdviceOnSpecificLoan(request.getUserInputInfoId(), request.getProductCode());
 
         return ApiResponse.ok(loanAdviceResponse);
     }

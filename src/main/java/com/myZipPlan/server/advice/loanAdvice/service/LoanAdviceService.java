@@ -12,6 +12,7 @@ import com.myZipPlan.server.advice.loanAdvice.repository.LoanAdviceResultReposit
 import com.myZipPlan.server.advice.loanAdvice.service.component.*;
 import com.myZipPlan.server.advice.userInputInfo.domain.UserInputInfo;
 import com.myZipPlan.server.advice.userInputInfo.repository.UserInputInfoRepository;
+import com.myZipPlan.server.common.enums.Bank;
 import com.myZipPlan.server.common.enums.loanAdvice.JeonseLoanProductType;
 import com.myZipPlan.server.common.exception.customException.AuthException;
 import com.myZipPlan.server.oauth.userInfo.SecurityUtils;
@@ -64,7 +65,7 @@ public class LoanAdviceService {
         return createFullLoanAdviceResponse(request, filterResults);
     }
 
-    public LoanAdviceResponse generateLoanAdviceOnSpecificLoan(Long loanAdviceResultId, String productCode) {
+    public LoanAdviceResponse generateLoanAdviceOnSpecificLoan(Long userInputInfoId, String productCode) {
         return null;
     }
 
@@ -97,8 +98,11 @@ public class LoanAdviceService {
     private LoanAdviceResponse createFullLoanAdviceResponse(LoanAdviceServiceRequest request, List<FilterProductResultDto> filterResults) {
         LoanAdviceComponents components = prepareLoanAdviceComponents(request, filterResults);
         LoanAdviceResult result = assembleAndCreateResult(components);
+
+        Long userInputInfoId = components.userInputInfo.getId();
+        List<Bank> availableBanks = components.additionalInfo.getAvailableBanks();
         loanAdviceResultRepository.save(result);
-        return LoanAdviceResponse.of(result, components.additionalInfo.getAvailableBanks());
+        return LoanAdviceResponse.of(result, userInputInfoId, availableBanks);
     }
 
     // 대출상품 추천을 위한 전체 프로세스를 수행한다.
