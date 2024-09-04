@@ -33,4 +33,14 @@ public enum JeonseLoanProductType {
     private final String productName;
     private final String productCode;
 
+    public static JeonseLoanProductType findByProductCode(String productCode) {
+        for (JeonseLoanProductType value : values()) {
+            if (value.productCode.equals(productCode)) {
+                return value;
+            }
+        }
+        return null;
+    }
+
+
 }

@@ -63,10 +63,6 @@ public class LoanAdviceResult extends BaseTimeEntity {
     @OneToMany(mappedBy = "loanAdviceResult", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<RecommendedProduct> recommendedProducts = new ArrayList<>();
 
-    @Builder.Default
-    @ElementCollection(targetClass = Bank.class)
-    @Enumerated(EnumType.STRING)
-    private List<Bank> availableBanks = new ArrayList<>();  // 이용 가능한 은행 목록
 
     @Column(length = 4000)
     private String rentalLoanGuide;             // 대출 가이드
@@ -103,7 +99,6 @@ public class LoanAdviceResult extends BaseTimeEntity {
             .stampDuty(additionalInformation.getStampDuty())
             .recommendedProducts(new ArrayList<>())
             .recommendationReason(aiReport)
-            .availableBanks(additionalInformation.getAvailableBanks())
             .rentalLoanGuide(additionalInformation.getRentalLoanGuide())
             .build();
 
@@ -128,32 +123,4 @@ public class LoanAdviceResult extends BaseTimeEntity {
         this.recommendedProducts.add(product);
         product.setLoanAdviceResult(this);
     }
-
-
-    public LoanAdviceResponse toLoanAdviceResponse() {
-        return LoanAdviceResponse.builder()
-            .loanAdviceResultId(id)
-            .hasEligibleProduct(true)
-            .loanProductName(loanProductName)
-            .loanProductCode(loanProductCode)
-            .possibleLoanLimit(possibleLoanLimit)
-            .expectedLoanRate(expectedLoanRate)
-            .totalRentalDeposit(totalRentalDeposit)
-            .loanAmount(loanAmount)
-            .ownFunds(ownFunds)
-            .monthlyInterestCost(monthlyInterestCost)
-            .monthlyRent(monthlyRent)
-            .opportunityCostOwnFunds(opportunityCostOwnFunds)
-            .depositInterestRate(depositInterestRate)
-            .guaranteeInsuranceFee(guaranteeInsuranceFee)
-            .stampDuty(stampDuty)
-            .recommendationReason(recommendationReason)
-            .recommendedProducts(recommendedProducts.stream()
-                .map(RecommendedProduct::toDto)
-                .collect(Collectors.toList()))
-            .availableBanks(availableBanks)
-            .rentalLoanGuide(rentalLoanGuide)
-            .build();
-    }
-
 }

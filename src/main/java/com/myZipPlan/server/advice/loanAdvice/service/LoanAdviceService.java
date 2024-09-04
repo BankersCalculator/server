@@ -98,7 +98,7 @@ public class LoanAdviceService {
         LoanAdviceComponents components = prepareLoanAdviceComponents(request, filterResults);
         LoanAdviceResult result = assembleAndCreateResult(components);
         loanAdviceResultRepository.save(result);
-        return result.toLoanAdviceResponse();
+        return LoanAdviceResponse.of(result, components.additionalInfo.getAvailableBanks());
     }
 
     // 대출상품 추천을 위한 전체 프로세스를 수행한다.

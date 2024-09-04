@@ -65,7 +65,7 @@ public class LoanAdviceResponse {
 
 
 
-    public static LoanAdviceResponse of(LoanAdviceResult result) {
+    public static LoanAdviceResponse of(LoanAdviceResult result, List<Bank> availableBanks) {
 
         BigDecimal totalLivingCost = result.getMonthlyRent().add(result.getMonthlyRent());
 
@@ -96,7 +96,7 @@ public class LoanAdviceResponse {
                     .notEligibleReasons(Arrays.stream(ap.getNotEligibleReasons().split(Pattern.quote("|"))).toList())
                     .build())
                 .collect(Collectors.toList()))
-            .availableBanks(result.getAvailableBanks())
+            .availableBanks(availableBanks)
             .rentalLoanGuide(result.getRentalLoanGuide())
             .build();
     }
