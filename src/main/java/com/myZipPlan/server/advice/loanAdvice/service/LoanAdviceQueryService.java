@@ -3,7 +3,9 @@ package com.myZipPlan.server.advice.loanAdvice.service;
 import com.myZipPlan.server.advice.loanAdvice.dto.response.LoanAdviceResponse;
 import com.myZipPlan.server.advice.loanAdvice.dto.response.LoanAdviceSummaryResponse;
 import com.myZipPlan.server.advice.loanAdvice.entity.LoanAdviceResult;
+import com.myZipPlan.server.advice.loanAdvice.model.LoanProductFactory;
 import com.myZipPlan.server.advice.loanAdvice.repository.LoanAdviceResultRepository;
+import com.myZipPlan.server.common.enums.Bank;
 import com.myZipPlan.server.common.exception.customException.AuthException;
 import com.myZipPlan.server.oauth.userInfo.SecurityUtils;
 import com.myZipPlan.server.user.entity.User;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -23,6 +26,7 @@ public class LoanAdviceQueryService {
 
     private final UserRepository userRepository;
     private final LoanAdviceResultRepository loanAdviceResultRepository;
+    private final LoanProductFactory loanProductFactory;
 
     public List<LoanAdviceSummaryResponse> getRecentLoanAdvices() {
         User user = fetchCurrentUser();
@@ -47,7 +51,15 @@ public class LoanAdviceQueryService {
     }
 
     public LoanAdviceResponse getSpecificLoanAdvice(Long loanAdviceResultId) {
-        return null;
+
+        Optional<LoanAdviceResult> loanAdviceResult = loanAdviceResultRepository.findById(loanAdviceResultId);
+
+        if (loanAdviceResult.isEmpty()) {
+            return null;
+        }
+
+        List<Bank> availableBanks = getAvailableBanks(loanAdviceResult.get().getLoanProductCode());
+        return LoanAdviceResponse.of(loanAdviceResult.get(), availableBanks);
     }
 
 
@@ -58,5 +70,9 @@ public class LoanAdviceQueryService {
             .orElseThrow(() -> new AuthException("사용자 정보가 없습니다."));
 
         return user;
+    }
+
+    private List<Bank> getAvailableBanks(String productCode) {
+        return loanProductFactory.getAvailableBanks(productCode);
     }
 }
