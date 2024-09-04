@@ -46,19 +46,23 @@ class LoanAdviceServiceTest extends IntegrationTestSupport {
     }
 
 
-    @DisplayName("대출 상담 정상 산출 테스트")
+    // TODO: 조회, 실패 등 테스트케이스 추가할 것.
+    // 상품이 추가될 때마다 테스트 결과가 바뀔 수 있다는 게 찜찜하다.
+    // 어떻게 해결할 수 있을지 고민해볼 것..
+
+    @DisplayName("일반 대출추천 - 서울시신혼부부(HF-01)")
     @Test
-    void generateLoanAdvice() {
+    void generateLoanAdvice_targetHF01() {
         // given
         LoanAdviceServiceRequest request = LoanAdviceServiceRequest.builder()
-            .rentalDeposit(new BigDecimal("200000000"))
-            .monthlyRent(new BigDecimal("500000"))
+            .rentalDeposit(new BigDecimal("300000000"))
+            .monthlyRent(new BigDecimal("0"))
             .cashOnHand(new BigDecimal("50000000"))
             .age(35)
-            .maritalStatus(MaritalStatus.MARRIED)
-            .annualIncome(new BigDecimal("60000000"))
+            .maritalStatus(MaritalStatus.ENGAGED)
+            .annualIncome(new BigDecimal("45000000"))
             .spouseAnnualIncome(new BigDecimal("40000000"))
-            .childStatus(ChildStatus.ONE_CHILD)
+            .childStatus(ChildStatus.NO_CHILD)
             .hasNewborn(false)
             .houseOwnershipType(HouseOwnershipType.NO_HOUSE)
             .isSMEEmployee(true)
@@ -76,36 +80,75 @@ class LoanAdviceServiceTest extends IntegrationTestSupport {
 
         // then
         assertNotNull(response);
-//        assertEquals("서울시신혼부부임차보증금대출", response.getLoanProductName());
-//        assertEquals("HF-01", response.getLoanProductCode());
-//        assertEquals(new BigDecimal("180000000.0"), response.getPossibleLoanLimit());
-//        assertEquals(new BigDecimal("4.60"), response.getExpectedLoanRate());
-//        assertEquals(new BigDecimal("200000000.0"), response.getTotalRentalDeposit());
-//        assertEquals(new BigDecimal("180000000.0"), response.getLoanAmount());
-//        assertEquals(new BigDecimal("20000000.0"), response.getOwnFunds());
-//        assertEquals(new BigDecimal("690000"), response.getMonthlyInterestCost());
-//        assertEquals(new BigDecimal("500000"), response.getMonthlyRent());
-//        assertEquals(new BigDecimal("0.0"), response.getOpportunityCostOwnFunds());
-//        assertEquals(new BigDecimal("0.03"), response.getDepositInterestRate());
-//        assertEquals(new BigDecimal("180000.0000"), response.getGuaranteeInsuranceFee());
-//        assertEquals(new BigDecimal("75000"), response.getStampDuty());
-//        assertEquals("AI가 생성해 줄 보고서입니다.", response.getRecommendationReason());
-//
-//        assertNotNull(response.getRecommendedProducts());
-//        assertTrue(response.getRecommendedProducts().size() >= 1);
-//        assertEquals("고정금리 협약전세자금보증", response.getRecommendedProducts().get(0).getLoanProductName());
-//        assertEquals("HF-07", response.getRecommendedProducts().get(0).getLoanProductCode());
-//        assertEquals(new BigDecimal("300000"), response.getRecommendedProducts().get(0).getPossibleLoanLimit());
-//        assertEquals(new BigDecimal("4.60"), response.getRecommendedProducts().get(0).getExpectedLoanRate());
-//        assertEquals("부부합산소득 1.3억 초과시 대출 불가능합니다.", response.getRecommendedProducts().get(0).getNotEligibleReasons().get(0));
-//
-//        assertNotNull(response.getAvailableBanks());
-//        assertTrue(response.getAvailableBanks().contains(Bank.HANA));
-//        assertTrue(response.getAvailableBanks().contains(Bank.SHINHAN));
-//        assertTrue(response.getAvailableBanks().contains(Bank.KB));
-//
-//        assertEquals("전세대출 가이드", response.getRentalLoanGuide());
+        assertEquals("HF-01", response.getLoanProductCode());
+        assertEquals("서울시신혼부부임차보증금대출", response.getLoanProductName());
+
+        assertEquals(new BigDecimal("270000000"), response.getPossibleLoanLimit());
+        assertEquals(new BigDecimal("4.60"), response.getExpectedLoanRate());
+        assertEquals(new BigDecimal("300000000"), response.getTotalRentalDeposit());
+        assertEquals(new BigDecimal("270000000"), response.getLoanAmount());
+        assertEquals(new BigDecimal("30000000"), response.getOwnFunds());
+
+        assertEquals(new BigDecimal("1035000"), response.getMonthlyInterestCost());
+        assertEquals(new BigDecimal("0"), response.getMonthlyRent());
+        assertEquals(new BigDecimal("0"), response.getTotalLivingCost());
+
+        assertEquals(new BigDecimal("270000"), response.getGuaranteeInsuranceFee());
+        assertEquals(new BigDecimal("75000"), response.getStampDuty());
+        assertEquals(3, response.getAvailableBanks().size());
     }
+
+    @DisplayName("특정 대출추천 - 중기청(HF-01)")
+    @Test
+    void generateSpecificLoanAdvice_targetHF01() {
+        // given
+        LoanAdviceServiceRequest request = LoanAdviceServiceRequest.builder()
+            .rentalDeposit(new BigDecimal("120000000"))
+            .monthlyRent(new BigDecimal("0"))
+            .cashOnHand(new BigDecimal("20000000"))
+            .age(32)
+            .maritalStatus(MaritalStatus.SINGLE)
+            .annualIncome(new BigDecimal("45000000"))
+            .spouseAnnualIncome(new BigDecimal("0"))
+            .childStatus(ChildStatus.NO_CHILD)
+            .hasNewborn(false)
+            .houseOwnershipType(HouseOwnershipType.NO_HOUSE)
+            .isSMEEmployee(true)
+            .isNetAssetOver345M(false)
+            .rentHousingType(RentHousingType.OFFICETEL)
+            .exclusiveArea(new BigDecimal(84.5))
+            .buildingName("행복아파트")
+            .districtCode("1111011700")
+            .dongName("역삼동")
+            .jibun("649-5")
+            .build();
+
+        // when
+        LoanAdviceResponse response = loanAdviceService.createLoanAdvice(request);
+
+        // then
+        assertNotNull(response);
+        assertEquals("NHUF-03", response.getLoanProductCode());
+        assertEquals("중소기업취업청년전월세대출", response.getLoanProductName());
+
+        assertEquals(new BigDecimal("96000000"), response.getPossibleLoanLimit());
+        assertEquals(new BigDecimal("1.5"), response.getExpectedLoanRate());
+        assertEquals(new BigDecimal("120000000"), response.getTotalRentalDeposit());
+        assertEquals(new BigDecimal("96000000"), response.getLoanAmount());
+        assertEquals(new BigDecimal("24000000"), response.getOwnFunds());
+
+        assertEquals(new BigDecimal("120000"), response.getMonthlyInterestCost());
+        assertEquals(new BigDecimal("0"), response.getMonthlyRent());
+        assertEquals(new BigDecimal("0"), response.getTotalLivingCost());
+
+        assertEquals(new BigDecimal("295680"), response.getGuaranteeInsuranceFee());
+        assertEquals(new BigDecimal("35000"), response.getStampDuty());
+        assertEquals(7, response.getAvailableBanks().size());
+
+    }
+
+
+
 
     private void createTestUser() {
         KakaoUserDetails userDetails = mock(KakaoUserDetails.class);
