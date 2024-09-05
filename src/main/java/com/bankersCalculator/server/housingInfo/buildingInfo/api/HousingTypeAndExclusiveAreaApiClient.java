@@ -17,7 +17,9 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 국토교통부 주택 유형 및 전용 면적 조회 API
@@ -49,7 +51,10 @@ public class HousingTypeAndExclusiveAreaApiClient {
         this.xmlMapper = new XmlMapper();
     }
 
-    public HousingTypeAndExclusiveAreaApiResponse getApHsTpInfo(
+    /**
+     * 주택 유형 및 전용 면적 정보를 가져오는 API 호출 메서드
+     */
+    public String callHousingTypeAndExclusiveAreaApi(
             String districtCodeFirst5,
             String districtCodeLast5,
             String jibunMain,
@@ -76,29 +81,30 @@ public class HousingTypeAndExclusiveAreaApiClient {
             conn.setRequestMethod("GET");
 
             BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8));
-            StringBuilder sb = new StringBuilder();
+            StringBuilder response = new StringBuilder();
             String line;
             while ((line = br.readLine()) != null) {
-                sb.append(line);
+                response.append(line);
             }
             br.close();
 
-            XmlMapper xmlMapper = new XmlMapper();
-            JsonNode jsonNode = xmlMapper.readTree(sb.toString());
+            // XML을 JSON으로 변환
+            JSONObject jsonObject = new JSONObject(xmlMapper.readTree(response.toString()).toString());
+            //logger.info("Converted XML to JSON: {}", jsonObject);
 
-            // JSON 객체로 변환하여 기존 로직으로 전달
-            JSONObject jsonObject = new JSONObject(jsonNode.toString());
-
-
-            return parseRentTransactionInfoResponse(jsonObject);
+            // 결과 처리 및 DTO 매핑
+            return jsonObject.toString();
         } catch (Exception e) {
             logger.error("Error occurred while calling the API", e);
             throw new RuntimeException("Error occurred while calling the API", e);
         }
     }
-
-    private HousingTypeAndExclusiveAreaApiResponse parseRentTransactionInfoResponse(JSONObject jsonObject) {
+    /**
+     * API 응답을 파싱하여 DTO로 변환하는 메서드
+     */
+    private HousingTypeAndExclusiveAreaApiResponse parseHousingTypeAndExclusiveAreaResponse(String apiResponse) {
         HousingTypeAndExclusiveAreaApiResponse response = new HousingTypeAndExclusiveAreaApiResponse();
+        JSONObject jsonObject = new JSONObject(apiResponse);
 
         HousingTypeAndExclusiveAreaApiResponse.ApiResponseHeader responseHeader = new HousingTypeAndExclusiveAreaApiResponse.ApiResponseHeader();
         if (jsonObject.has("header")) {
@@ -112,11 +118,16 @@ public class HousingTypeAndExclusiveAreaApiClient {
             responseHeader.setResultMsg(cmmMsgHeader.getString("returnAuthMsg"));
             response.setHeader(responseHeader);
         }
+
+        JSONObject body = jsonObject.getJSONObject("body");
         HousingTypeAndExclusiveAreaApiResponse.ApiResponseBody responseBody = new HousingTypeAndExclusiveAreaApiResponse.ApiResponseBody();
         List<HousingTypeAndExclusiveAreaApiResponse.ApiResponseItem> itemList = new ArrayList<>();
 
-        if (jsonObject.has("body")) {
-            JSONObject body = jsonObject.getJSONObject("body");
+        Object itemsObj = body.get("items");
+
+        if (itemsObj instanceof JSONObject) {
+            responseHeader.setResultCode("Y");
+            responseHeader.setResultMsg("Success");
             if (!body.isNull("items")) {
                 JSONArray itemsArray = body.getJSONObject("items").getJSONArray("item");
                 for (int i = 0; i < itemsArray.length(); i++) {
@@ -129,11 +140,29 @@ public class HousingTypeAndExclusiveAreaApiClient {
 
                     itemList.add(item);
                 }
-                responseBody.setItems(new HousingTypeAndExclusiveAreaApiResponse.ApiResponseItems());
-                responseBody.getItems().setItemList(itemList);
             }
         }
+        responseBody.setItems(new HousingTypeAndExclusiveAreaApiResponse.ApiResponseItems());
+        responseBody.getItems().setItemList(itemList);
         response.setBody(responseBody);
         return response;
+    }
+
+    public Map<String, Object> InquiryHousingTypeAndExclusiveArea (String districtCodeFirst5,
+                                                                   String districtCodeLast5,
+                                                                   String jibunMain,
+                                                                   String jibunSub) {
+
+        String apiResponse = callHousingTypeAndExclusiveAreaApi(districtCodeFirst5, districtCodeLast5, jibunMain, jibunSub);
+        HousingTypeAndExclusiveAreaApiResponse housingTypeAndExclusiveAreaApiResponse =  parseHousingTypeAndExclusiveAreaResponse(apiResponse);
+
+        Map<String, Object> inquiryHousingTypeAndExclusiveAreaResult = new HashMap<>();
+        inquiryHousingTypeAndExclusiveAreaResult.put("apiResultCode", housingTypeAndExclusiveAreaApiResponse.getHeader().getResultCode());
+        inquiryHousingTypeAndExclusiveAreaResult.put("apiResultMessage", housingTypeAndExclusiveAreaApiResponse.getHeader().getResultMsg());
+
+        List<HousingTypeAndExclusiveAreaApiResponse.ApiResponseItem> housingTypeAndExclusiveAreaList = housingTypeAndExclusiveAreaApiResponse.getBody().getItems().getItemList();
+        inquiryHousingTypeAndExclusiveAreaResult.put("housingTypeAndExclusiveAreaList", housingTypeAndExclusiveAreaList);
+
+        return inquiryHousingTypeAndExclusiveAreaResult;
     }
 }

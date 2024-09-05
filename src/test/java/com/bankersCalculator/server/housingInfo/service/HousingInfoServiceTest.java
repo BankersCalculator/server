@@ -54,16 +54,18 @@ public class HousingInfoServiceTest {
         logger.info("Jibun Sub: {}", jibunSub);
 
         // Step 2: 주택 유형 및 전용 면적 정보
-        HousingTypeAndExclusiveAreaApiResponse housingTypeInfo = housingTypeAndExclusiveAreaApiClient.getApHsTpInfo(districtCodeFirst5, districtCodeLast5, jibunMain, jibunSub);
+        Map<String, Object> apiResponse = housingTypeAndExclusiveAreaApiClient.InquiryHousingTypeAndExclusiveArea(
+                districtCodeFirst5, districtCodeLast5, jibunMain, jibunSub);
 
-        assertNotNull(housingTypeInfo, "HousingTypeInfo should not be null");
+        List<HousingTypeAndExclusiveAreaApiResponse.ApiResponseItem> itemList = (List<HousingTypeAndExclusiveAreaApiResponse.ApiResponseItem>)apiResponse.get("housingTypeAndExclusiveAreaList");
+
         logger.info("Step 2: HousingTypeInfo Response");
-        logger.info("Total Items: {}", housingTypeInfo.getBody().getItems().getItemList().size());
+        logger.info("Total Items: {}", itemList.size());
 
         List<HousingInfoResponse> result = new ArrayList<>();
 
         // Step 3: housingTypeInfo에서 필요한 정보를 추출하여 리스트에 추가
-        for (HousingTypeAndExclusiveAreaApiResponse.ApiResponseItem item : housingTypeInfo.getBody().getItems().getItemList()) {
+        for (HousingTypeAndExclusiveAreaApiResponse.ApiResponseItem item : itemList) {
             String rentHousingTypeName = item.getRentHousingTypeName();
             double exclusiveArea = item.getExclusiveArea();
             int rentHousingTypeCode = Integer.parseInt(item.getRentHousingTypeCode());

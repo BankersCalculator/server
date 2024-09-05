@@ -10,22 +10,23 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @Service
 public class HousingInfoService {
 
-    private final HousingTypeAndExclusiveAreaApiClient housingTypeApiClient;
+    private final HousingTypeAndExclusiveAreaApiClient housingTypeAndExclusiveAreaApiClient;
     private final RentTransactionInquiryService rentTransactionInquiryService;
 
     public HousingInfoService(HousingTypeAndExclusiveAreaApiClient housingTypeApiClient,
                               RentTransactionInquiryService rentTransactionInquiryService) {
-        this.housingTypeApiClient = housingTypeApiClient;
+        this.housingTypeAndExclusiveAreaApiClient = housingTypeApiClient;
         this.rentTransactionInquiryService = rentTransactionInquiryService;
     }
 
-    public List<HousingInfoResponse> getHousingInfo(String districtCode, String jibun, String dongName) throws IOException {
+    public Map<String, Object> getHousingInfo(String districtCode, String jibun, String dongName) throws IOException {
         // Step 1: districtCode와 jibun을 분리
         String districtCodeFirst5 = districtCode.substring(0, 5);
         String districtCodeLast5 = districtCode.substring(5);
@@ -35,58 +36,67 @@ public class HousingInfoService {
         String jibunSub = parsedJibun[1];
 
         // Step 2: 주택 유형 및 전용 면적 정보
-        HousingTypeAndExclusiveAreaApiResponse housingTypeInfo = housingTypeApiClient.getApHsTpInfo(
+        Map<String, Object> housingTypeAndExclusiveAreaApiResponse = housingTypeAndExclusiveAreaApiClient.InquiryHousingTypeAndExclusiveArea(
                 districtCodeFirst5, districtCodeLast5, jibunMain, jibunSub);
 
-        List<HousingInfoResponse> result = new ArrayList<>();
+        String apiResultCode = (String)housingTypeAndExclusiveAreaApiResponse.get("apiResultCode");
+        String apiResultMessage = (String)housingTypeAndExclusiveAreaApiResponse.get("apiResultMessage");
 
-        // Step 3: housingTypeInfo에서 필요한 정보를 추출하여 리스트에 추가
-        for (HousingTypeAndExclusiveAreaApiResponse.ApiResponseItem item : housingTypeInfo.getBody().getItems().getItemList()) {
-            String rentHousingTypeName = item.getRentHousingTypeName();
-            double exclusiveArea = item.getExclusiveArea();
-            int rentHousingTypeCode = Integer.parseInt(item.getRentHousingTypeCode());
+        Map<String, Object> housingInfoResult = new HashMap<>();
+        housingInfoResult.put("apiResultCode", apiResultCode);
+        housingInfoResult.put("apiResultMessage", apiResultMessage);
 
-            // RentHousingType 매핑
-            RentHousingType rentHousingType;
-            switch (rentHousingTypeCode) {
-                case 1:
-                    rentHousingType = RentHousingType.APARTMENT;
-                    break;
-                case 2:
-                    rentHousingType = RentHousingType.OFFICETEL;
-                    break;
-                case 3:
-                case 4:
-                    rentHousingType = RentHousingType.HOUSEHOLD_HOUSE;
-                    break;
-                case 5:
-                case 6:
-                    rentHousingType = RentHousingType.FAMILY_HOUSE;
-                    break;
-                default:
-                    throw new IllegalArgumentException("Unknown Rent Housing Type Code: " + rentHousingTypeCode);
-            }
+        if (apiResultCode.equals("Y")) {
+            List<HousingTypeAndExclusiveAreaApiResponse.ApiResponseItem> itemList = (List<HousingTypeAndExclusiveAreaApiResponse.ApiResponseItem>) housingTypeAndExclusiveAreaApiResponse.get("housingTypeAndExclusiveAreaList");
+            List<HousingInfoResponse> housingInfoList = new ArrayList<>();
+            // Step 3: housingTypeInfo에서 필요한 정보를 추출하여 리스트에 추가
+            for (HousingTypeAndExclusiveAreaApiResponse.ApiResponseItem item : itemList) {
+                String rentHousingTypeName = item.getRentHousingTypeName();
+                double exclusiveArea = item.getExclusiveArea();
+                int rentHousingTypeCode = Integer.parseInt(item.getRentHousingTypeCode());
 
-            // Step 4: 임대 거래 데이터
-            RentTransactionInquiryResponse rentTransactionResponse = rentTransactionInquiryService.getRentTransactionsResult(
-                    districtCodeFirst5, rentHousingType, 3, dongName, jibun);
+                // RentHousingType 매핑
+                RentHousingType rentHousingType;
+                switch (rentHousingTypeCode) {
+                    case 1:
+                        rentHousingType = RentHousingType.APARTMENT;
+                        break;
+                    case 2:
+                        rentHousingType = RentHousingType.OFFICETEL;
+                        break;
+                    case 3:
+                    case 4:
+                        rentHousingType = RentHousingType.HOUSEHOLD_HOUSE;
+                        break;
+                    case 5:
+                    case 6:
+                        rentHousingType = RentHousingType.FAMILY_HOUSE;
+                        break;
+                    default:
+                        throw new IllegalArgumentException("Unknown Rent Housing Type Code: " + rentHousingTypeCode);
+                }
 
-            // Step 5: 평균 보증금과 거래 건수를 추출하고, 정보를 활용
-            for (Map.Entry<String, RentTransactionInquiryResponse.AverageInfo> entry : rentTransactionResponse.getAverageInfoByExcluUseAr().entrySet()) {
-                String excluUseAr = entry.getKey();
-                RentTransactionInquiryResponse.AverageInfo avgInfo = entry.getValue();
+                // Step 4: 임대 거래 데이터
+                RentTransactionInquiryResponse rentTransactionResponse = rentTransactionInquiryService.getRentTransactionsResult(
+                        districtCodeFirst5, rentHousingType, 3, dongName, jibun);
 
-                result.add(new HousingInfoResponse(
-                        rentHousingTypeName,
-                        Double.parseDouble(excluUseAr),
-                        avgInfo.getAverageDeposit(),
-                        avgInfo.getAverageMonthlyRent(),
-                        avgInfo.getTransactionCount()
-                ));
+                // Step 5: 평균 보증금과 거래 건수를 추출하고, 정보를 활용
+                for (Map.Entry<String, RentTransactionInquiryResponse.AverageInfo> entry : rentTransactionResponse.getAverageInfoByExcluUseAr().entrySet()) {
+                    String excluUseAr = entry.getKey();
+                    RentTransactionInquiryResponse.AverageInfo avgInfo = entry.getValue();
+
+                    housingInfoList.add(new HousingInfoResponse(
+                            rentHousingTypeName,
+                            Double.parseDouble(excluUseAr),
+                            avgInfo.getAverageDeposit(),
+                            avgInfo.getAverageMonthlyRent(),
+                            avgInfo.getTransactionCount()
+                    ));
+                }
+                housingInfoResult.put("housingInfoList", housingInfoList);
             }
         }
-
-        return result;
+        return housingInfoResult;
     }
 
     public static String[] parseJibun(String jibun) {

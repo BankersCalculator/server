@@ -89,7 +89,6 @@ public class RentTransactionApiClient {
 
             // 결과 처리 및 DTO 매핑
             return jsonObject.toString();
-
         } catch (Exception e) {
             logger.error("Error occurred while calling the API", e);
             throw new RuntimeException("Error occurred while calling the API", e);
@@ -102,45 +101,44 @@ public class RentTransactionApiClient {
         JSONObject jsonObject = new JSONObject(apiResponse);
         JSONObject header = jsonObject.getJSONObject("header");
         RentTransactionApiResponse.ApiResponseHeader responseHeader = new RentTransactionApiResponse.ApiResponseHeader();
+
         responseHeader.setResultCode(header.getString("resultCode"));
         responseHeader.setResultMsg(header.getString("resultMsg"));
         response.setHeader(responseHeader);
 
         JSONObject body = jsonObject.getJSONObject("body");
         RentTransactionApiResponse.ApiResponseBody responseBody = new RentTransactionApiResponse.ApiResponseBody();
+        List<RentTransactionApiResponse.ApiResponseItem> itemList = new ArrayList<>();
 
         Object itemsObj = body.get("items");
-        List<RentTransactionApiResponse.ApiResponseItem> itemList = new ArrayList<>();
         if (itemsObj instanceof JSONObject) {
-            responseHeader.setResultCode("0");
+            responseHeader.setResultCode("Y");
             responseHeader.setResultMsg("Success");
-
-            JSONArray itemsArray = body.getJSONObject("items").getJSONArray("item");
-            for (int i = 0; i < itemsArray.length(); i++) {
-                JSONObject itemObject = itemsArray.getJSONObject(i);
-                RentTransactionApiResponse.ApiResponseItem item = new RentTransactionApiResponse.ApiResponseItem();
-                item.setAptNm(itemObject.has("aptNm") ? itemObject.getString("aptNm") : null);
-                item.setBuildYear(itemObject.has("buildYear") ? itemObject.getString("buildYear") : null);
-                item.setContractTerm(itemObject.has("contractTerm") ? itemObject.getString("contractTerm") : null);
-                item.setContractType(itemObject.has("contractType") ? itemObject.getString("contractType") : null);
-                item.setDealDay(itemObject.has("dealDay") ? itemObject.getString("dealDay") : null);
-                item.setDealMonth(itemObject.has("dealMonth") ? itemObject.getString("dealMonth") : null);
-                item.setDealYear(itemObject.has("dealYear") ? itemObject.getString("dealYear") : null);
-                item.setDeposit(itemObject.has("deposit") ? itemObject.getString("deposit") : null);
-                item.setExcluUseAr(itemObject.has("excluUseAr") ? itemObject.getString("excluUseAr") : null);
-                item.setFloor(itemObject.has("floor") ? itemObject.getString("floor") : null);
-                item.setJibun(itemObject.has("jibun") ? itemObject.getString("jibun") : null);
-                item.setMonthlyRent(itemObject.has("monthlyRent") ? itemObject.getString("monthlyRent") : null);
-                item.setPreDeposit(itemObject.has("preDeposit") ? itemObject.getString("preDeposit") : null);
-                item.setPreMonthlyRent(itemObject.has("preMonthlyRent") ? itemObject.getString("preMonthlyRent") : null);
-                item.setSggCd(itemObject.has("sggCd") ? itemObject.getString("sggCd") : null);
-                item.setUmdNm(itemObject.has("umdNm") ? itemObject.getString("umdNm") : null);
-                item.setUseRRRight(itemObject.has("useRRRight") ? itemObject.getString("useRRRight") : null);
-                itemList.add(item);
+            if (!body.isNull("items")) {
+                JSONArray itemsArray = body.getJSONObject("items").getJSONArray("item");
+                for (int i = 0; i < itemsArray.length(); i++) {
+                    JSONObject itemObject = itemsArray.getJSONObject(i);
+                    RentTransactionApiResponse.ApiResponseItem item = new RentTransactionApiResponse.ApiResponseItem();
+                    item.setAptNm(itemObject.has("aptNm") ? itemObject.getString("aptNm") : null);
+                    item.setBuildYear(itemObject.has("buildYear") ? itemObject.getString("buildYear") : null);
+                    item.setContractTerm(itemObject.has("contractTerm") ? itemObject.getString("contractTerm") : null);
+                    item.setContractType(itemObject.has("contractType") ? itemObject.getString("contractType") : null);
+                    item.setDealDay(itemObject.has("dealDay") ? itemObject.getString("dealDay") : null);
+                    item.setDealMonth(itemObject.has("dealMonth") ? itemObject.getString("dealMonth") : null);
+                    item.setDealYear(itemObject.has("dealYear") ? itemObject.getString("dealYear") : null);
+                    item.setDeposit(itemObject.has("deposit") ? itemObject.getString("deposit") : null);
+                    item.setExcluUseAr(itemObject.has("excluUseAr") ? itemObject.getString("excluUseAr") : null);
+                    item.setFloor(itemObject.has("floor") ? itemObject.getString("floor") : null);
+                    item.setJibun(itemObject.has("jibun") ? itemObject.getString("jibun") : null);
+                    item.setMonthlyRent(itemObject.has("monthlyRent") ? itemObject.getString("monthlyRent") : null);
+                    item.setPreDeposit(itemObject.has("preDeposit") ? itemObject.getString("preDeposit") : null);
+                    item.setPreMonthlyRent(itemObject.has("preMonthlyRent") ? itemObject.getString("preMonthlyRent") : null);
+                    item.setSggCd(itemObject.has("sggCd") ? itemObject.getString("sggCd") : null);
+                    item.setUmdNm(itemObject.has("umdNm") ? itemObject.getString("umdNm") : null);
+                    item.setUseRRRight(itemObject.has("useRRRight") ? itemObject.getString("useRRRight") : null);
+                    itemList.add(item);
+                }
             }
-        } else {
-            responseHeader.setResultCode("1");
-            responseHeader.setResultMsg("조회결과가 없습니다.");
         }
         responseBody.setItems(new RentTransactionApiResponse.ApiResponseItems());
         responseBody.getItems().setItemList(itemList);
