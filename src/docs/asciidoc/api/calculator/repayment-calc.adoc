@@ -1,11 +1,9 @@
-[[repaymentCalc]]
-=== 상환 일정 계산기 API
+[[repayment-calc]]
+=== 원리금 계산기
 
 ==== HTTP Request
 
 include::{snippets}/calculator/repayment-calc/http-request.adoc[]
-==== Request Headers
-include::{snippets}/calculator/repayment-calc/request-headers.adoc[]
 ==== Request Fields
 include::{snippets}/calculator/repayment-calc/request-fields.adoc[]
 

@@ -1,6 +1,11 @@
 # Created by https://www.toptal.com/developers/gitignore/api/windows,macos,git,java,maven,eclipse,intellij,gradle,netbeans,visualstudiocode
 # Edit at https://www.toptal.com/developers/gitignore?templates=windows,macos,git,java,maven,eclipse,intellij,gradle,netbeans,visualstudiocode
 
+
+### HTML 문서 제외 ###
+/build/docs/
+/src/main/resources/static/docs/
+
 ### Eclipse ###
 .metadata
 bin/
@@ -13,6 +18,9 @@ local.properties
 .settings/
 .loadpath
 .recommenders
+
+# 특정 디렉토리의 모든 HTML 파일 무시
+docs/*.html
 
 # External tool builders
 .externalToolBuilders/

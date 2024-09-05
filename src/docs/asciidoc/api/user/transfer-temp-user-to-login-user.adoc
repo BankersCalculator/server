@@ -1,0 +1,13 @@
+[[transfer-temp-user-to-login-user]]
+=== 일회성고객 기존고객으로 편입
+
+==== HTTP Request
+
+include::{snippets}/user/transfer-temp-user-to-login-user/http-request.adoc[]
+==== Request Headers
+include::{snippets}/user/transfer-temp-user-to-login-user/request-headers.adoc[]
+==== Request Fields
+include::{snippets}/user/transfer-temp-user-to-login-user/request-fields.adoc[]
+
+==== HTTP Response
+include::{snippets}/user/transfer-temp-user-to-login-user/http-response.adoc[]

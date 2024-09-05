@@ -1,7 +1,7 @@
 ifndef::snippets[]
 :snippets: ./build/generated-snippets
 endif::[]
-= BankersCalculator REST API 문서
+= MyZipPlan REST API 문서
 :doctype: book
 :icons: font
 :source-highlighter: highlightjs
@@ -13,15 +13,23 @@ include::overview.adoc[]
 
 
 [[overview-http-status-codes]]
-=== Oauth2 Login
-include::api/oauth2/oauth2.adoc[]
 
 
-[[LoanAdvise-API]]
-== LoanAdvise API
+[[User-API]]
+== User API
 
-include::api/loan-advise/generate-loan-advise.adoc[]
-include::api/loan-advise/generate-loan-advise-on-specific-loan.adoc[]
+include::api/user/oauth2.adoc[]
+include::api/user/transfer-temp-user-to-login-user.adoc[]
+include::api/user/logout.adoc[]
+include::api/user/withdraw.adoc[]
+
+[[Loanadvice-API]]
+== LoanAdvice API
+
+include::api/loan-advice/get-recent-loan-advices.adoc[]
+include::api/loan-advice/get-specific-loan-advice.adoc[]
+include::api/loan-advice/generate-loan-advice.adoc[]
+include::api/loan-advice/generate-loan-advice-on-specific-loan.adoc[]
 
 [[UserInputInfo-API]]
 == UserInputInfo API
@@ -30,6 +38,12 @@ include::api/user-input-info/get-recently-submitted.adoc[]
 include::api/user-input-info/get-recent-ten.adoc[]
 include::api/user-input-info/get-specific.adoc[]
 
+
+[[HousingInfo-API]]
+== HousingInfo API
+
+include::api/housing-info/address-search.adoc[]
+include::api/housing-info/housing-info-all.adoc[]
 
 
 [[Calculator-API]]
@@ -41,17 +55,14 @@ include::api/calculator/dsr-calc.adoc[]
 include::api/calculator/dti-calc.adoc[]
 
 
+[[Board-API]]
+== Board API
 
-[[HousingInfo-API]]
-== HousingInfo API
-
-include::api/housing-info/address-search.adoc[]
-include::api/housing-info/housing-info-all.adoc[]
-
-
-
-
-
+include::api/board/get-all-posts.adoc[]
+include::api/board/get-post-by-id.adoc[]
+include::api/board/create-post.adoc[]
+include::api/board/update-post.adoc[]
+include::api/board/delete-post.adoc[]
 
 
 

@@ -1,5 +1,5 @@
 [[get-recent-ten]]
-=== 최근 유저투입정보 목록 조회 API
+=== 최근 유저투입정보 목록 조회
 
 ==== HTTP Request
 

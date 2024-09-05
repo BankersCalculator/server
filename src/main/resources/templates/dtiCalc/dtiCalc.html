@@ -157,7 +157,7 @@
             <div class="form-group">
                 <label>주택 구매에 필요하신 금액을 입력해주세요(대출금액)</label>
                 <div class="input-container">
-                    <input type="number" th:field="*{loanStatusList[0].principal}" id="principal" placeholder="0" onfocus="this.placeholder=''" onblur="this.placeholder='0'" oninput="updateFormattedValue(this, 'formatted-principal')" />
+                    <input type="number" th:field="*{loanStatuses[0].principal}" id="principal" placeholder="0" onfocus="this.placeholder=''" onblur="this.placeholder='0'" oninput="updateFormattedValue(this, 'formatted-principal')" />
                     <span class="unit">원</span>
                 </div>
                 <div class="buttons">
@@ -169,7 +169,7 @@
             </div>
 			<div class="form-group">
 			    <label>대출유형을 선택해주세요</label>
-			    	<select th:field="*{loanStatusList[0].loanType}" style="width: 50%;">
+			    	<select th:field="*{loanStatuses[0].loanType}" style="width: 50%;">
 					<option value="MORTGAGE">주택담보대출</option>
 					<option value="INTERIM_PAYMENT_AND_MOVING">중도금 및 이주비</option>
 					<option value="OFFICETEL_MORTGAGE_LOAN">오피스텔담보대출</option>
@@ -186,7 +186,7 @@
 			</div>
 			<div class="form-group">
                 <label>매달 납부하실 방법을 선택해주세요(상환방식)</label>
-                <select th:field="*{loanStatusList[0].repaymentType}" style="width: 50%;">
+                <select th:field="*{loanStatuses[0].repaymentType}" style="width: 50%;">
 					<option value="BULLET">일시상환</option>
 					<option value="AMORTIZING">원리금균등분할상환</option>
 					<option value="EQUAL_PRINCIPAL">원금균등분할상환</option>
@@ -195,7 +195,7 @@
             <div class="form-group">
                 <label>대출 기간을 입력해주세요</label>
                 <div class="input-container">
-                    <input type="number" th:field="*{loanStatusList[0].term}" id="term" placeholder="0" onfocus="this.placeholder=''" onblur="this.placeholder='0'" oninput="updateFormattedValue(this, 'formatted-term')" />
+                    <input type="number" th:field="*{loanStatuses[0].term}" id="term" placeholder="0" onfocus="this.placeholder=''" onblur="this.placeholder='0'" oninput="updateFormattedValue(this, 'formatted-term')" />
                     <span class="unit">개월</span>
                 </div>
                 <div class="buttons">
@@ -207,7 +207,7 @@
             <div class="form-group">
                 <label>이자율</label>
                 <div class="input-container">
-                    <input type="number" step="0.01" th:field="*{loanStatusList[0].interestRatePercentage}" id="interestRatePercentage" placeholder="0" onfocus="this.placeholder=''" onblur="this.placeholder='0'" oninput="formatPercentage(this)" />
+                    <input type="number" step="0.01" th:field="*{loanStatuses[0].interestRatePercentage}" id="interestRatePercentage" placeholder="0" onfocus="this.placeholder=''" onblur="this.placeholder='0'" oninput="formatPercentage(this)" />
                     <span class="unit">%</span>
                 </div>
                 <div class="formatted-value" id="formatted-interestRatePercentage">0%</div>
@@ -217,14 +217,14 @@
         </form>
 		<div class="result" th:if="${dtiCalcResponse != null}">
 		    <h2>결과</h2>
-			    <p th:text="'주택담보대출 ' + ${#numbers.formatInteger(dtiCalcResponse.dtiCalcResultList[0].principal, 1, 'COMMA')} + '원의 경우'"></p>
-			    <p th:text="'(' + ${dtiCalcResponse.dtiCalcResultList[0].term} + '년' + ', 원리금균등 기준)'"></p>
+			    <p th:text="'주택담보대출 ' + ${#numbers.formatInteger(dtiCalcResponse.dtiCalcResults[0].principal, 1, 'COMMA')} + '원의 경우'"></p>
+			    <p th:text="'(' + ${dtiCalcResponse.dtiCalcResults[0].term} + '년' + ', 원리금균등 기준)'"></p>
 			    <p th:text="'연소득은 ' + ${#numbers.formatInteger(dtiCalcResponse.annualIncome, 1, 'COMMA')} + '원이므로'"></p>
 			    <p th:text="'DTI는 약 ' + ${#numbers.formatInteger(dtiCalcResponse.finalDtiRatio, 2, 'COMMA' )} + '%로 예상됩니다.'"></p>
                 <p class="section-title">연원금 상환액</p>
-                <p th:text="${#numbers.formatInteger(dtiCalcResponse.dtiCalcResultList[0].annualPrincipalRepayment,1,'COMMA')} + '원'"></p>
+                <p th:text="${#numbers.formatInteger(dtiCalcResponse.dtiCalcResults[0].annualPrincipalRepayment,1,'COMMA')} + '원'"></p>
                 <p class="section-title">연이자 상환액</p>
-			    <p th:text="${#numbers.formatInteger(dtiCalcResponse.dtiCalcResultList[0].annualInterestRepayment,1,'COMMA')} + '원'"></p>
+			    <p th:text="${#numbers.formatInteger(dtiCalcResponse.dtiCalcResults[0].annualInterestRepayment,1,'COMMA')} + '원'"></p>
 			    <p class="section-title">연소득</p>
 			    <p th:text="${#numbers.formatInteger(dtiCalcResponse.annualIncome,1,'COMMA')} + '원'"></p>
 			    <p class="section-title">DTI</p>

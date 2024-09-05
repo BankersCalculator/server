@@ -1,0 +1,15 @@
+[[delete-post]]
+=== 게시글 수정
+
+==== HTTP Request
+include::{snippets}/board/delete-post/http-request.adoc[]
+==== Path Parameters
+include::{snippets}/board/delete-post/path-parameters.adoc[]
+==== Request Headers
+include::{snippets}/board/delete-post/request-headers.adoc[]
+
+
+==== HTTP Response
+include::{snippets}/board/delete-post/http-response.adoc[]
+==== Response Fields
+include::{snippets}/board/delete-post/response-fields.adoc[]
