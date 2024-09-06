@@ -70,7 +70,6 @@ public class LoanAdviceApiQueryControllerDocsTest extends RestDocsSupport {
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .header("AccessToken", "액세스 토큰")
-                .header("RefreshToken", "리프레시 토큰")
             )
             .andExpect(status().isOk())
             .andDo(document("loan-Advice/get-recent-loan-advices",
@@ -78,9 +77,7 @@ public class LoanAdviceApiQueryControllerDocsTest extends RestDocsSupport {
                 preprocessResponse(prettyPrint()),
                 requestHeaders(
                     headerWithName("AccessToken")
-                        .description("액세스 토큰"),
-                    headerWithName("RefreshToken")
-                        .description("리프레쉬 토큰")
+                        .description("액세스 토큰")
                 ),
                 responseFields(
                     fieldWithPath("code").type(JsonFieldType.NUMBER).description("응답 코드"),
@@ -108,7 +105,6 @@ public class LoanAdviceApiQueryControllerDocsTest extends RestDocsSupport {
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .header("AccessToken", "액세스 토큰")
-                .header("RefreshToken", "리프레시 토큰")
             )
             .andExpect(status().isOk())
             .andDo(document("loan-advice/get-specific-loan-advice",
@@ -116,9 +112,7 @@ public class LoanAdviceApiQueryControllerDocsTest extends RestDocsSupport {
                 preprocessResponse(prettyPrint()),
                 requestHeaders(
                     headerWithName("AccessToken")
-                        .description("액세스 토큰"),
-                    headerWithName("RefreshToken")
-                        .description("리프레쉬 토큰")
+                        .description("액세스 토큰")
                 ),
                 pathParameters(
                     parameterWithName("loanAdviceResultId").description("대출 상담 결과 ID")

@@ -63,8 +63,7 @@ public class BoardApiControllerDocsTest extends RestDocsSupport {
                 .accept(MediaType.APPLICATION_JSON)
                 .param("page", "0")
                 .param("size", "10")
-                .header("AccessToken", "액세스 토큰")
-                .header("RefreshToken", "리프레시 토큰"))
+                .header("AccessToken", "액세스 토큰"))
             .andExpect(status().isOk())
             .andDo(print())
             .andDo(document("board/get-all-posts",
@@ -72,9 +71,7 @@ public class BoardApiControllerDocsTest extends RestDocsSupport {
                 preprocessResponse(prettyPrint()),
                 requestHeaders(
                     headerWithName("AccessToken")
-                        .description("액세스 토큰"),
-                    headerWithName("RefreshToken")
-                        .description("리프레쉬 토큰")
+                        .description("액세스 토큰")
                 ),
                 queryParameters(
                     parameterWithName("page").description("페이지 번호"),
@@ -117,8 +114,7 @@ public class BoardApiControllerDocsTest extends RestDocsSupport {
         mockMvc.perform(get(BASE_URL + "/posts/{postId}", 1L)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .header("AccessToken", "액세스 토큰")
-                .header("RefreshToken", "리프레시 토큰"))
+                .header("AccessToken", "액세스 토큰"))
             .andExpect(status().isOk())
             .andDo(print())
             .andDo(document("board/get-post-by-id",
@@ -126,9 +122,7 @@ public class BoardApiControllerDocsTest extends RestDocsSupport {
                 preprocessResponse(prettyPrint()),
                 requestHeaders(
                     headerWithName("AccessToken")
-                        .description("액세스 토큰"),
-                    headerWithName("RefreshToken")
-                        .description("리프레쉬 토큰")
+                        .description("액세스 토큰")
                 ),
                 pathParameters(
                     parameterWithName("postId").description("게시글 ID")
@@ -171,8 +165,7 @@ public class BoardApiControllerDocsTest extends RestDocsSupport {
                 .content(objectMapper.writeValueAsString(request))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .header("AccessToken", "액세스 토큰")
-                .header("RefreshToken", "리프레시 토큰"))
+                .header("AccessToken", "액세스 토큰"))
             .andExpect(status().isOk())
             .andDo(print())
             .andDo(document("board/create-post",
@@ -180,9 +173,7 @@ public class BoardApiControllerDocsTest extends RestDocsSupport {
                 preprocessResponse(prettyPrint()),
                 requestHeaders(
                     headerWithName("AccessToken")
-                        .description("액세스 토큰"),
-                    headerWithName("RefreshToken")
-                        .description("리프레쉬 토큰")
+                        .description("액세스 토큰")
                 ),
                 requestFields(
                     fieldWithPath("title").type(JsonFieldType.STRING).description("제목"),
@@ -227,8 +218,7 @@ public class BoardApiControllerDocsTest extends RestDocsSupport {
                 .content(objectMapper.writeValueAsString(request))
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
-                .header("AccessToken", "액세스 토큰")
-                .header("RefreshToken", "리프레시 토큰"))
+                .header("AccessToken", "액세스 토큰"))
             .andExpect(status().isOk())
             .andDo(print())
             .andDo(document("board/update-post",
@@ -236,9 +226,7 @@ public class BoardApiControllerDocsTest extends RestDocsSupport {
                 preprocessResponse(prettyPrint()),
                 requestHeaders(
                     headerWithName("AccessToken")
-                        .description("액세스 토큰"),
-                    headerWithName("RefreshToken")
-                        .description("리프레쉬 토큰")
+                        .description("액세스 토큰")
                 ),
                 pathParameters(
                     parameterWithName("postId").description("게시글 ID")
@@ -269,8 +257,7 @@ public class BoardApiControllerDocsTest extends RestDocsSupport {
         mockMvc.perform(delete(BASE_URL + "/posts/{postId}", 1L)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .header("AccessToken", "액세스 토큰")
-                .header("RefreshToken", "리프레시 토큰"))
+                .header("AccessToken", "액세스 토큰"))
             .andExpect(status().isOk())
             .andDo(print())
             .andDo(document("board/delete-post",
@@ -278,9 +265,7 @@ public class BoardApiControllerDocsTest extends RestDocsSupport {
                 preprocessResponse(prettyPrint()),
                 requestHeaders(
                     headerWithName("AccessToken")
-                        .description("액세스 토큰"),
-                    headerWithName("RefreshToken")
-                        .description("리프레쉬 토큰")
+                        .description("액세스 토큰")
                 ),
                 pathParameters(
                     parameterWithName("postId").description("게시글 ID")
