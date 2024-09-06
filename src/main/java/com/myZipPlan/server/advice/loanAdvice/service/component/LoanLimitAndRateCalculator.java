@@ -8,6 +8,7 @@ import com.myZipPlan.server.advice.loanAdvice.model.LoanProductFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +27,19 @@ public class LoanLimitAndRateCalculator {
             LoanProduct loanProduct = loanProductFactory.getLoanProduct(filteredProduct.getProductType());
             LoanLimitAndRateResultDto loanLimitAndRateResult = loanProduct.calculateLoanLimitAndRate(request);
             loanLimitAndRateResult.setIsEligible(filteredProduct.isEligible());
+            result.add(loanLimitAndRateResult);
+        }
+
+        return result;
+    }
+
+    public List<LoanLimitAndRateResultDto> calculateMaxLoanLimitAndMinRate(BigDecimal rentalAmount) {
+
+        List<LoanProduct> loanProducts = loanProductFactory.getAllLoanProducts();
+        List<LoanLimitAndRateResultDto> result = new ArrayList<>();
+
+        for (LoanProduct loanProduct : loanProducts) {
+            LoanLimitAndRateResultDto loanLimitAndRateResult = loanProduct.calculateMaxLoanLimitAndMinRate(rentalAmount);
             result.add(loanLimitAndRateResult);
         }
 

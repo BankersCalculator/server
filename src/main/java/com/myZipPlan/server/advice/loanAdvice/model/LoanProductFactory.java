@@ -4,6 +4,7 @@ import com.myZipPlan.server.common.enums.Bank;
 import com.myZipPlan.server.common.enums.loanAdvice.JeonseLoanProductType;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +27,10 @@ public class LoanProductFactory {
             throw new RuntimeException("해당 상품이 존재하지 않습니다.");
         }
         return loanProduct;
+    }
+
+    public List<LoanProduct> getAllLoanProducts() {
+        return new ArrayList<>(loanProducts.values());
     }
 
     public List<Bank> getAvailableBanks(String productCode) {

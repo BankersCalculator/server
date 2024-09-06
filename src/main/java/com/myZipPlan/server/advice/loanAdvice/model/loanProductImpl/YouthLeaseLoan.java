@@ -35,6 +35,19 @@ public class YouthLeaseLoan implements LoanProduct {
     }
 
     @Override
+    public LoanLimitAndRateResultDto calculateMaxLoanLimitAndMinRate(BigDecimal rentalAmount) {
+
+        BigDecimal minRate = calculateFinalRate();
+
+        return LoanLimitAndRateResultDto.builder()
+            .productType(getProductType())
+            .possibleLoanLimit(LOAN_LIMIT)
+            .expectedLoanRate(minRate)
+            .isEligible(true)
+            .build();
+    }
+
+    @Override
     public FilterProductResultDto filtering(LoanAdviceServiceRequest request) {
 
         /*
@@ -102,7 +115,7 @@ public class YouthLeaseLoan implements LoanProduct {
         // 한도산출
         BigDecimal possibleLoanLimit = calculateLoanLimit(request);
         // 금리산출
-        BigDecimal finalRate = calculateFinalRate(request);
+        BigDecimal finalRate = calculateFinalRate();
 
         return LoanLimitAndRateResultDto.builder()
             .productType(getProductType())
@@ -124,8 +137,9 @@ public class YouthLeaseLoan implements LoanProduct {
         return calculatedLimit.compareTo(LOAN_LIMIT) > 0 ? LOAN_LIMIT : calculatedLimit;
     }
 
-    private BigDecimal calculateFinalRate(LoanAdviceServiceRequest request) {
+    private BigDecimal calculateFinalRate() {
         // 하나은행 홈피 기준. 금융채6개월물 + 1.04%
         return rateProviderService.getBaseRate(BaseRate.FINANCIAL_BOND_6M).add(new BigDecimal("1.04"));
     }
+
 }

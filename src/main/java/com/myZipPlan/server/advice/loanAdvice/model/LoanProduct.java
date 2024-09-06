@@ -45,6 +45,8 @@ public interface LoanProduct {
 
     LoanLimitAndRateResultDto calculateLoanLimitAndRate(LoanAdviceServiceRequest request);
 
+    LoanLimitAndRateResultDto calculateMaxLoanLimitAndMinRate(BigDecimal rentalAmount);
+
     BigDecimal getGuaranteeInsuranceFee(BigDecimal loanAmount);
 
     List<Bank> getAvailableBanks();

@@ -7,6 +7,7 @@ import com.myZipPlan.server.advice.loanAdvice.model.LoanProduct;
 import com.myZipPlan.server.advice.rateProvider.service.RateProviderService;
 import com.myZipPlan.server.common.enums.Bank;
 import com.myZipPlan.server.common.enums.calculator.HouseOwnershipType;
+import com.myZipPlan.server.common.enums.loanAdvice.ChildStatus;
 import com.myZipPlan.server.common.enums.loanAdvice.JeonseLoanProductType;
 import com.myZipPlan.server.common.enums.loanAdvice.MaritalStatus;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +32,20 @@ public class SmeYouthMonthlyRentLoan implements LoanProduct {
     @Override
     public JeonseLoanProductType getProductType() {
         return JeonseLoanProductType.SME_YOUTH_MONTHLY_RENT_LOAN;
+    }
+
+
+    @Override
+    public LoanLimitAndRateResultDto calculateMaxLoanLimitAndMinRate(BigDecimal rentalAmount) {
+
+        BigDecimal minRate = calculateFinalRate();
+
+        return LoanLimitAndRateResultDto.builder()
+            .productType(getProductType())
+            .possibleLoanLimit(LOAN_LIMIT)
+            .expectedLoanRate(minRate)
+            .isEligible(true)
+            .build();
     }
 
     @Override
@@ -116,7 +131,7 @@ public class SmeYouthMonthlyRentLoan implements LoanProduct {
         // 한도산출
         BigDecimal possibleLoanLimit = calculateLoanLimit(request);
         // 금리산출
-        BigDecimal finalRate = calculateFinalRate(request);
+        BigDecimal finalRate = calculateFinalRate();
 
         return LoanLimitAndRateResultDto.builder()
             .productType(getProductType())
@@ -133,7 +148,7 @@ public class SmeYouthMonthlyRentLoan implements LoanProduct {
         return calculatedLimit.compareTo(LOAN_LIMIT) > 0 ? LOAN_LIMIT : calculatedLimit;
     }
 
-    private BigDecimal calculateFinalRate(LoanAdviceServiceRequest request) {
+    private BigDecimal calculateFinalRate() {
         return new BigDecimal("1.5");
     }
 }
