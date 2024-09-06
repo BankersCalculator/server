@@ -98,9 +98,9 @@ class LoanAdviceServiceTest extends IntegrationTestSupport {
         assertEquals(3, response.getAvailableBanks().size());
     }
 
-    @DisplayName("특정 대출추천 - 중기청(HF-01)")
+    @DisplayName("특정 대출추천 - 중기청(NHUF-03)")
     @Test
-    void generateSpecificLoanAdvice_targetHF01() {
+    void generateSpecificLoanAdvice_targetNHUF03() {
         // given
         LoanAdviceServiceRequest request = LoanAdviceServiceRequest.builder()
             .rentalDeposit(new BigDecimal("120000000"))

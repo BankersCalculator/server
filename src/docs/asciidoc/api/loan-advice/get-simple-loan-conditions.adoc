@@ -1,0 +1,15 @@
+[[get-simple-loan-advices]]
+=== 전세상품 간단 조회
+
+==== HTTP Request
+
+include::{snippets}/loan-advice/get-simple-loan-conditions/http-request.adoc[]
+==== HTTP Request
+include::{snippets}/loan-advice/get-simple-loan-conditions/request-body.adoc[]
+==== Request Fields
+include::{snippets}/loan-advice/get-simple-loan-conditions/request-fields.adoc[]
+
+==== HTTP Response
+include::{snippets}/loan-advice/get-simple-loan-conditions/http-response.adoc[]
+==== Response Fields
+include::{snippets}/loan-advice/get-simple-loan-conditions/response-fields.adoc[]

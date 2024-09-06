@@ -26,6 +26,7 @@ include::api/user/withdraw.adoc[]
 [[Loanadvice-API]]
 == LoanAdvice API
 
+include::api/loan-advice/get-simple-loan-conditions.adoc[]
 include::api/loan-advice/get-recent-loan-advices.adoc[]
 include::api/loan-advice/get-specific-loan-advice.adoc[]
 include::api/loan-advice/generate-loan-advice.adoc[]
