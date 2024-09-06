@@ -52,7 +52,6 @@ public class UserInputInfoApiControllerDocsTest extends RestDocsSupport {
         mockMvc.perform(get(BASE_URL)
                 .accept(MediaType.APPLICATION_JSON)
                 .header("AccessToken", "액세스 토큰")
-                .header("RefreshToken", "리프레시 토큰")
             )
             .andExpect(status().isOk())
             .andDo(document("user-input-info/get-recently-submitted",
@@ -60,9 +59,7 @@ public class UserInputInfoApiControllerDocsTest extends RestDocsSupport {
                 preprocessResponse(prettyPrint()),
                 requestHeaders(
                     headerWithName("AccessToken")
-                        .description("액세스 토큰"),
-                    headerWithName("RefreshToken")
-                        .description("리프레쉬 토큰")
+                        .description("액세스 토큰")
                 ),
                 responseFields(
                     fieldWithPath("code").type(JsonFieldType.NUMBER).description("응답 코드"),
@@ -104,17 +101,14 @@ public class UserInputInfoApiControllerDocsTest extends RestDocsSupport {
 
         mockMvc.perform(get(BASE_URL + "/specific/{userInfoInputId}", userInfoInputId)
                 .accept(MediaType.APPLICATION_JSON)
-                .header("AccessToken", "액세스 토큰")
-                .header("RefreshToken", "리프레시 토큰"))
+                .header("AccessToken", "액세스 토큰"))
             .andExpect(status().isOk())
             .andDo(document("user-input-info/get-specific",
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint()),
                 requestHeaders(
                     headerWithName("AccessToken")
-                        .description("액세스 토큰"),
-                    headerWithName("RefreshToken")
-                        .description("리프레쉬 토큰")
+                        .description("액세스 토큰")
                 ),
                 pathParameters(
                     parameterWithName("userInfoInputId").description("조회할 유저 INPUT ID")
@@ -161,17 +155,14 @@ public class UserInputInfoApiControllerDocsTest extends RestDocsSupport {
 
         mockMvc.perform(get(BASE_URL + "/recent-ten")
                 .accept(MediaType.APPLICATION_JSON)
-                .header("AccessToken", "액세스 토큰")
-                .header("RefreshToken", "리프레시 토큰"))
+                .header("AccessToken", "액세스 토큰"))
             .andExpect(status().isOk())
             .andDo(document("user-input-info/get-recent-ten",
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint()),
                 requestHeaders(
                     headerWithName("AccessToken")
-                        .description("액세스 토큰"),
-                    headerWithName("RefreshToken")
-                        .description("리프레쉬 토큰")
+                        .description("액세스 토큰")
                 ),
                 responseFields(
                     fieldWithPath("code").type(JsonFieldType.NUMBER).description("응답 코드"),

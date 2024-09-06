@@ -52,15 +52,15 @@ public class LoanAdviceApiQueryControllerDocsTest extends RestDocsSupport {
                 .loanAdviceResultId(1L)
                 .loanProductName("서울시신혼부부임차보증금대출")
                 .loanProductCode("HF-001")
-                .possibleLoanLimit(BigDecimal.valueOf(300000000L))
-                .expectedLoanRate(BigDecimal.valueOf(2.5))
+                .possibleLoanLimit(BigDecimal.valueOf(200000000L))
+                .expectedLoanRate(BigDecimal.valueOf(3.5))
                 .build(),
             LoanAdviceSummaryResponse.builder()
                 .loanAdviceResultId(2L)
                 .loanProductName("신혼부부전용전세자금대출")
                 .loanProductCode("NHUF-001")
-                .possibleLoanLimit(BigDecimal.valueOf(180000000L))
-                .expectedLoanRate(BigDecimal.valueOf(2.1))
+                .possibleLoanLimit(BigDecimal.valueOf(170000000L))
+                .expectedLoanRate(BigDecimal.valueOf(2.4))
                 .build()
         );
 
@@ -70,7 +70,6 @@ public class LoanAdviceApiQueryControllerDocsTest extends RestDocsSupport {
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .header("AccessToken", "액세스 토큰")
-                .header("RefreshToken", "리프레시 토큰")
             )
             .andExpect(status().isOk())
             .andDo(document("loan-Advice/get-recent-loan-advices",
@@ -78,9 +77,7 @@ public class LoanAdviceApiQueryControllerDocsTest extends RestDocsSupport {
                 preprocessResponse(prettyPrint()),
                 requestHeaders(
                     headerWithName("AccessToken")
-                        .description("액세스 토큰"),
-                    headerWithName("RefreshToken")
-                        .description("리프레쉬 토큰")
+                        .description("액세스 토큰")
                 ),
                 responseFields(
                     fieldWithPath("code").type(JsonFieldType.NUMBER).description("응답 코드"),
@@ -108,7 +105,6 @@ public class LoanAdviceApiQueryControllerDocsTest extends RestDocsSupport {
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .header("AccessToken", "액세스 토큰")
-                .header("RefreshToken", "리프레시 토큰")
             )
             .andExpect(status().isOk())
             .andDo(document("loan-advice/get-specific-loan-advice",
@@ -116,9 +112,7 @@ public class LoanAdviceApiQueryControllerDocsTest extends RestDocsSupport {
                 preprocessResponse(prettyPrint()),
                 requestHeaders(
                     headerWithName("AccessToken")
-                        .description("액세스 토큰"),
-                    headerWithName("RefreshToken")
-                        .description("리프레쉬 토큰")
+                        .description("액세스 토큰")
                 ),
                 pathParameters(
                     parameterWithName("loanAdviceResultId").description("대출 상담 결과 ID")
