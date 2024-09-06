@@ -1,6 +1,6 @@
 package com.myZipPlan.server.advice.userInputInfo.repository;
 
-import com.myZipPlan.server.advice.userInputInfo.domain.UserInputInfo;
+import com.myZipPlan.server.advice.userInputInfo.entity.UserInputInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

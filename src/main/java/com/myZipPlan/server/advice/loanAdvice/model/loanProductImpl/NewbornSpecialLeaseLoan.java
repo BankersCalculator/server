@@ -28,10 +28,22 @@ public class NewbornSpecialLeaseLoan implements LoanProduct {
     private static final BigDecimal LOAN_LIMIT = new BigDecimal("300000000");
 
 
-
     @Override
     public JeonseLoanProductType getProductType() {
         return JeonseLoanProductType.NEWBORN_SPECIAL_LEASE_LOAN;
+    }
+
+    @Override
+    public LoanLimitAndRateResultDto calculateMaxLoanLimitAndMinRate(BigDecimal rentalAmount) {
+
+        BigDecimal minRate = calculateMinRate(rentalAmount);
+
+        return LoanLimitAndRateResultDto.builder()
+            .productType(getProductType())
+            .possibleLoanLimit(LOAN_LIMIT)
+            .expectedLoanRate(minRate)
+            .isEligible(true)
+            .build();
     }
 
     @Override
@@ -99,6 +111,7 @@ public class NewbornSpecialLeaseLoan implements LoanProduct {
         // 신한은행 홈피 기준 보증료 0.05% * 2년치
         return loanAmount.multiply(new BigDecimal("0.001"));
     }
+
     @Override
     public List<Bank> getAvailableBanks() {
         return List.of(Bank.HANA, Bank.SHINHAN, Bank.KB);
@@ -136,10 +149,19 @@ public class NewbornSpecialLeaseLoan implements LoanProduct {
 
     private BigDecimal calculateFinalRate(LoanAdviceServiceRequest request) {
         BigDecimal combinedIncome = request.getAnnualIncome().add(request.getSpouseAnnualIncome());
-        BigDecimal baseRate = rateProviderService.getNewBornSpecialLeaseLoanRate(request.getRentalDeposit(), combinedIncome); // 신잔액기준COFIX
+        BigDecimal baseRate = rateProviderService.getNewBornSpecialLeaseLoanRate(request.getRentalDeposit(), combinedIncome);
         BigDecimal discountRate = calculateDiscountRate(request.getChildStatus(), request.getHasNewborn());
+        BigDecimal calculatedRate = baseRate.subtract(discountRate);
 
-        return baseRate.subtract(discountRate);
+        return calculatedRate.compareTo(BigDecimal.ONE) < 0 ? BigDecimal.ONE : calculatedRate;
+    }
+
+    private BigDecimal calculateMinRate(BigDecimal rentalDeposit) {
+        BigDecimal baseRate = rateProviderService.getNewBornSpecialLeaseLoanRate(rentalDeposit, BigDecimal.valueOf(20000000));
+        BigDecimal discountRate = calculateDiscountRate(ChildStatus.THREE_OR_MORE_CHILDREN, true);
+        BigDecimal calculatedRate = baseRate.subtract(discountRate);
+
+        return calculatedRate.compareTo(BigDecimal.ONE) < 0 ? BigDecimal.ONE : calculatedRate;
     }
 
     private BigDecimal calculateDiscountRate(ChildStatus childStatus, boolean hasNewborn ) {

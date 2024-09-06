@@ -1,6 +1,7 @@
 package com.myZipPlan.server.advice.loanAdvice.controller;
 
 import com.myZipPlan.server.advice.loanAdvice.dto.request.LoanAdviceRequest;
+import com.myZipPlan.server.advice.loanAdvice.dto.request.SimpleLoanAdviceRequest;
 import com.myZipPlan.server.advice.loanAdvice.dto.request.SpecificLoanAdviceRequest;
 import com.myZipPlan.server.advice.loanAdvice.dto.response.LoanAdviceResponse;
 import com.myZipPlan.server.advice.loanAdvice.dto.response.LoanAdviceSummaryResponse;
@@ -12,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -22,7 +24,6 @@ public class LoanAdviceApiController {
 
     private final LoanAdviceService loanAdviceService;
     private final LoanAdviceQueryService loanAdviceQueryService;
-
 
     @GetMapping
     public ApiResponse<List<LoanAdviceSummaryResponse>> getRecentLoanAdvices() {
@@ -40,6 +41,14 @@ public class LoanAdviceApiController {
         LoanAdviceResponse specificLoanAdvice = loanAdviceQueryService.getSpecificLoanAdvice(loanAdviceResultId);
 
         return ApiResponse.ok(specificLoanAdvice);
+    }
+
+    @PostMapping("/simple")
+    public ApiResponse<List<LoanAdviceSummaryResponse>> getSimpleLoanConditions(@RequestBody @Valid SimpleLoanAdviceRequest request) {
+        BigDecimal rentalDeposit = request.getRentalDeposit();
+        List<LoanAdviceSummaryResponse> recentLoanAdvices = loanAdviceService.getSimpleLoanConditions(rentalDeposit);
+
+        return ApiResponse.ok(recentLoanAdvices);
     }
 
     @PostMapping

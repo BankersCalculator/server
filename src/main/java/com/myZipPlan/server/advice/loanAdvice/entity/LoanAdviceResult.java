@@ -2,11 +2,9 @@ package com.myZipPlan.server.advice.loanAdvice.entity;
 
 import com.myZipPlan.server.advice.loanAdvice.dto.internal.AdditionalInformation;
 import com.myZipPlan.server.advice.loanAdvice.dto.internal.BestLoanProductResult;
-import com.myZipPlan.server.advice.loanAdvice.dto.response.LoanAdviceResponse;
 import com.myZipPlan.server.advice.loanAdvice.dto.response.RecommendedProductDto;
-import com.myZipPlan.server.advice.userInputInfo.domain.UserInputInfo;
+import com.myZipPlan.server.advice.userInputInfo.entity.UserInputInfo;
 import com.myZipPlan.server.common.domain.BaseTimeEntity;
-import com.myZipPlan.server.common.enums.Bank;
 import com.myZipPlan.server.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;

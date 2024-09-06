@@ -1,4 +1,4 @@
-package com.myZipPlan.server.advice.userInputInfo.domain;
+package com.myZipPlan.server.advice.userInputInfo.entity;
 
 import com.myZipPlan.server.advice.loanAdvice.dto.request.LoanAdviceServiceRequest;
 import com.myZipPlan.server.advice.loanAdvice.entity.LoanAdviceResult;

@@ -52,15 +52,15 @@ public class LoanAdviceApiQueryControllerDocsTest extends RestDocsSupport {
                 .loanAdviceResultId(1L)
                 .loanProductName("서울시신혼부부임차보증금대출")
                 .loanProductCode("HF-001")
-                .possibleLoanLimit(BigDecimal.valueOf(300000000L))
-                .expectedLoanRate(BigDecimal.valueOf(2.5))
+                .possibleLoanLimit(BigDecimal.valueOf(200000000L))
+                .expectedLoanRate(BigDecimal.valueOf(3.5))
                 .build(),
             LoanAdviceSummaryResponse.builder()
                 .loanAdviceResultId(2L)
                 .loanProductName("신혼부부전용전세자금대출")
                 .loanProductCode("NHUF-001")
-                .possibleLoanLimit(BigDecimal.valueOf(180000000L))
-                .expectedLoanRate(BigDecimal.valueOf(2.1))
+                .possibleLoanLimit(BigDecimal.valueOf(170000000L))
+                .expectedLoanRate(BigDecimal.valueOf(2.4))
                 .build()
         );
 

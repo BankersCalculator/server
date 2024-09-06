@@ -6,11 +6,12 @@ import com.myZipPlan.server.advice.loanAdvice.dto.internal.LoanLimitAndRateResul
 import com.myZipPlan.server.advice.loanAdvice.dto.internal.BestLoanProductResult;
 import com.myZipPlan.server.advice.loanAdvice.dto.request.LoanAdviceServiceRequest;
 import com.myZipPlan.server.advice.loanAdvice.dto.response.LoanAdviceResponse;
+import com.myZipPlan.server.advice.loanAdvice.dto.response.LoanAdviceSummaryResponse;
 import com.myZipPlan.server.advice.loanAdvice.dto.response.RecommendedProductDto;
 import com.myZipPlan.server.advice.loanAdvice.entity.LoanAdviceResult;
 import com.myZipPlan.server.advice.loanAdvice.repository.LoanAdviceResultRepository;
 import com.myZipPlan.server.advice.loanAdvice.service.component.*;
-import com.myZipPlan.server.advice.userInputInfo.domain.UserInputInfo;
+import com.myZipPlan.server.advice.userInputInfo.entity.UserInputInfo;
 import com.myZipPlan.server.advice.userInputInfo.repository.UserInputInfoRepository;
 import com.myZipPlan.server.common.enums.Bank;
 import com.myZipPlan.server.common.enums.loanAdvice.JeonseLoanProductType;
@@ -47,6 +48,21 @@ public class LoanAdviceService {
     private final LoanAdviceResultRepository loanAdviceResultRepository;
     private final UserInputInfoRepository userInputInfoRepository;
 
+
+    // 간편조회 서비스. 최대한도 및 최저금리 리스트 반환
+    public List<LoanAdviceSummaryResponse> getSimpleLoanConditions(BigDecimal rentalDeposit) {
+
+        List<LoanLimitAndRateResultDto> loanLimitAndRateResults = loanLimitAndRateCalculator.calculateMaxLoanLimitAndMinRate(rentalDeposit);
+
+        return loanLimitAndRateResults.stream()
+            .map(dto -> LoanAdviceSummaryResponse.builder()
+                .loanProductName(dto.getProductType().getProductName())
+                .loanProductCode(dto.getProductType().getProductCode())
+                .possibleLoanLimit(dto.getPossibleLoanLimit())
+                .expectedLoanRate(dto.getExpectedLoanRate())
+                .build())
+            .collect(Collectors.toList());
+    }
 
     // 대출추천 서비스
     public LoanAdviceResponse createLoanAdvice(LoanAdviceServiceRequest request) {

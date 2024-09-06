@@ -3,8 +3,10 @@ package com.myZipPlan.server.docs;
 import com.myZipPlan.server.RestDocsSupport;
 import com.myZipPlan.server.advice.loanAdvice.controller.LoanAdviceApiController;
 import com.myZipPlan.server.advice.loanAdvice.dto.request.LoanAdviceRequest;
+import com.myZipPlan.server.advice.loanAdvice.dto.request.SimpleLoanAdviceRequest;
 import com.myZipPlan.server.advice.loanAdvice.dto.request.SpecificLoanAdviceRequest;
 import com.myZipPlan.server.advice.loanAdvice.dto.response.LoanAdviceResponse;
+import com.myZipPlan.server.advice.loanAdvice.dto.response.LoanAdviceSummaryResponse;
 import com.myZipPlan.server.advice.loanAdvice.dto.response.RecommendedProductDto;
 import com.myZipPlan.server.advice.loanAdvice.service.LoanAdviceQueryService;
 import com.myZipPlan.server.advice.loanAdvice.service.LoanAdviceService;
@@ -32,7 +34,7 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class LoanAdviceApiControllerDocsTest extends RestDocsSupport {
@@ -46,6 +48,60 @@ public class LoanAdviceApiControllerDocsTest extends RestDocsSupport {
     protected Object initController() {
         return new LoanAdviceApiController(loanAdviceService, loanAdviceQueryService);
     }
+
+    @DisplayName("최대한도최저금리 사전 조회")
+    @Test
+    void getSimpleLoanConditions() throws Exception {
+
+        SimpleLoanAdviceRequest request = SimpleLoanAdviceRequest.builder()
+            .rentalDeposit(BigDecimal.valueOf(200000000))
+            .build();
+
+        List<LoanAdviceSummaryResponse> response = Arrays.asList(
+            LoanAdviceSummaryResponse.builder()
+                .loanAdviceResultId(1L)
+                .loanProductName("서울시신혼부부임차보증금대출")
+                .loanProductCode("HF-001")
+                .possibleLoanLimit(BigDecimal.valueOf(300000000L))
+                .expectedLoanRate(BigDecimal.valueOf(2.5))
+                .build(),
+            LoanAdviceSummaryResponse.builder()
+                .loanAdviceResultId(2L)
+                .loanProductName("신혼부부전용전세자금대출")
+                .loanProductCode("NHUF-001")
+                .possibleLoanLimit(BigDecimal.valueOf(180000000L))
+                .expectedLoanRate(BigDecimal.valueOf(2.1))
+                .build()
+        );
+
+        when(loanAdviceService.getSimpleLoanConditions(any())).thenReturn(response);
+
+        mockMvc.perform(post(BASE_URL + "/simple")
+                .content(objectMapper.writeValueAsString(request))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+            )
+            .andExpect(status().isOk())
+            .andDo(document("loan-Advice/get-simple-loan-conditions",
+                preprocessRequest(prettyPrint()),
+                preprocessResponse(prettyPrint()),
+                requestFields(
+                    fieldWithPath("rentalDeposit").type(JsonFieldType.NUMBER).description("임차보증금")
+                ),
+                responseFields(
+                    fieldWithPath("code").type(JsonFieldType.NUMBER).description("응답 코드"),
+                    fieldWithPath("status").type(JsonFieldType.STRING).description("응답 상태"),
+                    fieldWithPath("message").type(JsonFieldType.STRING).description("응답 메시지"),
+                    fieldWithPath("data").type(JsonFieldType.ARRAY).description("응답 데이터"),
+                    fieldWithPath("data[].loanAdviceResultId").type(JsonFieldType.NUMBER).description("대출 상담 결과 ID"),
+                    fieldWithPath("data[].loanProductName").type(JsonFieldType.STRING).description("대출 상품명"),
+                    fieldWithPath("data[].loanProductCode").type(JsonFieldType.STRING).description("대출 상품 코드"),
+                    fieldWithPath("data[].possibleLoanLimit").type(JsonFieldType.NUMBER).description("가능한 대출 한도"),
+                    fieldWithPath("data[].expectedLoanRate").type(JsonFieldType.NUMBER).description("예상 대출 금리")
+                )
+            ));
+    }
+
 
     @DisplayName("전세대출 추천보고서 생성")
     @Test

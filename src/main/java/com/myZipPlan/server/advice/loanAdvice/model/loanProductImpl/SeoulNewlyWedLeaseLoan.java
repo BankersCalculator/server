@@ -37,6 +37,19 @@ public class SeoulNewlyWedLeaseLoan implements LoanProduct {
     }
 
     @Override
+    public LoanLimitAndRateResultDto calculateMaxLoanLimitAndMinRate(BigDecimal rentalAmount) {
+
+        BigDecimal minRate = calculateMinRate(rentalAmount);
+
+        return LoanLimitAndRateResultDto.builder()
+            .productType(getProductType())
+            .possibleLoanLimit(LOAN_LIMIT)
+            .expectedLoanRate(minRate)
+            .isEligible(true)
+            .build();
+    }
+
+    @Override
     public FilterProductResultDto filtering(LoanAdviceServiceRequest request) {
         /*
           서울시신혼부부임차보증금대출
@@ -129,12 +142,18 @@ public class SeoulNewlyWedLeaseLoan implements LoanProduct {
         BigDecimal baseRate = rateProviderService.getBaseRate(BaseRate.COFIX_NEW_BALANCE); // 신잔액기준COFIX
         BigDecimal marginRate = new BigDecimal("1.45");
         BigDecimal discountRate = calculateDiscountRate(combinedIncome, request.getMaritalStatus(), request.getChildStatus());
-        BigDecimal finalRate = baseRate.add(marginRate).subtract(discountRate);
-        if (finalRate.compareTo(BigDecimal.ZERO) < 0) {
-            finalRate = BigDecimal.ZERO;
-        }
+        BigDecimal calculatedRate = baseRate.add(marginRate).subtract(discountRate);
 
-        return finalRate;
+        return calculatedRate.compareTo(BigDecimal.ONE) < 0 ? BigDecimal.ONE : calculatedRate;
+    }
+
+    private BigDecimal calculateMinRate(BigDecimal rentalDeposit) {
+        BigDecimal baseRate = rateProviderService.getBaseRate(BaseRate.COFIX_NEW_BALANCE);
+        BigDecimal marginRate = new BigDecimal("1.45");
+        BigDecimal discountRate = calculateDiscountRate(BigDecimal.valueOf(20000000), MaritalStatus.ENGAGED, ChildStatus.THREE_OR_MORE_CHILDREN);
+        BigDecimal calculatedRate = baseRate.add(marginRate).subtract(discountRate);
+
+        return calculatedRate.compareTo(BigDecimal.ONE) < 0 ? BigDecimal.ONE : calculatedRate;
     }
 
     private BigDecimal calculateDiscountRate(BigDecimal combinedIncome, MaritalStatus maritalStatus, ChildStatus childStatus) {
