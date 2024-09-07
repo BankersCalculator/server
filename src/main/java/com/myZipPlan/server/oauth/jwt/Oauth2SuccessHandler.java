@@ -69,9 +69,10 @@ public class Oauth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     private void addTokenCookie(HttpServletResponse response, String name, String value) {
         Cookie cookie = new Cookie(name, value);
         cookie.setHttpOnly(true);
-        cookie.setSecure(true);
+        cookie.setSecure(false);
         cookie.setMaxAge(COOKIE_MAX_AGE);
         cookie.setPath("/");
+        cookie.setAttribute("SameSite", "None");
         response.addCookie(cookie);
     }
 
