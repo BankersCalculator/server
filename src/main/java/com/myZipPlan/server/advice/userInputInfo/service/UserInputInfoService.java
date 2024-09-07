@@ -4,7 +4,7 @@ import com.myZipPlan.server.advice.userInputInfo.dto.UserInputInfoResponse;
 import com.myZipPlan.server.advice.userInputInfo.dto.UserInputSummaryResponse;
 import com.myZipPlan.server.common.enums.loanAdvice.ChildStatus;
 import com.myZipPlan.server.common.enums.loanAdvice.MaritalStatus;
-import com.myZipPlan.server.housingInfo.rentTransactionInquiry.common.RentHousingType;
+import com.myZipPlan.server.housingInfo.buildingInfo.common.RentHousingType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

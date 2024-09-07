@@ -3,13 +3,13 @@
 
 ==== HTTP Request
 
-include::{snippets}/housing-info/all/http-request.adoc[]
-include::{snippets}/housing-info/all/request-fields.adoc[]
+include::{snippets}/housing-info/http-request.adoc[]
+include::{snippets}/housing-info/request-fields.adoc[]
 
 ==== HTTP Response
 
-include::{snippets}/housing-info/all/http-response.adoc[]
-include::{snippets}/housing-info/all/response-fields.adoc[]
+include::{snippets}/housing-info/http-response.adoc[]
+include::{snippets}/housing-info/response-fields.adoc[]
 
 
 

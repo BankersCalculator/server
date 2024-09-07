@@ -1,5 +1,6 @@
 package com.myZipPlan.server.docs;
 
+
 import com.myZipPlan.server.RestDocsSupport;
 import com.myZipPlan.server.advice.userInputInfo.controller.UserInputInfoApiController;
 import com.myZipPlan.server.advice.userInputInfo.dto.UserInputInfoResponse;
@@ -7,7 +8,7 @@ import com.myZipPlan.server.advice.userInputInfo.dto.UserInputSummaryResponse;
 import com.myZipPlan.server.advice.userInputInfo.service.UserInputInfoService;
 import com.myZipPlan.server.common.enums.loanAdvice.ChildStatus;
 import com.myZipPlan.server.common.enums.loanAdvice.MaritalStatus;
-import com.myZipPlan.server.housingInfo.rentTransactionInquiry.common.RentHousingType;
+import com.myZipPlan.server.housingInfo.buildingInfo.common.RentHousingType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;

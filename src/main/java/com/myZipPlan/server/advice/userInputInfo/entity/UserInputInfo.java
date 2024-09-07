@@ -5,7 +5,7 @@ import com.myZipPlan.server.advice.loanAdvice.entity.LoanAdviceResult;
 import com.myZipPlan.server.common.enums.calculator.HouseOwnershipType;
 import com.myZipPlan.server.common.enums.loanAdvice.ChildStatus;
 import com.myZipPlan.server.common.enums.loanAdvice.MaritalStatus;
-import com.myZipPlan.server.housingInfo.rentTransactionInquiry.common.RentHousingType;
+import com.myZipPlan.server.housingInfo.buildingInfo.common.RentHousingType;
 import com.myZipPlan.server.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

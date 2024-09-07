@@ -46,7 +46,8 @@ public class DtiCalcRequest {
                 .principal(loanStatus.getPrincipal())
                 .term(loanStatus.getTerm())
                 .interestRate(loanStatus.getInterestRatePercentage() / 100)
-                .build())
+                .build()
+            )
             .collect(Collectors.toList());
 
         return DtiCalcServiceRequest.builder()

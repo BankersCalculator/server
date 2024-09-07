@@ -8,7 +8,7 @@ import com.myZipPlan.server.common.enums.RoleType;
 import com.myZipPlan.server.common.enums.loanAdvice.ChildStatus;
 import com.myZipPlan.server.common.enums.loanAdvice.MaritalStatus;
 import com.myZipPlan.server.common.enums.calculator.HouseOwnershipType;
-import com.myZipPlan.server.housingInfo.rentTransactionInquiry.common.RentHousingType;
+import com.myZipPlan.server.housingInfo.buildingInfo.common.RentHousingType;
 import com.myZipPlan.server.oauth.userInfo.KakaoUserDetails;
 import com.myZipPlan.server.user.entity.User;
 import com.myZipPlan.server.user.repository.UserRepository;

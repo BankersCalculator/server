@@ -1,8 +1,7 @@
 package com.myZipPlan.server.housingInfo.addressSearch.controller;
-
+import com.myZipPlan.server.housingInfo.addressSearch.api.AddressSearchApiClient;
+import com.myZipPlan.server.housingInfo.addressSearch.dto.AddressSearchApiRequest;
 import com.myZipPlan.server.common.api.ApiResponse;
-import com.myZipPlan.server.housingInfo.addressSearch.dto.AddressSearchRequest;
-import com.myZipPlan.server.housingInfo.addressSearch.service.AddressSearchService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,11 +15,11 @@ import java.util.Map;
 @RequestMapping("/api/v1/addressSearch")
 @RequiredArgsConstructor
 public class AddressSearchApiController {
-    private final AddressSearchService addressSearchService;
+    private final AddressSearchApiClient addressSearchApiClient;
 
     @PostMapping
-    public ApiResponse<Map<String, Object>> searchAddress(@RequestBody AddressSearchRequest request) throws IOException {
-            Map<String, Object> response = addressSearchService.searchAddress(request.getKeyword());
+    public ApiResponse<Map<String, Object>> searchAddress(@RequestBody AddressSearchApiRequest request) throws IOException {
+            Map<String, Object> response = addressSearchApiClient.searchAddress(request.getKeyword());
             return ApiResponse.ok(response);
     }
 }

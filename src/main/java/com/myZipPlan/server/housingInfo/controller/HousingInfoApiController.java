@@ -1,39 +1,32 @@
 package com.myZipPlan.server.housingInfo.controller;
-
 import com.myZipPlan.server.common.api.ApiResponse;
-import com.myZipPlan.server.housingInfo.dto.HousingInfoApiResponse;
 import com.myZipPlan.server.housingInfo.dto.HousingInfoRequest;
-import com.myZipPlan.server.housingInfo.service.HousingInfoApiService;
+import com.myZipPlan.server.housingInfo.service.HousingInfoService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import java.io.IOException;
+import java.util.Map;
 
 @RestController
-@RequestMapping("/api/v1/housing-info")
+@RequestMapping("/api/v1/housingInfoApi")
+@RequiredArgsConstructor
 public class HousingInfoApiController {
+    private final HousingInfoService housingInfoService;
 
-    private final HousingInfoApiService housingInfoApiService;
+    @PostMapping
+    public ApiResponse<Map<String, Object>> getHousingInfo(
+            @RequestBody HousingInfoRequest housingInfoRequest)  throws IOException {
 
-    public HousingInfoApiController(HousingInfoApiService housingInfoApiService) {
-        this.housingInfoApiService = housingInfoApiService;
-    }
-
-    @PostMapping("/info")
-    public ApiResponse<List<HousingInfoApiResponse>> getHousingInfo(
-            @RequestBody HousingInfoRequest housingInfoRequest) {
-        try {
-            List<HousingInfoApiResponse> response = housingInfoApiService.getHousingInfo(
+            Map<String, Object> response = housingInfoService.getHousingInfo(
                     housingInfoRequest.getDistrictCode(),
                     housingInfoRequest.getJibun(),
                     housingInfoRequest.getDongName()
             );
             return ApiResponse.ok(response);
-        } catch (Exception e) {
-            throw new RuntimeException("주택 정보를 가져오는 데 실패했습니다.", e);
-        }
     }
 }
 
