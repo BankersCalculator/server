@@ -103,7 +103,7 @@ docs/*.html
 .idea/**/dictionaries
 .idea/**/shelf
 
-# AWS User-specific
+# aws User-specific
 .idea/**/aws.xml
 
 # Generated files
