@@ -1,4 +1,4 @@
-package com.myZipPlan.server.community.dto;
+package com.myZipPlan.server.community.dto.post;
 
 
 import lombok.Getter;

@@ -1,9 +1,9 @@
 package com.myZipPlan.server.community.service;
 
 import com.myZipPlan.server.community.domain.Post;
-import com.myZipPlan.server.community.dto.AddPostRequest;
-import com.myZipPlan.server.community.dto.PostResponse;
-import com.myZipPlan.server.community.dto.UpdatePostRequest;
+import com.myZipPlan.server.community.dto.post.AddPostRequest;
+import com.myZipPlan.server.community.dto.post.PostResponse;
+import com.myZipPlan.server.community.dto.post.UpdatePostRequest;
 import com.myZipPlan.server.community.repository.PostRepository;
 import com.myZipPlan.server.user.entity.User;
 import com.myZipPlan.server.user.repository.UserRepository;
@@ -101,6 +101,23 @@ public class PostService {
 
         // 게시글 삭제
         postRepository.delete(post);
+    }
+
+
+    // 게시글 좋아요
+    @Transactional
+    public void likePost(Long postId) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new IllegalArgumentException("Post not found"));
+        post.setLikes(post.getLikes() + 1);  // 좋아요 수 증가
+    }
+
+    // 게시글 좋아요 취소
+    @Transactional
+    public void unlikePost(Long postId) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new IllegalArgumentException("Post not found"));
+        post.setLikes(post.getLikes() - 1);  // 좋아요 수 감소
     }
 
 }

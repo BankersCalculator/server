@@ -2,13 +2,11 @@ package com.myZipPlan.server.community.controller;
 
 import com.myZipPlan.server.common.api.ApiResponse;
 import com.myZipPlan.server.community.domain.Post;
-import com.myZipPlan.server.community.dto.AddPostRequest;
-import com.myZipPlan.server.community.dto.PostResponse;
-import com.myZipPlan.server.community.dto.UpdatePostRequest;
+import com.myZipPlan.server.community.dto.post.AddPostRequest;
+import com.myZipPlan.server.community.dto.post.PostResponse;
+import com.myZipPlan.server.community.dto.post.UpdatePostRequest;
 import com.myZipPlan.server.community.service.PostService;
-import com.myZipPlan.server.user.entity.User;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -22,9 +20,10 @@ public class PostApiController {
 
     // 게시글 작성
     @PostMapping
-    public ApiResponse<Post> addPost(@RequestBody AddPostRequest addPostRequest, @RequestParam Long userId) throws IOException {
-        Post createPost = postService.addPost(addPostRequest, userId);
-        return ApiResponse.ok(createPost);
+    public ApiResponse<PostResponse> addPost(@RequestBody AddPostRequest addPostRequest, @RequestParam Long userId) throws IOException {
+        Post post = postService.addPost(addPostRequest, userId);
+        PostResponse postResponse = PostResponse.fromEntity(post);
+        return ApiResponse.ok(postResponse);
     }
 
     // 게시글 목록 조회
@@ -34,7 +33,7 @@ public class PostApiController {
         return ApiResponse.ok(posts);
     }
 
-    // 게시글 단일 조회
+    // 게시글 상세조회
     @GetMapping("/{postId}")
     public ApiResponse<PostResponse> getPostById(@PathVariable Long postId) {
         PostResponse post = postService.getPostById(postId);
@@ -42,17 +41,31 @@ public class PostApiController {
     }
 
     // 게시글 수정
-    @PutMapping("/{userId}/{postId}")
-    public ApiResponse<Post> updatePost(@PathVariable Long userId, @PathVariable Long postId, @RequestBody UpdatePostRequest updatePostRequest) throws IOException {
+    @PutMapping("/{postId}")
+    public ApiResponse<PostResponse> updatePost(@PathVariable Long postId, @RequestParam Long userId, @RequestBody UpdatePostRequest updatePostRequest) throws IOException {
         Post updatedPost = postService.updatePost(postId, userId, updatePostRequest);
-        return ApiResponse.ok(updatedPost);
+        PostResponse postResponse = PostResponse.fromEntity(updatedPost);
+        return ApiResponse.ok(postResponse);
     }
 
     // 게시글 삭제
-    @DeleteMapping("/{userId}/{postId}")
-    public ApiResponse<Void> deletePost(@PathVariable Long userId,
-                                           @PathVariable Long postId) {
+    @DeleteMapping("/{postId}")
+    public ApiResponse<Void> deletePost(@RequestParam Long userId, @PathVariable Long postId) {
         postService.deletePost(userId, postId);
+        return ApiResponse.ok(null);
+    }
+
+    // 게시글 좋아요
+    @PostMapping("/{postId}/like")
+    public ApiResponse<Void> likePost(@PathVariable Long postId) {
+        postService.likePost(postId);
+        return ApiResponse.ok(null);
+    }
+
+    // 게시글 좋아요 취소
+    @PostMapping("/{postId}/unlike")
+    public ApiResponse<Void> unlikePost(@PathVariable Long postId) {
+        postService.unlikePost(postId);
         return ApiResponse.ok(null);
     }
 }

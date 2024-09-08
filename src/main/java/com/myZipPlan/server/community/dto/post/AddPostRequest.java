@@ -1,4 +1,4 @@
-package com.myZipPlan.server.community.dto;
+package com.myZipPlan.server.community.dto.post;
 
 import com.myZipPlan.server.community.domain.Post;
 import com.myZipPlan.server.user.entity.User;
