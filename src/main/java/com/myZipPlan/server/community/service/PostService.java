@@ -24,21 +24,19 @@ public class PostService {
     private final UserRepository userRepository;
     private final S3Service s3Service;
 
-    public Post addPost(AddPostRequest request, Long userId) throws IOException {
+    public Post addPost(AddPostRequest addPostRequest, Long userId) throws IOException {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
         // 이미지 파일 업로드 후 URL 획득
         String imageUrl = null;
 
-        /*
-        if (request.getImageFile() != null && !request.getImageFile().isEmpty()) {
-            imageUrl = s3Service.uploadFile(request.getImageFile());
+        if (addPostRequest.getImageFile() != null && !addPostRequest.getImageFile().isEmpty()) {
+            imageUrl = s3Service.uploadFile(addPostRequest.getImageFile());
         }
-         */
 
         // AddPostRequest를 이용해 Post 엔티티 생성
-        Post post = request.toEntity(user, imageUrl);
+        Post post = addPostRequest.toEntity(user, imageUrl);
 
         return postRepository.save(post);
     }
@@ -63,7 +61,7 @@ public class PostService {
 
     // 게시글 수정
     @Transactional
-    public Post updatePost(Long postId, Long userId, UpdatePostRequest updatePostRequest)  {
+    public Post updatePost(Long postId, Long userId, UpdatePostRequest updatePostRequest) throws IOException  {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new IllegalArgumentException("Post not found"));
 
@@ -75,11 +73,9 @@ public class PostService {
         // 이미지 파일이 새로 업로드되면 이미지 URL 업데이트
         String imageUrl = post.getImageUrl();  // 기존 이미지 URL 유지
         MultipartFile imageFile = updatePostRequest.getImageFile();
-        /*
         if (imageFile != null && !imageFile.isEmpty()) {
             imageUrl = s3Service.uploadFile(imageFile);
         }
-        */
 
         post.setTitle(updatePostRequest.getTitle());
         post.setContent(updatePostRequest.getContent());

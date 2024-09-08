@@ -43,7 +43,7 @@ public class PostApiController {
 
     // 게시글 수정
     @PutMapping("/{userId}/{postId}")
-    public ApiResponse<Post> updatePost(@PathVariable Long userId, @PathVariable Long postId, @RequestBody UpdatePostRequest updatePostRequest) {
+    public ApiResponse<Post> updatePost(@PathVariable Long userId, @PathVariable Long postId, @RequestBody UpdatePostRequest updatePostRequest) throws IOException {
         Post updatedPost = postService.updatePost(postId, userId, updatePostRequest);
         return ApiResponse.ok(updatedPost);
     }
@@ -55,6 +55,4 @@ public class PostApiController {
         postService.deletePost(userId, postId);
         return ApiResponse.ok(null);
     }
-
-
 }
