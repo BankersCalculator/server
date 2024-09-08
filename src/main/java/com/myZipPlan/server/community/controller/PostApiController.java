@@ -2,9 +2,7 @@ package com.myZipPlan.server.community.controller;
 
 import com.myZipPlan.server.common.api.ApiResponse;
 import com.myZipPlan.server.community.domain.Post;
-import com.myZipPlan.server.community.dto.post.AddPostRequest;
-import com.myZipPlan.server.community.dto.post.PostResponse;
-import com.myZipPlan.server.community.dto.post.UpdatePostRequest;
+import com.myZipPlan.server.community.dto.post.*;
 import com.myZipPlan.server.community.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -50,22 +48,21 @@ public class PostApiController {
 
     // 게시글 삭제
     @DeleteMapping("/{postId}")
-    public ApiResponse<Void> deletePost(@RequestParam Long userId, @PathVariable Long postId) {
-        postService.deletePost(userId, postId);
+    public ApiResponse<Void> deletePost(@PathVariable Long postId, @RequestBody DeletePostRequest deletePostRequest) {
+        postService.deletePost(deletePostRequest.getUserId(), postId);
         return ApiResponse.ok(null);
     }
 
-    // 게시글 좋아요
+
     @PostMapping("/{postId}/like")
-    public ApiResponse<Void> likePost(@PathVariable Long postId) {
-        postService.likePost(postId);
+    public ApiResponse<Void> likePost(@PathVariable Long postId, @RequestBody LikePostRequest likePostRequest) {
+        postService.likePost(postId, likePostRequest.getUserId());
         return ApiResponse.ok(null);
     }
 
-    // 게시글 좋아요 취소
     @PostMapping("/{postId}/unlike")
-    public ApiResponse<Void> unlikePost(@PathVariable Long postId) {
-        postService.unlikePost(postId);
+    public ApiResponse<Void> unlikePost(@PathVariable Long postId, @RequestBody LikePostRequest likePostRequest) {
+        postService.unlikePost(postId, likePostRequest.getUserId());
         return ApiResponse.ok(null);
     }
 }

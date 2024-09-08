@@ -103,20 +103,22 @@ public class PostService {
 
     // 게시글 좋아요
     @Transactional
-    public void likePost(Long postId) {
+    public void likePost(Long postId, Long userId) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new IllegalArgumentException("Post not found"));
-        post.setLikes(post.getLikes() + 1);  // 좋아요 수 증가
+        // 좋아요 처리 로직 (예: 좋아요 수 증가 등)
+        post.setLikes(post.getLikes() + 1);
+        postRepository.save(post);
     }
 
-    // 게시글 좋아요 취소
     @Transactional
-    public void unlikePost(Long postId) {
+    public void unlikePost(Long postId, Long userId) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new IllegalArgumentException("Post not found"));
-        post.setLikes(post.getLikes() - 1);  // 좋아요 수 감소
+        // 좋아요 취소 처리 로직 (예: 좋아요 수 감소 등)
+        post.setLikes(post.getLikes() - 1);
+        postRepository.save(post);
     }
-
 }
 
 

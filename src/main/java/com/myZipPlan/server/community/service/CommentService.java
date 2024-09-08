@@ -3,6 +3,7 @@ package com.myZipPlan.server.community.service;
 import com.myZipPlan.server.community.domain.Comment;
 import com.myZipPlan.server.community.domain.Post;
 import com.myZipPlan.server.community.dto.comment.AddCommentRequest;
+import com.myZipPlan.server.community.dto.comment.AddReplyRequest;
 import com.myZipPlan.server.community.dto.comment.CommentResponse;
 import com.myZipPlan.server.community.dto.comment.UpdateCommentRequest;
 import com.myZipPlan.server.community.repository.CommentRepository;
@@ -63,23 +64,27 @@ public class CommentService {
 
     // 댓글 좋아요
     @Transactional
-    public void likeComment(Long commentId) {
+    public void likeComment(Long commentId, Long userId) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new IllegalArgumentException("Comment not found"));
-        comment.setLikes(comment.getLikes() + 1);  // 좋아요 수 증가
+        // 좋아요 처리 로직 (예: 좋아요 수 증가 등)
+        comment.setLikes(comment.getLikes() + 1);
+        commentRepository.save(comment);
     }
 
     // 댓글 좋아요 취소
     @Transactional
-    public void unlikeComment(Long commentId) {
+    public void unlikeComment(Long commentId, Long userId) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new IllegalArgumentException("Comment not found"));
-        comment.setLikes(comment.getLikes() - 1);  // 좋아요 수 감소
+        // 좋아요 취소 처리 로직 (예: 좋아요 수 감소 등)
+        comment.setLikes(comment.getLikes() - 1);
+        commentRepository.save(comment);
     }
 
-    // 대댓글 작성 (부모 댓글이 존재하는 경우)
+    // 대댓글 작성
     @Transactional
-    public Comment addReply(Long parentCommentId, Long userId, String content) {
+    public Comment addReply(Long parentCommentId, AddReplyRequest addReplyRequest) {
         Comment parentComment = commentRepository.findById(parentCommentId)
                 .orElseThrow(() -> new IllegalArgumentException("Parent comment not found"));
 
@@ -87,10 +92,10 @@ public class CommentService {
             throw new IllegalStateException("This comment already has a reply.");
         }
 
-        User user = userRepository.findById(userId)
+        User user = userRepository.findById(addReplyRequest.getUserId())
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
-        Comment reply = new Comment(parentComment.getPost(), user, content);
+        Comment reply = new Comment(parentComment.getPost(), user, addReplyRequest.getContent());
         reply.setParentComment(parentComment);
         parentComment.setChildComment(reply);
 

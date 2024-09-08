@@ -2,9 +2,7 @@ package com.myZipPlan.server.community.controller;
 
 import com.myZipPlan.server.common.api.ApiResponse;
 import com.myZipPlan.server.community.domain.Comment;
-import com.myZipPlan.server.community.dto.comment.AddCommentRequest;
-import com.myZipPlan.server.community.dto.comment.CommentResponse;
-import com.myZipPlan.server.community.dto.comment.UpdateCommentRequest;
+import com.myZipPlan.server.community.dto.comment.*;
 import com.myZipPlan.server.community.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -31,29 +29,27 @@ public class CommentApiController {
 
     // 댓글 삭제
     @DeleteMapping("/{commentId}")
-    public ApiResponse<Void> deleteComment(@PathVariable Long commentId, @RequestParam Long userId) {
-        commentService.deleteComment(commentId, userId);
+    public ApiResponse<Void> deleteComment(@PathVariable Long commentId, @RequestBody DeleteCommentRequest deleteCommentRequest) {
+        commentService.deleteComment(commentId, deleteCommentRequest.getUserId());
         return ApiResponse.ok(null);
     }
 
-    // 댓글 좋아요
     @PostMapping("/{commentId}/like")
-    public ApiResponse<Void> likeComment(@PathVariable Long commentId) {
-        commentService.likeComment(commentId);
+    public ApiResponse<Void> likeComment(@PathVariable Long commentId, @RequestBody LikeCommentRequest likeCommentRequest) {
+        commentService.likeComment(commentId, likeCommentRequest.getUserId());
         return ApiResponse.ok(null);
     }
 
-    // 댓글 좋아요 취소
     @PostMapping("/{commentId}/unlike")
-    public ApiResponse<Void> unlikeComment(@PathVariable Long commentId) {
-        commentService.unlikeComment(commentId);
+    public ApiResponse<Void> unlikeComment(@PathVariable Long commentId, @RequestBody LikeCommentRequest likeCommentRequest) {
+        commentService.unlikeComment(commentId, likeCommentRequest.getUserId());
         return ApiResponse.ok(null);
     }
 
     // 대댓글 작성
     @PostMapping("/{parentCommentId}/reply")
-    public ApiResponse<CommentResponse> addReply(@PathVariable Long parentCommentId, @RequestParam Long userId, @RequestBody String content) {
-        Comment reply = commentService.addReply(parentCommentId, userId, content);
+    public ApiResponse<CommentResponse> addReply(@PathVariable Long parentCommentId, @RequestBody AddReplyRequest addReplyRequest) {
+        Comment reply = commentService.addReply(parentCommentId, addReplyRequest);
         CommentResponse commentResponse = CommentResponse.fromEntity(reply);
         return ApiResponse.ok(commentResponse);
     }
