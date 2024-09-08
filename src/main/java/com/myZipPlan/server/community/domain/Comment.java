@@ -30,10 +30,25 @@ public class Comment {
     private LocalDateTime createdDate;
     private LocalDateTime lastModifiedDate;
 
+    // 좋아요 수 추가
+    @Column(name = "likes", nullable = false)
+    private int likes = 0;  // 기본값 0
+
+    // 부모 댓글 (대댓글인 경우)
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "parent_comment_id")
+    private Comment parentComment;
+
+    // 자식 댓글 (대댓글, 최대 1개)
+    @OneToOne(mappedBy = "parentComment", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Comment childComment;
+
+    // 생성자
     public Comment(Post post, User user, String content) {
         this.post = post;
         this.user = user;
         this.content = content;
         this.createdDate = LocalDateTime.now();
+        this.likes = 0;
     }
 }

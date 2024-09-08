@@ -2,6 +2,7 @@ package com.myZipPlan.server.community.dto.post;
 
 import com.myZipPlan.server.community.domain.Post;
 import com.myZipPlan.server.community.domain.Comment;
+import com.myZipPlan.server.community.dto.comment.CommentResponse;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -17,12 +18,12 @@ public class PostResponse {
     private final String author;            // 작성자 이름 (User 엔티티에서 가져옴)
     private final String imageUrl;           // 이미지 URL
     private final int likes;                 // 좋아요 수
-    private final List<String> comments;     // 댓글 목록
+    private final List<CommentResponse> comments;     // 댓글 목록
     private final LocalDateTime createdDate; // 작성일자
     private final LocalDateTime lastModifiedDate; // 수정일자
 
     @Builder
-    public PostResponse(Long id, String title, String content, String author, String imageUrl, int likes, List<String> comments, LocalDateTime createdDate, LocalDateTime lastModifiedDate) {
+    public PostResponse(Long id, String title, String content, String author, String imageUrl, int likes,  List<CommentResponse> comments, LocalDateTime createdDate, LocalDateTime lastModifiedDate) {
         this.id = id;
         this.title = title;
         this.content = content;
@@ -44,7 +45,7 @@ public class PostResponse {
                 .imageUrl(post.getImageUrl())
                 .likes(post.getLikes())
                 .comments(post.getComments().stream()
-                        .map(Comment::getContent) // 각 댓글의 내용을 가져옴
+                        .map(CommentResponse::fromEntity)  // 댓글 목록 변환
                         .collect(Collectors.toList()))
                 .createdDate(post.getCreatedDate())
                 .lastModifiedDate(post.getLastModifiedDate())

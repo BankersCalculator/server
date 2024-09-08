@@ -60,4 +60,42 @@ public class CommentService {
 
         commentRepository.delete(comment);
     }
+
+    // 댓글 좋아요
+    @Transactional
+    public void likeComment(Long commentId) {
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new IllegalArgumentException("Comment not found"));
+        comment.setLikes(comment.getLikes() + 1);  // 좋아요 수 증가
+    }
+
+    // 댓글 좋아요 취소
+    @Transactional
+    public void unlikeComment(Long commentId) {
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new IllegalArgumentException("Comment not found"));
+        comment.setLikes(comment.getLikes() - 1);  // 좋아요 수 감소
+    }
+
+    // 대댓글 작성 (부모 댓글이 존재하는 경우)
+    @Transactional
+    public Comment addReply(Long parentCommentId, Long userId, String content) {
+        Comment parentComment = commentRepository.findById(parentCommentId)
+                .orElseThrow(() -> new IllegalArgumentException("Parent comment not found"));
+
+        if (parentComment.getChildComment() != null) {
+            throw new IllegalStateException("This comment already has a reply.");
+        }
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        Comment reply = new Comment(parentComment.getPost(), user, content);
+        reply.setParentComment(parentComment);
+        parentComment.setChildComment(reply);
+
+        return commentRepository.save(reply);
+    }
+
+
 }

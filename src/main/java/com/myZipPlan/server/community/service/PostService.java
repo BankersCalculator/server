@@ -57,8 +57,6 @@ public class PostService {
         return PostResponse.fromEntity(post);
     }
 
-
-
     // 게시글 수정
     @Transactional
     public Post updatePost(Long postId, Long userId, UpdatePostRequest updatePostRequest) throws IOException  {
@@ -102,7 +100,6 @@ public class PostService {
         // 게시글 삭제
         postRepository.delete(post);
     }
-
 
     // 게시글 좋아요
     @Transactional

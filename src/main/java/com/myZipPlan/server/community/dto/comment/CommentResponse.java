@@ -14,15 +14,18 @@ public class CommentResponse {
     private final String content;  // 댓글 내용
     private final LocalDateTime createdDate;  // 작성일
     private final LocalDateTime lastModifiedDate;  // 수정일
+    private final CommentResponse childComment;  // 대댓글 (최대 1개)
+
 
     @Builder
-    public CommentResponse(Long id, Long postId, Long userId, String content, LocalDateTime createdDate, LocalDateTime lastModifiedDate) {
+    public CommentResponse(Long id, Long postId, Long userId, String content, LocalDateTime createdDate, LocalDateTime lastModifiedDate, CommentResponse childComment) {
         this.id = id;
         this.postId = postId;
         this.userId = userId;
         this.content = content;
         this.createdDate = createdDate;
         this.lastModifiedDate = lastModifiedDate;
+        this.childComment =childComment;
     }
 
     // Comment 엔티티를 CommentResponse로 변환하는 메소드
@@ -34,6 +37,7 @@ public class CommentResponse {
                 .content(comment.getContent())
                 .createdDate(comment.getCreatedDate())
                 .lastModifiedDate(comment.getLastModifiedDate())
+                .childComment(comment.getChildComment() != null ? fromEntity(comment.getChildComment()) : null)
                 .build();
     }
 }

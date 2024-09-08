@@ -1,6 +1,7 @@
 package com.myZipPlan.server.community.controller;
 
 import com.myZipPlan.server.common.api.ApiResponse;
+import com.myZipPlan.server.community.domain.Comment;
 import com.myZipPlan.server.community.dto.comment.AddCommentRequest;
 import com.myZipPlan.server.community.dto.comment.CommentResponse;
 import com.myZipPlan.server.community.dto.comment.UpdateCommentRequest;
@@ -33,5 +34,27 @@ public class CommentApiController {
     public ApiResponse<Void> deleteComment(@PathVariable Long commentId, @RequestParam Long userId) {
         commentService.deleteComment(commentId, userId);
         return ApiResponse.ok(null);
+    }
+
+    // 댓글 좋아요
+    @PostMapping("/{commentId}/like")
+    public ApiResponse<Void> likeComment(@PathVariable Long commentId) {
+        commentService.likeComment(commentId);
+        return ApiResponse.ok(null);
+    }
+
+    // 댓글 좋아요 취소
+    @PostMapping("/{commentId}/unlike")
+    public ApiResponse<Void> unlikeComment(@PathVariable Long commentId) {
+        commentService.unlikeComment(commentId);
+        return ApiResponse.ok(null);
+    }
+
+    // 대댓글 작성
+    @PostMapping("/{parentCommentId}/reply")
+    public ApiResponse<CommentResponse> addReply(@PathVariable Long parentCommentId, @RequestParam Long userId, @RequestBody String content) {
+        Comment reply = commentService.addReply(parentCommentId, userId, content);
+        CommentResponse commentResponse = CommentResponse.fromEntity(reply);
+        return ApiResponse.ok(commentResponse);
     }
 }
