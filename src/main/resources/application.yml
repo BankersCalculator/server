@@ -69,3 +69,16 @@ jwt:
   secret-key: ${jwt.secret-key} # TODO: change to UUID
   access-token-validity-in-seconds: 36000
   refresh-token-validity-in-seconds: 86400
+
+
+
+
+cloud:
+  aws:
+    credentials:
+      access-key: AKIATAVAA3FNYHXWF775
+      secret-key: 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
+    region:
+      static: ap-northeast-2
+    s3:
+      bucket: myzipplan-service-storage
