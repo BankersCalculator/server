@@ -3,7 +3,7 @@ package com.myZipPlan.server.docs.community;
 import com.myZipPlan.server.RestDocsSupport;
 import com.myZipPlan.server.community.controller.PostApiController;
 import com.myZipPlan.server.community.dto.post.*;
-import com.myZipPlan.server.community.enums.PostSortType;
+import com.myZipPlan.server.common.enums.community.PostSortType;
 import com.myZipPlan.server.community.service.PostService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

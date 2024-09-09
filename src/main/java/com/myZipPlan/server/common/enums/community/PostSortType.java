@@ -1,4 +1,4 @@
-package com.myZipPlan.server.community.enums;
+package com.myZipPlan.server.common.enums.community;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

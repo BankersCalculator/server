@@ -4,7 +4,7 @@ import com.myZipPlan.server.community.domain.Post;
 import com.myZipPlan.server.community.dto.post.AddPostRequest;
 import com.myZipPlan.server.community.dto.post.PostResponse;
 import com.myZipPlan.server.community.dto.post.UpdatePostRequest;
-import com.myZipPlan.server.community.enums.PostSortType;
+import com.myZipPlan.server.common.enums.community.PostSortType;
 import com.myZipPlan.server.community.repository.PostRepository;
 import com.myZipPlan.server.user.entity.User;
 import com.myZipPlan.server.user.repository.UserRepository;
