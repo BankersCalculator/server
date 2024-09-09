@@ -1,4 +1,4 @@
-package com.myZipPlan.server.community.dto.post;
+package com.myZipPlan.server.community.dto.post.request;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

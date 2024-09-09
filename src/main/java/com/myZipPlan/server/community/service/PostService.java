@@ -1,9 +1,9 @@
 package com.myZipPlan.server.community.service;
 
 import com.myZipPlan.server.community.domain.Post;
-import com.myZipPlan.server.community.dto.post.AddPostRequest;
-import com.myZipPlan.server.community.dto.post.PostResponse;
-import com.myZipPlan.server.community.dto.post.UpdatePostRequest;
+import com.myZipPlan.server.community.dto.post.request.PostCreateRequest;
+import com.myZipPlan.server.community.dto.post.response.PostResponse;
+import com.myZipPlan.server.community.dto.post.request.UpdatePostRequest;
 import com.myZipPlan.server.common.enums.community.PostSortType;
 import com.myZipPlan.server.community.repository.PostRepository;
 import com.myZipPlan.server.user.entity.User;
@@ -26,20 +26,20 @@ public class PostService {
     private final UserRepository userRepository;
     private final S3Service s3Service;
 
-    public Post addPost(AddPostRequest addPostRequest, Long userId) throws IOException {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+    public Post addPost(PostCreateRequest postCreateRequest, String oauthProviderId) throws IOException {
+        // security session 통해
+        User user = userRepository.findByOauthProviderId(oauthProviderId)
+                .orElseThrow(() -> new IllegalArgumentException("세션에 연결된 oauthProviderId를 찾을 수 없습니다."));
 
         // 이미지 파일 업로드 후 URL 획득
         String imageUrl = null;
 
-        if (addPostRequest.getImageFile() != null && !addPostRequest.getImageFile().isEmpty()) {
-            imageUrl = s3Service.uploadFile(addPostRequest.getImageFile());
+        if (postCreateRequest.getImageFile() != null && !postCreateRequest.getImageFile().isEmpty()) {
+            imageUrl = s3Service.uploadFile(postCreateRequest.getImageFile());
         }
 
         // AddPostRequest를 이용해 Post 엔티티 생성
-        Post post = addPostRequest.toEntity(user, imageUrl);
-
+        Post post = postCreateRequest.toEntity(user, imageUrl);
         return postRepository.save(post);
     }
 
@@ -61,14 +61,16 @@ public class PostService {
 
     // 게시글 수정
     @Transactional
-    public Post updatePost(Long postId, Long userId, UpdatePostRequest updatePostRequest) throws IOException  {
+    public Post updatePost(String oauthProviderId, Long postId, UpdatePostRequest updatePostRequest) throws IOException  {
+        User user = userRepository.findByOauthProviderId(oauthProviderId)
+                .orElseThrow(() -> new IllegalArgumentException("세션에 연결된 oauthProviderId를 찾을 수 없습니다."));
+
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new IllegalArgumentException("Post not found"));
+                .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다."));
 
-        if (!post.getUser().getId().equals(userId)) {
-            throw new IllegalArgumentException("Only the author can update the post");
+        if (!post.getUser().getOauthProviderId().equals(user.getOauthProviderId())) {
+            throw new IllegalArgumentException("해당 글 작성자만 수정이 할 수 있습니다.");
         }
-
 
         // 이미지 파일이 새로 업로드되면 이미지 URL 업데이트
         String imageUrl = post.getImageUrl();  // 기존 이미지 URL 유지
@@ -81,22 +83,19 @@ public class PostService {
         post.setContent(updatePostRequest.getContent());
         post.setImageUrl(imageUrl);
         post.setLastModifiedDate(LocalDateTime.now()); // 업데이트 시 수정일 갱신
-
-        return post;
+        return postRepository.save(post);
     }
 
     // 게시글 삭제 로직
-    public void deletePost(Long userId, Long postId) {
-        // 사용자가 존재하는지 확인
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+    public void deletePost(String oauthProviderId, Long postId) {
+        User user = userRepository.findByOauthProviderId(oauthProviderId)
+                .orElseThrow(() -> new IllegalArgumentException("세션에 연결된 oauthProviderId를 찾을 수 없습니다."));
 
-        // 해당 게시글이 사용자가 작성한 게시글인지 확인
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new IllegalArgumentException("Post not found"));
+                .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다."));
 
-        if (!post.getUser().equals(user)) {
-            throw new IllegalStateException("User is not authorized to delete this post");
+        if (!post.getUser().getOauthProviderId().equals(user.getOauthProviderId())) {
+            throw new IllegalArgumentException("해당 글 작성자만 삭제할 수 있습니다.");
         }
 
         // 게시글 삭제
@@ -105,18 +104,18 @@ public class PostService {
 
     // 게시글 좋아요
     @Transactional
-    public void likePost(Long postId, Long userId) {
+    public void likePost(String oauthProviderId, Long postId) {
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new IllegalArgumentException("Post not found"));
+                .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다."));
         // 좋아요 처리 로직 (예: 좋아요 수 증가 등)
         post.setLikes(post.getLikes() + 1);
         postRepository.save(post);
     }
 
     @Transactional
-    public void unlikePost(Long postId, Long userId) {
+    public void unlikePost(String oauthProviderId, Long postId) {
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new IllegalArgumentException("Post not found"));
+                .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다."));
         // 좋아요 취소 처리 로직 (예: 좋아요 수 감소 등)
         post.setLikes(post.getLikes() - 1);
         postRepository.save(post);

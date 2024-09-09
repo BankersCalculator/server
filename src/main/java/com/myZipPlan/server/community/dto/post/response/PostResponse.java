@@ -1,7 +1,6 @@
-package com.myZipPlan.server.community.dto.post;
+package com.myZipPlan.server.community.dto.post.response;
 
 import com.myZipPlan.server.community.domain.Post;
-import com.myZipPlan.server.community.dto.ReportComponent;
 import com.myZipPlan.server.community.dto.comment.CommentResponse;
 import lombok.Builder;
 import lombok.Getter;

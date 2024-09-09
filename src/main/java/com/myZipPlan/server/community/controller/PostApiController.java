@@ -2,8 +2,13 @@ package com.myZipPlan.server.community.controller;
 
 import com.myZipPlan.server.common.api.ApiResponse;
 import com.myZipPlan.server.community.domain.Post;
-import com.myZipPlan.server.community.dto.post.*;
+import com.myZipPlan.server.community.dto.post.request.LikePostRequest;
+import com.myZipPlan.server.community.dto.post.request.PostCreateRequest;
+import com.myZipPlan.server.community.dto.post.request.PostSortRequest;
+import com.myZipPlan.server.community.dto.post.request.UpdatePostRequest;
+import com.myZipPlan.server.community.dto.post.response.PostResponse;
 import com.myZipPlan.server.community.service.PostService;
+import com.myZipPlan.server.oauth.userInfo.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,11 +20,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PostApiController {
     private final PostService postService;
-
     // 게시글 작성
     @PostMapping
-    public ApiResponse<PostResponse> addPost(@RequestBody AddPostRequest addPostRequest, @RequestParam Long userId) throws IOException {
-        Post post = postService.addPost(addPostRequest, userId);
+    public ApiResponse<PostResponse> addPost(@RequestBody PostCreateRequest postCreateRequest) throws IOException {
+        //security session에 있는 oauthProviderId GET
+        String oauthProviderId = SecurityUtils.getProviderId();
+        Post post = postService.addPost(postCreateRequest, oauthProviderId);
         PostResponse postResponse = PostResponse.fromEntity(post);
         return ApiResponse.ok(postResponse);
     }
@@ -28,6 +34,13 @@ public class PostApiController {
     @GetMapping
     public ApiResponse<List<PostResponse>> getAllPosts() {
         List<PostResponse> posts = postService.getAllPosts();
+        return ApiResponse.ok(posts);
+    }
+
+    // 게시글 목록 조회 (정렬 기능 포함)
+    @GetMapping("/sorted")
+    public ApiResponse<List<PostResponse>> getPostsBySortType(@RequestBody PostSortRequest postSortRequest) {
+        List<PostResponse> posts = postService.getPostsBySortType(postSortRequest.getSortType());
         return ApiResponse.ok(posts);
     }
 
@@ -40,38 +53,37 @@ public class PostApiController {
 
     // 게시글 수정
     @PutMapping("/{postId}")
-    public ApiResponse<PostResponse> updatePost(@PathVariable Long postId, @RequestParam Long userId, @RequestBody UpdatePostRequest updatePostRequest) throws IOException {
-        Post updatedPost = postService.updatePost(postId, userId, updatePostRequest);
+    public ApiResponse<PostResponse> updatePost(@PathVariable Long postId, @RequestBody UpdatePostRequest updatePostRequest) throws IOException {
+        String oauthProviderId = SecurityUtils.getProviderId();
+        Post updatedPost = postService.updatePost(oauthProviderId, postId, updatePostRequest);
         PostResponse postResponse = PostResponse.fromEntity(updatedPost);
         return ApiResponse.ok(postResponse);
     }
 
     // 게시글 삭제
     @DeleteMapping("/{postId}")
-    public ApiResponse<Void> deletePost(@PathVariable Long postId, @RequestBody DeletePostRequest deletePostRequest) {
-        postService.deletePost(deletePostRequest.getUserId(), postId);
+    public ApiResponse<Void> deletePost(@PathVariable Long postId) {
+        String oauthProviderId = SecurityUtils.getProviderId();
+        postService.deletePost(oauthProviderId, postId);
         return ApiResponse.ok(null);
     }
 
 
     @PostMapping("/{postId}/like")
-    public ApiResponse<Void> likePost(@PathVariable Long postId, @RequestBody LikePostRequest likePostRequest) {
-        postService.likePost(postId, likePostRequest.getUserId());
+    public ApiResponse<Void> likePost(@PathVariable Long postId) {
+        String oauthProviderId = SecurityUtils.getProviderId();
+        postService.likePost(oauthProviderId, postId);
         return ApiResponse.ok(null);
     }
 
     @PostMapping("/{postId}/unlike")
-    public ApiResponse<Void> unlikePost(@PathVariable Long postId, @RequestBody LikePostRequest likePostRequest) {
-        postService.unlikePost(postId, likePostRequest.getUserId());
+    public ApiResponse<Void> unlikePost(@PathVariable Long postId) {
+        String oauthProviderId = SecurityUtils.getProviderId();
+        postService.unlikePost(oauthProviderId, postId);
         return ApiResponse.ok(null);
     }
 
-    // 게시글 목록 조회 (정렬 기능 포함)
-    @GetMapping("/sorted")
-    public ApiResponse<List<PostResponse>> getPostsBySortType(@RequestBody PostSortRequest postSortRequest) {
-        List<PostResponse> posts = postService.getPostsBySortType(postSortRequest.getSortType());
-        return ApiResponse.ok(posts);
-    }
+
 
 
 }

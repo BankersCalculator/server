@@ -1,4 +1,4 @@
-package com.myZipPlan.server.community.dto.post;
+package com.myZipPlan.server.community.dto.post.request;
 
 import com.myZipPlan.server.common.enums.community.PostSortType;
 import lombok.AllArgsConstructor;

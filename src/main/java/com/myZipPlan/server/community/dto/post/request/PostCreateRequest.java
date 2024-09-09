@@ -1,4 +1,4 @@
-package com.myZipPlan.server.community.dto.post;
+package com.myZipPlan.server.community.dto.post.request;
 
 import com.myZipPlan.server.community.domain.Post;
 import com.myZipPlan.server.user.entity.User;
@@ -10,7 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Getter
 @Setter
 @NoArgsConstructor
-public class AddPostRequest {
+public class PostCreateRequest {
 
     private String title;
     private String content;

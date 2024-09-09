@@ -2,8 +2,11 @@ package com.myZipPlan.server.docs.community;
 
 import com.myZipPlan.server.RestDocsSupport;
 import com.myZipPlan.server.community.controller.PostApiController;
-import com.myZipPlan.server.community.dto.post.*;
 import com.myZipPlan.server.common.enums.community.PostSortType;
+import com.myZipPlan.server.community.dto.post.request.LikePostRequest;
+import com.myZipPlan.server.community.dto.post.request.PostCreateRequest;
+import com.myZipPlan.server.community.dto.post.request.PostSortRequest;
+import com.myZipPlan.server.community.dto.post.request.UpdatePostRequest;
 import com.myZipPlan.server.community.service.PostService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -31,11 +34,11 @@ public class PostApiDocsTest extends RestDocsSupport {
     @Test
     @DisplayName("게시글 작성 API 문서화 테스트")
     void addPost() throws Exception {
-        AddPostRequest request = new AddPostRequest();
+        PostCreateRequest request = new PostCreateRequest();
         request.setTitle("게시글 제목");
         request.setContent("게시글 내용");
 
-        when(postService.addPost(request, 1L)).thenReturn(null);
+        when(postService.addPost(request, "oauthProviderId")).thenReturn(null);
 
         mockMvc.perform(post(BASE_URL + "?userId=1")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -66,7 +69,7 @@ public class PostApiDocsTest extends RestDocsSupport {
         request.setTitle("수정된 제목");
         request.setContent("수정된 내용");
 
-        when(postService.updatePost(1L, 1L, request)).thenReturn(null);
+        when(postService.updatePost("oauthProviderId", 1L, request)).thenReturn(null);
 
         mockMvc.perform(put(BASE_URL + "/1?userId=1")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -93,8 +96,6 @@ public class PostApiDocsTest extends RestDocsSupport {
     @Test
     @DisplayName("게시글 삭제 API 문서화 테스트")
     void deletePost() throws Exception {
-        DeletePostRequest request = new DeletePostRequest(1L);
-
         mockMvc.perform(delete(BASE_URL + "/{postId}", 1L)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"userId\": 1}"))
@@ -104,9 +105,6 @@ public class PostApiDocsTest extends RestDocsSupport {
                         preprocessResponse(prettyPrint()),
                         requestFields(
                                 fieldWithPath("postId").description("삭제할 게시글 ID")
-                        ),
-                        requestFields(
-                                fieldWithPath("userId").type(JsonFieldType.NUMBER).description("게시글을 삭제하는 사용자 ID")
                         )
                 ));
     }
