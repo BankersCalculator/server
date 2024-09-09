@@ -4,6 +4,7 @@ import com.myZipPlan.server.community.domain.Post;
 import com.myZipPlan.server.community.dto.post.AddPostRequest;
 import com.myZipPlan.server.community.dto.post.PostResponse;
 import com.myZipPlan.server.community.dto.post.UpdatePostRequest;
+import com.myZipPlan.server.community.enums.PostSortType;
 import com.myZipPlan.server.community.repository.PostRepository;
 import com.myZipPlan.server.user.entity.User;
 import com.myZipPlan.server.user.repository.UserRepository;
@@ -14,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -118,6 +120,20 @@ public class PostService {
         // 좋아요 취소 처리 로직 (예: 좋아요 수 감소 등)
         post.setLikes(post.getLikes() - 1);
         postRepository.save(post);
+    }
+
+    // 게시글조회(정렬)
+    public List<PostResponse> getPostsBySortType(PostSortType sortType) {
+        if (sortType == PostSortType.LATEST) {
+            return postRepository.findAllByOrderByCreatedDateDesc()
+                    .stream().map(PostResponse::fromEntity)
+                    .collect(Collectors.toList());
+        } else if (sortType == PostSortType.POPULAR) {
+            return postRepository.findAllByOrderByLikesDesc()
+                    .stream().map(PostResponse::fromEntity)
+                    .collect(Collectors.toList());
+        }
+        return Collections.emptyList();
     }
 }
 

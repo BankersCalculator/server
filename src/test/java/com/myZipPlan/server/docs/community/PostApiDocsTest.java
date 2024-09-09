@@ -2,10 +2,8 @@ package com.myZipPlan.server.docs.community;
 
 import com.myZipPlan.server.RestDocsSupport;
 import com.myZipPlan.server.community.controller.PostApiController;
-import com.myZipPlan.server.community.dto.post.AddPostRequest;
-import com.myZipPlan.server.community.dto.post.DeletePostRequest;
-import com.myZipPlan.server.community.dto.post.LikePostRequest;
-import com.myZipPlan.server.community.dto.post.UpdatePostRequest;
+import com.myZipPlan.server.community.dto.post.*;
+import com.myZipPlan.server.community.enums.PostSortType;
 import com.myZipPlan.server.community.service.PostService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -145,6 +143,33 @@ public class PostApiDocsTest extends RestDocsSupport {
                         preprocessResponse(prettyPrint()),
                         requestFields(
                                 fieldWithPath("userId").type(JsonFieldType.NUMBER).description("좋아요 취소를 한 사용자 ID")
+                        )
+                ));
+    }
+
+    @Test
+    @DisplayName("게시글 목록 조회 (최신순) API 문서화 테스트")
+    void getPostsByLatest() throws Exception {
+        PostSortRequest request = new PostSortRequest(PostSortType.LATEST);
+
+        mockMvc.perform(get(BASE_URL + "/sorted")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"sortType\":\"LATEST\"}"))
+                .andExpect(status().isOk())
+                .andDo(document("post-list-latest",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestFields(
+                                fieldWithPath("sortType").description("정렬 방식 (LATEST: 최신순, POPULAR: 인기순)")
+                        ),
+                        responseFields(
+                                fieldWithPath("[]").description("게시글 목록"),
+                                fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("게시글 ID"),
+                                fieldWithPath("[].title").type(JsonFieldType.STRING).description("게시글 제목"),
+                                fieldWithPath("[].content").type(JsonFieldType.STRING).description("게시글 내용"),
+                                fieldWithPath("[].createdDate").type(JsonFieldType.STRING).description("작성일"),
+                                fieldWithPath("[].lastModifiedDate").type(JsonFieldType.STRING).description("수정일"),
+                                fieldWithPath("[].likes").type(JsonFieldType.NUMBER).description("좋아요 수")
                         )
                 ));
     }

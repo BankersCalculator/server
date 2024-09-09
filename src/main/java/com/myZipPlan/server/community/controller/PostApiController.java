@@ -65,4 +65,13 @@ public class PostApiController {
         postService.unlikePost(postId, likePostRequest.getUserId());
         return ApiResponse.ok(null);
     }
+
+    // 게시글 목록 조회 (정렬 기능 포함)
+    @GetMapping("/sorted")
+    public ApiResponse<List<PostResponse>> getPostsBySortType(@RequestBody PostSortRequest postSortRequest) {
+        List<PostResponse> posts = postService.getPostsBySortType(postSortRequest.getSortType());
+        return ApiResponse.ok(posts);
+    }
+
+
 }

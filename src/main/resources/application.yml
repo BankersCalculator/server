@@ -70,9 +70,6 @@ jwt:
   access-token-validity-in-seconds: 36000
   refresh-token-validity-in-seconds: 86400
 
-
-
-
 cloud:
   aws:
     credentials:
