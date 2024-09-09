@@ -24,11 +24,11 @@ public class CommentService {
     private final UserRepository userRepository;
 
     // 댓글 작성
-    public CommentResponse addComment(Long postId, AddCommentRequest addCommentRequest) {
+    public CommentResponse addComment(String oauthProviderId, Long postId, AddCommentRequest addCommentRequest) {
+        User user = userRepository.findByOauthProviderId(oauthProviderId)
+                .orElseThrow(() -> new IllegalArgumentException("세션에 연결된 oauthProviderId를 찾을 수 없습니다."));
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new IllegalArgumentException("Post not found"));
-        User user = userRepository.findById(addCommentRequest.getUserId())
-                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+                .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다."));
 
         Comment comment = new Comment(post, user, addCommentRequest.getContent());
         comment = commentRepository.save(comment);
@@ -37,12 +37,15 @@ public class CommentService {
 
     // 댓글 수정
     @Transactional
-    public CommentResponse updateComment(Long commentId, UpdateCommentRequest updateCommentRequest) {
+    public CommentResponse updateComment(String oauthProviderId, Long commentId, UpdateCommentRequest updateCommentRequest) {
+        User user = userRepository.findByOauthProviderId(oauthProviderId)
+                .orElseThrow(() -> new IllegalArgumentException("세션에 연결된 oauthProviderId를 찾을 수 없습니다."));
+
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new IllegalArgumentException("Comment not found"));
 
-        if (!comment.getUser().getId().equals(updateCommentRequest.getUserId())) {
-            throw new IllegalArgumentException("Only the author can update the comment");
+        if (!comment.getUser().getOauthProviderId().equals(user.getOauthProviderId())) {
+            throw new IllegalArgumentException("해당 글 작성자만 수정이 할 수 있습니다.");
         }
 
         comment.setContent(updateCommentRequest.getUpdatedContent());
@@ -51,12 +54,15 @@ public class CommentService {
     }
 
     //댓글삭제
-    public void deleteComment(Long commentId, Long userId) {
+    public void deleteComment(String oauthProviderId, Long commentId) {
+        User user = userRepository.findByOauthProviderId(oauthProviderId)
+                .orElseThrow(() -> new IllegalArgumentException("세션에 연결된 oauthProviderId를 찾을 수 없습니다."));
+
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new IllegalArgumentException("Comment not found"));
 
-        if (!comment.getUser().getId().equals(userId)) {
-            throw new IllegalStateException("User is not authorized to delete this comment");
+        if (!comment.getUser().getOauthProviderId().equals(user.getOauthProviderId())) {
+            throw new IllegalArgumentException("해당 글 작성자만 삭제 할 수 있습니다.");
         }
 
         commentRepository.delete(comment);

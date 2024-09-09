@@ -98,10 +98,8 @@ public class CommentApiDocsTest extends RestDocsSupport {
     @DisplayName("댓글 수정 API 문서화 테스트")
     void updateComment() throws Exception {
         UpdateCommentRequest request = new UpdateCommentRequest();
-        request.setUserId(1L);
         request.setUpdatedContent("수정된 댓글 내용");
-
-        when(commentService.updateComment(1L, request)).thenReturn(null);
+        when(commentService.updateComment("oauthPrividerId",1L, request)).thenReturn(null);
 
         mockMvc.perform(put(BASE_URL + "/1")
                         .contentType(MediaType.APPLICATION_JSON)
