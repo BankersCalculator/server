@@ -1,10 +1,12 @@
 package com.myZipPlan.server.community.service;
 
 import com.myZipPlan.server.community.domain.Post;
+import com.myZipPlan.server.community.domain.PostLike;
 import com.myZipPlan.server.community.dto.post.request.PostCreateRequest;
 import com.myZipPlan.server.community.dto.post.response.PostResponse;
 import com.myZipPlan.server.community.dto.post.request.UpdatePostRequest;
 import com.myZipPlan.server.common.enums.community.PostSortType;
+import com.myZipPlan.server.community.repository.PostLikeRepository;
 import com.myZipPlan.server.community.repository.PostRepository;
 import com.myZipPlan.server.user.entity.User;
 import com.myZipPlan.server.user.repository.UserRepository;
@@ -25,6 +27,7 @@ public class PostService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
     private final S3Service s3Service;
+    private final PostLikeRepository postLikeRepository;
 
     public Post addPost(PostCreateRequest postCreateRequest, String oauthProviderId) throws IOException {
         // security session 통해
@@ -102,21 +105,38 @@ public class PostService {
         postRepository.delete(post);
     }
 
-    // 게시글 좋아요
     @Transactional
     public void likePost(String oauthProviderId, Long postId) {
+        User user = userRepository.findByOauthProviderId(oauthProviderId)
+                .orElseThrow(() -> new IllegalArgumentException("세션에 연결된 oauthProviderId를 찾을 수 없습니다."));
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다."));
-        // 좋아요 처리 로직 (예: 좋아요 수 증가 등)
+
+        // 이미 좋아요를 눌렀는지 확인
+        boolean alreadyLiked = postLikeRepository.findByPostAndUser(post, user).isPresent();
+        if (alreadyLiked) {
+            throw new IllegalArgumentException("이미 좋아요를 누른 게시글입니다.");
+        }
+
+        // 좋아요 추가
+        postLikeRepository.save(new PostLike(post, user));
         post.setLikes(post.getLikes() + 1);
         postRepository.save(post);
     }
 
     @Transactional
     public void unlikePost(String oauthProviderId, Long postId) {
+        User user = userRepository.findByOauthProviderId(oauthProviderId)
+                .orElseThrow(() -> new IllegalArgumentException("세션에 연결된 oauthProviderId를 찾을 수 없습니다."));
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다."));
-        // 좋아요 취소 처리 로직 (예: 좋아요 수 감소 등)
+
+        // 좋아요를 누른 기록이 있는지 확인
+        PostLike postLike = postLikeRepository.findByPostAndUser(post, user)
+                .orElseThrow(() -> new IllegalArgumentException("해당 게시글에 좋아요를 누르지 않았습니다."));
+
+        // 좋아요 제거
+        postLikeRepository.delete(postLike);
         post.setLikes(post.getLikes() - 1);
         postRepository.save(post);
     }

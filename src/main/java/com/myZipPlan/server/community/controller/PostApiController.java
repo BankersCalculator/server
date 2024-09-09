@@ -82,8 +82,4 @@ public class PostApiController {
         postService.unlikePost(oauthProviderId, postId);
         return ApiResponse.ok(null);
     }
-
-
-
-
 }

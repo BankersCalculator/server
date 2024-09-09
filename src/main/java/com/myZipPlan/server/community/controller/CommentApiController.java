@@ -16,6 +16,7 @@ public class CommentApiController {
     // 댓글 작성
     @PostMapping("/{postId}")
     public ApiResponse<CommentResponse> addComment(@PathVariable Long postId, @RequestBody AddCommentRequest addCommentRequest) {
+
         CommentResponse commentResponse = commentService.addComment(postId, addCommentRequest);
         return ApiResponse.ok(commentResponse);
     }
