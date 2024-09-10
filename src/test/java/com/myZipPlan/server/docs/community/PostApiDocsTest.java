@@ -3,7 +3,6 @@ package com.myZipPlan.server.docs.community;
 import com.myZipPlan.server.RestDocsSupport;
 import com.myZipPlan.server.community.controller.PostApiController;
 import com.myZipPlan.server.common.enums.community.PostSortType;
-import com.myZipPlan.server.community.dto.post.request.PostLikeRequest;
 import com.myZipPlan.server.community.dto.post.request.PostCreateRequest;
 import com.myZipPlan.server.community.dto.post.request.PostSortRequest;
 import com.myZipPlan.server.community.dto.post.request.PostUpdateRequest;
@@ -112,9 +111,7 @@ public class PostApiDocsTest extends RestDocsSupport {
     @Test
     @DisplayName("게시글 좋아요 API 문서화 테스트")
     void likePost() throws Exception {
-        PostLikeRequest request = new PostLikeRequest(1L);
-
-        mockMvc.perform(post(BASE_URL + "/1/like")
+         mockMvc.perform(post(BASE_URL + "/1/like")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"userId\":1}"))
                 .andExpect(status().isOk())
@@ -130,8 +127,6 @@ public class PostApiDocsTest extends RestDocsSupport {
     @Test
     @DisplayName("게시글 좋아요 취소 API 문서화 테스트")
     void unlikePost() throws Exception {
-        PostLikeRequest request = new PostLikeRequest(1L);
-
         mockMvc.perform(post(BASE_URL + "/1/unlike")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"userId\":1}"))

@@ -13,6 +13,7 @@ public class PostUpdateRequest {
     private String content;       // 수정할 게시글 내용
     private MultipartFile imageFile;  // 수정할 이미지 파일
 
+
     public PostUpdateRequest(String title, String content, MultipartFile imageFile) {
         this.title = title;
         this.content = content;

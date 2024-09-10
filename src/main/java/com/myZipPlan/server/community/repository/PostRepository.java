@@ -1,7 +1,10 @@
 package com.myZipPlan.server.community.repository;
 
+import com.myZipPlan.server.advice.loanAdvice.entity.LoanAdviceResult;
 import com.myZipPlan.server.community.domain.Post;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
@@ -14,5 +17,7 @@ import java.util.List;
 public interface PostRepository extends JpaRepository<Post, Long> {
     List<Post> findAllByOrderByCreatedDateDesc();
     List<Post> findAllByOrderByLikesDesc();
+    @Query("SELECT p.loanAdviceResult FROM Post p WHERE p.id = :postId")
+    LoanAdviceResult findLoanAdviceResultByPostId(@Param("postId") Long postId);
 
 }

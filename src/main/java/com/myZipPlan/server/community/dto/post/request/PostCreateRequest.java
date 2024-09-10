@@ -1,5 +1,6 @@
 package com.myZipPlan.server.community.dto.post.request;
 
+import com.myZipPlan.server.advice.loanAdvice.entity.LoanAdviceResult;
 import com.myZipPlan.server.community.domain.Post;
 import com.myZipPlan.server.user.entity.User;
 import lombok.Getter;
@@ -15,15 +16,17 @@ public class PostCreateRequest {
     private String title;
     private String content;
     private MultipartFile imageFile;
+    private Long loanAdviceResultId;
 
     // toEntity() 메서드를 통해 Post 엔티티로 변환
-    public Post toEntity(User user, String imageUrl) {
+    public Post toEntity(User user, String imageUrl, LoanAdviceResult loanAdviceResult) {
         return Post.builder()
                 .title(this.title)
                 .content(this.content)
                 .user(user)
                 .imageUrl(imageUrl)
                 .likes(0) // 초기 좋아요 수는 0으로 설정
+                .loanAdviceResult(loanAdviceResult)
                 .build();
     }
 }

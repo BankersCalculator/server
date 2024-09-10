@@ -1,9 +1,11 @@
 package com.myZipPlan.server.community.domain;
 
+import com.myZipPlan.server.advice.loanAdvice.entity.LoanAdviceResult;
 import com.myZipPlan.server.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,8 +46,13 @@ public class Post {
     @Column(name = "likes", nullable = false)
     private int likes;
 
+    // LoanAdviceResult 연관 관계 추가.
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "loan_advice_result_id")
+    private LoanAdviceResult loanAdviceResult;
+
     @Builder
-    public Post(String title, String content, User user, String imageUrl, int likes) {
+    public Post(String title, String content, User user, String imageUrl, int likes, LoanAdviceResult loanAdviceResult) {
         this.title = title;
         this.content = content;
         this.user = user;
@@ -53,5 +60,23 @@ public class Post {
         this.LastModifiedDate = LocalDateTime.now();
         this.imageUrl = imageUrl;
         this.likes = likes;
+        this.loanAdviceResult = loanAdviceResult;
+    }
+
+    // LoanAdviceResult에서 필요한 필드 가져오기
+    public String getLoanProductName() {
+        return loanAdviceResult != null ? loanAdviceResult.getLoanProductName() : null;
+    }
+
+    public BigDecimal getPossibleLoanLimit() {
+        return loanAdviceResult != null ? loanAdviceResult.getPossibleLoanLimit() : null;
+    }
+
+    public String getLoanProductCode() {
+        return loanAdviceResult != null ? loanAdviceResult.getLoanProductCode() : null;
+    }
+
+    public BigDecimal getExpectedLoanRate() {
+        return loanAdviceResult != null ? loanAdviceResult.getExpectedLoanRate() : null;
     }
 }

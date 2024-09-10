@@ -39,7 +39,7 @@ public class CommentApiDocsTest extends RestDocsSupport {
     @Test
     @DisplayName("댓글 작성 API 문서화 테스트")
     void addComment() throws Exception {
-        CommentCreateRequest request = new CommentCreateRequest();
+        CommentCreateRequest request = new  CommentCreateRequest();
         request.setContent("댓글 내용");
 
         // Create mock User using factory method
@@ -170,34 +170,6 @@ public class CommentApiDocsTest extends RestDocsSupport {
                         preprocessResponse(prettyPrint()),
                         requestFields(
                                 fieldWithPath("userId").type(JsonFieldType.NUMBER).description("좋아요 취소를 한 사용자 ID")
-                        )
-                ));
-    }
-
-    @Test
-    @DisplayName("대댓글 작성 API 문서화 테스트")
-    void addReply() throws Exception {
-        CommentReplyCreateRequest request = new CommentReplyCreateRequest( "대댓글 내용");
-
-        when(commentService.addReply(1L, request)).thenReturn(null);
-
-        mockMvc.perform(post(BASE_URL + "/1/reply")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"userId\":1,\"content\":\"대댓글 내용\"}"))
-                .andExpect(status().isOk())
-                .andDo(document("comment-reply-add",
-                        preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint()),
-                        requestFields(
-                                fieldWithPath("userId").type(JsonFieldType.NUMBER).description("대댓글 작성자 ID"),
-                                fieldWithPath("content").type(JsonFieldType.STRING).description("대댓글 내용")
-                        ),
-                        responseFields(
-                                fieldWithPath("id").type(JsonFieldType.NUMBER).description("댓글 ID"),
-                                fieldWithPath("content").type(JsonFieldType.STRING).description("대댓글 내용"),
-                                fieldWithPath("userId").type(JsonFieldType.NUMBER).description("작성자 ID"),
-                                fieldWithPath("createdDate").type(JsonFieldType.STRING).description("작성일"),
-                                fieldWithPath("lastModifiedDate").type(JsonFieldType.STRING).description("수정일")
                         )
                 ));
     }

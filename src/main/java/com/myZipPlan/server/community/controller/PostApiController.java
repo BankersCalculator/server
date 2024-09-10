@@ -1,5 +1,7 @@
 package com.myZipPlan.server.community.controller;
 
+import com.myZipPlan.server.advice.loanAdvice.entity.LoanAdviceResult;
+import com.myZipPlan.server.advice.loanAdvice.repository.LoanAdviceResultRepository;
 import com.myZipPlan.server.common.api.ApiResponse;
 import com.myZipPlan.server.community.domain.Post;
 import com.myZipPlan.server.community.dto.post.request.PostCreateRequest;
@@ -19,13 +21,18 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PostApiController {
     private final PostService postService;
+    private final LoanAdviceResultRepository loanAdviceResultRepository;
+
     // 게시글 작성
     @PostMapping
     public ApiResponse<PostResponse> addPost(@RequestBody PostCreateRequest postCreateRequest) throws IOException {
         //security session에 있는 oauthProviderId GET
         String oauthProviderId = SecurityUtils.getProviderId();
         Post post = postService.addPost(postCreateRequest, oauthProviderId);
-        PostResponse postResponse = PostResponse.fromEntity(post);
+        LoanAdviceResult loanAdviceResult = loanAdviceResultRepository.findById(postCreateRequest.getLoanAdviceResultId())
+                .orElseThrow(() -> new IllegalArgumentException("LoanAdviceResult를 찾을 수 없습니다."));
+
+        PostResponse postResponse = PostResponse.fromEntity(post, loanAdviceResult);
         return ApiResponse.ok(postResponse);
     }
 
@@ -55,6 +62,7 @@ public class PostApiController {
     public ApiResponse<PostResponse> updatePost(@PathVariable Long postId, @RequestBody PostUpdateRequest updatePostRequest) throws IOException {
         String oauthProviderId = SecurityUtils.getProviderId();
         Post updatedPost = postService.updatePost(oauthProviderId, postId, updatePostRequest);
+        LoanAdviceResult loanAdviceReport =
         PostResponse postResponse = PostResponse.fromEntity(updatedPost);
         return ApiResponse.ok(postResponse);
     }

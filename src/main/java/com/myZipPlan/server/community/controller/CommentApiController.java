@@ -51,13 +51,4 @@ public class CommentApiController {
         commentService.unlikeComment(oauthProviderId, commentId);
         return ApiResponse.ok(null);
     }
-
-    // 대댓글 작성
-    @PostMapping("/{parentCommentId}/reply")
-    public ApiResponse<CommentResponse> addReply(@PathVariable Long parentCommentId, @RequestBody CommentReplyCreateRequest commentReplyCreateRequest) {
-        String oauthProviderId = SecurityUtils.getProviderId();
-        Comment reply = commentService.addReply(oauthProviderId, parentCommentId, commentReplyCreateRequest);
-        CommentResponse commentResponse = CommentResponse.fromEntity(reply);
-        return ApiResponse.ok(commentResponse);
-    }
 }

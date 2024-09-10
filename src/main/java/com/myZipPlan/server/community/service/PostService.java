@@ -1,5 +1,7 @@
 package com.myZipPlan.server.community.service;
 
+import com.myZipPlan.server.advice.loanAdvice.entity.LoanAdviceResult;
+import com.myZipPlan.server.advice.loanAdvice.repository.LoanAdviceResultRepository;
 import com.myZipPlan.server.community.domain.Post;
 import com.myZipPlan.server.community.domain.PostLike;
 import com.myZipPlan.server.community.dto.post.request.PostCreateRequest;
@@ -28,21 +30,28 @@ public class PostService {
     private final UserRepository userRepository;
     private final S3Service s3Service;
     private final PostLikeRepository postLikeRepository;
+    private final LoanAdviceResultRepository loanAdviceResultRepository;
 
+    @Transactional
     public Post addPost(PostCreateRequest postCreateRequest, String oauthProviderId) throws IOException {
-        // security session 통해
+        // security session 통해 사용자 조회
         User user = userRepository.findByOauthProviderId(oauthProviderId)
                 .orElseThrow(() -> new IllegalArgumentException("세션에 연결된 oauthProviderId를 찾을 수 없습니다."));
 
         // 이미지 파일 업로드 후 URL 획득
         String imageUrl = null;
-
         if (postCreateRequest.getImageFile() != null && !postCreateRequest.getImageFile().isEmpty()) {
             imageUrl = s3Service.uploadFile(postCreateRequest.getImageFile());
         }
 
-        // AddPostRequest를 이용해 Post 엔티티 생성
-        Post post = postCreateRequest.toEntity(user, imageUrl);
+        // loanAdviceResultId를 이용해 LoanAdviceResult 조회
+        LoanAdviceResult loanAdviceResult = loanAdviceResultRepository.findById(postCreateRequest.getLoanAdviceResultId())
+                .orElseThrow(() -> new IllegalArgumentException("LoanAdviceResult를 찾을 수 없습니다."));
+
+        // Post 엔티티 생성
+        Post post = postCreateRequest.toEntity(user, imageUrl, loanAdviceResult);
+
+        // 저장
         return postRepository.save(post);
     }
 
