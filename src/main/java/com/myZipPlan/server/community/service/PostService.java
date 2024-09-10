@@ -33,7 +33,7 @@ public class PostService {
     private final LoanAdviceResultRepository loanAdviceResultRepository;
 
     @Transactional
-    public Post addPost(PostCreateRequest postCreateRequest, String oauthProviderId) throws IOException {
+    public Post createPost(PostCreateRequest postCreateRequest, String oauthProviderId) throws IOException {
         // security session 통해 사용자 조회
         User user = userRepository.findByOauthProviderId(oauthProviderId)
                 .orElseThrow(() -> new IllegalArgumentException("세션에 연결된 oauthProviderId를 찾을 수 없습니다."));
@@ -48,10 +48,7 @@ public class PostService {
         LoanAdviceResult loanAdviceResult = loanAdviceResultRepository.findById(postCreateRequest.getLoanAdviceResultId())
                 .orElseThrow(() -> new IllegalArgumentException("LoanAdviceResult를 찾을 수 없습니다."));
 
-        // Post 엔티티 생성
         Post post = postCreateRequest.toEntity(user, imageUrl, loanAdviceResult);
-
-        // 저장
         return postRepository.save(post);
     }
 
@@ -59,7 +56,10 @@ public class PostService {
     public List<PostResponse> getAllPosts() {
         List<Post> posts = postRepository.findAll();
         return posts.stream()
-                .map(PostResponse::fromEntity)  // Post 엔티티를 PostResponse로 변환
+                .map(post -> {
+                    LoanAdviceResult loanAdviceResult = post.getLoanAdviceResult();
+                    return PostResponse.fromEntity(post, loanAdviceResult);
+                })
                 .collect(Collectors.toList());
     }
 
@@ -67,34 +67,37 @@ public class PostService {
     @Transactional
     public PostResponse getPostById(Long id) {
         Post post = postRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Post not found"));
-        return PostResponse.fromEntity(post);
+                .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다."));
+        LoanAdviceResult loanAdviceResult = post.getLoanAdviceResult();
+        return PostResponse.fromEntity(post, loanAdviceResult);
     }
 
     // 게시글 수정
     @Transactional
-    public Post updatePost(String oauthProviderId, Long postId, PostUpdateRequest updatePostRequest) throws IOException  {
+    public Post updatePost(String oauthProviderId, Long postId, PostUpdateRequest postUpdateRequest) throws IOException  {
         User user = userRepository.findByOauthProviderId(oauthProviderId)
-                .orElseThrow(() -> new IllegalArgumentException("세션에 연결된 oauthProviderId를 찾을 수 없습니다."));
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
 
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다."));
 
         if (!post.getUser().getOauthProviderId().equals(user.getOauthProviderId())) {
-            throw new IllegalArgumentException("해당 글 작성자만 수정이 할 수 있습니다.");
+            throw new IllegalArgumentException("해당 게시글 작성자가 아닙니다.");
         }
 
-        // 이미지 파일이 새로 업로드되면 이미지 URL 업데이트
-        String imageUrl = post.getImageUrl();  // 기존 이미지 URL 유지
-        MultipartFile imageFile = updatePostRequest.getImageFile();
-        if (imageFile != null && !imageFile.isEmpty()) {
-            imageUrl = s3Service.uploadFile(imageFile);
+        String imageUrl = post.getImageUrl(); // 기존 이미지 URL
+        if (postUpdateRequest.getImageFile() != null && !postUpdateRequest.getImageFile().isEmpty()) {
+            imageUrl = s3Service.uploadFile(postUpdateRequest.getImageFile());
         }
 
-        post.setTitle(updatePostRequest.getTitle());
-        post.setContent(updatePostRequest.getContent());
-        post.setImageUrl(imageUrl);
-        post.setLastModifiedDate(LocalDateTime.now()); // 업데이트 시 수정일 갱신
+        // LoanAdviceResult 업데이트 (있을 경우)
+        LoanAdviceResult loanAdviceResult = null;
+        if (postUpdateRequest.getLoanAdviceResultId() != null) {
+            loanAdviceResult = loanAdviceResultRepository.findById(postUpdateRequest.getLoanAdviceResultId())
+                    .orElseThrow(() -> new IllegalArgumentException("LoanAdviceResult를 찾을 수 없습니다."));
+        }
+
+        postUpdateRequest.updatePost(post, loanAdviceResult, imageUrl);
         return postRepository.save(post);
     }
 
@@ -152,16 +155,22 @@ public class PostService {
 
     // 게시글조회(정렬)
     public List<PostResponse> getPostsBySortType(PostSortType sortType) {
+        List<Post> posts;
+
         if (sortType == PostSortType.LATEST) {
-            return postRepository.findAllByOrderByCreatedDateDesc()
-                    .stream().map(PostResponse::fromEntity)
-                    .collect(Collectors.toList());
+            posts = postRepository.findAllByOrderByCreatedDateDesc();
         } else if (sortType == PostSortType.POPULAR) {
-            return postRepository.findAllByOrderByLikesDesc()
-                    .stream().map(PostResponse::fromEntity)
-                    .collect(Collectors.toList());
+            posts = postRepository.findAllByOrderByLikesDesc();
+        } else {
+            return Collections.emptyList(); // 알 수 없는 정렬 조건일 경우 빈 리스트 반환
         }
-        return Collections.emptyList();
+
+        return posts.stream()
+                .map(post -> {
+                    LoanAdviceResult loanAdviceResult = post.getLoanAdviceResult();
+                    return PostResponse.fromEntity(post, loanAdviceResult);
+                })
+                .collect(Collectors.toList());
     }
 }
 

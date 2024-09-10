@@ -37,7 +37,7 @@ public class PostApiDocsTest extends RestDocsSupport {
         request.setTitle("게시글 제목");
         request.setContent("게시글 내용");
 
-        when(postService.addPost(request, "oauthProviderId")).thenReturn(null);
+        when(postService.createPost(request, "oauthProviderId")).thenReturn(null);
 
         mockMvc.perform(post(BASE_URL + "?userId=1")
                         .contentType(MediaType.APPLICATION_JSON)
