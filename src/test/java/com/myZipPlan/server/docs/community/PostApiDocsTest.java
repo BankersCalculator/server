@@ -87,7 +87,7 @@ public class PostApiDocsTest extends RestDocsSupport {
                         )
                 ));
     }
-    /*
+
     @DisplayName("게시글 상세 조회 API")
     @Test
     void getPostById() throws Exception {
@@ -125,10 +125,18 @@ public class PostApiDocsTest extends RestDocsSupport {
                                 fieldWithPath("data.title").type(JsonFieldType.STRING).description("제목"),
                                 fieldWithPath("data.content").type(JsonFieldType.STRING).description("내용"),
                                 fieldWithPath("data.author").type(JsonFieldType.STRING).description("작성자"),
-                                fieldWithPath("data.likes").type(JsonFieldType.NUMBER).description("좋아요 수")
+                                fieldWithPath("data.likes").type(JsonFieldType.NUMBER).description("좋아요 수"),
+                                fieldWithPath("data.imageUrl").type(JsonFieldType.STRING).description("이미지 URL").optional(),
+                                fieldWithPath("data.comments").type(JsonFieldType.ARRAY).description("댓글 목록").optional(),
+                                fieldWithPath("data.createdDate").type(JsonFieldType.STRING).description("작성일자").optional(),
+                                fieldWithPath("data.lastModifiedDate").type(JsonFieldType.STRING).description("수정일자").optional(),
+                                fieldWithPath("data.avatarUrl").type(JsonFieldType.STRING).description("작성자 아바타 URL").optional(),
+                                fieldWithPath("data.timeAgo").type(JsonFieldType.STRING).description("얼마 전에 작성되었는지").optional(),
+                                fieldWithPath("data.loanAdviceResult").type(JsonFieldType.OBJECT).description("대출 상담 결과").optional()
                         )
                 ));
     }
+    /*
 
     @DisplayName("게시글 생성 API")
     @Test
