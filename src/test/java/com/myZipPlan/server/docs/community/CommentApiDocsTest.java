@@ -146,7 +146,7 @@ public class CommentApiDocsTest extends RestDocsSupport {
     @Test
     @DisplayName("댓글 좋아요 API 문서화 테스트")
     void likeComment() throws Exception {
-        LikeCommentRequest request = new LikeCommentRequest(1L);
+
 
         mockMvc.perform(post(BASE_URL + "/1/like")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -164,9 +164,7 @@ public class CommentApiDocsTest extends RestDocsSupport {
     @Test
     @DisplayName("댓글 좋아요 취소 API 문서화 테스트")
     void unlikeComment() throws Exception {
-        LikeCommentRequest request = new LikeCommentRequest(1L);
-
-        mockMvc.perform(post(BASE_URL + "/1/unlike")
+         mockMvc.perform(post(BASE_URL + "/1/unlike")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"userId\":1}"))
                 .andExpect(status().isOk())

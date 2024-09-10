@@ -39,14 +39,16 @@ public class CommentApiController {
     }
 
     @PostMapping("/{commentId}/like")
-    public ApiResponse<Void> likeComment(@PathVariable Long commentId, @RequestBody LikeCommentRequest likeCommentRequest) {
-        commentService.likeComment(commentId, likeCommentRequest.getUserId());
+    public ApiResponse<Void> likeComment(@PathVariable Long commentId) {
+        String oauthProviderId = SecurityUtils.getProviderId();
+        commentService.likeComment(oauthProviderId, commentId);
         return ApiResponse.ok(null);
     }
 
     @PostMapping("/{commentId}/unlike")
-    public ApiResponse<Void> unlikeComment(@PathVariable Long commentId, @RequestBody LikeCommentRequest likeCommentRequest) {
-        commentService.unlikeComment(commentId, likeCommentRequest.getUserId());
+    public ApiResponse<Void> unlikeComment(@PathVariable Long commentId) {
+        String oauthProviderId = SecurityUtils.getProviderId();
+        commentService.unlikeComment(oauthProviderId, commentId);
         return ApiResponse.ok(null);
     }
 

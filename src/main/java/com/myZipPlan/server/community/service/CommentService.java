@@ -1,11 +1,13 @@
 package com.myZipPlan.server.community.service;
 
 import com.myZipPlan.server.community.domain.Comment;
+import com.myZipPlan.server.community.domain.CommentLike;
 import com.myZipPlan.server.community.domain.Post;
 import com.myZipPlan.server.community.dto.comment.AddCommentRequest;
 import com.myZipPlan.server.community.dto.comment.AddReplyRequest;
 import com.myZipPlan.server.community.dto.comment.CommentResponse;
 import com.myZipPlan.server.community.dto.comment.UpdateCommentRequest;
+import com.myZipPlan.server.community.repository.CommentLikeRepository;
 import com.myZipPlan.server.community.repository.CommentRepository;
 import com.myZipPlan.server.community.repository.PostRepository;
 import com.myZipPlan.server.user.entity.User;
@@ -22,6 +24,7 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final PostRepository postRepository;
     private final UserRepository userRepository;
+    private final CommentLikeRepository commentLikeRepository;
 
     // 댓글 작성
     public CommentResponse addComment(String oauthProviderId, Long postId, AddCommentRequest addCommentRequest) {
@@ -68,23 +71,40 @@ public class CommentService {
         commentRepository.delete(comment);
     }
 
-    // 댓글 좋아요
     @Transactional
-    public void likeComment(Long commentId, Long userId) {
+    public void likeComment(String oauthProviderId, Long commentId) {
+        User user = userRepository.findByOauthProviderId(oauthProviderId)
+                .orElseThrow(() -> new IllegalArgumentException("세션에 연결된 oauthProviderId를 찾을 수 없습니다."));
         Comment comment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new IllegalArgumentException("Comment not found"));
-        // 좋아요 처리 로직 (예: 좋아요 수 증가 등)
-        comment.setLikes(comment.getLikes() + 1);
+                .orElseThrow(() -> new IllegalArgumentException("댓글을 찾을 수 없습니다."));
+
+        // 이미 좋아요를 눌렀는지 확인
+        boolean alreadyLiked = commentLikeRepository.findByCommentAndUser(comment, user).isPresent();
+        if (alreadyLiked) {
+            throw new IllegalArgumentException("이미 좋아요를 누른 댓글입니다.");
+        }
+
+        // 좋아요 추가
+        commentLikeRepository.save(new CommentLike(comment, user));
+        comment.setLikes(comment.getLikes() + 1);  // 좋아요 수 증가
         commentRepository.save(comment);
     }
 
-    // 댓글 좋아요 취소
+
     @Transactional
-    public void unlikeComment(Long commentId, Long userId) {
+    public void unlikeComment(String oauthProviderId, Long commentId) {
+        User user = userRepository.findByOauthProviderId(oauthProviderId)
+                .orElseThrow(() -> new IllegalArgumentException("세션에 연결된 oauthProviderId를 찾을 수 없습니다."));
         Comment comment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new IllegalArgumentException("Comment not found"));
-        // 좋아요 취소 처리 로직 (예: 좋아요 수 감소 등)
-        comment.setLikes(comment.getLikes() - 1);
+                .orElseThrow(() -> new IllegalArgumentException("댓글을 찾을 수 없습니다."));
+
+        // 좋아요를 누른 기록이 있는지 확인
+        CommentLike commentLike = commentLikeRepository.findByCommentAndUser(comment, user)
+                .orElseThrow(() -> new IllegalArgumentException("해당 댓글에 좋아요를 누르지 않았습니다."));
+
+        // 좋아요 제거
+        commentLikeRepository.delete(commentLike);
+        comment.setLikes(comment.getLikes() - 1);  // 좋아요 수 감소
         commentRepository.save(comment);
     }
 
