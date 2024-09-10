@@ -1,7 +1,10 @@
 package com.myZipPlan.server.docs.community;
 
 import com.myZipPlan.server.RestDocsSupport;
+import com.myZipPlan.server.advice.loanAdvice.entity.LoanAdviceResult;
 import com.myZipPlan.server.advice.loanAdvice.repository.LoanAdviceResultRepository;
+import com.myZipPlan.server.advice.userInputInfo.entity.UserInputInfo;
+import com.myZipPlan.server.common.enums.RoleType;
 import com.myZipPlan.server.community.controller.PostApiController;
 import com.myZipPlan.server.common.enums.community.PostSortType;
 import com.myZipPlan.server.community.domain.Post;
@@ -10,11 +13,17 @@ import com.myZipPlan.server.community.dto.post.request.PostSortRequest;
 import com.myZipPlan.server.community.dto.post.request.PostUpdateRequest;
 import com.myZipPlan.server.community.dto.post.response.PostResponse;
 import com.myZipPlan.server.community.service.PostService;
+import com.myZipPlan.server.oauth.userInfo.SecurityUtils;
+import com.myZipPlan.server.user.entity.User;
+import com.myZipPlan.server.user.repository.UserRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.security.test.context.support.WithMockUser;
 
+import java.math.BigDecimal;
 import java.util.Collections;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -35,7 +44,7 @@ public class PostApiDocsTest extends RestDocsSupport {
     private static final String BASE_URL = "/api/v1/post";
     private final PostService postService = mock(PostService.class);
     private final LoanAdviceResultRepository loanAdviceResultRepository = mock(LoanAdviceResultRepository.class);
-
+    private final UserRepository userRepository = mock(UserRepository.class);
     @Override
     protected Object initController() {
         return new PostApiController(postService, loanAdviceResultRepository);
@@ -136,30 +145,46 @@ public class PostApiDocsTest extends RestDocsSupport {
                         )
                 ));
     }
-    /*
+
 
     @DisplayName("게시글 생성 API")
     @Test
     void createPost() throws Exception {
+        String mockProviderId = "test-provider-id";
+        Mockito.mockStatic(SecurityUtils.class).when(SecurityUtils::getProviderId).thenReturn(mockProviderId);
+
+        // Mock PostCreateRequest 객체 생성
         PostCreateRequest request = new PostCreateRequest();
         request.setTitle("New Title");
         request.setContent("New Content");
+        request.setLoanAdviceResultId(1L);
 
-        PostResponse response = PostResponse.builder()
-                .id(1L)
-                .title("New Title")
-                .content("New Content")
-                .author("New Author")
+        User user = User.create("google", "test-oauth-id", "test@example.com", RoleType.USER);
+
+
+
+
+
+
+        // Mock Post 엔티티 생성 (빌더 패턴을 사용하여 불변성 유지)
+        Post post = Post.builder()
+                .title(request.getTitle())
+                .content(request.getContent())
+                .imageUrl("http://test-image-url.com")
                 .likes(0)
+                .loanAdviceResult(loanAdviceResult)  // LoanAdviceResult 객체 빌더 사용
+                .user(user)  // User 객체 빌더 사용
                 .build();
 
-        when(postService.createPost(any(), any()))
-                .thenReturn(new Post());
+        // Mock 서비스 호출 결과 설정
+        when(postService.createPost(any(PostCreateRequest.class), any(String.class)))
+                .thenReturn(post);
 
         mockMvc.perform(multipart(BASE_URL)
                         .file("imageFile", "test image".getBytes())
                         .param("title", "New Title")
                         .param("content", "New Content")
+                        .param("loanAdviceResultId", "1")
                         .header("AccessToken", "액세스 토큰")
                         .contentType(MediaType.MULTIPART_FORM_DATA)
                         .accept(MediaType.APPLICATION_JSON))
@@ -171,9 +196,11 @@ public class PostApiDocsTest extends RestDocsSupport {
                         requestHeaders(
                                 headerWithName("AccessToken").description("액세스 토큰")
                         ),
-                        requestParameters(
-                                parameterWithName("title").description("게시글 제목"),
-                                parameterWithName("content").description("게시글 내용")
+                        requestParts(
+                                partWithName("imageFile").description("업로드할 이미지 파일").optional(),
+                                partWithName("title").description("게시글 제목"),
+                                partWithName("content").description("게시글 내용"),
+                                partWithName("loanAdviceResultId").description("대출 상담 결과 ID")
                         ),
                         responseFields(
                                 fieldWithPath("code").type(JsonFieldType.NUMBER).description("응답 코드"),
@@ -183,11 +210,23 @@ public class PostApiDocsTest extends RestDocsSupport {
                                 fieldWithPath("data.title").type(JsonFieldType.STRING).description("제목"),
                                 fieldWithPath("data.content").type(JsonFieldType.STRING).description("내용"),
                                 fieldWithPath("data.author").type(JsonFieldType.STRING).description("작성자"),
-                                fieldWithPath("data.likes").type(JsonFieldType.NUMBER).description("좋아요 수")
+                                fieldWithPath("data.likes").type(JsonFieldType.NUMBER).description("좋아요 수"),
+                                fieldWithPath("data.imageUrl").type(JsonFieldType.STRING).description("이미지 URL").optional(),
+                                fieldWithPath("data.comments").type(JsonFieldType.ARRAY).description("댓글 목록").optional(),
+                                fieldWithPath("data.createdDate").type(JsonFieldType.STRING).description("작성일자").optional(),
+                                fieldWithPath("data.lastModifiedDate").type(JsonFieldType.STRING).description("수정일자").optional(),
+                                fieldWithPath("data.avatarUrl").type(JsonFieldType.STRING).description("작성자 아바타 URL").optional(),
+                                fieldWithPath("data.timeAgo").type(JsonFieldType.STRING).description("얼마 전에 작성되었는지").optional(),
+                                fieldWithPath("data.loanAdviceResult").type(JsonFieldType.OBJECT).description("대출 상담 결과").optional()
                         )
                 ));
     }
 
+
+
+
+
+    /*
     @DisplayName("게시글 수정 API")
     @Test
     void updatePost() throws Exception {
@@ -280,36 +319,44 @@ public class PostApiDocsTest extends RestDocsSupport {
                 .build();
 
         when(postService.getPostsBySortType(any()))
-                .thenReturn(Collections.singletonList(response));
+            .thenReturn(Collections.singletonList(response));
 
         mockMvc.perform(get(BASE_URL + "/sorted")
-                        .param("sortType", "POPULAR")  // 정렬 타입: LATEST, POPULAR
-                        .header("AccessToken", "액세스 토큰")
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andDo(print())
-                .andDo(document("post/get-sorted-posts",
-                        preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint()),
-                        requestHeaders(
-                                headerWithName("AccessToken").description("액세스 토큰")
-                        ),
-                        queryParameters(
-                                parameterWithName("sortType").description("정렬 타입: LATEST(최신순), POPULAR(인기순)")
-                        ),
-                        responseFields(
-                                fieldWithPath("code").type(JsonFieldType.NUMBER).description("응답 코드"),
-                                fieldWithPath("status").type(JsonFieldType.STRING).description("응답 상태"),
-                                fieldWithPath("message").type(JsonFieldType.STRING).description("응답 메시지"),
-                                fieldWithPath("data").type(JsonFieldType.ARRAY).description("게시글 목록"),
-                                fieldWithPath("data[].id").type(JsonFieldType.NUMBER).description("게시글 ID"),
-                                fieldWithPath("data[].title").type(JsonFieldType.STRING).description("게시글 제목"),
-                                fieldWithPath("data[].content").type(JsonFieldType.STRING).description("게시글 내용"),
-                                fieldWithPath("data[].author").type(JsonFieldType.STRING).description("작성자"),
-                                fieldWithPath("data[].likes").type(JsonFieldType.NUMBER).description("좋아요 수")
-                        )
-                ));
+                .param("sortType", "POPULAR")  // 정렬 타입: LATEST, POPULAR
+                .header("AccessToken", "액세스 토큰")
+                .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andDo(print())
+            .andDo(document("post/get-sorted-posts",
+                preprocessRequest(prettyPrint()),
+                preprocessResponse(prettyPrint()),
+                requestHeaders(
+                    headerWithName("AccessToken").description("액세스 토큰")
+                ),
+                queryParameters(
+                    parameterWithName("sortType").description("정렬 타입: LATEST(최신순), POPULAR(인기순)")
+                ),
+                responseFields(
+                    fieldWithPath("code").type(JsonFieldType.NUMBER).description("응답 코드"),
+                    fieldWithPath("status").type(JsonFieldType.STRING).description("응답 상태"),
+                    fieldWithPath("message").type(JsonFieldType.STRING).description("응답 메시지"),
+                    fieldWithPath("data").type(JsonFieldType.ARRAY).description("게시글 목록"),
+                    fieldWithPath("data[].id").type(JsonFieldType.NUMBER).description("게시글 ID"),
+                    fieldWithPath("data[].title").type(JsonFieldType.STRING).description("게시글 제목"),
+                    fieldWithPath("data[].content").type(JsonFieldType.STRING).description("게시글 내용"),
+                    fieldWithPath("data[].author").type(JsonFieldType.STRING).description("작성자"),
+                    fieldWithPath("data[].likes").type(JsonFieldType.NUMBER).description("좋아요 수"),
+                    fieldWithPath("data[].imageUrl").type(JsonFieldType.STRING).description("이미지 URL").optional(),
+                    fieldWithPath("data[].comments").type(JsonFieldType.ARRAY).description("댓글 목록").optional(),
+                    fieldWithPath("data[].createdDate").type(JsonFieldType.STRING).description("작성일자").optional(),
+                    fieldWithPath("data[].lastModifiedDate").type(JsonFieldType.STRING).description("수정일자").optional(),
+                    fieldWithPath("data[].avatarUrl").type(JsonFieldType.STRING).description("작성자 아바타 URL").optional(),
+                    fieldWithPath("data[].timeAgo").type(JsonFieldType.STRING).description("얼마 전에 작성되었는지").optional(),
+                    fieldWithPath("data[].loanAdviceResult").type(JsonFieldType.OBJECT).description("대출 상담 결과").optional()
+                )
+            ));
     }
+
 
     @DisplayName("게시글 좋아요 API")
     @Test
