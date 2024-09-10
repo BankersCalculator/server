@@ -2,10 +2,9 @@ package com.myZipPlan.server.community.controller;
 
 import com.myZipPlan.server.common.api.ApiResponse;
 import com.myZipPlan.server.community.domain.Post;
-import com.myZipPlan.server.community.dto.post.request.LikePostRequest;
 import com.myZipPlan.server.community.dto.post.request.PostCreateRequest;
 import com.myZipPlan.server.community.dto.post.request.PostSortRequest;
-import com.myZipPlan.server.community.dto.post.request.UpdatePostRequest;
+import com.myZipPlan.server.community.dto.post.request.PostUpdateRequest;
 import com.myZipPlan.server.community.dto.post.response.PostResponse;
 import com.myZipPlan.server.community.service.PostService;
 import com.myZipPlan.server.oauth.userInfo.SecurityUtils;
@@ -53,7 +52,7 @@ public class PostApiController {
 
     // 게시글 수정
     @PutMapping("/{postId}")
-    public ApiResponse<PostResponse> updatePost(@PathVariable Long postId, @RequestBody UpdatePostRequest updatePostRequest) throws IOException {
+    public ApiResponse<PostResponse> updatePost(@PathVariable Long postId, @RequestBody PostUpdateRequest updatePostRequest) throws IOException {
         String oauthProviderId = SecurityUtils.getProviderId();
         Post updatedPost = postService.updatePost(oauthProviderId, postId, updatePostRequest);
         PostResponse postResponse = PostResponse.fromEntity(updatedPost);

@@ -39,8 +39,7 @@ public class CommentApiDocsTest extends RestDocsSupport {
     @Test
     @DisplayName("댓글 작성 API 문서화 테스트")
     void addComment() throws Exception {
-        AddCommentRequest request = new AddCommentRequest();
-        request.setUserId(1L);
+        CommentCreateRequest request = new CommentCreateRequest();
         request.setContent("댓글 내용");
 
         // Create mock User using factory method
@@ -63,7 +62,7 @@ public class CommentApiDocsTest extends RestDocsSupport {
         mockComment.setCreatedDate(LocalDateTime.now());
         mockComment.setLastModifiedDate(LocalDateTime.now());
 
-        when(commentService.addComment(1L, request)).thenReturn(CommentResponse.fromEntity(mockComment));
+        when(commentService.addComment("oauthProviderID", 1L, request )).thenReturn(CommentResponse.fromEntity(mockComment));
 
         mockMvc.perform(post(BASE_URL + "/1")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -97,7 +96,7 @@ public class CommentApiDocsTest extends RestDocsSupport {
     @Test
     @DisplayName("댓글 수정 API 문서화 테스트")
     void updateComment() throws Exception {
-        UpdateCommentRequest request = new UpdateCommentRequest();
+        CommentUpdateRequest request = new CommentUpdateRequest();
         request.setUpdatedContent("수정된 댓글 내용");
         when(commentService.updateComment("oauthPrividerId",1L, request)).thenReturn(null);
 
@@ -125,8 +124,6 @@ public class CommentApiDocsTest extends RestDocsSupport {
     @Test
     @DisplayName("댓글 삭제 API 문서화 테스트")
     void deleteComment() throws Exception {
-        DeleteCommentRequest request = new DeleteCommentRequest(1L);
-
         mockMvc.perform(delete(BASE_URL + "/{commentId}", 1L)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"userId\": 1}"))
@@ -180,7 +177,7 @@ public class CommentApiDocsTest extends RestDocsSupport {
     @Test
     @DisplayName("대댓글 작성 API 문서화 테스트")
     void addReply() throws Exception {
-        AddReplyRequest request = new AddReplyRequest(1L, "대댓글 내용");
+        CommentReplyCreateRequest request = new CommentReplyCreateRequest( "대댓글 내용");
 
         when(commentService.addReply(1L, request)).thenReturn(null);
 

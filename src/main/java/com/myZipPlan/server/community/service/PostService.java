@@ -4,7 +4,7 @@ import com.myZipPlan.server.community.domain.Post;
 import com.myZipPlan.server.community.domain.PostLike;
 import com.myZipPlan.server.community.dto.post.request.PostCreateRequest;
 import com.myZipPlan.server.community.dto.post.response.PostResponse;
-import com.myZipPlan.server.community.dto.post.request.UpdatePostRequest;
+import com.myZipPlan.server.community.dto.post.request.PostUpdateRequest;
 import com.myZipPlan.server.common.enums.community.PostSortType;
 import com.myZipPlan.server.community.repository.PostLikeRepository;
 import com.myZipPlan.server.community.repository.PostRepository;
@@ -64,7 +64,7 @@ public class PostService {
 
     // 게시글 수정
     @Transactional
-    public Post updatePost(String oauthProviderId, Long postId, UpdatePostRequest updatePostRequest) throws IOException  {
+    public Post updatePost(String oauthProviderId, Long postId, PostUpdateRequest updatePostRequest) throws IOException  {
         User user = userRepository.findByOauthProviderId(oauthProviderId)
                 .orElseThrow(() -> new IllegalArgumentException("세션에 연결된 oauthProviderId를 찾을 수 없습니다."));
 

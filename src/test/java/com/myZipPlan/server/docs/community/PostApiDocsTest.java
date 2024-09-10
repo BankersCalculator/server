@@ -3,10 +3,10 @@ package com.myZipPlan.server.docs.community;
 import com.myZipPlan.server.RestDocsSupport;
 import com.myZipPlan.server.community.controller.PostApiController;
 import com.myZipPlan.server.common.enums.community.PostSortType;
-import com.myZipPlan.server.community.dto.post.request.LikePostRequest;
+import com.myZipPlan.server.community.dto.post.request.PostLikeRequest;
 import com.myZipPlan.server.community.dto.post.request.PostCreateRequest;
 import com.myZipPlan.server.community.dto.post.request.PostSortRequest;
-import com.myZipPlan.server.community.dto.post.request.UpdatePostRequest;
+import com.myZipPlan.server.community.dto.post.request.PostUpdateRequest;
 import com.myZipPlan.server.community.service.PostService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -65,7 +65,7 @@ public class PostApiDocsTest extends RestDocsSupport {
     @Test
     @DisplayName("게시글 수정 API 문서화 테스트")
     void updatePost() throws Exception {
-        UpdatePostRequest request = new UpdatePostRequest("제목", "내용", null);
+        PostUpdateRequest request = new PostUpdateRequest("제목", "내용", null);
         request.setTitle("수정된 제목");
         request.setContent("수정된 내용");
 
@@ -112,7 +112,7 @@ public class PostApiDocsTest extends RestDocsSupport {
     @Test
     @DisplayName("게시글 좋아요 API 문서화 테스트")
     void likePost() throws Exception {
-        LikePostRequest request = new LikePostRequest(1L);
+        PostLikeRequest request = new PostLikeRequest(1L);
 
         mockMvc.perform(post(BASE_URL + "/1/like")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -130,7 +130,7 @@ public class PostApiDocsTest extends RestDocsSupport {
     @Test
     @DisplayName("게시글 좋아요 취소 API 문서화 테스트")
     void unlikePost() throws Exception {
-        LikePostRequest request = new LikePostRequest(1L);
+        PostLikeRequest request = new PostLikeRequest(1L);
 
         mockMvc.perform(post(BASE_URL + "/1/unlike")
                         .contentType(MediaType.APPLICATION_JSON)

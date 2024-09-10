@@ -7,10 +7,10 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class LikePostRequest {
+public class PostLikeRequest {
     private Long userId;  // 게시글에 좋아요를 누른 사용자 ID
 
-    public LikePostRequest(Long userId) {
+    public PostLikeRequest(Long userId) {
         this.userId = userId;
     }
 }

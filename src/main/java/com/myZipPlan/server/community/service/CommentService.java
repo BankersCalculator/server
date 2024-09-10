@@ -3,10 +3,10 @@ package com.myZipPlan.server.community.service;
 import com.myZipPlan.server.community.domain.Comment;
 import com.myZipPlan.server.community.domain.CommentLike;
 import com.myZipPlan.server.community.domain.Post;
-import com.myZipPlan.server.community.dto.comment.AddCommentRequest;
-import com.myZipPlan.server.community.dto.comment.AddReplyRequest;
+import com.myZipPlan.server.community.dto.comment.CommentCreateRequest;
+import com.myZipPlan.server.community.dto.comment.CommentReplyCreateRequest;
 import com.myZipPlan.server.community.dto.comment.CommentResponse;
-import com.myZipPlan.server.community.dto.comment.UpdateCommentRequest;
+import com.myZipPlan.server.community.dto.comment.CommentUpdateRequest;
 import com.myZipPlan.server.community.repository.CommentLikeRepository;
 import com.myZipPlan.server.community.repository.CommentRepository;
 import com.myZipPlan.server.community.repository.PostRepository;
@@ -27,20 +27,20 @@ public class CommentService {
     private final CommentLikeRepository commentLikeRepository;
 
     // 댓글 작성
-    public CommentResponse addComment(String oauthProviderId, Long postId, AddCommentRequest addCommentRequest) {
+    public CommentResponse addComment(String oauthProviderId, Long postId, CommentCreateRequest commentCreateRequest) {
         User user = userRepository.findByOauthProviderId(oauthProviderId)
                 .orElseThrow(() -> new IllegalArgumentException("세션에 연결된 oauthProviderId를 찾을 수 없습니다."));
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다."));
 
-        Comment comment = new Comment(post, user, addCommentRequest.getContent());
+        Comment comment = new Comment(post, user, commentCreateRequest.getContent());
         comment = commentRepository.save(comment);
         return CommentResponse.fromEntity(comment);
     }
 
     // 댓글 수정
     @Transactional
-    public CommentResponse updateComment(String oauthProviderId, Long commentId, UpdateCommentRequest updateCommentRequest) {
+    public CommentResponse updateComment(String oauthProviderId, Long commentId, CommentUpdateRequest commentUpdateRequest) {
         User user = userRepository.findByOauthProviderId(oauthProviderId)
                 .orElseThrow(() -> new IllegalArgumentException("세션에 연결된 oauthProviderId를 찾을 수 없습니다."));
 
@@ -51,7 +51,7 @@ public class CommentService {
             throw new IllegalArgumentException("해당 글 작성자만 수정이 할 수 있습니다.");
         }
 
-        comment.setContent(updateCommentRequest.getUpdatedContent());
+        comment.setContent(commentUpdateRequest.getUpdatedContent());
         comment.setLastModifiedDate(LocalDateTime.now());
         return CommentResponse.fromEntity(comment);
     }
@@ -107,26 +107,4 @@ public class CommentService {
         comment.setLikes(comment.getLikes() - 1);  // 좋아요 수 감소
         commentRepository.save(comment);
     }
-
-    // 대댓글 작성
-    @Transactional
-    public Comment addReply(Long parentCommentId, AddReplyRequest addReplyRequest) {
-        Comment parentComment = commentRepository.findById(parentCommentId)
-                .orElseThrow(() -> new IllegalArgumentException("Parent comment not found"));
-
-        if (parentComment.getChildComment() != null) {
-            throw new IllegalStateException("This comment already has a reply.");
-        }
-
-        User user = userRepository.findById(addReplyRequest.getUserId())
-                .orElseThrow(() -> new IllegalArgumentException("User not found"));
-
-        Comment reply = new Comment(parentComment.getPost(), user, addReplyRequest.getContent());
-        reply.setParentComment(parentComment);
-        parentComment.setChildComment(reply);
-
-        return commentRepository.save(reply);
-    }
-
-
 }

@@ -16,17 +16,17 @@ public class CommentApiController {
 
     // 댓글 작성
     @PostMapping("/{postId}")
-    public ApiResponse<CommentResponse> addComment(@PathVariable Long postId, @RequestBody AddCommentRequest addCommentRequest) {
+    public ApiResponse<CommentResponse> addComment(@PathVariable Long postId, @RequestBody CommentCreateRequest commentCreateRequest) {
         String oauthProviderId = SecurityUtils.getProviderId();
-        CommentResponse commentResponse = commentService.addComment(oauthProviderId, postId, addCommentRequest);
+        CommentResponse commentResponse = commentService.addComment(oauthProviderId, postId, commentCreateRequest);
         return ApiResponse.ok(commentResponse);
     }
 
     // 댓글 수정
     @PutMapping("/{commentId}")
-    public ApiResponse<CommentResponse> updateComment(@PathVariable Long commentId, @RequestBody UpdateCommentRequest updateCommentRequest) {
+    public ApiResponse<CommentResponse> updateComment(@PathVariable Long commentId, @RequestBody CommentUpdateRequest commentUpdateRequest) {
         String oauthProviderId = SecurityUtils.getProviderId();
-        CommentResponse updatedComment = commentService.updateComment(oauthProviderId, commentId, updateCommentRequest);
+        CommentResponse updatedComment = commentService.updateComment(oauthProviderId, commentId, commentUpdateRequest);
         return ApiResponse.ok(updatedComment);
     }
 
@@ -54,8 +54,9 @@ public class CommentApiController {
 
     // 대댓글 작성
     @PostMapping("/{parentCommentId}/reply")
-    public ApiResponse<CommentResponse> addReply(@PathVariable Long parentCommentId, @RequestBody AddReplyRequest addReplyRequest) {
-        Comment reply = commentService.addReply(parentCommentId, addReplyRequest);
+    public ApiResponse<CommentResponse> addReply(@PathVariable Long parentCommentId, @RequestBody CommentReplyCreateRequest commentReplyCreateRequest) {
+        String oauthProviderId = SecurityUtils.getProviderId();
+        Comment reply = commentService.addReply(oauthProviderId, parentCommentId, commentReplyCreateRequest);
         CommentResponse commentResponse = CommentResponse.fromEntity(reply);
         return ApiResponse.ok(commentResponse);
     }

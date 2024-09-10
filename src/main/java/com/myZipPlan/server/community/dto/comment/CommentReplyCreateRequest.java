@@ -7,12 +7,10 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class AddReplyRequest {
-    private Long userId;    // 대댓글을 작성한 사용자 ID
+public class CommentReplyCreateRequest {
     private String content; // 대댓글 내용
 
-    public AddReplyRequest(Long userId, String content) {
-        this.userId = userId;
+    public CommentReplyCreateRequest(String content) {
         this.content = content;
     }
 }

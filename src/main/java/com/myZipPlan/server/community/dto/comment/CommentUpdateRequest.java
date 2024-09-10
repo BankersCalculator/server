@@ -5,6 +5,6 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class AddCommentRequest {
-    private String content;  // 댓글 내용
+public class CommentUpdateRequest {
+    private String updatedContent;  // 수정된 댓글 내용
 }
