@@ -193,41 +193,52 @@ public class CommentApiDocsTest extends RestDocsSupport {
     }
 
     @Test
-    @DisplayName("댓글 좋아요 API 문서화 테스트")
+    @DisplayName("댓글 좋아요 API")
     void likeComment() throws Exception {
+        doNothing().when(commentService).likeComment(any(String.class), anyLong());
 
         try (MockedStatic<SecurityUtils> mockedSecurityUtils = Mockito.mockStatic(SecurityUtils.class)) {
             mockedSecurityUtils.when(SecurityUtils::getProviderId).thenReturn("mockedProviderId");
-            mockMvc.perform(post(BASE_URL + "/1/like")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content("{\"userId\":1}"))
+
+            mockMvc.perform(RestDocumentationRequestBuilders.post("/api/v1/comment/{commentId}/like", 1L)
+                            .header("AccessToken", "액세스 토큰"))
                     .andExpect(status().isOk())
-                    .andDo(document("comment-like",
+                    .andDo(document("comment/like-comment",
                             preprocessRequest(prettyPrint()),
                             preprocessResponse(prettyPrint()),
-                            requestFields(
-                                    fieldWithPath("userId").type(JsonFieldType.NUMBER).description("좋아요를 누른 사용자 ID")
+                            requestHeaders(
+                                    headerWithName("AccessToken").description("액세스 토큰")
+                            ),
+                            pathParameters(
+                                    parameterWithName("commentId").description("댓글 ID")
                             )
                     ));
         }
     }
+
 
     @Test
-    @DisplayName("댓글 좋아요 취소 API 문서화 테스트")
+    @DisplayName("댓글 좋아요 취소 API")
     void unlikeComment() throws Exception {
+        doNothing().when(commentService).unlikeComment(any(String.class), anyLong());
+
         try (MockedStatic<SecurityUtils> mockedSecurityUtils = Mockito.mockStatic(SecurityUtils.class)) {
             mockedSecurityUtils.when(SecurityUtils::getProviderId).thenReturn("mockedProviderId");
-            mockMvc.perform(post(BASE_URL + "/1/unlike")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content("{\"userId\":1}"))
+
+            mockMvc.perform(RestDocumentationRequestBuilders.post("/api/v1/comment/{commentId}/unlike", 1L)
+                            .header("AccessToken", "액세스 토큰"))
                     .andExpect(status().isOk())
-                    .andDo(document("comment-unlike",
+                    .andDo(document("comment/unlike-comment",
                             preprocessRequest(prettyPrint()),
                             preprocessResponse(prettyPrint()),
-                            requestFields(
-                                    fieldWithPath("userId").type(JsonFieldType.NUMBER).description("좋아요 취소를 한 사용자 ID")
+                            requestHeaders(
+                                    headerWithName("AccessToken").description("액세스 토큰")
+                            ),
+                            pathParameters(
+                                    parameterWithName("commentId").description("댓글 ID")
                             )
                     ));
         }
     }
+
 }
