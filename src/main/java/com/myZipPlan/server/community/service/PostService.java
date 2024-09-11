@@ -76,19 +76,15 @@ public class PostService {
 
     @Transactional
     public PostResponse updatePost(String oauthProviderId, Long postId, PostUpdateRequest postUpdateRequest) throws IOException {
-        User user = userRepository.findByOauthProviderId(oauthProviderId)
-                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
-
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다."));
 
-        if (!post.getUser().getOauthProviderId().equals(user.getOauthProviderId())) {
-            throw new IllegalArgumentException("해당 게시글 작성자가 아닙니다.");
-        }
+        User user = userRepository.findByOauthProviderId(oauthProviderId)
+                .orElseThrow(() -> new IllegalArgumentException("유저를 찾을 수 없습니다."));
 
-        String imageUrl = post.getImageUrl();
-        if (postUpdateRequest.getImageFile() != null && !postUpdateRequest.getImageFile().isEmpty()) {
-            imageUrl = s3Service.uploadFile(postUpdateRequest.getImageFile());
+        // 사용자 권한 확인
+        if (!post.getUser().getId().equals(user.getId())) {
+            throw new IllegalStateException("작성자만 게시글을 수정할 수 있습니다.");
         }
 
         LoanAdviceResult loanAdviceResult = null;
@@ -97,12 +93,18 @@ public class PostService {
                     .orElseThrow(() -> new IllegalArgumentException("LoanAdviceResult를 찾을 수 없습니다."));
         }
 
+        String imageUrl = postUpdateRequest.getExistingImageUrl();  // 기존 이미지 URL 사용
+        if (postUpdateRequest.getImageFile() != null && !postUpdateRequest.getImageFile().isEmpty()) {
+            imageUrl = s3Service.uploadFile(postUpdateRequest.getImageFile());
+        }
+
         postUpdateRequest.updatePost(post, loanAdviceResult, imageUrl);
         postRepository.save(post);
 
-        LoanAdviceSummaryResponse loanAdviceSummaryResponse = LoanAdviceSummaryResponse.fromEntity(loanAdviceResult);
-        return PostResponse.fromEntity(post, loanAdviceSummaryResponse);
+        LoanAdviceSummaryResponse loanAdviceSummaryReport = LoanAdviceSummaryResponse.fromEntity(loanAdviceResult);
+        return PostResponse.fromEntity(post, loanAdviceSummaryReport);
     }
+
 
     // 게시글 삭제 로직
     public void deletePost(String oauthProviderId, Long postId) {

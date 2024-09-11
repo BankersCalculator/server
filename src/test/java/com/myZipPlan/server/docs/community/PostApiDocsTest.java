@@ -336,4 +336,88 @@ public class PostApiDocsTest extends RestDocsSupport {
         }
     }
 
+    @Test
+    @DisplayName("게시글 수정 API")
+    void updatePost() throws Exception {
+        // Mock PostUpdateRequest 객체 생성
+        PostUpdateRequest request = new PostUpdateRequest();
+        request.setTitle("Updated Title");
+        request.setContent("Updated Content");
+        request.setLoanAdviceResultId(2L); // 새로운 LoanAdviceResult ID
+
+        // Mock LoanAdviceSummaryResponse 객체 생성
+        LoanAdviceSummaryResponse loanAdviceSummaryResponse = LoanAdviceSummaryResponse.builder()
+                .loanAdviceResultId(2L)
+                .loanProductName("Updated Loan Product")
+                .loanProductCode("DEF456")
+                .possibleLoanLimit(BigDecimal.valueOf(70000))
+                .expectedLoanRate(BigDecimal.valueOf(4.0))
+                .build();
+
+        // Mock PostResponse 객체 생성
+        PostResponse response = PostResponse.builder()
+                .id(1L)
+                .title("Updated Title")
+                .content("Updated Content")
+                .author("Test Author")
+                .imageUrl("newImageUrl")  // 새 이미지 URL
+                .likes(5)
+                .loanAdviceSummaryReport(loanAdviceSummaryResponse)
+                .build();
+
+        // Mocking PostService의 updatePost 메서드
+        when(postService.updatePost(anyString(), anyLong(), any(PostUpdateRequest.class)))
+                .thenReturn(response);
+        // Mock SecurityUtils.getProviderId()
+        try (MockedStatic<SecurityUtils> mockedSecurityUtils = Mockito.mockStatic(SecurityUtils.class)) {
+            mockedSecurityUtils.when(SecurityUtils::getProviderId).thenReturn("mockedProviderId");
+            mockMvc.perform(put("/api/v1/post/{postId}", 1L)
+                            .content(objectMapper.writeValueAsString(request))
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .accept(MediaType.APPLICATION_JSON)
+                            .header("AccessToken", "액세스 토큰"))
+                    .andExpect(status().isOk())
+                    .andDo(print())
+                    .andDo(document("post/update-post",
+                            preprocessRequest(prettyPrint()),
+                            preprocessResponse(prettyPrint()),
+                            requestHeaders(
+                                    headerWithName("AccessToken").description("액세스 토큰")
+                            ),
+                            pathParameters(
+                                    parameterWithName("postId").description("게시글 ID")
+                            ),
+                            requestFields(
+                                    fieldWithPath("title").description("수정된 게시글 제목"),
+                                    fieldWithPath("content").description("수정된 게시글 내용"),
+                                    fieldWithPath("loanAdviceResultId").description("새로운 LoanAdviceResult ID").optional(),
+                                    fieldWithPath("existingImageUrl").description("기존 이미지 URL").optional(),
+                                    fieldWithPath("imageFile").description("첨부 이미지 파일").optional() // imageFile 필드를 선택적으로 추가
+                            ),
+                            responseFields(
+                                    fieldWithPath("code").description("응답 코드"),
+                                    fieldWithPath("status").description("응답 상태"),
+                                    fieldWithPath("message").description("응답 메시지"),
+                                    fieldWithPath("data.id").description("게시글 ID"),
+                                    fieldWithPath("data.title").description("게시글 제목"),
+                                    fieldWithPath("data.content").description("게시글 내용"),
+                                    fieldWithPath("data.author").description("작성자"),
+                                    fieldWithPath("data.likes").description("좋아요 수"),
+                                    fieldWithPath("data.comments").description("댓글 목록").optional(),
+                                    fieldWithPath("data.createdDate").description("작성일자").optional(),
+                                    fieldWithPath("data.lastModifiedDate").description("수정일자").optional(),
+                                    fieldWithPath("data.avatarUrl").description("작성자 아바타 URL").optional(),
+                                    fieldWithPath("data.timeAgo").description("얼마 전에 작성되었는지").optional(),
+                                    fieldWithPath("data.imageUrl").description("새로운 이미지 URL"),
+                                    fieldWithPath("data.loanAdviceSummaryReport").description("대출 상담 결과"),
+                                    fieldWithPath("data.loanAdviceSummaryReport.loanAdviceResultId").description("대출 상담 결과 ID"),
+                                    fieldWithPath("data.loanAdviceSummaryReport.loanProductName").description("대출 상품명"),
+                                    fieldWithPath("data.loanAdviceSummaryReport.loanProductCode").description("대출 상품 코드"),
+                                    fieldWithPath("data.loanAdviceSummaryReport.possibleLoanLimit").description("가능한 대출 한도"),
+                                    fieldWithPath("data.loanAdviceSummaryReport.expectedLoanRate").description("예상 대출 금리")
+                            )
+                    ));
+        }
+    }
+
 }
