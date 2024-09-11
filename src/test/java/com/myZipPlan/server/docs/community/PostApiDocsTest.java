@@ -442,4 +442,49 @@ public class PostApiDocsTest extends RestDocsSupport {
         }
 
     }
+
+    @Test
+    @DisplayName("게시글 좋아요 API")
+    void likePost() throws Exception {
+        doNothing().when(postService).likePost(any(String.class), anyLong());
+        try (MockedStatic<SecurityUtils> mockedSecurityUtils = Mockito.mockStatic(SecurityUtils.class)) {
+            mockedSecurityUtils.when(SecurityUtils::getProviderId).thenReturn("mockedProviderId");
+            mockMvc.perform(post("/api/v1/post/{postId}/like", 1L)
+                            .header("AccessToken", "액세스 토큰"))
+                    .andExpect(status().isOk())
+                    .andDo(document("post/like-post",
+                            preprocessRequest(prettyPrint()),
+                            preprocessResponse(prettyPrint()),
+                            requestHeaders(
+                                    headerWithName("AccessToken").description("액세스 토큰")
+                            ),
+                            pathParameters(
+                                    parameterWithName("postId").description("게시글 ID")
+                            )
+                    ));
+        }
+    }
+
+    @Test
+    @DisplayName("게시글 좋아요 취소 API")
+    void unlikePost() throws Exception {
+        doNothing().when(postService).unlikePost(any(String.class), anyLong());
+        try (MockedStatic<SecurityUtils> mockedSecurityUtils = Mockito.mockStatic(SecurityUtils.class)) {
+            mockedSecurityUtils.when(SecurityUtils::getProviderId).thenReturn("mockedProviderId");
+            mockMvc.perform(post("/api/v1/post/{postId}/unlike", 1L)
+                            .header("AccessToken", "액세스 토큰"))
+                    .andExpect(status().isOk())
+                    .andDo(document("post/unlike-post",
+                            preprocessRequest(prettyPrint()),
+                            preprocessResponse(prettyPrint()),
+                            requestHeaders(
+                                    headerWithName("AccessToken").description("액세스 토큰")
+                            ),
+                            pathParameters(
+                                    parameterWithName("postId").description("게시글 ID")
+                            )
+                    ));
+        }
+    }
+
 }
