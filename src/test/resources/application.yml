@@ -47,6 +47,12 @@ spring:
         default_batch_fetch_size: 100
     defer-datasource-initialization: true
 
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 10MB
+      max-request-size: 10MB
+
 jwt:
   secret-key: "secretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecret"
   access-token-validity-in-seconds: 30000
@@ -61,3 +67,5 @@ cloud:
       static: ap-northeast-2
     s3:
       bucket: myzipplan-service-storage
+
+

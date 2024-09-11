@@ -46,8 +46,7 @@ public class Post {
     @Column(name = "likes", nullable = false)
     private int likes;
 
-    // LoanAdviceResult 연관 관계 추가.
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "loan_advice_result_id")
     private LoanAdviceResult loanAdviceResult;
 

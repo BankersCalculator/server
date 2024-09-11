@@ -1,7 +1,6 @@
 package com.myZipPlan.server.community.dto.post.response;
 
 import com.myZipPlan.server.advice.loanAdvice.dto.response.LoanAdviceSummaryResponse;
-import com.myZipPlan.server.advice.loanAdvice.entity.LoanAdviceResult;
 import com.myZipPlan.server.community.domain.Post;
 import com.myZipPlan.server.community.dto.comment.CommentResponse;
 import lombok.Builder;
@@ -29,7 +28,7 @@ public class PostResponse {
 
     private final String avatarUrl;          // 작성자 아바타 URL
     private final String timeAgo;            // "n시간 전"과 같은 형태로 변환된 작성 시간
-    private final LoanAdviceResult loanAdviceResult;    // 보고서
+    private final LoanAdviceSummaryResponse loanAdviceSummaryReport;    // 보고서
 
     @Builder
     public PostResponse(Long id, String title, String content, String author
@@ -37,7 +36,7 @@ public class PostResponse {
                        , List<CommentResponse> comments
                        , LocalDateTime createdDate, LocalDateTime lastModifiedDate
                        , String avatarUrl, String timeAgo
-                       , LoanAdviceResult loanAdviceResult
+                       , LoanAdviceSummaryResponse loanAdviceSummaryReport
                        ) {
         this.id = id;
         this.title = title;
@@ -51,11 +50,11 @@ public class PostResponse {
 
         this.avatarUrl = avatarUrl;
         this.timeAgo = timeAgo;
-        this.loanAdviceResult = loanAdviceResult;
+        this.loanAdviceSummaryReport = loanAdviceSummaryReport;
     }
 
     // Post 엔티티를 PostResponse로 변환하는 메소드
-    public static PostResponse fromEntity(Post post, LoanAdviceResult loanAdviceResult) {
+    public static PostResponse fromEntity(Post post, LoanAdviceSummaryResponse loanAdviceSummaryReport) {
         return PostResponse.builder()
                 .id(post.getId())
                 .title(post.getTitle())
@@ -70,7 +69,7 @@ public class PostResponse {
                 .lastModifiedDate(post.getLastModifiedDate())
                 .avatarUrl("카카오프로필")  // (임시) 작성자의 아바타 URL. 사용할 이미지 공유 받으면 대체할 것.
                 .timeAgo(calculateTimeAgo(post.getCreatedDate()))  // "n시간 전"으로 작성 시간 표시
-                .loanAdviceResult(loanAdviceResult)
+                .loanAdviceSummaryReport(loanAdviceSummaryReport)
                 .build();
     }
 

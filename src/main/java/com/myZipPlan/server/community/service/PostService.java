@@ -1,5 +1,6 @@
 package com.myZipPlan.server.community.service;
 
+import com.myZipPlan.server.advice.loanAdvice.dto.response.LoanAdviceSummaryResponse;
 import com.myZipPlan.server.advice.loanAdvice.entity.LoanAdviceResult;
 import com.myZipPlan.server.advice.loanAdvice.repository.LoanAdviceResultRepository;
 import com.myZipPlan.server.community.domain.Post;
@@ -33,23 +34,23 @@ public class PostService {
     private final LoanAdviceResultRepository loanAdviceResultRepository;
 
     @Transactional
-    public Post createPost(PostCreateRequest postCreateRequest, String oauthProviderId) throws IOException {
-        // security session 통해 사용자 조회
+    public PostResponse createPost(PostCreateRequest postCreateRequest, String oauthProviderId) throws IOException {
         User user = userRepository.findByOauthProviderId(oauthProviderId)
                 .orElseThrow(() -> new IllegalArgumentException("세션에 연결된 oauthProviderId를 찾을 수 없습니다."));
 
-        // 이미지 파일 업로드 후 URL 획득
         String imageUrl = null;
         if (postCreateRequest.getImageFile() != null && !postCreateRequest.getImageFile().isEmpty()) {
             imageUrl = s3Service.uploadFile(postCreateRequest.getImageFile());
         }
 
-        // loanAdviceResultId를 이용해 LoanAdviceResult 조회
         LoanAdviceResult loanAdviceResult = loanAdviceResultRepository.findById(postCreateRequest.getLoanAdviceResultId())
                 .orElseThrow(() -> new IllegalArgumentException("LoanAdviceResult를 찾을 수 없습니다."));
 
         Post post = postCreateRequest.toEntity(user, imageUrl, loanAdviceResult);
-        return postRepository.save(post);
+        postRepository.save(post);
+
+        LoanAdviceSummaryResponse loanAdviceSummaryReport = LoanAdviceSummaryResponse.fromEntity(loanAdviceResult);
+        return PostResponse.fromEntity(post, loanAdviceSummaryReport);
     }
 
     // 모든 게시글 조회
@@ -58,23 +59,23 @@ public class PostService {
         return posts.stream()
                 .map(post -> {
                     LoanAdviceResult loanAdviceResult = post.getLoanAdviceResult();
-                    return PostResponse.fromEntity(post, loanAdviceResult);
+                    LoanAdviceSummaryResponse loanAdviceSummaryResponse = LoanAdviceSummaryResponse.fromEntity(loanAdviceResult);
+                    return PostResponse.fromEntity(post, loanAdviceSummaryResponse);
                 })
                 .collect(Collectors.toList());
     }
 
-    // 게시글 상세 조회
     @Transactional
     public PostResponse getPostById(Long id) {
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다."));
         LoanAdviceResult loanAdviceResult = post.getLoanAdviceResult();
-        return PostResponse.fromEntity(post, loanAdviceResult);
+        LoanAdviceSummaryResponse loanAdviceSummaryResponse = LoanAdviceSummaryResponse.fromEntity(loanAdviceResult);
+        return PostResponse.fromEntity(post, loanAdviceSummaryResponse);
     }
 
-    // 게시글 수정
     @Transactional
-    public Post updatePost(String oauthProviderId, Long postId, PostUpdateRequest postUpdateRequest) throws IOException  {
+    public PostResponse updatePost(String oauthProviderId, Long postId, PostUpdateRequest postUpdateRequest) throws IOException {
         User user = userRepository.findByOauthProviderId(oauthProviderId)
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
 
@@ -85,12 +86,11 @@ public class PostService {
             throw new IllegalArgumentException("해당 게시글 작성자가 아닙니다.");
         }
 
-        String imageUrl = post.getImageUrl(); // 기존 이미지 URL
+        String imageUrl = post.getImageUrl();
         if (postUpdateRequest.getImageFile() != null && !postUpdateRequest.getImageFile().isEmpty()) {
             imageUrl = s3Service.uploadFile(postUpdateRequest.getImageFile());
         }
 
-        // LoanAdviceResult 업데이트 (있을 경우)
         LoanAdviceResult loanAdviceResult = null;
         if (postUpdateRequest.getLoanAdviceResultId() != null) {
             loanAdviceResult = loanAdviceResultRepository.findById(postUpdateRequest.getLoanAdviceResultId())
@@ -98,7 +98,10 @@ public class PostService {
         }
 
         postUpdateRequest.updatePost(post, loanAdviceResult, imageUrl);
-        return postRepository.save(post);
+        postRepository.save(post);
+
+        LoanAdviceSummaryResponse loanAdviceSummaryResponse = LoanAdviceSummaryResponse.fromEntity(loanAdviceResult);
+        return PostResponse.fromEntity(post, loanAdviceSummaryResponse);
     }
 
     // 게시글 삭제 로직
@@ -162,13 +165,14 @@ public class PostService {
         } else if (sortType == PostSortType.POPULAR) {
             posts = postRepository.findAllByOrderByLikesDesc();
         } else {
-            return Collections.emptyList(); // 알 수 없는 정렬 조건일 경우 빈 리스트 반환
+            return Collections.emptyList();
         }
 
         return posts.stream()
                 .map(post -> {
                     LoanAdviceResult loanAdviceResult = post.getLoanAdviceResult();
-                    return PostResponse.fromEntity(post, loanAdviceResult);
+                    LoanAdviceSummaryResponse loanAdviceSummaryResponse = LoanAdviceSummaryResponse.fromEntity(loanAdviceResult);
+                    return PostResponse.fromEntity(post, loanAdviceSummaryResponse);
                 })
                 .collect(Collectors.toList());
     }

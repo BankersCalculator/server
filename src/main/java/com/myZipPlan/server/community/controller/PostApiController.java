@@ -1,5 +1,6 @@
 package com.myZipPlan.server.community.controller;
 
+import com.myZipPlan.server.advice.loanAdvice.dto.response.LoanAdviceSummaryResponse;
 import com.myZipPlan.server.advice.loanAdvice.entity.LoanAdviceResult;
 import com.myZipPlan.server.advice.loanAdvice.repository.LoanAdviceResultRepository;
 import com.myZipPlan.server.common.api.ApiResponse;
@@ -26,14 +27,9 @@ public class PostApiController {
 
     // 게시글 작성
     @PostMapping
-    public ApiResponse<PostResponse> createPost(@ModelAttribute  PostCreateRequest postCreateRequest) throws IOException {
-        //security session에 있는 oauthProviderId GET
+    public ApiResponse<PostResponse> createPost(@ModelAttribute PostCreateRequest postCreateRequest) throws IOException {
         String oauthProviderId = SecurityUtils.getProviderId();
-        Post post = postService.createPost(postCreateRequest, oauthProviderId);
-        LoanAdviceResult loanAdviceResult = loanAdviceResultRepository.findById(postCreateRequest.getLoanAdviceResultId())
-                .orElseThrow(() -> new IllegalArgumentException("LoanAdviceResult를 찾을 수 없습니다."));
-
-        PostResponse postResponse = PostResponse.fromEntity(post, loanAdviceResult);
+        PostResponse postResponse = postService.createPost(postCreateRequest, oauthProviderId);
         return ApiResponse.ok(postResponse);
     }
 
@@ -65,10 +61,7 @@ public class PostApiController {
     @PutMapping("/{postId}")
     public ApiResponse<PostResponse> updatePost(@PathVariable Long postId, @ModelAttribute PostUpdateRequest postUpdateRequest) throws IOException {
         String oauthProviderId = SecurityUtils.getProviderId();
-        Post updatedPost = postService.updatePost(oauthProviderId, postId, postUpdateRequest);
-        LoanAdviceResult loanAdviceResult = updatedPost.getLoanAdviceResult();
-        PostResponse postResponse = PostResponse.fromEntity(updatedPost, loanAdviceResult);
-
+        PostResponse postResponse = postService.updatePost(oauthProviderId, postId, postUpdateRequest);
         return ApiResponse.ok(postResponse);
     }
 
