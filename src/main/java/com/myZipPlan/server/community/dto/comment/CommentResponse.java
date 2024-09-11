@@ -12,17 +12,17 @@ import java.time.LocalDateTime;
 public class CommentResponse {
     private final Long id;  // 댓글 ID
     private final Long postId;  // 댓글이 달린 게시글 ID
-    private final Long userId;  // 댓글 작성자 ID
+    private final String author;  // 댓글 작성자 ID
     private final String content;  // 댓글 내용
     private final LocalDateTime createdDate;  // 작성일
     private final LocalDateTime lastModifiedDate;  // 수정일
 
 
     @Builder
-    public CommentResponse(Long id, Long postId, Long userId, String content, LocalDateTime createdDate, LocalDateTime lastModifiedDate, CommentResponse childComment) {
+    public CommentResponse(Long id, Long postId, String author, String content, LocalDateTime createdDate, LocalDateTime lastModifiedDate ) {
         this.id = id;
         this.postId = postId;
-        this.userId = userId;
+        this.author = author;
         this.content = content;
         this.createdDate = createdDate;
         this.lastModifiedDate = lastModifiedDate;
@@ -33,7 +33,7 @@ public class CommentResponse {
         return CommentResponse.builder()
                 .id(comment.getId())
                 .postId(comment.getPost().getId())
-                .userId(comment.getUser().getId())
+                .author(comment.getUser().getEmail())
                 .content(comment.getContent())
                 .createdDate(comment.getCreatedDate())
                 .lastModifiedDate(comment.getLastModifiedDate())

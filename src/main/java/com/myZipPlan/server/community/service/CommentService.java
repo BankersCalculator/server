@@ -4,7 +4,7 @@ import com.myZipPlan.server.community.domain.Comment;
 import com.myZipPlan.server.community.domain.CommentLike;
 import com.myZipPlan.server.community.domain.Post;
 import com.myZipPlan.server.community.dto.comment.CommentCreateRequest;
-import com.myZipPlan.server.community.dto.comment.CommentReplyCreateRequest;
+
 import com.myZipPlan.server.community.dto.comment.CommentResponse;
 import com.myZipPlan.server.community.dto.comment.CommentUpdateRequest;
 import com.myZipPlan.server.community.repository.CommentLikeRepository;
@@ -27,7 +27,7 @@ public class CommentService {
     private final CommentLikeRepository commentLikeRepository;
 
     // 댓글 작성
-    public CommentResponse addComment(String oauthProviderId, Long postId, CommentCreateRequest commentCreateRequest) {
+    public CommentResponse createComment(String oauthProviderId, Long postId, CommentCreateRequest commentCreateRequest) {
         User user = userRepository.findByOauthProviderId(oauthProviderId)
                 .orElseThrow(() -> new IllegalArgumentException("세션에 연결된 oauthProviderId를 찾을 수 없습니다."));
         Post post = postRepository.findById(postId)

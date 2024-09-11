@@ -14,15 +14,21 @@ import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.security.test.context.support.WithMockUser;
 
 import java.time.LocalDateTime;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.put;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -41,109 +47,146 @@ public class CommentApiDocsTest extends RestDocsSupport {
 
 
     @Test
-    @DisplayName("댓글 작성 API 문서화 테스트")
-    void addComment() throws Exception {
+    @DisplayName("댓글 작성 API")
+    @WithMockUser(username = "testUser", roles = {"USER"})
+    void createComment() throws Exception {
+        // Mock CommentCreateRequest 객체 생성
         CommentCreateRequest request = new CommentCreateRequest();
-        request.setContent("댓글 내용");
+        request.setContent("New Comment Content");
 
-        // Create mock User using factory method
-        User mockUser = User.create("testProvider", "testProviderId", "test@example.com", RoleType.USER);
-
-        // Mocking Post using builder
-        Post mockPost = Post.builder()
-                .title("Test Post Title")
-                .content("Test Post Content")
-                .user(mockUser)  // Set the user for Post
-                .likes(0)
+        // Mock CommentResponse 객체 생성
+        CommentResponse response = CommentResponse.builder()
+                .id(1L)
+                .postId(10L)
+                .author("Test Author")
+                .content("New Comment Content")
+                .createdDate(LocalDateTime.now())
+                .lastModifiedDate(LocalDateTime.now())
                 .build();
 
-        // Mocking Comment
-        Comment mockComment = new Comment();
-        mockComment.setId(1L);
-        mockComment.setContent("댓글 내용");
-        mockComment.setPost(mockPost);  // Set Post
-        mockComment.setUser(mockUser);  // Set User
-        mockComment.setCreatedDate(LocalDateTime.now());
-        mockComment.setLastModifiedDate(LocalDateTime.now());
+        // Mocking CommentService의 addComment 메서드
+        when(commentService.createComment(anyString(), anyLong(), any(CommentCreateRequest.class)))
+                .thenReturn(response);
 
-        when(commentService.addComment("oauthProviderID", 1L, request)).thenReturn(CommentResponse.fromEntity(mockComment));
+        // Mock SecurityUtils.getProviderId()
         try (MockedStatic<SecurityUtils> mockedSecurityUtils = Mockito.mockStatic(SecurityUtils.class)) {
             mockedSecurityUtils.when(SecurityUtils::getProviderId).thenReturn("mockedProviderId");
-            mockMvc.perform(post(BASE_URL + "/1")
+
+            mockMvc.perform(post("/api/v1/comment/{postId}", 10L)
+                            .content(objectMapper.writeValueAsString(request))
                             .contentType(MediaType.APPLICATION_JSON)
-                            .content("{\"userId\":1,\"content\":\"댓글 내용\"}"))
+                            .accept(MediaType.APPLICATION_JSON)
+                            .header("AccessToken", "액세스 토큰"))
                     .andExpect(status().isOk())
-                    .andDo(print()) // 응답을 출력하여 확인합니다.
-                    .andDo(document("comment-add",
+                    .andDo(print())
+                    .andDo(document("comment/create-comment",
                             preprocessRequest(prettyPrint()),
                             preprocessResponse(prettyPrint()),
+                            requestHeaders(
+                                    headerWithName("AccessToken").description("액세스 토큰")
+                            ),
+                            pathParameters(
+                                    parameterWithName("postId").description("댓글을 작성할 게시글 ID")
+                            ),
                             requestFields(
-                                    fieldWithPath("userId").type(JsonFieldType.NUMBER).description("댓글 작성자 ID"),
-                                    fieldWithPath("content").type(JsonFieldType.STRING).description("댓글 내용")
+                                    fieldWithPath("content").description("댓글 내용")
                             ),
                             responseFields(
-                                    fieldWithPath("code").type(JsonFieldType.NUMBER).description("응답 코드"),
-                                    fieldWithPath("status").type(JsonFieldType.STRING).description("응답 상태"),
-                                    fieldWithPath("message").type(JsonFieldType.STRING).description("응답 메시지"),
-                                    fieldWithPath("data").type(JsonFieldType.OBJECT).description("응답 데이터"),
-                                    fieldWithPath("data.id").optional().type(JsonFieldType.NUMBER).description("댓글 ID"),
-                                    fieldWithPath("data.content").optional().type(JsonFieldType.STRING).description("댓글 내용"),
-                                    fieldWithPath("data.userId").optional().type(JsonFieldType.NUMBER).description("작성자 ID"),
-                                    fieldWithPath("data.createdDate").optional().type(JsonFieldType.STRING).description("작성일"),
-                                    fieldWithPath("data.lastModifiedDate").optional().type(JsonFieldType.STRING).description("수정일")
+                                    fieldWithPath("code").description("응답 코드"),
+                                    fieldWithPath("status").description("응답 상태"),
+                                    fieldWithPath("message").description("응답 메시지"),
+                                    fieldWithPath("data.id").description("댓글 ID"),
+                                    fieldWithPath("data.postId").description("댓글이 달린 게시글 ID"),
+                                    fieldWithPath("data.author").description("댓글 작성자 ID"),
+                                    fieldWithPath("data.content").description("작성된 댓글 내용"),
+                                    fieldWithPath("data.createdDate").description("댓글 작성일자").optional(),
+                                    fieldWithPath("data.lastModifiedDate").description("댓글 수정일자").optional()
                             )
                     ));
         }
     }
 
 
+
     @Test
-    @DisplayName("댓글 수정 API 문서화 테스트")
+    @DisplayName("댓글 수정 API")
     void updateComment() throws Exception {
+        // Mock CommentUpdateRequest 객체 생성
         CommentUpdateRequest request = new CommentUpdateRequest();
-        request.setUpdatedContent("수정된 댓글 내용");
-        when(commentService.updateComment("oauthPrividerId", 1L, request)).thenReturn(null);
+        request.setUpdatedContent("Updated Comment Content");
+
+        // Mock CommentResponse 객체 생성
+        CommentResponse response = CommentResponse.builder()
+                .id(1L)
+                .postId(10L)
+                .author("Test Author")
+                .content("Updated Comment Content")
+                .createdDate(LocalDateTime.now().minusDays(1))
+                .lastModifiedDate(LocalDateTime.now())
+                .build();
+
+        // Mocking CommentService의 updateComment 메서드
+        when(commentService.updateComment(anyString(), anyLong(), any(CommentUpdateRequest.class)))
+                .thenReturn(response);
+
+        // Mock SecurityUtils.getProviderId()
         try (MockedStatic<SecurityUtils> mockedSecurityUtils = Mockito.mockStatic(SecurityUtils.class)) {
             mockedSecurityUtils.when(SecurityUtils::getProviderId).thenReturn("mockedProviderId");
-            mockMvc.perform(put(BASE_URL + "/1")
+
+            mockMvc.perform(put("/api/v1/comment/{commentId}", 1L)
+                            .content(objectMapper.writeValueAsString(request))
                             .contentType(MediaType.APPLICATION_JSON)
-                            .content("{\"userId\":1,\"updatedContent\":\"수정된 댓글 내용\"}"))
+                            .accept(MediaType.APPLICATION_JSON)
+                            .header("AccessToken", "액세스 토큰"))
                     .andExpect(status().isOk())
-                    .andDo(document("comment-update",
+                    .andDo(print())
+                    .andDo(document("comment/update-comment",
                             preprocessRequest(prettyPrint()),
                             preprocessResponse(prettyPrint()),
+                            requestHeaders(
+                                    headerWithName("AccessToken").description("액세스 토큰")
+                            ),
+                            pathParameters(
+                                    parameterWithName("commentId").description("댓글 ID")
+                            ),
                             requestFields(
-                                    fieldWithPath("userId").type(JsonFieldType.NUMBER).description("댓글 작성자 ID"),
-                                    fieldWithPath("updatedContent").type(JsonFieldType.STRING).description("수정된 댓글 내용")
+                                    fieldWithPath("updatedContent").description("수정된 댓글 내용")
                             ),
                             responseFields(
-                                    fieldWithPath("id").type(JsonFieldType.NUMBER).description("댓글 ID"),
-                                    fieldWithPath("content").type(JsonFieldType.STRING).description("수정된 댓글 내용"),
-                                    fieldWithPath("userId").type(JsonFieldType.NUMBER).description("작성자 ID"),
-                                    fieldWithPath("createdDate").type(JsonFieldType.STRING).description("작성일"),
-                                    fieldWithPath("lastModifiedDate").type(JsonFieldType.STRING).description("수정일")
+                                    fieldWithPath("code").description("응답 코드"),
+                                    fieldWithPath("status").description("응답 상태"),
+                                    fieldWithPath("message").description("응답 메시지"),
+                                    fieldWithPath("data.id").description("댓글 ID"),
+                                    fieldWithPath("data.postId").description("댓글이 달린 게시글 ID"),
+                                    fieldWithPath("data.author").description("댓글 작성자 ID"),
+                                    fieldWithPath("data.content").description("수정된 댓글 내용"),
+                                    fieldWithPath("data.createdDate").description("댓글 작성일자").optional(),
+                                    fieldWithPath("data.lastModifiedDate").description("댓글 수정일자").optional()
                             )
                     ));
         }
     }
 
     @Test
-    @DisplayName("댓글 삭제 API 문서화 테스트")
+    @DisplayName("댓글 삭제 API")
     void deleteComment() throws Exception {
+        doNothing().when(commentService).deleteComment(any(String.class), anyLong());
+
+        // Mock SecurityUtils.getProviderId()
         try (MockedStatic<SecurityUtils> mockedSecurityUtils = Mockito.mockStatic(SecurityUtils.class)) {
             mockedSecurityUtils.when(SecurityUtils::getProviderId).thenReturn("mockedProviderId");
-            mockMvc.perform(delete(BASE_URL + "/{commentId}", 1L)
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content("{\"userId\": 1}"))
+
+            mockMvc.perform(RestDocumentationRequestBuilders.delete("/api/v1/comment/{commentId}", 1L)
+                            .header("AccessToken", "액세스 토큰"))
                     .andExpect(status().isOk())
-                    .andDo(document("comment-delete",
+                    .andDo(document("comment/delete-comment",
                             preprocessRequest(prettyPrint()),
                             preprocessResponse(prettyPrint()),
-                            requestFields(
-                                    fieldWithPath("commentId").description("삭제할 댓글 ID")
+                            requestHeaders(
+                                    headerWithName("AccessToken").description("액세스 토큰")
                             ),
-                            requestFields(
-                                    fieldWithPath("userId").type(JsonFieldType.NUMBER).description("댓글을 삭제하는 사용자 ID")
+                            pathParameters(
+                                    parameterWithName("commentId").description("댓글 ID")
                             )
                     ));
         }

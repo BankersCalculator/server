@@ -16,9 +16,9 @@ public class CommentApiController {
 
     // 댓글 작성
     @PostMapping("/{postId}")
-    public ApiResponse<CommentResponse> addComment(@PathVariable Long postId, @RequestBody CommentCreateRequest commentCreateRequest) {
+    public ApiResponse<CommentResponse> createComment(@PathVariable Long postId, @RequestBody CommentCreateRequest commentCreateRequest) {
         String oauthProviderId = SecurityUtils.getProviderId();
-        CommentResponse commentResponse = commentService.addComment(oauthProviderId, postId, commentCreateRequest);
+        CommentResponse commentResponse = commentService.createComment(oauthProviderId, postId, commentCreateRequest);
         return ApiResponse.ok(commentResponse);
     }
 

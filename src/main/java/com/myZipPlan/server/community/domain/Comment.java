@@ -39,9 +39,6 @@ public class Comment {
     @JoinColumn(name = "parent_comment_id")
     private Comment parentComment;
 
-    // 자식 댓글 (대댓글, 최대 1개)
-    @OneToOne(mappedBy = "parentComment", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Comment childComment;
 
     // 생성자
     public Comment(Post post, User user, String content) {
