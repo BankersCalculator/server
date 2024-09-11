@@ -420,4 +420,26 @@ public class PostApiDocsTest extends RestDocsSupport {
         }
     }
 
+    @Test
+    @DisplayName("게시글 삭제 API")
+    void deletePost() throws Exception {
+        doNothing().when(postService).deletePost(any(String.class), anyLong());
+        try (MockedStatic<SecurityUtils> mockedSecurityUtils = Mockito.mockStatic(SecurityUtils.class)) {
+            mockedSecurityUtils.when(SecurityUtils::getProviderId).thenReturn("mockedProviderId");
+            mockMvc.perform(delete("/api/v1/post/{postId}", 1L)
+                            .header("AccessToken", "액세스 토큰"))
+                    .andExpect(status().isOk())
+                    .andDo(document("post/delete-post",
+                            preprocessRequest(prettyPrint()),
+                            preprocessResponse(prettyPrint()),
+                            requestHeaders(
+                                    headerWithName("AccessToken").description("액세스 토큰")
+                            ),
+                            pathParameters(
+                                    parameterWithName("postId").description("게시글 ID")
+                            )
+                    ));
+        }
+
+    }
 }
