@@ -3,10 +3,12 @@ package com.myZipPlan.server.community.dto.comment;
 import com.myZipPlan.server.community.domain.Comment;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
 @Getter
+@Setter
 public class CommentResponse {
     private final Long id;  // 댓글 ID
     private final Long postId;  // 댓글이 달린 게시글 ID
@@ -14,7 +16,6 @@ public class CommentResponse {
     private final String content;  // 댓글 내용
     private final LocalDateTime createdDate;  // 작성일
     private final LocalDateTime lastModifiedDate;  // 수정일
-    private final CommentResponse childComment;  // 대댓글 (최대 1개)
 
 
     @Builder
@@ -25,7 +26,6 @@ public class CommentResponse {
         this.content = content;
         this.createdDate = createdDate;
         this.lastModifiedDate = lastModifiedDate;
-        this.childComment =childComment;
     }
 
     // Comment 엔티티를 CommentResponse로 변환하는 메소드
@@ -37,7 +37,6 @@ public class CommentResponse {
                 .content(comment.getContent())
                 .createdDate(comment.getCreatedDate())
                 .lastModifiedDate(comment.getLastModifiedDate())
-                .childComment(comment.getChildComment() != null ? fromEntity(comment.getChildComment()) : null)
                 .build();
     }
 }
