@@ -1,0 +1,12 @@
+[[get-sorted-posts]]
+=== 게시글 정렬 조회
+
+==== HTTP Request
+include::{snippets}/post/get-sorted-posts/http-request.adoc[]
+==== Request Headers
+include::{snippets}/post/get-sorted-posts/request-headers.adoc[]
+
+==== HTTP Response
+include::{snippets}/post/get-sorted-posts/http-response.adoc[]
+==== Response Fields
+include::{snippets}/post/get-sorted-posts/response-fields.adoc[]

@@ -1,0 +1,10 @@
+[[unlike-comment]]
+=== 댓글 좋아요 취소
+
+==== HTTP Request
+include::{snippets}/comment/unlike-comment/http-request.adoc[]
+==== Request Headers
+include::{snippets}/comment/unlike-comment/request-headers.adoc[]
+
+==== HTTP Response
+include::{snippets}/comment/unlike-comment/http-response.adoc[]

@@ -1,0 +1,14 @@
+[[create-comment]]
+=== 댓글 작성
+
+==== HTTP Request
+include::{snippets}/comment/create-comment/http-request.adoc[]
+==== Request Headers
+include::{snippets}/comment/create-comment/request-headers.adoc[]
+==== Request Fields
+include::{snippets}/comment/create-comment/request-fields.adoc[]
+
+==== HTTP Response
+include::{snippets}/comment/create-comment/http-response.adoc[]
+==== Response Fields
+include::{snippets}/comment/create-comment/response-fields.adoc[]

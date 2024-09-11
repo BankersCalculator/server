@@ -1,0 +1,10 @@
+[[like-comment]]
+=== 댓글 좋아요
+
+==== HTTP Request
+include::{snippets}/comment/like-comment/http-request.adoc[]
+==== Request Headers
+include::{snippets}/comment/like-comment/request-headers.adoc[]
+
+==== HTTP Response
+include::{snippets}/comment/like-comment/http-response.adoc[]

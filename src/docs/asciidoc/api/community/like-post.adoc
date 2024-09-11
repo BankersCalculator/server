@@ -1,0 +1,10 @@
+[[like-post]]
+=== 게시글 좋아요
+
+==== HTTP Request
+include::{snippets}/post/like-post/http-request.adoc[]
+==== Request Headers
+include::{snippets}/post/like-post/request-headers.adoc[]
+
+==== HTTP Response
+include::{snippets}/post/like-post/http-response.adoc[]

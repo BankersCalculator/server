@@ -1,0 +1,10 @@
+[[delete-comment]]
+=== 댓글 삭제
+
+==== HTTP Request
+include::{snippets}/comment/delete-comment/http-request.adoc[]
+==== Request Headers
+include::{snippets}/comment/delete-comment/request-headers.adoc[]
+
+==== HTTP Response
+include::{snippets}/comment/delete-comment/http-response.adoc[]

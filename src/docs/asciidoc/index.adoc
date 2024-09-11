@@ -65,7 +65,21 @@ include::api/board/create-post.adoc[]
 include::api/board/update-post.adoc[]
 include::api/board/delete-post.adoc[]
 
-
+[[Community-API]]
+== Community API
+include::api/community/get-all-posts.adoc[]
+include::api/community/get-post-by-id.adoc[]
+include::api/community/get-sorted-posts.adoc[]
+include::api/community/create-post.adoc[]
+include::api/community/update-comment.adoc[]
+include::api/community/delete-post.adoc[]
+include::api/community/like-post.adoc[]
+include::api/community/unlike-post.adoc[]
+include::api/community/create-comment.adoc[]
+include::api/community/update-comment.adoc[]
+include::api/community/delete-comment.adoc[]
+include::api/community/like-comment.adoc[]
+include::api/community/unlike-comment.adoc[]
 
 
 

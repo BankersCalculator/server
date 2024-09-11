@@ -1,0 +1,14 @@
+[[update-comment]]
+=== 댓글 수정
+
+==== HTTP Request
+include::{snippets}/comment/update-comment/http-request.adoc[]
+==== Request Headers
+include::{snippets}/comment/update-comment/request-headers.adoc[]
+==== Request Fields
+include::{snippets}/comment/update-comment/request-fields.adoc[]
+
+==== HTTP Response
+include::{snippets}/comment/update-comment/http-response.adoc[]
+==== Response Fields
+include::{snippets}/comment/update-comment/response-fields.adoc[]

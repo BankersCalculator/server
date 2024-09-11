@@ -1,0 +1,12 @@
+[[get-all-posts]]
+=== 게시글 목록 조회
+
+==== HTTP Request
+include::{snippets}/post/get-all-posts/http-request.adoc[]
+==== Request Headers
+include::{snippets}/post/get-all-posts/request-headers.adoc[]
+
+==== HTTP Response
+include::{snippets}/post/get-all-posts/http-response.adoc[]
+==== Response Fields
+include::{snippets}/post/get-all-posts/response-fields.adoc[]

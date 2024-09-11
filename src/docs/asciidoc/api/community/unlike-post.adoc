@@ -1,0 +1,10 @@
+[[unlike-post]]
+=== 게시글 좋아요 취소
+
+==== HTTP Request
+include::{snippets}/post/unlike-post/http-request.adoc[]
+==== Request Headers
+include::{snippets}/post/unlike-post/request-headers.adoc[]
+
+==== HTTP Response
+include::{snippets}/post/unlike-post/http-response.adoc[]

@@ -1,0 +1,14 @@
+[[update-post]]
+=== 게시글 수정
+
+==== HTTP Request
+include::{snippets}/post/update-post/http-request.adoc[]
+==== Request Headers
+include::{snippets}/post/update-post/request-headers.adoc[]
+==== Request Fields
+include::{snippets}/post/update-post/request-fields.adoc[]
+
+==== HTTP Response
+include::{snippets}/post/update-post/http-response.adoc[]
+==== Response Fields
+include::{snippets}/post/update-post/response-fields.adoc[]
