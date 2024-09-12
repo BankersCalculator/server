@@ -23,6 +23,7 @@ public class PostResponse {
     private final String imageUrl;           // 이미지 URL
     private final int likes;                 // 좋아요 수
     private final List<CommentResponse> comments;     // 댓글 목록
+    private int commentCount;
     private final LocalDateTime createdDate; // 작성일자
     private final LocalDateTime lastModifiedDate; // 수정일자
 
@@ -37,6 +38,7 @@ public class PostResponse {
                        , LocalDateTime createdDate, LocalDateTime lastModifiedDate
                        , String avatarUrl, String timeAgo
                        , LoanAdviceSummaryResponse loanAdviceSummaryReport
+
                        ) {
         this.id = id;
         this.title = title;
@@ -45,6 +47,7 @@ public class PostResponse {
         this.imageUrl = imageUrl;
         this.likes = likes;
         this.comments = comments;
+        this.commentCount = (comments != null) ? comments.size() : 0;
         this.createdDate = createdDate;
         this.lastModifiedDate = lastModifiedDate;
 

@@ -177,6 +177,8 @@ public class CommentApiDocsTest extends RestDocsSupport {
             mockedSecurityUtils.when(SecurityUtils::getProviderId).thenReturn("mockedProviderId");
 
             mockMvc.perform(RestDocumentationRequestBuilders.delete("/api/v1/comment/{commentId}", 1L)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .accept(MediaType.APPLICATION_JSON)
                             .header("AccessToken", "액세스 토큰"))
                     .andExpect(status().isOk())
                     .andDo(document("comment/delete-comment",
@@ -201,6 +203,8 @@ public class CommentApiDocsTest extends RestDocsSupport {
             mockedSecurityUtils.when(SecurityUtils::getProviderId).thenReturn("mockedProviderId");
 
             mockMvc.perform(RestDocumentationRequestBuilders.post("/api/v1/comment/{commentId}/like", 1L)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .accept(MediaType.APPLICATION_JSON)
                             .header("AccessToken", "액세스 토큰"))
                     .andExpect(status().isOk())
                     .andDo(document("comment/like-comment",
@@ -216,7 +220,6 @@ public class CommentApiDocsTest extends RestDocsSupport {
         }
     }
 
-
     @Test
     @DisplayName("댓글 좋아요 취소 API")
     void unlikeComment() throws Exception {
@@ -224,8 +227,9 @@ public class CommentApiDocsTest extends RestDocsSupport {
 
         try (MockedStatic<SecurityUtils> mockedSecurityUtils = Mockito.mockStatic(SecurityUtils.class)) {
             mockedSecurityUtils.when(SecurityUtils::getProviderId).thenReturn("mockedProviderId");
-
             mockMvc.perform(RestDocumentationRequestBuilders.post("/api/v1/comment/{commentId}/unlike", 1L)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .accept(MediaType.APPLICATION_JSON)
                             .header("AccessToken", "액세스 토큰"))
                     .andExpect(status().isOk())
                     .andDo(document("comment/unlike-comment",
