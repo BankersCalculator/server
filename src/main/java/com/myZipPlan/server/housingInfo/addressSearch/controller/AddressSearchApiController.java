@@ -1,7 +1,8 @@
 package com.myZipPlan.server.housingInfo.addressSearch.controller;
+
+import com.myZipPlan.server.common.api.ApiResponse;
 import com.myZipPlan.server.housingInfo.addressSearch.api.AddressSearchApiClient;
 import com.myZipPlan.server.housingInfo.addressSearch.dto.AddressSearchApiRequest;
-import com.myZipPlan.server.common.api.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

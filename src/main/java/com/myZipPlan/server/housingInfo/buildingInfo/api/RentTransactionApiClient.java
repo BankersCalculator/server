@@ -1,10 +1,9 @@
 package com.myZipPlan.server.housingInfo.buildingInfo.api;
 
-import com.myZipPlan.server.housingInfo.addressSearch.dto.AddressSearchApiResponse;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.myZipPlan.server.housingInfo.buildingInfo.common.RentHousingType;
 import com.myZipPlan.server.housingInfo.buildingInfo.config.RentTransactionApiConfig;
 import com.myZipPlan.server.housingInfo.buildingInfo.dto.RentTransactionApiResponse;
-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;

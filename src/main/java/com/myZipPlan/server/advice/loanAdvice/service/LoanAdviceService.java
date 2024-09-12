@@ -1,9 +1,9 @@
 package com.myZipPlan.server.advice.loanAdvice.service;
 
 import com.myZipPlan.server.advice.loanAdvice.dto.internal.AdditionalInformation;
+import com.myZipPlan.server.advice.loanAdvice.dto.internal.BestLoanProductResult;
 import com.myZipPlan.server.advice.loanAdvice.dto.internal.FilterProductResultDto;
 import com.myZipPlan.server.advice.loanAdvice.dto.internal.LoanLimitAndRateResultDto;
-import com.myZipPlan.server.advice.loanAdvice.dto.internal.BestLoanProductResult;
 import com.myZipPlan.server.advice.loanAdvice.dto.request.LoanAdviceServiceRequest;
 import com.myZipPlan.server.advice.loanAdvice.dto.response.LoanAdviceResponse;
 import com.myZipPlan.server.advice.loanAdvice.dto.response.LoanAdviceSummaryResponse;

@@ -1,8 +1,8 @@
 package com.myZipPlan.server.advice.loanAdvice.dto.request;
 
+import com.myZipPlan.server.common.enums.calculator.HouseOwnershipType;
 import com.myZipPlan.server.common.enums.loanAdvice.ChildStatus;
 import com.myZipPlan.server.common.enums.loanAdvice.MaritalStatus;
-import com.myZipPlan.server.common.enums.calculator.HouseOwnershipType;
 import com.myZipPlan.server.housingInfo.buildingInfo.common.RentHousingType;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;

@@ -1,17 +1,9 @@
 package com.myZipPlan.server.housingInfo.buildingInfo.service;
+
 import com.myZipPlan.server.housingInfo.buildingInfo.api.RentTransactionApiClient;
 import com.myZipPlan.server.housingInfo.buildingInfo.common.RentHousingType;
-import com.myZipPlan.server.housingInfo.buildingInfo.controller.RentTransactionApiController;
 import com.myZipPlan.server.housingInfo.buildingInfo.dto.RentTransactionApiResponse;
 import com.myZipPlan.server.housingInfo.buildingInfo.dto.RentTransactionInquiryResponse;
-
-
-
-import com.myZipPlan.server.housingInfo.buildingInfo.api.RentTransactionApiClient;
-import com.myZipPlan.server.housingInfo.buildingInfo.common.RentHousingType;
-
-
-
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;

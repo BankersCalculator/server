@@ -1,7 +1,7 @@
 package com.myZipPlan.server.advice.loanAdvice.service.component;
 
-import com.myZipPlan.server.advice.loanAdvice.dto.internal.LoanLimitAndRateResultDto;
 import com.myZipPlan.server.advice.loanAdvice.dto.internal.BestLoanProductResult;
+import com.myZipPlan.server.advice.loanAdvice.dto.internal.LoanLimitAndRateResultDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

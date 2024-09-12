@@ -1,6 +1,6 @@
 package com.myZipPlan.server.user.controller;
 
-import com.myZipPlan.server.user.UserService.UserService;
+import com.myZipPlan.server.user.userService.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
