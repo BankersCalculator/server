@@ -52,6 +52,9 @@ public class PostApiDocsTest extends RestDocsSupport {
     @DisplayName("게시글 목록 조회 API")
     @Test
     void getAllPosts() throws Exception {
+
+
+        //PostResponse1
         LoanAdviceSummaryResponse loanAdviceSummaryResponse = LoanAdviceSummaryResponse.builder()
                 .loanAdviceResultId(1L)
                 .loanProductName("Test Loan Product")
@@ -84,8 +87,8 @@ public class PostApiDocsTest extends RestDocsSupport {
 
         PostResponse response = PostResponse.builder()
                 .id(1L)
-                .title("Test Title")
-                .content("Test Content")
+                .title("후, 지난주에 할걸그랬어요")
+                .content("3개월 만에 0.5% 올라버림 ㅋ 지금이라도 사렵니다~~ 바로 은행가보려구요")
                 .author("무지무지")
                 .imageUrl("amazonS3ImageUrl")
                 .avatarUrl("amazonS3Avataurl")
@@ -97,8 +100,28 @@ public class PostApiDocsTest extends RestDocsSupport {
                 .timeAgo("4시간 전")
                 .build();
 
+        //PostResponse2
+        PostResponse response2 = PostResponse.builder()
+                .id(2L)
+                .title("이 앱 믿어도되나요?")
+                .content("써보신분들 어떄요?")
+                .author("궁금궁금이")
+                .imageUrl(null)
+                .avatarUrl(null)
+                .likes(5)
+                .comments(comments)
+                .loanAdviceSummaryReport(loanAdviceSummaryResponse)
+                .createdDate(LocalDateTime.now())
+                .lastModifiedDate(LocalDateTime.now())
+                .timeAgo("30분 전")
+                .build();
+
+        List<PostResponse> posts = new ArrayList<>();
+        posts.add(response);
+        posts.add(response2);
+
         when(postService.getAllPosts())
-                .thenReturn(Collections.singletonList(response));
+                .thenReturn(posts);
 
         mockMvc.perform(get(BASE_URL)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -120,7 +143,7 @@ public class PostApiDocsTest extends RestDocsSupport {
                                         fieldWithPath("data[].title").description("게시글 제목"),
                                         fieldWithPath("data[].content").description("게시글 내용"),
                                         fieldWithPath("data[].author").description("게시글 작성자"),
-                                        fieldWithPath("data[].imageUrl").description("게시글 이미지 URL"),
+                                        fieldWithPath("data[].imageUrl").description("게시글 이미지 URL").optional(),
                                         fieldWithPath("data[].likes").description("게시글 좋아요 수"),
                                         fieldWithPath("data[].comments[].id").description("댓글 ID"),
                                         fieldWithPath("data[].comments[].postId").description("댓글이 달린 게시글 ID"),
@@ -128,10 +151,10 @@ public class PostApiDocsTest extends RestDocsSupport {
                                         fieldWithPath("data[].comments[].content").description("댓글 내용"),
                                         fieldWithPath("data[].comments[].createdDate").description("댓글 생성 날짜"),
                                         fieldWithPath("data[].comments[].lastModifiedDate").description("댓글 수정 날짜"),
-                                        fieldWithPath("data[].commentCount").description("댓글 수"),
+                                        fieldWithPath("data[].commentCount").description("댓글 수").optional(),
                                         fieldWithPath("data[].createdDate").description("게시글 생성 날짜"),
                                         fieldWithPath("data[].lastModifiedDate").description("게시글 수정 날짜"),
-                                        fieldWithPath("data[].avatarUrl").description("작성자 아바타 URL"),
+                                        fieldWithPath("data[].avatarUrl").description("작성자 아바타 URL").optional(),
                                         fieldWithPath("data[].timeAgo").description("게시글 작성 시간 경과 정보"),
                                         fieldWithPath("data[].loanAdviceSummaryReport.loanAdviceResultId").description("대출 상담 결과 ID"),
                                         fieldWithPath("data[].loanAdviceSummaryReport.loanProductName").description("대출 상품 이름"),
@@ -467,6 +490,8 @@ public class PostApiDocsTest extends RestDocsSupport {
         try (MockedStatic<SecurityUtils> mockedSecurityUtils = Mockito.mockStatic(SecurityUtils.class)) {
             mockedSecurityUtils.when(SecurityUtils::getProviderId).thenReturn("mockedProviderId");
             mockMvc.perform(post("/api/v1/post/{postId}/like", 1L)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .accept(MediaType.APPLICATION_JSON)
                             .header("AccessToken", "액세스 토큰"))
                     .andExpect(status().isOk())
                     .andDo(document("post/like-post",
@@ -489,6 +514,8 @@ public class PostApiDocsTest extends RestDocsSupport {
         try (MockedStatic<SecurityUtils> mockedSecurityUtils = Mockito.mockStatic(SecurityUtils.class)) {
             mockedSecurityUtils.when(SecurityUtils::getProviderId).thenReturn("mockedProviderId");
             mockMvc.perform(post("/api/v1/post/{postId}/unlike", 1L)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .accept(MediaType.APPLICATION_JSON)
                             .header("AccessToken", "액세스 토큰"))
                     .andExpect(status().isOk())
                     .andDo(document("post/unlike-post",
