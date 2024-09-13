@@ -268,6 +268,7 @@ public class PostApiDocsTest extends RestDocsSupport {
     @DisplayName("게시글 목록 정렬 조회 API")
     @Test
     void getPostsBySortType() throws Exception {
+        //PostResponse1
         LoanAdviceSummaryResponse loanAdviceSummaryResponse = LoanAdviceSummaryResponse.builder()
                 .loanAdviceResultId(1L)
                 .loanProductName("Test Loan Product")
@@ -276,17 +277,67 @@ public class PostApiDocsTest extends RestDocsSupport {
                 .expectedLoanRate(BigDecimal.valueOf(3.5))
                 .build();
 
-        PostResponse response = PostResponse.builder()
+        CommentResponse commentResponse = CommentResponse.builder()
                 .id(1L)
-                .title("Test Title")
-                .content("Test Content")
-                .author("Test Author")
-                .likes(10)
-                .loanAdviceSummaryReport(loanAdviceSummaryResponse)
+                .postId(1L)
+                .author("오*환")
+                .content("후... 금리 장난아니네요")
+                .createdDate(LocalDateTime.now())
+                .lastModifiedDate(LocalDateTime.now())
                 .build();
 
+        CommentResponse commentResponse2 = CommentResponse.builder()
+                .id(2L)
+                .postId(2L)
+                .author("호*이")
+                .content("어 혹시, 수도권 인건가요? 물권 정보 공유 받을 수 있을까요...?")
+                .createdDate(LocalDateTime.now())
+                .lastModifiedDate(LocalDateTime.now())
+                .build();
+
+        List<CommentResponse> comments = new ArrayList<>();
+        comments.add(commentResponse2);
+        comments.add(commentResponse);
+
+
+        PostResponse response = PostResponse.builder()
+                .id(1L)
+                .title("후, 지난주에 할걸그랬어요")
+                .content("3개월 만에 0.5% 올라버림 ㅋ 지금이라도 사렵니다~~ 바로 은행가보려구요")
+                .author("무지무지")
+                .imageUrl("amazonS3ImageUrl")
+                .avatarUrl("amazonS3Avataurl")
+                .likes(1)
+                .comments(comments)
+                .loanAdviceSummaryReport(loanAdviceSummaryResponse)
+                .createdDate(LocalDateTime.now())
+                .lastModifiedDate(LocalDateTime.now())
+                .timeAgo("4시간 전")
+                .build();
+
+        //PostResponse2
+        PostResponse response2 = PostResponse.builder()
+                .id(2L)
+                .title("이 앱 믿어도되나요?")
+                .content("써보신분들 어떄요?")
+                .author("궁금궁금이")
+                .imageUrl(null)
+                .avatarUrl(null)
+                .likes(10)
+                .comments(comments)
+                .loanAdviceSummaryReport(loanAdviceSummaryResponse)
+                .createdDate(LocalDateTime.now())
+                .lastModifiedDate(LocalDateTime.now())
+                .timeAgo("30분 전")
+                .build();
+
+        List<PostResponse> posts = new ArrayList<>();
+        posts.add(response2);
+        posts.add(response);
+
+
         when(postService.getPostsBySortType(any()))
-                .thenReturn(Collections.singletonList(response));
+                .thenReturn(posts);
 
         mockMvc.perform(get(BASE_URL + "/sorted")
                         .param("sortType", "POPULAR")
@@ -314,10 +365,18 @@ public class PostApiDocsTest extends RestDocsSupport {
                                 fieldWithPath("data[].author").type(JsonFieldType.STRING).description("작성자"),
                                 fieldWithPath("data[].likes").type(JsonFieldType.NUMBER).description("좋아요 수"),
                                 fieldWithPath("data[].imageUrl").type(JsonFieldType.STRING).description("이미지 URL").optional(),
+
                                 fieldWithPath("data[].comments").type(JsonFieldType.ARRAY).description("댓글 목록").optional(),
-                                fieldWithPath("data[].commentCount").type(JsonFieldType.NUMBER).description("댓글 목록").optional(),
-                                fieldWithPath("data[].createdDate").type(JsonFieldType.STRING).description("작성일자").optional(),
-                                fieldWithPath("data[].lastModifiedDate").type(JsonFieldType.STRING).description("수정일자").optional(),
+                                fieldWithPath("data[].comments[].id").type(JsonFieldType.NUMBER).description("댓글 ID"),
+                                fieldWithPath("data[].comments[].postId").type(JsonFieldType.NUMBER).description("댓글이 달린 게시글 ID"),
+                                fieldWithPath("data[].comments[].author").type(JsonFieldType.STRING).description("댓글 작성자"),
+                                fieldWithPath("data[].comments[].content").type(JsonFieldType.STRING).description("댓글 내용"),
+                                fieldWithPath("data[].comments[].createdDate").type(JsonFieldType.ARRAY).description("댓글 생성 날짜 [년, 월, 일, 시, 분, 초, 나노초]"),
+                                fieldWithPath("data[].comments[].lastModifiedDate").type(JsonFieldType.ARRAY).description("댓글 수정 날짜 [년, 월, 일, 시, 분, 초, 나노초]"),
+
+                                fieldWithPath("data[].commentCount").type(JsonFieldType.NUMBER).description("댓글 수").optional(),
+                                fieldWithPath("data[].createdDate").type(JsonFieldType.ARRAY).description("작성일자").optional(),
+                                fieldWithPath("data[].lastModifiedDate").type(JsonFieldType.ARRAY).description("수정일자").optional(),
                                 fieldWithPath("data[].avatarUrl").type(JsonFieldType.STRING).description("작성자 아바타 URL").optional(),
                                 fieldWithPath("data[].timeAgo").type(JsonFieldType.STRING).description("얼마 전에 작성되었는지").optional(),
                                 fieldWithPath("data[].loanAdviceSummaryReport").type(JsonFieldType.OBJECT).description("대출 상담 결과").optional(),
