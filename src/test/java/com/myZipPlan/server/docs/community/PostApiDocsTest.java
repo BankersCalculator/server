@@ -413,7 +413,10 @@ public class PostApiDocsTest extends RestDocsSupport {
                 .content("New Content")
                 .author("Test Author")
                 .likes(0)
+                .imageUrl("amazonS3ImageUrl")
+                .avatarUrl("amazonS3Avataurl")
                 .loanAdviceSummaryReport(loanAdviceSummaryResponse)
+                .createdDate(LocalDateTime.now())
                 .build();
 
         // Mocking PostService의 createPost 메서드
