@@ -565,6 +565,8 @@ public class PostApiDocsTest extends RestDocsSupport {
         try (MockedStatic<SecurityUtils> mockedSecurityUtils = Mockito.mockStatic(SecurityUtils.class)) {
             mockedSecurityUtils.when(SecurityUtils::getProviderId).thenReturn("mockedProviderId");
             mockMvc.perform(delete("/api/v1/post/{postId}", 1L)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .accept(MediaType.APPLICATION_JSON)
                             .header("AccessToken", "액세스 토큰"))
                     .andExpect(status().isOk())
                     .andDo(document("post/delete-post",

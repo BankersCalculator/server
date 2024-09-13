@@ -32,23 +32,23 @@ public class CommentApiController {
 
     // 댓글 삭제
     @DeleteMapping("/{commentId}")
-    public ApiResponse<Void> deleteComment(@PathVariable Long commentId) {
+    public ApiResponse<String> deleteComment(@PathVariable Long commentId) {
         String oauthProviderId = SecurityUtils.getProviderId();
         commentService.deleteComment(oauthProviderId, commentId);
-        return ApiResponse.ok(null);
+        return ApiResponse.ok("댓글을 성공적으로 삭제하였습니다.");
     }
 
     @PostMapping("/{commentId}/like")
-    public ApiResponse<Void> likeComment(@PathVariable Long commentId) {
+    public ApiResponse<String> likeComment(@PathVariable Long commentId) {
         String oauthProviderId = SecurityUtils.getProviderId();
         commentService.likeComment(oauthProviderId, commentId);
-        return ApiResponse.ok(null);
+        return ApiResponse.ok("좋아요를 성공적으로 눌렀습니다.");
     }
 
     @PostMapping("/{commentId}/unlike")
-    public ApiResponse<Void> unlikeComment(@PathVariable Long commentId) {
+    public ApiResponse<String> unlikeComment(@PathVariable Long commentId) {
         String oauthProviderId = SecurityUtils.getProviderId();
         commentService.unlikeComment(oauthProviderId, commentId);
-        return ApiResponse.ok(null);
+        return ApiResponse.ok("좋아요를 성공적으로 취소하였습니다.");
     }
 }
