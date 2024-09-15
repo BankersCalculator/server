@@ -16,12 +16,11 @@ import java.util.Optional;
  수 있게 해줍니다.
  */
 public interface PostRepository extends JpaRepository<Post, Long> {
-    List<Post> findAllByOrderByCreatedDateDesc();
+    List<Post> findAllByOrderByCreatedDateAsc();
     List<Post> findAllByOrderByLikesDesc();
     @Query("SELECT p FROM Post p JOIN FETCH p.user WHERE p.id = :postId")
     Optional<Post> findByIdWithUser(@Param("postId") Long postId);
 
     @Query("SELECT p FROM Post p LEFT JOIN FETCH p.comments")
     List<Post> findAllWithComments();
-
 }

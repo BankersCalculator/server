@@ -192,11 +192,12 @@ public class    PostService {
     }
 
     // 게시글조회(정렬)
+    @Transactional
     public List<PostResponse> getPostsBySortType(PostSortType sortType) {
         List<Post> posts;
 
         if (sortType == PostSortType.LATEST) {
-            posts = postRepository.findAllByOrderByCreatedDateDesc();
+            posts = postRepository.findAllByOrderByCreatedDateAsc();
         } else if (sortType == PostSortType.POPULAR) {
             posts = postRepository.findAllByOrderByLikesDesc();
         } else {
