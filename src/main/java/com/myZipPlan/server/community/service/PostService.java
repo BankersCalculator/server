@@ -70,7 +70,7 @@ public class    PostService {
 
     // 모든 게시글 조회
     public List<PostResponse> getAllPosts() {
-        List<Post> posts = postRepository.findAll();
+        List<Post> posts = postRepository.findAllWithComments();
         return posts.stream()
                 .map(post -> {
                     LoanAdviceResult loanAdviceResult = post.getLoanAdviceResult();

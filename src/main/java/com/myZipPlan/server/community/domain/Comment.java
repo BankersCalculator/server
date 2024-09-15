@@ -34,12 +34,6 @@ public class Comment {
     @Column(name = "likes", nullable = false)
     private int likes = 0;  // 기본값 0
 
-    // 부모 댓글 (대댓글인 경우)
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "parent_comment_id")
-    private Comment parentComment;
-
-
     // 생성자
     public Comment(Post post, User user, String content) {
         this.post = post;
