@@ -6,7 +6,7 @@ include::{snippets}/post/create-post/http-request.adoc[]
 ==== Request Headers
 include::{snippets}/post/create-post/request-headers.adoc[]
 ==== Request Fields
-include::{snippets}/post/create-post/request-fields.adoc[]
+include::{snippets}/post/create-post/request-parts.adoc[]
 
 ==== HTTP Response
 include::{snippets}/post/create-post/http-response.adoc[]
