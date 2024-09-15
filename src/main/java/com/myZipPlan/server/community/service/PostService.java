@@ -59,7 +59,7 @@ public class    PostService {
         LoanAdviceResult loanAdviceResult = null;
         if (postCreateRequest.getLoanAdviceResultId() != null) {
             loanAdviceResult = loanAdviceResultRepository.findById(postCreateRequest.getLoanAdviceResultId())
-                    .orElseThrow(() -> new IllegalArgumentException("LoanAdviceResult를 찾을 수 없습니다."));
+                    .orElseThrow(() -> new IllegalArgumentException("선택한 보고서는 존재하지 않습니다."));
         }
 
         logger.info("============== 종료, loanAdviceResult : {}", loanAdviceResult);

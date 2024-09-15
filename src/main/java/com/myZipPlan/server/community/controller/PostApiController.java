@@ -27,12 +27,44 @@ public class PostApiController {
     private final LoanAdviceResultRepository loanAdviceResultRepository;
 
     // 게시글 작성
+    /*
     @PostMapping
-    public ApiResponse<PostResponse> createPost(@ModelAttribute PostCreateRequest postCreateRequest) throws IOException {
+    public ApiResponse<PostResponse> createPost(@RequestBody PostCreateRequest postCreateRequest) throws IOException {
         String oauthProviderId = SecurityUtils.getProviderId();
         PostResponse postResponse = postService.createPost(postCreateRequest, oauthProviderId);
         return ApiResponse.ok(postResponse);
     }
+     */
+    /*
+
+    @PostMapping
+    public ApiResponse<PostResponse> createPost(
+            @RequestPart("postCreateRequest") PostCreateRequest postCreateRequest,
+            @RequestPart("imageFile") MultipartFile imageFile) throws IOException {
+
+        String oauthProviderId = SecurityUtils.getProviderId();
+        System.out.println("=======oauthProviderId : " + oauthProviderId);
+
+        // 파일을 PostCreateRequest에 설정
+        postCreateRequest.setImageFile(imageFile);
+
+        MultipartFile file = postCreateRequest.getImageFile();
+        System.out.println("Uploaded file content type: " + file.getContentType());
+
+
+        PostResponse postResponse = postService.createPost(postCreateRequest, oauthProviderId);
+        return ApiResponse.ok(postResponse);
+    }
+     */
+    @PostMapping
+    public ApiResponse<PostResponse> createPost(@ModelAttribute PostCreateRequest postCreateRequest ) throws IOException {
+
+        String oauthProviderId = SecurityUtils.getProviderId();
+        System.out.println("=======oauthProviderId : " + oauthProviderId);
+        PostResponse postResponse = postService.createPost(postCreateRequest, oauthProviderId);
+        return ApiResponse.ok(postResponse);
+    }
+
 
     // 게시글 목록 조회
     @GetMapping
