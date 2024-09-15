@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 /*
 인터페이스 Repository는 **데이터 액세스 계층(DAL)**에서 중요한 역할을 하며,
@@ -17,7 +18,7 @@ import java.util.List;
 public interface PostRepository extends JpaRepository<Post, Long> {
     List<Post> findAllByOrderByCreatedDateDesc();
     List<Post> findAllByOrderByLikesDesc();
-    @Query("SELECT p.loanAdviceResult FROM Post p WHERE p.id = :postId")
-    LoanAdviceResult findLoanAdviceResultByPostId(@Param("postId") Long postId);
+    @Query("SELECT p FROM Post p JOIN FETCH p.user WHERE p.id = :postId")
+    Optional<Post> findByIdWithUser(@Param("postId") Long postId);
 
 }

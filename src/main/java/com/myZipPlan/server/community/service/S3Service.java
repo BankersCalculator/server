@@ -6,9 +6,12 @@ import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.net.URLDecoder;
@@ -21,6 +24,8 @@ public class S3Service {
     private final AmazonS3 amazonS3;
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
+    private static final Logger logger = LoggerFactory.getLogger(S3Service.class);
+
 
     public String uploadFile(MultipartFile file) throws IOException {
         String fileName = UUID.randomUUID() + "-" + file.getOriginalFilename();
@@ -38,7 +43,9 @@ public class S3Service {
 
     // 파일 삭제 메서드 (imageUri 사용)
     public void deleteFileByImageUri(String imageUri) {
-        System.out.println("==========Deleting file from S3: " + imageUri);
+
+        logger.info("Deleting file from S3: {}", imageUri); // 이미지 삭제 전 로그
+
         // imageUri에서 파일 경로 추출
         String fileKey = imageUri.replace("https://" + bucket + ".s3.amazonaws.com/", "");
 
@@ -50,11 +57,12 @@ public class S3Service {
 
         // URL 디코딩
         String decodedFileKey = URLDecoder.decode(fileKey, StandardCharsets.UTF_8);
-        System.out.println("=============Decoded file key: " + decodedFileKey);
+        logger.info("Decoded file key: {}", decodedFileKey); // 디코딩된 파일 경로 로그
+
 
         // S3에서 파일 삭제
         amazonS3.deleteObject(bucket, decodedFileKey);
+        logger.info("File deleted from S3: {}", decodedFileKey); // 삭제 완료 로그
 
-        System.out.println("=============File deleted: " + decodedFileKey);
     }
 }

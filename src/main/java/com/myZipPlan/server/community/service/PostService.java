@@ -134,15 +134,21 @@ public class    PostService {
 
 
     // 게시글 삭제 로직
+    @Transactional
     public void deletePost(String oauthProviderId, Long postId) {
         User user = userRepository.findByOauthProviderId(oauthProviderId)
                 .orElseThrow(() -> new IllegalArgumentException("세션에 연결된 oauthProviderId를 찾을 수 없습니다."));
 
-        Post post = postRepository.findById(postId)
+        Post post = postRepository.findByIdWithUser(postId)
                 .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다."));
 
         if (!post.getUser().getOauthProviderId().equals(user.getOauthProviderId())) {
             throw new IllegalArgumentException("해당 글 작성자만 삭제할 수 있습니다.");
+        }
+
+        // 게시글에 이미지 URL이 있는 경우 S3에서 파일 삭제
+        if (post.getImageUrl() != null && !post.getImageUrl().isEmpty()) {
+            s3Service.deleteFileByImageUri(post.getImageUrl());  // 이미지 삭제
         }
 
         // 게시글 삭제
