@@ -15,6 +15,8 @@ import com.myZipPlan.server.user.entity.User;
 import com.myZipPlan.server.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -32,19 +34,35 @@ public class    PostService {
     private final S3Service s3Service;
     private final PostLikeRepository postLikeRepository;
     private final LoanAdviceResultRepository loanAdviceResultRepository;
+    private static final Logger logger = LoggerFactory.getLogger(PostService.class);
+
 
     @Transactional
     public PostResponse createPost(PostCreateRequest postCreateRequest, String oauthProviderId) throws IOException {
+
+        // 유효성 검증
+        postCreateRequest.validate();
+
         User user = userRepository.findByOauthProviderId(oauthProviderId)
                 .orElseThrow(() -> new IllegalArgumentException("세션에 연결된 oauthProviderId를 찾을 수 없습니다."));
+
+        logger.info("============== user : {}", user);
 
         String imageUrl = null;
         if (postCreateRequest.getImageFile() != null && !postCreateRequest.getImageFile().isEmpty()) {
             imageUrl = s3Service.uploadFile(postCreateRequest.getImageFile());
         }
 
-        LoanAdviceResult loanAdviceResult = loanAdviceResultRepository.findById(postCreateRequest.getLoanAdviceResultId())
-                .orElseThrow(() -> new IllegalArgumentException("LoanAdviceResult를 찾을 수 없습니다."));
+
+        logger.info("============== 진입, imageUrl : {}", imageUrl);
+
+        LoanAdviceResult loanAdviceResult = null;
+        if (postCreateRequest.getLoanAdviceResultId() != null) {
+            loanAdviceResult = loanAdviceResultRepository.findById(postCreateRequest.getLoanAdviceResultId())
+                    .orElseThrow(() -> new IllegalArgumentException("LoanAdviceResult를 찾을 수 없습니다."));
+        }
+
+        logger.info("============== 종료, loanAdviceResult : {}", loanAdviceResult);
 
         Post post = postCreateRequest.toEntity(user, imageUrl, loanAdviceResult);
         postRepository.save(post);

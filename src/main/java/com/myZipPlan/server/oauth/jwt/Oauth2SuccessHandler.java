@@ -31,7 +31,7 @@ public class Oauth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
     private static final int COOKIE_MAX_AGE = 7 * 24 * 60 * 60; // 7일
     // 인증 완료 후 Client에게 토큰반환할 URI
-    private static final String REDIRECT_URI = "http://localhost:5173/login-result";
+    private static final String REDIRECT_URI = "http://localhost:5173/login-result?accessToken=%s&refreshToken=%s";
 
     private final TokenProvider tokenProvider;
     private final UserRepository userRepository;
@@ -60,7 +60,10 @@ public class Oauth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         addTokenCookie(response, "accessToken", tokenDto.getAccessToken());
         addTokenCookie(response, "refreshToken", tokenDto.getRefreshToken());
 
-        getRedirectStrategy().sendRedirect(request, response, REDIRECT_URI);
+        String redirectURI = String.format(REDIRECT_URI,
+                tokenDto.getAccessToken(), tokenDto.getRefreshToken());
+
+        getRedirectStrategy().sendRedirect(request, response, redirectURI);
     }
 
     private void addTokenCookie(HttpServletResponse response, String name, String value) {
