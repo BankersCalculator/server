@@ -17,6 +17,10 @@ public class LoanAdviceSummaryResponse {
 
 
     public static LoanAdviceSummaryResponse fromEntity(LoanAdviceResult loanAdviceResult) {
+        if (loanAdviceResult == null) {
+            return null;
+        }
+
         return LoanAdviceSummaryResponse.builder()
                 .loanAdviceResultId(loanAdviceResult.getId())
                 .loanProductName(loanAdviceResult.getLoanProductName())

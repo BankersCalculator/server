@@ -40,6 +40,7 @@ public class Post {
     private LocalDateTime LastModifiedDate;
 
     // 이미지 업로드 정보 (S3 링크 등)
+    @Column(length = 500)
     private String imageUrl;
 
     // 좋아요 수

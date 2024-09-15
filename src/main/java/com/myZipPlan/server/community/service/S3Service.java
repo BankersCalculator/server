@@ -33,6 +33,4 @@ public class S3Service {
         // 파일 URL 반환
         return amazonS3.getUrl(bucket, fileName).toString();
     }
-
-
 }

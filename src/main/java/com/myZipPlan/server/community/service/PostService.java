@@ -39,35 +39,36 @@ public class    PostService {
 
     @Transactional
     public PostResponse createPost(PostCreateRequest postCreateRequest, String oauthProviderId) throws IOException {
-
-        // 유효성 검증
+        // 1. 유효성 검증
         postCreateRequest.validate();
 
+        // 2. 유저 확인
         User user = userRepository.findByOauthProviderId(oauthProviderId)
                 .orElseThrow(() -> new IllegalArgumentException("세션에 연결된 oauthProviderId를 찾을 수 없습니다."));
-
         logger.info("============== user : {}", user);
 
-        String imageUrl = null;
-        if (postCreateRequest.getImageFile() != null && !postCreateRequest.getImageFile().isEmpty()) {
-            imageUrl = s3Service.uploadFile(postCreateRequest.getImageFile());
-        }
-
-
-        logger.info("============== 진입, imageUrl : {}", imageUrl);
-
+        // 3. 보고서
         LoanAdviceResult loanAdviceResult = null;
         if (postCreateRequest.getLoanAdviceResultId() != null) {
             loanAdviceResult = loanAdviceResultRepository.findById(postCreateRequest.getLoanAdviceResultId())
                     .orElseThrow(() -> new IllegalArgumentException("선택한 보고서는 존재하지 않습니다."));
         }
 
-        logger.info("============== 종료, loanAdviceResult : {}", loanAdviceResult);
+        LoanAdviceSummaryResponse loanAdviceSummaryReport = LoanAdviceSummaryResponse.fromEntity(loanAdviceResult);
+
+        // 4. 파일업로드
+        String imageUrl = null;
+        if (postCreateRequest.getImageFile() != null && !postCreateRequest.getImageFile().isEmpty()) {
+            MultipartFile file = postCreateRequest.getImageFile();
+            imageUrl = s3Service.uploadFile(file);
+        }
+
+        logger.info("============== 진입, imageUrl : {}", imageUrl);
+
 
         Post post = postCreateRequest.toEntity(user, imageUrl, loanAdviceResult);
         postRepository.save(post);
 
-        LoanAdviceSummaryResponse loanAdviceSummaryReport = LoanAdviceSummaryResponse.fromEntity(loanAdviceResult);
         return PostResponse.fromEntity(post, loanAdviceSummaryReport);
     }
 
