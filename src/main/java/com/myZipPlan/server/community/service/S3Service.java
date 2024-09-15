@@ -33,4 +33,19 @@ public class S3Service {
         // 파일 URL 반환
         return amazonS3.getUrl(bucket, fileName).toString();
     }
+
+    // 파일 삭제 메서드 (imageUri 사용)
+    public void deleteFileByImageUri(String imageUri) {
+        // imageUri에서 파일 경로 추출
+        String fileKey = imageUri.replace("https://" + bucket + ".s3.amazonaws.com/", "");
+
+        // 버킷 URL에 리전 정보가 포함된 경우 처리
+        if (imageUri.contains("s3.")) {
+            // 리전이 포함된 URL 처리 (예: s3.ap-northeast-2.amazonaws.com)
+            fileKey = imageUri.substring(imageUri.indexOf(".amazonaws.com/") + 15);
+        }
+
+        // S3에서 파일 삭제
+        amazonS3.deleteObject(bucket, fileKey);
+    }
 }

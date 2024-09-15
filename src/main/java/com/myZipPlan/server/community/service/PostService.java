@@ -53,7 +53,6 @@ public class    PostService {
             loanAdviceResult = loanAdviceResultRepository.findById(postCreateRequest.getLoanAdviceResultId())
                     .orElseThrow(() -> new IllegalArgumentException("선택한 보고서는 존재하지 않습니다."));
         }
-
         LoanAdviceSummaryResponse loanAdviceSummaryReport = LoanAdviceSummaryResponse.fromEntity(loanAdviceResult);
 
         // 4. 파일업로드
@@ -62,9 +61,6 @@ public class    PostService {
             MultipartFile file = postCreateRequest.getImageFile();
             imageUrl = s3Service.uploadFile(file);
         }
-
-        logger.info("============== 진입, imageUrl : {}", imageUrl);
-
 
         Post post = postCreateRequest.toEntity(user, imageUrl, loanAdviceResult);
         postRepository.save(post);
@@ -101,7 +97,6 @@ public class    PostService {
         User user = userRepository.findByOauthProviderId(oauthProviderId)
                 .orElseThrow(() -> new IllegalArgumentException("유저를 찾을 수 없습니다."));
 
-        // 사용자 권한 확인
         if (!post.getUser().getId().equals(user.getId())) {
             throw new IllegalStateException("작성자만 게시글을 수정할 수 있습니다.");
         }

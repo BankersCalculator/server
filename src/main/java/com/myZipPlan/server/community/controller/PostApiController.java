@@ -28,9 +28,24 @@ public class PostApiController {
     @PostMapping
     public ApiResponse<PostResponse> createPost(@ModelAttribute PostCreateRequest postCreateRequest ) throws IOException {
         String oauthProviderId = SecurityUtils.getProviderId();
-        System.out.println("=======oauthProviderId : " + oauthProviderId);
         PostResponse postResponse = postService.createPost(postCreateRequest, oauthProviderId);
         return ApiResponse.ok(postResponse);
+    }
+
+    // 게시글 수정
+    @PutMapping("/{postId}")
+    public ApiResponse<PostResponse> updatePost(@PathVariable Long postId, @ModelAttribute PostUpdateRequest postUpdateRequest) throws IOException {
+        String oauthProviderId = SecurityUtils.getProviderId();
+        PostResponse postResponse = postService.updatePost(oauthProviderId, postId, postUpdateRequest);
+        return ApiResponse.ok(postResponse);
+    }
+
+    // 게시글 삭제
+    @DeleteMapping("/{postId}")
+    public ApiResponse<String> deletePost(@PathVariable Long postId) {
+        String oauthProviderId = SecurityUtils.getProviderId();
+        postService.deletePost(oauthProviderId, postId);
+        return ApiResponse.ok("게시글이 성공적으로 삭제되었습니다.");
     }
 
     // 게시글 목록 조회
@@ -57,21 +72,7 @@ public class PostApiController {
         return ApiResponse.ok(post);
     }
 
-    // 게시글 수정
-    @PutMapping("/{postId}")
-    public ApiResponse<PostResponse> updatePost(@PathVariable Long postId, @ModelAttribute PostUpdateRequest postUpdateRequest) throws IOException {
-        String oauthProviderId = SecurityUtils.getProviderId();
-        PostResponse postResponse = postService.updatePost(oauthProviderId, postId, postUpdateRequest);
-        return ApiResponse.ok(postResponse);
-    }
 
-    // 게시글 삭제
-    @DeleteMapping("/{postId}")
-    public ApiResponse<String> deletePost(@PathVariable Long postId) {
-        String oauthProviderId = SecurityUtils.getProviderId();
-        postService.deletePost(oauthProviderId, postId);
-        return ApiResponse.ok("게시글이 성공적으로 삭제되었습니다.");
-    }
 
 
     @PostMapping("/{postId}/like")
