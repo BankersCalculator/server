@@ -17,7 +17,6 @@ public class PostUpdateRequest {
     private String content;            // 게시글 내용
     private MultipartFile imageFile;   // 새로 업로드될 이미지 파일 (null일 수 있음)
     private Long loanAdviceResultId;   // 새로운 LoanAdviceResult ID (null일 수 있음)
-
     private String existingImageUrl;   // 기존 이미지 URL
 
     // toEntity() 메서드는 필요 없으며, 대신 기존 게시글을 업데이트하는 방식으로 작성할 수 있습니다.

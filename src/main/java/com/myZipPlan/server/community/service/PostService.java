@@ -106,9 +106,10 @@ public class    PostService {
             loanAdviceResult = loanAdviceResultRepository.findById(postUpdateRequest.getLoanAdviceResultId())
                     .orElseThrow(() -> new IllegalArgumentException("LoanAdviceResult를 찾을 수 없습니다."));
         }
+        LoanAdviceSummaryResponse loanAdviceSummaryReport = LoanAdviceSummaryResponse.fromEntity(loanAdviceResult);
+
 
         String imageUrl = post.getImageUrl(); // 기본적으로 기존 이미지 URL 유지
-
         // 이미지 파일 처리 로직
         if (postUpdateRequest.getImageFile() != null && !postUpdateRequest.getImageFile().isEmpty()) {
             // 새로운 이미지 파일이 있으면 기존 이미지를 삭제하고 새로운 이미지를 업로드
@@ -127,7 +128,7 @@ public class    PostService {
         postUpdateRequest.updatePost(post, loanAdviceResult, imageUrl);
         postRepository.save(post);
 
-        LoanAdviceSummaryResponse loanAdviceSummaryReport = LoanAdviceSummaryResponse.fromEntity(loanAdviceResult);
+
         return PostResponse.fromEntity(post, loanAdviceSummaryReport);
     }
 

@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -36,6 +38,7 @@ public class S3Service {
 
     // 파일 삭제 메서드 (imageUri 사용)
     public void deleteFileByImageUri(String imageUri) {
+        System.out.println("==========Deleting file from S3: " + imageUri);
         // imageUri에서 파일 경로 추출
         String fileKey = imageUri.replace("https://" + bucket + ".s3.amazonaws.com/", "");
 
@@ -45,7 +48,13 @@ public class S3Service {
             fileKey = imageUri.substring(imageUri.indexOf(".amazonaws.com/") + 15);
         }
 
+        // URL 디코딩
+        String decodedFileKey = URLDecoder.decode(fileKey, StandardCharsets.UTF_8);
+        System.out.println("=============Decoded file key: " + decodedFileKey);
+
         // S3에서 파일 삭제
-        amazonS3.deleteObject(bucket, fileKey);
+        amazonS3.deleteObject(bucket, decodedFileKey);
+
+        System.out.println("=============File deleted: " + decodedFileKey);
     }
 }
