@@ -107,9 +107,21 @@ public class    PostService {
                     .orElseThrow(() -> new IllegalArgumentException("LoanAdviceResult를 찾을 수 없습니다."));
         }
 
-        String imageUrl = postUpdateRequest.getExistingImageUrl();  // 기존 이미지 URL 사용
+        String imageUrl = post.getImageUrl(); // 기본적으로 기존 이미지 URL 유지
+
+        // 이미지 파일 처리 로직
         if (postUpdateRequest.getImageFile() != null && !postUpdateRequest.getImageFile().isEmpty()) {
-            imageUrl = s3Service.uploadFile(postUpdateRequest.getImageFile());
+            // 새로운 이미지 파일이 있으면 기존 이미지를 삭제하고 새로운 이미지를 업로드
+            if (imageUrl != null && !imageUrl.isEmpty()) {
+                s3Service.deleteFileByImageUri(imageUrl); // 기존 이미지 삭제
+            }
+            imageUrl = s3Service.uploadFile(postUpdateRequest.getImageFile()); // 새로운 이미지 업로드
+        } else if (postUpdateRequest.getExistingImageUrl() == null || postUpdateRequest.getExistingImageUrl().isEmpty()) {
+            // 새로운 이미지를 업로드하지 않고 기존 이미지를 삭제하는 경우
+            if (imageUrl != null && !imageUrl.isEmpty()) {
+                s3Service.deleteFileByImageUri(imageUrl); // 기존 이미지 삭제
+            }
+            imageUrl = null; // 이미지 URL을 null로 설정
         }
 
         postUpdateRequest.updatePost(post, loanAdviceResult, imageUrl);
