@@ -18,6 +18,9 @@ import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockPart;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
@@ -34,6 +37,7 @@ import static org.springframework.restdocs.headers.HeaderDocumentation.requestHe
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
@@ -475,12 +479,13 @@ public class PostApiDocsTest extends RestDocsSupport {
 
     @Test
     @DisplayName("게시글 수정 API")
+    @WithMockUser(username = "testUser", roles = {"USER"})
     void updatePost() throws Exception {
         // Mock PostUpdateRequest 객체 생성
-        PostUpdateRequest request = new PostUpdateRequest();
-        request.setTitle("Updated Title");
-        request.setContent("Updated Content");
-        request.setLoanAdviceResultId(2L); // 새로운 LoanAdviceResult ID
+        PostUpdateRequest postUpdateRequest = new PostUpdateRequest();
+        postUpdateRequest.setTitle("수정된 제목");
+        postUpdateRequest.setContent("수정된 내용");
+        postUpdateRequest.setLoanAdviceResultId(2L); // 새로운 LoanAdviceResult ID
 
         // Mock LoanAdviceSummaryResponse 객체 생성
         LoanAdviceSummaryResponse loanAdviceSummaryResponse = LoanAdviceSummaryResponse.builder()
@@ -494,25 +499,40 @@ public class PostApiDocsTest extends RestDocsSupport {
         // Mock PostResponse 객체 생성
         PostResponse response = PostResponse.builder()
                 .id(1L)
-                .title("Updated Title")
-                .content("Updated Content")
-                .author("Test Author")
-                .imageUrl("newImageUrl")  // 새 이미지 URL
+                .title("수정된 제목")
+                .content("수정된 내용")
+                .author("testUser@example.com")
+                .imageUrl("https://myzipplan-service-storage.s3.ap-northeast-2.amazonaws.com/updated-image-url.png")
                 .likes(5)
+                .comments(Collections.emptyList())
+                .createdDate(LocalDateTime.of(2024, 9, 15, 16, 0, 43))
+                .lastModifiedDate(LocalDateTime.of(2024, 9, 15, 16, 5, 43))
+                .avatarUrl("카카오프로필")
+                .timeAgo("5분 전")
                 .loanAdviceSummaryReport(loanAdviceSummaryResponse)
                 .build();
 
         // Mocking PostService의 updatePost 메서드
         when(postService.updatePost(anyString(), anyLong(), any(PostUpdateRequest.class)))
                 .thenReturn(response);
+
         // Mock SecurityUtils.getProviderId()
         try (MockedStatic<SecurityUtils> mockedSecurityUtils = Mockito.mockStatic(SecurityUtils.class)) {
             mockedSecurityUtils.when(SecurityUtils::getProviderId).thenReturn("mockedProviderId");
-            mockMvc.perform(put("/api/v1/post/{postId}", 1L)
-                            .content(objectMapper.writeValueAsString(request))
-                            .contentType(MediaType.APPLICATION_JSON)
+
+            // PUT 메서드로 multipart 요청을 보냄
+            mockMvc.perform(MockMvcRequestBuilders.multipart("/api/v1/post/{postId}", 1L)
+                            .file("imageFile", "updated-image-content".getBytes()) // 이미지 파일
+                            .part(new MockPart("title", "수정된 제목".getBytes(StandardCharsets.UTF_8))) // 제목
+                            .part(new MockPart("content", "수정된 내용".getBytes(StandardCharsets.UTF_8))) // 내용
+                            .param("loanAdviceResultId", "2") // 새로운 LoanAdviceResult ID 추가
+                            .contentType(MediaType.MULTIPART_FORM_DATA)
                             .accept(MediaType.APPLICATION_JSON)
-                            .header("AccessToken", "액세스 토큰"))
+                            .header("AccessToken", "액세스 토큰")
+                            .with(request -> {
+                                request.setMethod("PUT"); // PUT 메서드로 설정
+                                return request;
+                            }))
                     .andExpect(status().isOk())
                     .andDo(print())
                     .andDo(document("post/update-post",
@@ -521,42 +541,39 @@ public class PostApiDocsTest extends RestDocsSupport {
                             requestHeaders(
                                     headerWithName("AccessToken").description("액세스 토큰")
                             ),
-                            pathParameters(
-                                    parameterWithName("postId").description("게시글 ID")
-                            ),
-                            requestFields(
-                                    fieldWithPath("title").description("수정된 게시글 제목"),
-                                    fieldWithPath("content").description("수정된 게시글 내용"),
-                                    fieldWithPath("loanAdviceResultId").description("새로운 LoanAdviceResult ID").optional(),
-                                    fieldWithPath("existingImageUrl").description("기존 이미지 URL").optional(),
-                                    fieldWithPath("imageFile").description("첨부 이미지 파일").optional() // imageFile 필드를 선택적으로 추가
+                            requestParts(
+                                    partWithName("imageFile").description("첨부 이미지 파일").optional(),
+                                    partWithName("title").description("수정된 게시글 제목"),
+                                    partWithName("content").description("수정된 게시글 내용"),
+                                    partWithName("loanAdviceResultId").description("대출 상담 결과 ID").optional()
                             ),
                             responseFields(
-                                    fieldWithPath("code").description("응답 코드"),
-                                    fieldWithPath("status").description("응답 상태"),
-                                    fieldWithPath("message").description("응답 메시지"),
-                                    fieldWithPath("data.id").description("게시글 ID"),
-                                    fieldWithPath("data.title").description("게시글 제목"),
-                                    fieldWithPath("data.content").description("게시글 내용"),
-                                    fieldWithPath("data.author").description("작성자"),
-                                    fieldWithPath("data.likes").description("좋아요 수"),
-                                    fieldWithPath("data.comments").description("댓글 목록").optional(),
-                                    fieldWithPath("data.commentCount").description("댓글 수").optional(),
-                                    fieldWithPath("data.createdDate").description("작성일자").optional(),
-                                    fieldWithPath("data.lastModifiedDate").description("수정일자").optional(),
-                                    fieldWithPath("data.avatarUrl").description("작성자 아바타 URL").optional(),
-                                    fieldWithPath("data.timeAgo").description("얼마 전에 작성되었는지").optional(),
-                                    fieldWithPath("data.imageUrl").description("새로운 이미지 URL"),
-                                    fieldWithPath("data.loanAdviceSummaryReport").description("대출 상담 결과"),
-                                    fieldWithPath("data.loanAdviceSummaryReport.loanAdviceResultId").description("대출 상담 결과 ID"),
-                                    fieldWithPath("data.loanAdviceSummaryReport.loanProductName").description("대출 상품명"),
-                                    fieldWithPath("data.loanAdviceSummaryReport.loanProductCode").description("대출 상품 코드"),
-                                    fieldWithPath("data.loanAdviceSummaryReport.possibleLoanLimit").description("가능한 대출 한도"),
-                                    fieldWithPath("data.loanAdviceSummaryReport.expectedLoanRate").description("예상 대출 금리")
+                                    fieldWithPath("code").type(JsonFieldType.NUMBER).description("응답 코드"),
+                                    fieldWithPath("status").type(JsonFieldType.STRING).description("응답 상태"),
+                                    fieldWithPath("message").type(JsonFieldType.STRING).description("응답 메시지"),
+                                    fieldWithPath("data.id").type(JsonFieldType.NUMBER).description("게시글 ID"),
+                                    fieldWithPath("data.title").type(JsonFieldType.STRING).description("게시글 제목"),
+                                    fieldWithPath("data.content").type(JsonFieldType.STRING).description("게시글 내용"),
+                                    fieldWithPath("data.author").type(JsonFieldType.STRING).description("작성자 이메일"),
+                                    fieldWithPath("data.imageUrl").type(JsonFieldType.STRING).description("이미지 URL").optional(),
+                                    fieldWithPath("data.likes").type(JsonFieldType.NUMBER).description("좋아요 수"),
+                                    fieldWithPath("data.comments").type(JsonFieldType.ARRAY).description("댓글 목록").optional(),
+                                    fieldWithPath("data.commentCount").type(JsonFieldType.NUMBER).description("댓글 수"),
+                                    fieldWithPath("data.createdDate").type(JsonFieldType.ARRAY).description("작성일자 [년, 월, 일, 시, 분, 초, 나노초]"),
+                                    fieldWithPath("data.lastModifiedDate").type(JsonFieldType.ARRAY).description("수정일자 [년, 월, 일, 시, 분, 초, 나노초]"),
+                                    fieldWithPath("data.avatarUrl").type(JsonFieldType.STRING).description("작성자 아바타 URL"),
+                                    fieldWithPath("data.timeAgo").type(JsonFieldType.STRING).description("얼마 전에 작성되었는지"),
+                                    fieldWithPath("data.loanAdviceSummaryReport").type(JsonFieldType.OBJECT).description("대출 상담 결과").optional(),
+                                    fieldWithPath("data.loanAdviceSummaryReport.loanAdviceResultId").type(JsonFieldType.NUMBER).description("대출 상담 결과 ID").optional(),
+                                    fieldWithPath("data.loanAdviceSummaryReport.loanProductName").type(JsonFieldType.STRING).description("대출 상품명").optional(),
+                                    fieldWithPath("data.loanAdviceSummaryReport.loanProductCode").type(JsonFieldType.STRING).description("대출 상품 코드").optional(),
+                                    fieldWithPath("data.loanAdviceSummaryReport.possibleLoanLimit").type(JsonFieldType.NUMBER).description("가능한 대출 한도").optional(),
+                                    fieldWithPath("data.loanAdviceSummaryReport.expectedLoanRate").type(JsonFieldType.NUMBER).description("예상 대출 금리").optional()
                             )
                     ));
         }
     }
+
 
     @Test
     @DisplayName("게시글 삭제 API")
