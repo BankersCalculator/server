@@ -46,7 +46,7 @@ spring:
     show-sql: true
     open-in-view: false
     hibernate:
-      ddl-auto: create-drop # TODO: update
+      ddl-auto: update
     properties:
       hibernate:
         default_batch_fetch_size: 100

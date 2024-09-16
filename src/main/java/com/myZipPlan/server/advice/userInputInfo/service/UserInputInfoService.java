@@ -2,66 +2,106 @@ package com.myZipPlan.server.advice.userInputInfo.service;
 
 import com.myZipPlan.server.advice.userInputInfo.dto.UserInputInfoResponse;
 import com.myZipPlan.server.advice.userInputInfo.dto.UserInputSummaryResponse;
+import com.myZipPlan.server.advice.userInputInfo.entity.UserInputInfo;
+import com.myZipPlan.server.advice.userInputInfo.repository.UserInputInfoRepository;
 import com.myZipPlan.server.common.enums.loanAdvice.ChildStatus;
 import com.myZipPlan.server.common.enums.loanAdvice.MaritalStatus;
+import com.myZipPlan.server.common.exception.customException.AuthException;
 import com.myZipPlan.server.housingInfo.buildingInfo.common.RentHousingType;
+import com.myZipPlan.server.oauth.userInfo.SecurityUtils;
+import com.myZipPlan.server.user.entity.User;
+import com.myZipPlan.server.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
 public class UserInputInfoService {
 
+    private final UserInputInfoRepository userInputInfoRepository;
+    private final UserRepository userRepository;
+
+
+    public UserInputInfo findById(Long id) {
+        return userInputInfoRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("입력된 유저투입정보가 유효하지 않습니다."));
+    }
+
+    public UserInputInfo save(UserInputInfo userInputInfo) {
+        return userInputInfoRepository.save(userInputInfo);
+    }
+
     public UserInputInfoResponse getRecentlySubmittedUserInput() {
 
-        return UserInputInfoResponse.builder()
-            .rentalDeposit(BigDecimal.valueOf(300000000))  // 3억원 임차보증금
-            .monthlyRent(BigDecimal.valueOf(500000))       // 50만원 월세
-            .cashOnHand(BigDecimal.valueOf(50000000))      // 5천만원 보유 현금
-            .age(35)                    // 35세
-            .maritalStatus(MaritalStatus.MARRIED)
-            .annualIncome(BigDecimal.valueOf(60000000))    // 6천만원 연소득
-            .spouseAnnualIncome(BigDecimal.valueOf(40000000))  // 4천만원 배우자 연소득
-            .childStatus(ChildStatus.ONE_CHILD)
-            .hasNewborn(true)
-            .isSMEEmployee(true)        // 중소기업 재직 여부
-            .isNetAssetOver345M(false)  // 순자산 3.45억 초과 여부
-            .rentHousingType(RentHousingType.APARTMENT)
-            .exclusiveArea(BigDecimal.valueOf(85.0))         // 85제곱미터 전용면적
-            .buildingName("행복아파트")
-            .districtCode("1168010100") // 서울특별시 강남구 삼성동
-            .dongName("삼성동")
-            .jibun("79-1")
-            .build();
+        User user = fetchCurrentUser();
+
+        return userInputInfoRepository.findTop1ByUserIdOrderByCreatedDateTimeDesc(user.getId())
+            .map(this::mapToUserInputInfoResponse)
+            .orElse(null);
     }
 
     public UserInputInfoResponse getSpecificUserInput(Long userInfoInputId) {
 
-        return UserInputInfoResponse.builder()
-            .rentalDeposit(BigDecimal.valueOf(300000000))  // 3억원 임차보증금
-            .monthlyRent(BigDecimal.valueOf(500000))       // 50만원 월세
-            .cashOnHand(BigDecimal.valueOf(50000000))      // 5천만원 보유 현금
-            .age(35)                    // 35세
-            .maritalStatus(MaritalStatus.MARRIED)
-            .annualIncome(BigDecimal.valueOf(60000000))    // 6천만원 연소득
-            .spouseAnnualIncome(BigDecimal.valueOf(40000000))  // 4천만원 배우자 연소득
-            .childStatus(ChildStatus.ONE_CHILD)
-            .hasNewborn(true)
-            .isSMEEmployee(true)        // 중소기업 재직 여부
-            .isNetAssetOver345M(false)  // 순자산 3.45억 초과 여부
-            .rentHousingType(RentHousingType.APARTMENT)
-            .exclusiveArea(BigDecimal.valueOf(85.0))         // 85제곱미터 전용면적
-            .buildingName("행복아파트")
-            .districtCode("1168010100") // 서울특별시 강남구 삼성동
-            .dongName("삼성동")
-            .jibun("79-1")
-            .build();
+       return  userInputInfoRepository.findById(userInfoInputId)
+            .map(this::mapToUserInputInfoResponse)
+            .orElse(null);
     }
 
     public List<UserInputSummaryResponse> getRecentUserInputs() {
-        return null;
+        User user = fetchCurrentUser();
+
+        List<UserInputInfo> userInputInfoList = userInputInfoRepository.findTop5ByUserIdOrderByCreatedDateTimeDesc(user.getId());
+
+        if (userInputInfoList.isEmpty()) {
+            return null;
+        }
+
+        return userInputInfoList.stream()
+            .map(userInputInfo -> UserInputSummaryResponse.builder()
+                .userInputInfoId(userInputInfo.getId())
+                .inquiryDateTime(userInputInfo.getCreatedDateTime())
+                .dongName(userInputInfo.getDongName())
+                .buildingName(userInputInfo.getBuildingName())
+                .rentalDeposit(userInputInfo.getRentalDeposit())
+                .monthlyRent(userInputInfo.getMonthlyRent())
+                .build())
+            .collect(Collectors.toList());
+    }
+
+
+    private User fetchCurrentUser() {
+        String providerId = SecurityUtils.getProviderId();
+
+        User user = userRepository.findByOauthProviderId(providerId)
+            .orElseThrow(() -> new AuthException("사용자 정보가 없습니다."));
+
+        return user;
+    }
+
+
+    private UserInputInfoResponse mapToUserInputInfoResponse(UserInputInfo userInputInfo) {
+        return UserInputInfoResponse.builder()
+            .rentalDeposit(userInputInfo.getRentalDeposit())
+            .monthlyRent(userInputInfo.getMonthlyRent())
+            .cashOnHand(userInputInfo.getCashOnHand())
+            .age(userInputInfo.getAge())
+            .maritalStatus(userInputInfo.getMaritalStatus())
+            .annualIncome(userInputInfo.getAnnualIncome())
+            .spouseAnnualIncome(userInputInfo.getSpouseAnnualIncome())
+            .childStatus(userInputInfo.getChildStatus())
+            .hasNewborn(userInputInfo.getHasNewborn())
+            .isSMEEmployee(userInputInfo.getIsSMEEmployee())
+            .isNetAssetOver345M(userInputInfo.getIsNetAssetOver345M())
+            .rentHousingType(userInputInfo.getRentHousingType())
+            .exclusiveArea(userInputInfo.getExclusiveArea())
+            .buildingName(userInputInfo.getBuildingName())
+            .districtCode(userInputInfo.getDistrictCode())
+            .dongName(userInputInfo.getDongName())
+            .jibun(userInputInfo.getJibun())
+            .build();
     }
 }

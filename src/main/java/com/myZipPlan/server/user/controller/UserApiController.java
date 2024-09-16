@@ -1,5 +1,7 @@
 package com.myZipPlan.server.user.controller;
 
+import com.myZipPlan.server.common.api.ApiResponse;
+import com.myZipPlan.server.user.dto.TempUserTransferRequest;
 import com.myZipPlan.server.user.userService.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,8 +17,12 @@ public class UserApiController {
     private final UserService userService;
 
     @PostMapping("/transfer")
-    public void transferTempUserToLoginUser(@RequestBody String tempUserId) {
-        userService.transferTempUserToLoginUser(tempUserId);
+    public ApiResponse transferTempUserToLoginUser(@RequestBody TempUserTransferRequest request) {
+        userService.transferTempUserToLoginUser(request.getTempUserId());
+
+        return ApiResponse.success();
+
+
     }
 
     @PostMapping("/logout")

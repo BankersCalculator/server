@@ -2,6 +2,7 @@ package com.myZipPlan.server.advice.userInputInfo.entity;
 
 import com.myZipPlan.server.advice.loanAdvice.dto.request.LoanAdviceServiceRequest;
 import com.myZipPlan.server.advice.loanAdvice.entity.LoanAdviceResult;
+import com.myZipPlan.server.common.domain.BaseTimeEntity;
 import com.myZipPlan.server.common.enums.calculator.HouseOwnershipType;
 import com.myZipPlan.server.common.enums.loanAdvice.ChildStatus;
 import com.myZipPlan.server.common.enums.loanAdvice.MaritalStatus;
@@ -21,7 +22,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UserInputInfo {
+public class UserInputInfo extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -57,7 +58,6 @@ public class UserInputInfo {
     // 주택정보
     @Enumerated(EnumType.STRING)
     private RentHousingType rentHousingType;  // 주택타입
-
     private BigDecimal exclusiveArea;  // 전용면적
     private String buildingName; // 건물명
     private String districtCode; // 법정동 코드

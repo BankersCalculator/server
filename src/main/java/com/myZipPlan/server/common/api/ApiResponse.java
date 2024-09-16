@@ -37,6 +37,10 @@ public class ApiResponse<T> {
         return new ApiResponse<>(OK, "SUCCESS", data);
     }
 
+    public static <T> ApiResponse<T> success() {
+        return new ApiResponse<>(OK, "SUCCESS", null);
+    }
+
     public static <T> ApiResponse<T> noContent(T data) {
         return new ApiResponse<>(NO_CONTENT, "NO_CONTENT", data);
     }

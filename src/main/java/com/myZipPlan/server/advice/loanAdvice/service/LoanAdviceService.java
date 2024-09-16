@@ -12,13 +12,12 @@ import com.myZipPlan.server.advice.loanAdvice.entity.LoanAdviceResult;
 import com.myZipPlan.server.advice.loanAdvice.repository.LoanAdviceResultRepository;
 import com.myZipPlan.server.advice.loanAdvice.service.component.*;
 import com.myZipPlan.server.advice.userInputInfo.entity.UserInputInfo;
-import com.myZipPlan.server.advice.userInputInfo.repository.UserInputInfoRepository;
+import com.myZipPlan.server.advice.userInputInfo.service.UserInputInfoService;
 import com.myZipPlan.server.common.enums.Bank;
 import com.myZipPlan.server.common.enums.loanAdvice.JeonseLoanProductType;
-import com.myZipPlan.server.common.exception.customException.AuthException;
 import com.myZipPlan.server.oauth.userInfo.SecurityUtils;
 import com.myZipPlan.server.user.entity.User;
-import com.myZipPlan.server.user.repository.UserRepository;
+import com.myZipPlan.server.user.userService.UserService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -44,9 +43,11 @@ public class LoanAdviceService {
     private final AdditionalInfoGenerator additionalInfoGenerator;
     private final AiReportGenerator aiReportGenerator;
 
-    private final UserRepository userRepository;
+
+    private final UserService userService;
+    private final UserInputInfoService userInputInfoService;
     private final LoanAdviceResultRepository loanAdviceResultRepository;
-    private final UserInputInfoRepository userInputInfoRepository;
+
 
 
     // 간편조회 서비스. 최대한도 및 최저금리 리스트 반환
@@ -78,9 +79,8 @@ public class LoanAdviceService {
 
     // 특정 대출상품 추천 서비스
     public LoanAdviceResponse generateLoanAdviceOnSpecificLoan(Long userInputInfoId, String productCode) {
-        UserInputInfo userInputInfo = userInputInfoRepository.findById(userInputInfoId)
-            .orElseThrow(() -> new IllegalArgumentException("입력된 유저투입정보가 유효하지 않습니다."));
 
+        UserInputInfo userInputInfo = userInputInfoService.findById(userInputInfoId);
         LoanAdviceServiceRequest request = LoanAdviceServiceRequest.fromUserInputInfo(userInputInfo, productCode);
 
         List<FilterProductResultDto> filterResults = productFilter.filterSpecificProduct(request);
@@ -203,17 +203,17 @@ public class LoanAdviceService {
 
         User user;
         if (providerId.startsWith("temp")) {
-            user = userRepository.save(User.createTempUser(providerId));
+            user = userService.save(User.createTempUser(providerId));
         } else {
-            user = userRepository.findByOauthProviderId(providerId)
-                .orElseThrow(() -> new AuthException("사용자 정보가 없습니다."));
+
+            user = userService.findUser(providerId);
         }
         return user;
     }
 
     private UserInputInfo createUserInputInfo(LoanAdviceServiceRequest request, User user) {
         UserInputInfo userInputInfo = UserInputInfo.create(user, request);
-        userInputInfoRepository.save(userInputInfo);
+        userInputInfoService.save(userInputInfo);
         return userInputInfo;
     }
 
