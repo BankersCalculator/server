@@ -26,6 +26,15 @@ public class UserInputInfoService {
     private final UserInputInfoRepository userInputInfoRepository;
     private final UserRepository userRepository;
 
+
+    public UserInputInfo findById(Long id) {
+        return userInputInfoRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("입력된 유저투입정보가 유효하지 않습니다."));
+    }
+
+    public UserInputInfo save(UserInputInfo userInputInfo) {
+        return userInputInfoRepository.save(userInputInfo);
+    }
+
     public UserInputInfoResponse getRecentlySubmittedUserInput() {
 
         User user = fetchCurrentUser();
