@@ -1,6 +1,7 @@
 package com.myZipPlan.server.advice.userInputInfo.dto;
 
 import com.myZipPlan.server.advice.userInputInfo.entity.UserInputInfo;
+import com.myZipPlan.server.common.enums.calculator.HouseOwnershipType;
 import com.myZipPlan.server.common.enums.loanAdvice.ChildStatus;
 import com.myZipPlan.server.common.enums.loanAdvice.MaritalStatus;
 import com.myZipPlan.server.housingInfo.buildingInfo.common.RentHousingType;
@@ -23,6 +24,7 @@ public class UserInputInfoResponse {
     private BigDecimal spouseAnnualIncome;    // 배우자연소득
     private ChildStatus childStatus;    // 자녀상태
     private Boolean hasNewborn; // 신생아여부
+    private HouseOwnershipType houseOwnershipType; // 주택소유형태
     private Boolean isSMEEmployee; // 중소기업재직여부(SME: SmallMediumEnterprise);
     private Boolean isNetAssetOver345M; // 순자산 3.45억 초과 여부
 

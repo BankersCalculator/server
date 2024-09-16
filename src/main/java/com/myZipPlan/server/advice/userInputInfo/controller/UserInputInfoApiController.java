@@ -27,14 +27,14 @@ public class UserInputInfoApiController {
         return ApiResponse.ok(submittedUserInput);
     }
 
-    @GetMapping("/specific/{userInfoInputId}")
+    @GetMapping("/{userInfoInputId}")
     public ApiResponse<UserInputInfoResponse> getSpecificUserInput(@PathVariable Long userInfoInputId) {
         UserInputInfoResponse submittedUserInput = userInputInfoService.getSpecificUserInput(userInfoInputId);
 
         return ApiResponse.ok(submittedUserInput);
     }
 
-    @GetMapping("/recent-ten")
+    @GetMapping("/recent")
     public ApiResponse<List<UserInputSummaryResponse>> getRecentUserInputs() {
         List<UserInputSummaryResponse> recentUserInputs = userInputInfoService.getRecentUserInputs();
 
