@@ -6,6 +6,7 @@ import com.myZipPlan.server.advice.userInputInfo.controller.UserInputInfoApiCont
 import com.myZipPlan.server.advice.userInputInfo.dto.UserInputInfoResponse;
 import com.myZipPlan.server.advice.userInputInfo.dto.UserInputSummaryResponse;
 import com.myZipPlan.server.advice.userInputInfo.service.UserInputInfoService;
+import com.myZipPlan.server.common.enums.calculator.HouseOwnershipType;
 import com.myZipPlan.server.common.enums.loanAdvice.ChildStatus;
 import com.myZipPlan.server.common.enums.loanAdvice.MaritalStatus;
 import com.myZipPlan.server.housingInfo.buildingInfo.common.RentHousingType;
@@ -76,6 +77,13 @@ public class UserInputInfoApiControllerDocsTest extends RestDocsSupport {
                     fieldWithPath("data.spouseAnnualIncome").type(JsonFieldType.NUMBER).description("배우자연소득"),
                     fieldWithPath("data.childStatus").type(JsonFieldType.STRING).description("자녀상태"),
                     fieldWithPath("data.hasNewborn").type(JsonFieldType.BOOLEAN).description("신생아여부"),
+                    fieldWithPath("data.houseOwnershipType").type(JsonFieldType.STRING)
+                        .description("주택 소유 형태 " +
+                            "(LIFETIME_FIRST: 생애최초, " +
+                            "ORDINARY_DEMAND: 서민실수요자, " +
+                            "NO_HOUSE: 무주택, " +
+                            "SINGLE_HOUSE: 1주택, " +
+                            "MULTI_HOUSE: 다주택) "),
                     fieldWithPath("data.isSMEEmployee").type(JsonFieldType.BOOLEAN).description("중소기업재직여부"),
                     fieldWithPath("data.isNetAssetOver345M").type(JsonFieldType.BOOLEAN).description("순자산 3.45억 초과 여부"),
                     fieldWithPath("data.rentHousingType").type(JsonFieldType.STRING)
@@ -100,7 +108,7 @@ public class UserInputInfoApiControllerDocsTest extends RestDocsSupport {
         UserInputInfoResponse response = createSampleUserInputInfoResponse();
         when(userInputInfoService.getSpecificUserInput(userInfoInputId)).thenReturn(response);
 
-        mockMvc.perform(get(BASE_URL + "/specific/{userInfoInputId}", userInfoInputId)
+        mockMvc.perform(get(BASE_URL + "/{userInfoInputId}", userInfoInputId)
                 .accept(MediaType.APPLICATION_JSON)
                 .header("AccessToken", "액세스 토큰"))
             .andExpect(status().isOk())
@@ -128,6 +136,13 @@ public class UserInputInfoApiControllerDocsTest extends RestDocsSupport {
                     fieldWithPath("data.spouseAnnualIncome").type(JsonFieldType.NUMBER).description("배우자연소득"),
                     fieldWithPath("data.childStatus").type(JsonFieldType.STRING).description("자녀상태"),
                     fieldWithPath("data.hasNewborn").type(JsonFieldType.BOOLEAN).description("신생아여부"),
+                    fieldWithPath("data.houseOwnershipType").type(JsonFieldType.STRING)
+                        .description("주택 소유 형태 " +
+                            "(LIFETIME_FIRST: 생애최초, " +
+                            "ORDINARY_DEMAND: 서민실수요자, " +
+                            "NO_HOUSE: 무주택, " +
+                            "SINGLE_HOUSE: 1주택, " +
+                            "MULTI_HOUSE: 다주택) "),
                     fieldWithPath("data.isSMEEmployee").type(JsonFieldType.BOOLEAN).description("중소기업재직여부"),
                     fieldWithPath("data.isNetAssetOver345M").type(JsonFieldType.BOOLEAN).description("순자산 3.45억 초과 여부"),
                     fieldWithPath("data.rentHousingType").type(JsonFieldType.STRING)
@@ -145,7 +160,7 @@ public class UserInputInfoApiControllerDocsTest extends RestDocsSupport {
             ));
     }
 
-    @DisplayName("최근 10개의 유저 INPUT 요약 조회")
+    @DisplayName("최근 5개의 유저 INPUT 요약 조회")
     @Test
     void getRecentUserInputs() throws Exception {
         List<UserInputSummaryResponse> summaries = Arrays.asList(
@@ -154,7 +169,7 @@ public class UserInputInfoApiControllerDocsTest extends RestDocsSupport {
         );
         when(userInputInfoService.getRecentUserInputs()).thenReturn(summaries);
 
-        mockMvc.perform(get(BASE_URL + "/recent-ten")
+        mockMvc.perform(get(BASE_URL + "/recent")
                 .accept(MediaType.APPLICATION_JSON)
                 .header("AccessToken", "액세스 토큰"))
             .andExpect(status().isOk())
@@ -191,6 +206,7 @@ public class UserInputInfoApiControllerDocsTest extends RestDocsSupport {
             .spouseAnnualIncome(BigDecimal.valueOf(40000000))  // 4천만원 배우자 연소득
             .childStatus(ChildStatus.ONE_CHILD)
             .hasNewborn(true)
+            .houseOwnershipType(HouseOwnershipType.SINGLE_HOUSE)
             .isSMEEmployee(true)        // 중소기업 재직 여부
             .isNetAssetOver345M(false)  // 순자산 3.45억 초과 여부
             .rentHousingType(RentHousingType.APARTMENT)
@@ -208,8 +224,8 @@ public class UserInputInfoApiControllerDocsTest extends RestDocsSupport {
             .inquiryDateTime(LocalDateTime.now())
             .dongName("삼성동")
             .buildingName("행복아파트")
-            .rentalDeposit(300000000L)
-            .monthlyRent(500000L)
+            .rentalDeposit(BigDecimal.valueOf(300000000L))
+            .monthlyRent(BigDecimal.valueOf(500000L))
             .build();
     }
 }
