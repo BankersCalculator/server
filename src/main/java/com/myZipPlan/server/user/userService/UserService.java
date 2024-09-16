@@ -1,4 +1,4 @@
-package com.myZipPlan.server.user.UserService;
+package com.myZipPlan.server.user.userService;
 
 import org.springframework.stereotype.Service;
 

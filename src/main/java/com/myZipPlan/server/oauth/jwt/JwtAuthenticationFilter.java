@@ -1,12 +1,12 @@
 package com.myZipPlan.server.oauth.jwt;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.myZipPlan.server.common.api.ApiResponse;
 import com.myZipPlan.server.common.exception.customException.AuthException;
 import com.myZipPlan.server.oauth.config.SecurityPathConfig;
 import com.myZipPlan.server.oauth.token.TokenDto;
 import com.myZipPlan.server.oauth.token.TokenProvider;
 import com.myZipPlan.server.oauth.token.TokenValidator;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

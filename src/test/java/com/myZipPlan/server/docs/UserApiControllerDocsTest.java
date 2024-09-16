@@ -1,7 +1,7 @@
 package com.myZipPlan.server.docs;
 
 import com.myZipPlan.server.RestDocsSupport;
-import com.myZipPlan.server.user.UserService.UserService;
+import com.myZipPlan.server.user.userService.UserService;
 import com.myZipPlan.server.user.controller.UserApiController;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

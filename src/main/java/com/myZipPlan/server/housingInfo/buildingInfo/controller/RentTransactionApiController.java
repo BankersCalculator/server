@@ -1,10 +1,15 @@
 package com.myZipPlan.server.housingInfo.buildingInfo.controller;
+
 import com.myZipPlan.server.common.api.ApiResponse;
 import com.myZipPlan.server.housingInfo.buildingInfo.api.RentTransactionApiClient;
 import com.myZipPlan.server.housingInfo.buildingInfo.dto.RentTransactionApiRequest;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONException;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import java.io.IOException;
 import java.util.Map;
 

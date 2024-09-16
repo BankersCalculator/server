@@ -1,9 +1,9 @@
 package com.myZipPlan.server.advice.userInputInfo.dto;
+
 import com.myZipPlan.server.advice.userInputInfo.entity.UserInputInfo;
 import com.myZipPlan.server.common.enums.loanAdvice.ChildStatus;
 import com.myZipPlan.server.common.enums.loanAdvice.MaritalStatus;
 import com.myZipPlan.server.housingInfo.buildingInfo.common.RentHousingType;
-
 import lombok.Builder;
 import lombok.Getter;
 

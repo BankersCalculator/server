@@ -9,7 +9,6 @@ import com.myZipPlan.server.common.enums.Bank;
 import com.myZipPlan.server.common.enums.calculator.HouseOwnershipType;
 import com.myZipPlan.server.common.enums.loanAdvice.BaseRate;
 import com.myZipPlan.server.common.enums.loanAdvice.JeonseLoanProductType;
-import com.myZipPlan.server.common.enums.loanAdvice.MaritalStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
