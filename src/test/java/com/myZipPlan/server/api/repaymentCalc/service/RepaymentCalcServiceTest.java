@@ -39,7 +39,7 @@ class RepaymentCalcServiceTest extends IntegrationTestSupport {
             .build();
 
         //when
-        RepaymentCalcResponse repaymentCalcResponse = repaymentCalcService.calculateRepayment(repaymentCalcServiceRequest);
+        RepaymentCalcResponse repaymentCalcResponse = repaymentCalcService.calculate(repaymentCalcServiceRequest);
         List<RepaymentSchedule> repaymentScheduleList = repaymentCalcResponse.getRepaymentSchedules();
         double totalPrincipal = repaymentCalcResponse.getTotalPrincipal();
         double totalInterest = repaymentCalcResponse.getTotalInterest();
@@ -92,7 +92,7 @@ class RepaymentCalcServiceTest extends IntegrationTestSupport {
             .build();
 
         //when
-        RepaymentCalcResponse repaymentCalcResponse = repaymentCalcService.calculateRepayment(repaymentCalcServiceRequest);
+        RepaymentCalcResponse repaymentCalcResponse = repaymentCalcService.calculate(repaymentCalcServiceRequest);
         List<RepaymentSchedule> repaymentScheduleList = repaymentCalcResponse.getRepaymentSchedules();
 
         double totalPrincipal = repaymentCalcResponse.getTotalPrincipal();
@@ -154,7 +154,7 @@ class RepaymentCalcServiceTest extends IntegrationTestSupport {
             .build();
 
         //when
-        RepaymentCalcResponse repaymentCalcResponse = repaymentCalcService.calculateRepayment(repaymentCalcServiceRequest);
+        RepaymentCalcResponse repaymentCalcResponse = repaymentCalcService.calculate(repaymentCalcServiceRequest);
         List<RepaymentSchedule> repaymentScheduleList = repaymentCalcResponse.getRepaymentSchedules();
 
         double totalPrincipal = repaymentCalcResponse.getTotalPrincipal();
@@ -217,7 +217,7 @@ class RepaymentCalcServiceTest extends IntegrationTestSupport {
             .build();
 
         //when
-        RepaymentCalcResponse repaymentCalcResponse = repaymentCalcService.calculateRepayment(repaymentCalcServiceRequest);
+        RepaymentCalcResponse repaymentCalcResponse = repaymentCalcService.calculate(repaymentCalcServiceRequest);
         List<RepaymentSchedule> repaymentScheduleList = repaymentCalcResponse.getRepaymentSchedules();
 
         double totalPrincipal = repaymentCalcResponse.getTotalPrincipal();
@@ -288,7 +288,7 @@ class RepaymentCalcServiceTest extends IntegrationTestSupport {
             .build();
 
         //when
-        RepaymentCalcResponse repaymentCalcResponse = repaymentCalcService.calculateRepayment(repaymentCalcServiceRequest);
+        RepaymentCalcResponse repaymentCalcResponse = repaymentCalcService.calculate(repaymentCalcServiceRequest);
         List<RepaymentSchedule> repaymentScheduleList = repaymentCalcResponse.getRepaymentSchedules();
 
         double totalPrincipal = repaymentCalcResponse.getTotalPrincipal();

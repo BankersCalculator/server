@@ -35,7 +35,7 @@ public class DsrCommonCalculator {
         double principal = loanStatus.getPrincipal();
         int term = loanStatus.getTerm();
 
-        RepaymentCalcResponse repaymentCalcResponse = repaymentCalcService.calculateRepayment(loanStatus.toRepaymentCalcServiceRequest());
+        RepaymentCalcResponse repaymentCalcResponse = repaymentCalcService.calculate(loanStatus.toRepaymentCalcServiceRequest());
         double totalInterest = repaymentCalcResponse.getTotalInterest();
 
         double annualPrincipalRepayment = principal / maxTerm * 12;
@@ -53,7 +53,7 @@ public class DsrCommonCalculator {
         double principal = loanStatus.getPrincipal();
         int term = loanStatus.getTerm();
 
-        RepaymentCalcResponse repaymentCalcResponse = repaymentCalcService.calculateRepayment(loanStatus.toRepaymentCalcServiceRequest());
+        RepaymentCalcResponse repaymentCalcResponse = repaymentCalcService.calculate(loanStatus.toRepaymentCalcServiceRequest());
         double totalInterest = repaymentCalcResponse.getTotalInterest();
 
         double annualPrincipalRepayment = principal / maxTerm * 12;

@@ -2,68 +2,53 @@ package com.myZipPlan.server.calculator.ltvCalc.service;
 
 import com.myZipPlan.server.calculator.ltvCalc.dto.LtvCalcResponse;
 import com.myZipPlan.server.calculator.ltvCalc.dto.LtvCalcServiceRequest;
-import com.myZipPlan.server.common.enums.calculator.HousingType;
+import com.myZipPlan.server.common.enums.calculator.HouseOwnershipType;
+import com.myZipPlan.server.common.enums.calculator.LoanPurpose;
 import com.myZipPlan.server.common.enums.calculator.RegionType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
+
+import static com.myZipPlan.server.common.enums.calculator.HouseOwnershipType.LIFETIME_FIRST;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class LtvCalcService {
 
-    /***
-     *
-     * @param request
-     * @return LtvCalcResponse
-     *
-     * TODO: 개발이 필요한 사항
-     * 1. 지역별 LTV/DTI 기준 최신화
-     * 2. 부동산별 방수 차감 기준 확인 및 개선
-     */
+    private final LtvMatrix ltvMatrix;
 
-    public LtvCalcResponse ltvCalculate(LtvCalcServiceRequest request) {
+    public LtvCalcResponse calculate(LtvCalcServiceRequest request) {
 
-        double topPriorityRepaymentAmount = getTopPriorityRepaymentAmount(request);
-        double totalLoanExposure = calculateTotalLoanExposure(request, topPriorityRepaymentAmount);
-        double ltvRatio = calculateLtvRatio(request.getCollateralValue(), totalLoanExposure);
-
-        return request.toResponse(topPriorityRepaymentAmount, totalLoanExposure, ltvRatio);
-    }
-
-
-    private double getTopPriorityRepaymentAmount(LtvCalcServiceRequest request) {
-        double totalSmallAmountLeaseDeposit = getTotalSmallAmountLeaseDeposit(request);
-        double collateralValue = request.getCollateralValue();
-        double maximumRepaymentAmount = collateralValue / 2;
-        return Math.min(totalSmallAmountLeaseDeposit, maximumRepaymentAmount);
-    }
-
-    private double getTotalSmallAmountLeaseDeposit(LtvCalcServiceRequest request) {
-        HousingType housingType = request.getHousingType();
+        LoanPurpose loanPurpose = request.getLoanPurpose();
+        BigDecimal collateralValue = request.getCollateralValue();
         RegionType regionType = request.getRegionType();
-        double smallAmountLeaseDeposit = regionType.getSmallAmountLeaseDeposit();
-        int numberOfRooms = request.getNumberOfRooms();
-        double totalSmallAmountLeaseDeposit;
+        HouseOwnershipType houseOwnershipType = request.getHouseOwnershipType();
+        boolean isLifetimeFirst = houseOwnershipType == LIFETIME_FIRST;
 
-        if (housingType == HousingType.APARTMENT) {
-            totalSmallAmountLeaseDeposit = smallAmountLeaseDeposit;
+        BigDecimal ltvRatio = ltvMatrix.getLtvRatio(loanPurpose, regionType, houseOwnershipType);
+        BigDecimal possibleLoanAmount = calculatePossibleLoanAmount(loanPurpose, isLifetimeFirst, collateralValue, ltvRatio);
+
+        return LtvCalcResponse.builder()
+            .ltvRatio(ltvRatio)
+            .collateralValue(collateralValue)
+            .possibleLoanAmount(possibleLoanAmount)
+            .build();
+    }
+
+    private BigDecimal calculatePossibleLoanAmount(LoanPurpose loanPurpose,boolean isLifetimeFirst, BigDecimal collateralValue, BigDecimal ltvRatio) {
+
+        if (loanPurpose == LoanPurpose.HOME_PURCHASE) {
+            BigDecimal amount = collateralValue.multiply(ltvRatio);
+            BigDecimal maxAmount = isLifetimeFirst ? BigDecimal.valueOf(600000000) : BigDecimal.valueOf(999999999999L);
+            return amount.compareTo(maxAmount) > 0 ? maxAmount : amount;
         } else {
-            totalSmallAmountLeaseDeposit = (numberOfRooms - 1) * smallAmountLeaseDeposit;
+            BigDecimal amount = collateralValue.multiply(ltvRatio);
+            BigDecimal maxAmount = BigDecimal.valueOf(200000000);
+            return amount.compareTo(maxAmount) > 0 ? maxAmount : amount;
         }
-        return totalSmallAmountLeaseDeposit;
     }
 
-    private double calculateTotalLoanExposure(LtvCalcServiceRequest request, double topPriorityRepaymentAmount) {
-        return request.getLoanAmount() + request.getCurrentLeaseDeposit() + topPriorityRepaymentAmount + request.getPriorMortgage();
-    }
-
-    private double calculateLtvRatio(double collateralValue, double totalLoanExposure) {
-        log.info(String.valueOf(collateralValue));
-        log.info(String.valueOf(totalLoanExposure));
-        log.info(String.valueOf(totalLoanExposure / collateralValue));
-        return totalLoanExposure / collateralValue;
-
-    }
 }

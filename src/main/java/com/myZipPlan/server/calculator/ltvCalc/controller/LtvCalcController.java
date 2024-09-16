@@ -22,7 +22,7 @@ public class LtvCalcController {
 
     @PostMapping
     public ApiResponse<LtvCalcResponse> calculateLtv(@Valid @RequestBody LtvCalcRequest ltvCalcRequest) {
-        LtvCalcResponse ltvCalcResponse = ltvCalcService.ltvCalculate(ltvCalcRequest.toServiceRequest());
+        LtvCalcResponse ltvCalcResponse = ltvCalcService.calculate(ltvCalcRequest.toServiceRequest());
 
         return ApiResponse.ok(ltvCalcResponse);
     }

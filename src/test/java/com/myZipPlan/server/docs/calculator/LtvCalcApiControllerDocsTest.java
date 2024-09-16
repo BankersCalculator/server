@@ -56,7 +56,7 @@ public class LtvCalcApiControllerDocsTest extends RestDocsSupport {
             .ltvRatio(70.0)
             .build();
 
-        when(ltvCalcService.ltvCalculate(any()))
+        when(ltvCalcService.calculate(any()))
             .thenReturn(response);
 
         mockMvc.perform(post(BASE_URL)

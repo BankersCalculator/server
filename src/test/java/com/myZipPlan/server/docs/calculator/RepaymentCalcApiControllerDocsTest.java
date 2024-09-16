@@ -56,7 +56,7 @@ public class RepaymentCalcApiControllerDocsTest extends RestDocsSupport {
             .totalInterest(3500000.0)
             .totalInstallments(60)
             .build();
-        when(repaymentCalcService.calculateRepayment(any()))
+        when(repaymentCalcService.calculate(any()))
             .thenReturn(response);
 
         mockMvc.perform(post(BASE_URL)

@@ -34,7 +34,7 @@ class LtvCalcServiceTest extends IntegrationTestSupport {
         LtvCalcServiceRequest request = createTestRequest(loanAmount, collateralValue, priorMortgage, numberOfRooms, housingType, regionType, currentLeaseDeposit);
 
         //when
-        LtvCalcResponse response = ltvCalcService.ltvCalculate(request);
+        LtvCalcResponse response = ltvCalcService.calculate(request);
 
         //then
         assertCommonExpectations(response, request, expectedLtvRatio);

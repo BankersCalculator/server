@@ -6,11 +6,11 @@ import lombok.Getter;
 @Getter
 public class RepaymentSchedule {
 
-    private int installmentNumber;
-    private double principalPayment;
-    private double interestPayment;
-    private double totalPayment;
-    private double remainingPrincipal;
+    private int installmentNumber; // 상환회차
+    private double principalPayment; // 상환원금
+    private double interestPayment; // 상환이자
+    private double totalPayment; // 총 상환액
+    private double remainingPrincipal; // 잔여원금
 
     @Builder
     public RepaymentSchedule(int installmentNumber, double principalPayment, double interestPayment, double totalPayment, double remainingPrincipal) {

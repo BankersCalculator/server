@@ -20,7 +20,7 @@ public class RepaymentCalcApiController {
 
     @PostMapping
     public ApiResponse<RepaymentCalcResponse> calculateRepayment(@Valid @RequestBody RepaymentCalcRequest request) {
-        RepaymentCalcResponse repaymentCalcResponse = repaymentCalcService.calculateRepayment(request.toServiceRequest());
+        RepaymentCalcResponse repaymentCalcResponse = repaymentCalcService.calculate(request.toServiceRequest());
         return ApiResponse.ok(repaymentCalcResponse);
     }
 }

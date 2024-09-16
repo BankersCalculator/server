@@ -74,7 +74,7 @@ public class OfficetelMortgageLoanDsrCalc implements DsrCalculator {
         double maturityRepayment = maturityPaymentAmount / actualRepaymentTerm;
         double annualPrincipalRepayment = installmentRepayment + maturityRepayment;
 
-        RepaymentCalcResponse repaymentCalcResponse = repaymentCalcService.calculateRepayment(loanStatus.toRepaymentCalcServiceRequest());
+        RepaymentCalcResponse repaymentCalcResponse = repaymentCalcService.calculate(loanStatus.toRepaymentCalcServiceRequest());
         double totalInterest = repaymentCalcResponse.getTotalInterest();
         double annalInterestRepayment = totalInterest / term * 12;
 
