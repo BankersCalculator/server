@@ -26,14 +26,15 @@ spring:
       default-property-inclusion: non_null
       serialization:
         FAIL_ON_EMPTY_BEANS: false
-  h2:
-    console:
-      enabled: true
   datasource:
-    driver-class-name: org.h2.Driver
-    url: jdbc:h2:mem:~/test
-    username: sa
-    password:
+#    driver-class-name: org.h2.Driver
+#    url: jdbc:h2:mem:~/test
+#    username: sa
+#    password:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: "${datasource.url}"
+    username: ${datasource.username}
+    password: ${datasource.password}
   data:
     redis:
       host: localhost
@@ -42,12 +43,13 @@ spring:
     show-sql: true
     open-in-view: false
     hibernate:
-      ddl-auto: create-drop # TODO: update
+      ddl-auto: update
     properties:
       hibernate:
         default_batch_fetch_size: 100
         format_sql: true
         generate_statistics: true
+        dialect: org.hibernate.dialect.MySQLDialect
     defer-datasource-initialization: true
 
   servlet:
