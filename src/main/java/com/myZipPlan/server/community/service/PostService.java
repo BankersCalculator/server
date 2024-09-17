@@ -108,21 +108,18 @@ public class    PostService {
         }
         LoanAdviceSummaryResponse loanAdviceSummaryReport = LoanAdviceSummaryResponse.fromEntity(loanAdviceResult);
 
+        // 이미지 처리 로직
+        String imageUrl = post.getImageUrl();
+        logger.info("1. imageUrl  : {}", imageUrl);
 
-        String imageUrl = post.getImageUrl(); // 기본적으로 기존 이미지 URL 유지
-        // 이미지 파일 처리 로직
-        if (postUpdateRequest.getImageFile() != null && !postUpdateRequest.getImageFile().isEmpty()) {
-            // 새로운 이미지 파일이 있으면 기존 이미지를 삭제하고 새로운 이미지를 업로드
-            if (imageUrl != null && !imageUrl.isEmpty()) {
-                s3Service.deleteFileByImageUri(imageUrl); // 기존 이미지 삭제
-            }
-            imageUrl = s3Service.uploadFile(postUpdateRequest.getImageFile()); // 새로운 이미지 업로드
-        } else if (postUpdateRequest.getExistingImageUrl() == null || postUpdateRequest.getExistingImageUrl().isEmpty()) {
-            // 새로운 이미지를 업로드하지 않고 기존 이미지를 삭제하는 경우
-            if (imageUrl != null && !imageUrl.isEmpty()) {
-                s3Service.deleteFileByImageUri(imageUrl); // 기존 이미지 삭제
-            }
-            imageUrl = null; // 이미지 URL을 null로 설정
+        if (hasNewImage(postUpdateRequest)) {
+            logger.info("2. hasNewImage : {}", hasNewImage(postUpdateRequest) );
+            imageUrl = handleNewImage(postUpdateRequest.getImageFile(), imageUrl);
+            logger.info("3. imageUrl  : {}", imageUrl);
+        } else if (shouldDeleteExistingImage(postUpdateRequest, imageUrl)) {
+            logger.info("4. shouldDeleteExistingImage : {}", shouldDeleteExistingImage(postUpdateRequest, imageUrl) );
+            imageUrl = deleteExistingImage(imageUrl);
+            logger.info("5. imageUrl  : {}", imageUrl);
         }
 
         postUpdateRequest.updatePost(post, loanAdviceResult, imageUrl);
@@ -131,7 +128,6 @@ public class    PostService {
 
         return PostResponse.fromEntity(post, loanAdviceSummaryReport);
     }
-
 
     // 게시글 삭제 로직
     @Transactional
@@ -211,6 +207,32 @@ public class    PostService {
                     return PostResponse.fromEntity(post, loanAdviceSummaryResponse);
                 })
                 .collect(Collectors.toList());
+    }
+
+
+    // 새로운 이미지가 있는지 여부 확인
+    private boolean hasNewImage(PostUpdateRequest postUpdateRequest) {
+        return postUpdateRequest.getImageFile() != null && !postUpdateRequest.getImageFile().isEmpty();
+    }
+
+    // 기존 이미지를 삭제해야 하는지 여부 확인
+    private boolean shouldDeleteExistingImage(PostUpdateRequest postUpdateRequest, String imageUrl) {
+        return (postUpdateRequest.getExistingImageUrl() == null || postUpdateRequest.getExistingImageUrl().isEmpty())
+                && imageUrl != null && !imageUrl.isEmpty();
+    }
+
+    // 새로운 이미지 처리
+    private String handleNewImage(MultipartFile newImageFile, String existingImageUrl) throws IOException{
+        if (existingImageUrl != null && !existingImageUrl.isEmpty()) {
+            s3Service.deleteFileByImageUri(existingImageUrl); // 기존 이미지 삭제
+        }
+        return s3Service.uploadFile(newImageFile); // 새로운 이미지 업로드 후 URL 반환
+    }
+
+    // 기존 이미지 삭제
+    private String deleteExistingImage(String existingImageUrl) {
+        s3Service.deleteFileByImageUri(existingImageUrl); // 기존 이미지 삭제
+        return null; // 이미지가 없음을 나타내는 null 반환
     }
 }
 

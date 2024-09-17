@@ -6,11 +6,12 @@ import com.myZipPlan.server.community.domain.Post;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
-
+import lombok.extern.slf4j.Slf4j;
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
+@Slf4j
 public class PostUpdateRequest {
 
     private String title;              // 게시글 제목
@@ -19,20 +20,18 @@ public class PostUpdateRequest {
     private Long loanAdviceResultId;   // 새로운 LoanAdviceResult ID (null일 수 있음)
     private String existingImageUrl;   // 기존 이미지 URL
 
-    // toEntity() 메서드는 필요 없으며, 대신 기존 게시글을 업데이트하는 방식으로 작성할 수 있습니다.
     public void updatePost(Post post, LoanAdviceResult loanAdviceResult, String imageUrl) {
+        log.info("updatePost method called with title: {}, content: {}, imageUrl: {}, loanAdviceResultId: {}",
+                this.title, this.content, imageUrl, this.loanAdviceResultId);
+
         if (this.title != null) {
             post.setTitle(this.title);
         }
         if (this.content != null) {
             post.setContent(this.content);
         }
-        if (loanAdviceResult != null) {
-            post.setLoanAdviceResult(loanAdviceResult);
-        }
-        if (imageUrl != null) {
-            post.setImageUrl(imageUrl);
-        }
+        post.setLoanAdviceResult(loanAdviceResult);
+        post.setImageUrl(imageUrl);
         post.setLastModifiedDate(LocalDateTime.now()); // 수정 시간 업데이트
     }
 }
