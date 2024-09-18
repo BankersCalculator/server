@@ -402,7 +402,15 @@ public class PostApiDocsTest extends RestDocsSupport {
         PostCreateRequest request = new PostCreateRequest();
         request.setTitle("테스트 제목");
         request.setContent("테스트 내용");
-        request.setLoanAdviceResultId(null); // loanAdviceResultId는 null로 설정
+        request.setLoanAdviceResultId(1L); // loanAdviceResultId는 null로 설정
+
+        LoanAdviceSummaryResponse loanAdviceSummaryResponse = LoanAdviceSummaryResponse.builder()
+                .loanAdviceResultId(1L)
+                .loanProductName("Test Loan Product")
+                .loanProductCode("ABC123")
+                .possibleLoanLimit(BigDecimal.valueOf(50000))
+                .expectedLoanRate(BigDecimal.valueOf(3.5))
+                .build();
         // 이미지 파일은 MultipartFile로 처리하므로 여기서는 생략
 
         // Mock PostResponse 객체 생성
@@ -418,7 +426,7 @@ public class PostApiDocsTest extends RestDocsSupport {
                 .lastModifiedDate(LocalDateTime.of(2024, 9, 15, 16, 0, 43))
                 .avatarUrl("카카오프로필")
                 .timeAgo("0분 전")
-                .loanAdviceSummaryReport(null)
+                .loanAdviceSummaryReport(loanAdviceSummaryResponse)
                 .build();
 
         // Mocking PostService의 createPost 메서드
@@ -433,6 +441,7 @@ public class PostApiDocsTest extends RestDocsSupport {
                             .file("imageFile", "test-image-content".getBytes())
                             .part(new MockPart("title", "테스트 제목".getBytes(StandardCharsets.UTF_8))) // title as part
                             .part(new MockPart("content", "테스트 내용".getBytes(StandardCharsets.UTF_8))) // content as part
+                            .part(new MockPart("loanAdviceResultId", "1".getBytes(StandardCharsets.UTF_8))) // content as part
                             .contentType(MediaType.MULTIPART_FORM_DATA)
                             .accept(MediaType.APPLICATION_JSON)
                             .header("AccessToken", "액세스 토큰"))
