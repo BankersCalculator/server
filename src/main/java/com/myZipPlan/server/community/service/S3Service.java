@@ -5,13 +5,13 @@ import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.myZipPlan.server.community.dto.post.request.PostUpdateRequest;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.net.URLDecoder;
@@ -43,12 +43,9 @@ public class S3Service {
 
     // 파일 삭제 메서드 (imageUri 사용)
     public void deleteFileByImageUri(String imageUri) {
-
         logger.info("Deleting file from S3: {}", imageUri); // 이미지 삭제 전 로그
-
         // imageUri에서 파일 경로 추출
         String fileKey = imageUri.replace("https://" + bucket + ".s3.amazonaws.com/", "");
-
         // 버킷 URL에 리전 정보가 포함된 경우 처리
         if (imageUri.contains("s3.")) {
             // 리전이 포함된 URL 처리 (예: s3.ap-northeast-2.amazonaws.com)
@@ -63,6 +60,5 @@ public class S3Service {
         // S3에서 파일 삭제
         amazonS3.deleteObject(bucket, decodedFileKey);
         logger.info("File deleted from S3: {}", decodedFileKey); // 삭제 완료 로그
-
     }
 }
