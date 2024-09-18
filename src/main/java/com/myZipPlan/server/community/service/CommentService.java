@@ -27,6 +27,7 @@ public class CommentService {
     private final CommentLikeRepository commentLikeRepository;
 
     // 댓글 작성
+    @Transactional
     public CommentResponse createComment(String oauthProviderId, Long postId, CommentCreateRequest commentCreateRequest) {
         User user = userRepository.findByOauthProviderId(oauthProviderId)
                 .orElseThrow(() -> new IllegalArgumentException("세션에 연결된 oauthProviderId를 찾을 수 없습니다."));
@@ -53,10 +54,12 @@ public class CommentService {
 
         comment.setContent(commentUpdateRequest.getUpdatedContent());
         comment.setLastModifiedDate(LocalDateTime.now());
-        return CommentResponse.fromEntity(comment);
+
+        boolean like = commentLikeRepository.findByCommentAndUser(comment, user).isPresent();
+        return CommentResponse.fromEntity(comment, like);
     }
 
-    //댓글삭제
+    //댓글 삭제
     @Transactional
     public void deleteComment(String oauthProviderId, Long commentId) {
         User user = userRepository.findByOauthProviderId(oauthProviderId)
