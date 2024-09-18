@@ -1,7 +1,7 @@
-package com.myZipPlan.server.housingInfo.controller;
+package com.myZipPlan.server.housingInfo.housingInfoMain.controller;
 import com.myZipPlan.server.common.api.ApiResponse;
-import com.myZipPlan.server.housingInfo.dto.HousingInfoRequest;
-import com.myZipPlan.server.housingInfo.service.HousingInfoService;
+import com.myZipPlan.server.housingInfo.housingInfoMain.dto.HousingInfoRequest;
+import com.myZipPlan.server.housingInfo.housingInfoMain.service.HousingInfoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

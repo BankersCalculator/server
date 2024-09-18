@@ -1,8 +1,8 @@
 package com.myZipPlan.server.docs;
-import com.myZipPlan.server.housingInfo.controller.HousingInfoApiController;
+import com.myZipPlan.server.housingInfo.housingInfoMain.controller.HousingInfoApiController;
 import com.myZipPlan.server.RestDocsSupport;
-import com.myZipPlan.server.housingInfo.dto.HousingInfoResponse;
-import com.myZipPlan.server.housingInfo.service.HousingInfoService;
+import com.myZipPlan.server.housingInfo.housingInfoMain.dto.HousingInfoResponse;
+import com.myZipPlan.server.housingInfo.housingInfoMain.service.HousingInfoService;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

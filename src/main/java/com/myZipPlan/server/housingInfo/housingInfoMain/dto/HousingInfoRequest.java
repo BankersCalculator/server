@@ -1,4 +1,4 @@
-package com.myZipPlan.server.housingInfo.dto;
+package com.myZipPlan.server.housingInfo.housingInfoMain.dto;
 
 import lombok.Getter;
 

@@ -2,20 +2,18 @@ package com.myZipPlan.server.api.housingInfo.service;
 import com.myZipPlan.server.housingInfo.buildingInfo.api.HousingTypeAndExclusiveAreaApiClient;
 
 import com.myZipPlan.server.housingInfo.buildingInfo.service.RentTransactionInquiryService;
-import com.myZipPlan.server.housingInfo.dto.HousingInfoResponse;
+import com.myZipPlan.server.housingInfo.housingInfoMain.dto.HousingInfoResponse;
 
 
-import com.myZipPlan.server.housingInfo.buildingInfo.api.HousingTypeAndExclusiveAreaApiClient;
 import com.myZipPlan.server.housingInfo.buildingInfo.common.RentHousingType;
 import com.myZipPlan.server.housingInfo.buildingInfo.dto.HousingTypeAndExclusiveAreaApiResponse;
-import com.myZipPlan.server.housingInfo.service.HousingInfoService;
+import com.myZipPlan.server.housingInfo.housingInfoMain.service.HousingInfoService;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.myZipPlan.server.housingInfo.buildingInfo.dto.HousingTypeAndExclusiveAreaApiResponse;
 import com.myZipPlan.server.housingInfo.buildingInfo.dto.RentTransactionInquiryResponse;
 
 
@@ -24,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static com.myZipPlan.server.housingInfo.service.HousingInfoService.parseJibun;
+import static com.myZipPlan.server.housingInfo.housingInfoMain.service.HousingInfoService.parseJibun;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 

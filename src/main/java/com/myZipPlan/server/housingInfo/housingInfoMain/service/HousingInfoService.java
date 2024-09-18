@@ -1,11 +1,11 @@
-package com.myZipPlan.server.housingInfo.service;
+package com.myZipPlan.server.housingInfo.housingInfoMain.service;
 
 import com.myZipPlan.server.housingInfo.buildingInfo.api.HousingTypeAndExclusiveAreaApiClient;
 import com.myZipPlan.server.housingInfo.buildingInfo.common.RentHousingType;
 import com.myZipPlan.server.housingInfo.buildingInfo.dto.HousingTypeAndExclusiveAreaApiResponse;
 import com.myZipPlan.server.housingInfo.buildingInfo.dto.RentTransactionInquiryResponse;
 import com.myZipPlan.server.housingInfo.buildingInfo.service.RentTransactionInquiryService;
-import com.myZipPlan.server.housingInfo.dto.HousingInfoResponse;
+import com.myZipPlan.server.housingInfo.housingInfoMain.dto.HousingInfoResponse;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
