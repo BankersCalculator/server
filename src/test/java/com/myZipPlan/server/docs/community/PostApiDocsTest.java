@@ -160,6 +160,8 @@ public class PostApiDocsTest extends RestDocsSupport {
                                             fieldWithPath("data[].comments[].content").description("댓글 내용"),
                                             fieldWithPath("data[].comments[].createdDate").description("댓글 생성 날짜"),
                                             fieldWithPath("data[].comments[].lastModifiedDate").description("댓글 수정 날짜"),
+                                            fieldWithPath("data[].comments[].like").type(JsonFieldType.BOOLEAN).description("댓글 좋아요 여부"),
+
                                             fieldWithPath("data[].commentCount").description("댓글 수").optional(),
                                             fieldWithPath("data[].createdDate").description("게시글 생성 날짜"),
                                             fieldWithPath("data[].lastModifiedDate").description("게시글 수정 날짜"),
@@ -196,6 +198,7 @@ public class PostApiDocsTest extends RestDocsSupport {
                 .content("후... 금리 장난아니네요")
                 .createdDate(LocalDateTime.now())
                 .lastModifiedDate(LocalDateTime.now())
+                .like(true)
                 .build();
 
         CommentResponse commentResponse2 = CommentResponse.builder()
@@ -205,6 +208,7 @@ public class PostApiDocsTest extends RestDocsSupport {
                 .content("어 혹시, 수도권 인건가요? 물권 정보 공유 받을 수 있을까요...?")
                 .createdDate(LocalDateTime.now())
                 .lastModifiedDate(LocalDateTime.now())
+                .like(true)
                 .build();
 
         List<CommentResponse> comments = new ArrayList<>();
@@ -264,6 +268,7 @@ public class PostApiDocsTest extends RestDocsSupport {
                                     fieldWithPath("data.comments[].content").type(JsonFieldType.STRING).description("댓글 내용"),
                                     fieldWithPath("data.comments[].createdDate").type(JsonFieldType.ARRAY).description("댓글 생성 날짜 [년, 월, 일, 시, 분, 초, 나노초]"),
                                     fieldWithPath("data.comments[].lastModifiedDate").type(JsonFieldType.ARRAY).description("댓글 수정 날짜 [년, 월, 일, 시, 분, 초, 나노초]"),
+                                    fieldWithPath("data.comments[].like").type(JsonFieldType.BOOLEAN).description("댓글 좋아요 여부"),
 
                                     fieldWithPath("data.commentCount").type(JsonFieldType.NUMBER).description("댓글 수"),
                                     fieldWithPath("data.createdDate").type(JsonFieldType.ARRAY).description("작성일자").optional(),
@@ -394,6 +399,7 @@ public class PostApiDocsTest extends RestDocsSupport {
                                 fieldWithPath("data[].comments[].content").type(JsonFieldType.STRING).description("댓글 내용"),
                                 fieldWithPath("data[].comments[].createdDate").type(JsonFieldType.ARRAY).description("댓글 생성 날짜 [년, 월, 일, 시, 분, 초, 나노초]"),
                                 fieldWithPath("data[].comments[].lastModifiedDate").type(JsonFieldType.ARRAY).description("댓글 수정 날짜 [년, 월, 일, 시, 분, 초, 나노초]"),
+                                fieldWithPath("data[].comments[].like").type(JsonFieldType.BOOLEAN).description("댓글 좋아요 여부"),
 
                                 fieldWithPath("data[].commentCount").type(JsonFieldType.NUMBER).description("댓글 수").optional(),
                                 fieldWithPath("data[].createdDate").type(JsonFieldType.ARRAY).description("작성일자").optional(),
