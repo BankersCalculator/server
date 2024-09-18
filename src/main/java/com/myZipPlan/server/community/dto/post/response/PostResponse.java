@@ -59,7 +59,9 @@ public class PostResponse {
         this.loanAdviceSummaryReport = loanAdviceSummaryReport;
         this.like = like;
     }
-    public static PostResponse fromEntity(Post post, LoanAdviceSummaryResponse loanAdviceSummaryReport) {
+    public static PostResponse fromEntity(Post post
+                                          , List<CommentResponse> comments
+                                          , LoanAdviceSummaryResponse loanAdviceSummaryReport) {
         return PostResponse.builder()
                 .id(post.getId())
                 .title(post.getTitle())
@@ -67,9 +69,7 @@ public class PostResponse {
                 .author(post.getUser().getEmail()) // (임시) 작성자 이메일로 잠시 사용. 닉네임 이후 대체
                 .imageUrl(post.getImageUrl())
                 .likes(post.getLikes())
-                .comments(post.getComments().stream()
-                        .map(CommentResponse::fromEntity)  // 댓글 목록 변환
-                        .collect(Collectors.toList()))
+                .comments(comments)
                 .createdDate(post.getCreatedDate())
                 .lastModifiedDate(post.getLastModifiedDate())
                 .avatarUrl("카카오프로필")  // (임시) 작성자의 아바타 URL. 사용할 이미지 공유 받으면 대체할 것.
@@ -79,7 +79,10 @@ public class PostResponse {
                 .build();
     }
 
-    public static PostResponse fromEntity(Post post, LoanAdviceSummaryResponse loanAdviceSummaryReport, boolean like) {
+    public static PostResponse fromEntity(Post post
+                                          , List<CommentResponse> comments
+                                          , LoanAdviceSummaryResponse loanAdviceSummaryReport
+                                          , boolean like) {
         return PostResponse.builder()
                 .id(post.getId())
                 .title(post.getTitle())
@@ -87,9 +90,7 @@ public class PostResponse {
                 .author(post.getUser().getEmail()) // (임시) 작성자 이메일로 잠시 사용. 닉네임 이후 대체
                 .imageUrl(post.getImageUrl())
                 .likes(post.getLikes())
-                .comments(post.getComments().stream()
-                        .map(CommentResponse::fromEntity)  // 댓글 목록 변환
-                        .collect(Collectors.toList()))
+                .comments(comments)
                 .createdDate(post.getCreatedDate())
                 .lastModifiedDate(post.getLastModifiedDate())
                 .avatarUrl("카카오프로필")  // (임시) 작성자의 아바타 URL. 사용할 이미지 공유 받으면 대체할 것.
