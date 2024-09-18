@@ -62,6 +62,7 @@ public class CommentApiDocsTest extends RestDocsSupport {
                 .content("New Comment Content")
                 .createdDate(LocalDateTime.now())
                 .lastModifiedDate(LocalDateTime.now())
+                .like(false)
                 .build();
 
         // Mocking CommentService의 addComment 메서드
@@ -100,7 +101,9 @@ public class CommentApiDocsTest extends RestDocsSupport {
                                     fieldWithPath("data.author").description("댓글 작성자 ID"),
                                     fieldWithPath("data.content").description("작성된 댓글 내용"),
                                     fieldWithPath("data.createdDate").description("댓글 작성일자").optional(),
-                                    fieldWithPath("data.lastModifiedDate").description("댓글 수정일자").optional()
+                                    fieldWithPath("data.lastModifiedDate").description("댓글 수정일자").optional(),
+                                    fieldWithPath("data.like").description("유저 댓글 좋아요 여부")
+
                             )
                     ));
         }
@@ -123,6 +126,7 @@ public class CommentApiDocsTest extends RestDocsSupport {
                 .content("Updated Comment Content")
                 .createdDate(LocalDateTime.now().minusDays(1))
                 .lastModifiedDate(LocalDateTime.now())
+                .like(true)
                 .build();
 
         // Mocking CommentService의 updateComment 메서드
@@ -161,7 +165,8 @@ public class CommentApiDocsTest extends RestDocsSupport {
                                     fieldWithPath("data.author").description("댓글 작성자 ID"),
                                     fieldWithPath("data.content").description("수정된 댓글 내용"),
                                     fieldWithPath("data.createdDate").description("댓글 작성일자").optional(),
-                                    fieldWithPath("data.lastModifiedDate").description("댓글 수정일자").optional()
+                                    fieldWithPath("data.lastModifiedDate").description("댓글 수정일자").optional(),
+                                    fieldWithPath("data.like").description("유저 댓글 좋아요 여부")
                             )
                     ));
         }
