@@ -5,6 +5,7 @@ import com.myZipPlan.server.advice.loanAdvice.entity.LoanAdviceResult;
 import com.myZipPlan.server.advice.loanAdvice.repository.LoanAdviceResultRepository;
 import com.myZipPlan.server.community.domain.Post;
 import com.myZipPlan.server.community.domain.PostLike;
+import com.myZipPlan.server.community.dto.comment.CommentResponse;
 import com.myZipPlan.server.community.dto.post.request.PostCreateRequest;
 import com.myZipPlan.server.community.dto.post.response.PostResponse;
 import com.myZipPlan.server.community.dto.post.request.PostUpdateRequest;
@@ -35,6 +36,7 @@ public class    PostService {
     private final PostLikeRepository postLikeRepository;
     private final LoanAdviceResultRepository loanAdviceResultRepository;
     private static final Logger logger = LoggerFactory.getLogger(PostService.class);
+    private final CommentService commentService;
 
 
     @Transactional
@@ -64,7 +66,9 @@ public class    PostService {
         Post post = postCreateRequest.toEntity(user, imageUrl, loanAdviceResult);
         postRepository.save(post);
 
-        return PostResponse.fromEntity(post, loanAdviceSummaryReport);
+        List<CommentResponse> comments = commentService.getComments(oauthProviderId, post.getId());
+
+        return PostResponse.fromEntity(post, comments, loanAdviceSummaryReport);
     }
 
     // 모든 게시글 조회
@@ -75,10 +79,11 @@ public class    PostService {
         List<Post> posts = postRepository.findAllWithComments();
         return posts.stream()
                 .map(post -> {
+                    List<CommentResponse> comments = commentService.getComments(oauthProviderId, post.getId());
                     LoanAdviceResult loanAdviceResult = post.getLoanAdviceResult();
                     LoanAdviceSummaryResponse loanAdviceSummaryResponse = LoanAdviceSummaryResponse.fromEntity(loanAdviceResult);
                     boolean like = postLikeRepository.findByPostAndUser(post, user).isPresent();
-                    return PostResponse.fromEntity(post, loanAdviceSummaryResponse, like);
+                    return PostResponse.fromEntity(post, comments, loanAdviceSummaryResponse, like);
                 })
                 .collect(Collectors.toList());
     }
@@ -92,7 +97,9 @@ public class    PostService {
         LoanAdviceResult loanAdviceResult = post.getLoanAdviceResult();
         LoanAdviceSummaryResponse loanAdviceSummaryResponse = LoanAdviceSummaryResponse.fromEntity(loanAdviceResult);
         boolean like = postLikeRepository.findByPostAndUser(post, user).isPresent();
-        return PostResponse.fromEntity(post, loanAdviceSummaryResponse, like);
+        List<CommentResponse> comments = commentService.getComments(oauthProviderId, post.getId());
+
+        return PostResponse.fromEntity(post, comments, loanAdviceSummaryResponse, like);
     }
 
     // 게시글조회(정렬)
@@ -112,10 +119,11 @@ public class    PostService {
 
         return posts.stream()
                 .map(post -> {
+                    List<CommentResponse> comments = commentService.getComments(oauthProviderId, post.getId());
                     LoanAdviceResult loanAdviceResult = post.getLoanAdviceResult();
                     LoanAdviceSummaryResponse loanAdviceSummaryResponse = LoanAdviceSummaryResponse.fromEntity(loanAdviceResult);
                     boolean like = postLikeRepository.findByPostAndUser(post, user).isPresent();
-                    return PostResponse.fromEntity(post, loanAdviceSummaryResponse, like);
+                    return PostResponse.fromEntity(post, comments, loanAdviceSummaryResponse, like);
                 })
                 .collect(Collectors.toList());
     }
@@ -157,8 +165,9 @@ public class    PostService {
         postRepository.save(post);
 
         boolean like = postLikeRepository.findByPostAndUser(post, user).isPresent();
+        List<CommentResponse> comments = commentService.getComments(oauthProviderId, post.getId());
 
-        return PostResponse.fromEntity(post, loanAdviceSummaryReport, like);
+        return PostResponse.fromEntity(post, comments, loanAdviceSummaryReport, like);
     }
 
     // 게시글 삭제 로직
