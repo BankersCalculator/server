@@ -17,6 +17,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -27,6 +29,7 @@ public class CommentService {
     private final CommentLikeRepository commentLikeRepository;
 
     // 댓글 작성
+    @Transactional
     public CommentResponse createComment(String oauthProviderId, Long postId, CommentCreateRequest commentCreateRequest) {
         User user = userRepository.findByOauthProviderId(oauthProviderId)
                 .orElseThrow(() -> new IllegalArgumentException("세션에 연결된 oauthProviderId를 찾을 수 없습니다."));
@@ -53,10 +56,12 @@ public class CommentService {
 
         comment.setContent(commentUpdateRequest.getUpdatedContent());
         comment.setLastModifiedDate(LocalDateTime.now());
-        return CommentResponse.fromEntity(comment);
+
+        boolean like = commentLikeRepository.findByCommentAndUser(comment, user).isPresent();
+        return CommentResponse.fromEntity(comment, like);
     }
 
-    //댓글삭제
+    //댓글 삭제
     @Transactional
     public void deleteComment(String oauthProviderId, Long commentId) {
         User user = userRepository.findByOauthProviderId(oauthProviderId)
@@ -107,5 +112,19 @@ public class CommentService {
         commentLikeRepository.delete(commentLike);
         comment.setLikes(comment.getLikes() - 1);  // 좋아요 수 감소
         commentRepository.save(comment);
+    }
+
+    @Transactional
+    public List<CommentResponse> getComments(String oauthProviderId, Long postId) {
+        User user = userRepository.findByOauthProviderId(oauthProviderId)
+                .orElseThrow(() -> new IllegalArgumentException("세션에 연결된 oauthProviderId를 찾을 수 없습니다."));
+
+        List<Comment> comments = commentRepository.findByPostId(postId);
+        return comments.stream()
+                .map(comment -> {
+                    boolean like = commentLikeRepository.findByCommentAndUser(comment, user).isPresent();
+                    return CommentResponse.fromEntity(comment, like);
+                })
+                .collect(Collectors.toList());
     }
 }

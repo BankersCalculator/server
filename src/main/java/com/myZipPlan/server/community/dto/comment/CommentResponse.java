@@ -16,19 +16,20 @@ public class CommentResponse {
     private final String content;  // 댓글 내용
     private final LocalDateTime createdDate;  // 작성일
     private final LocalDateTime lastModifiedDate;  // 수정일
+    private final boolean like; //유저 댓글 좋아요 여부
 
 
     @Builder
-    public CommentResponse(Long id, Long postId, String author, String content, LocalDateTime createdDate, LocalDateTime lastModifiedDate ) {
+    public CommentResponse(Long id, Long postId, String author, String content, LocalDateTime createdDate, LocalDateTime lastModifiedDate, boolean like ) {
         this.id = id;
         this.postId = postId;
         this.author = author;
         this.content = content;
         this.createdDate = createdDate;
         this.lastModifiedDate = lastModifiedDate;
+        this.like = like;
     }
 
-    // Comment 엔티티를 CommentResponse로 변환하는 메소드
     public static CommentResponse fromEntity(Comment comment) {
         return CommentResponse.builder()
                 .id(comment.getId())
@@ -37,6 +38,19 @@ public class CommentResponse {
                 .content(comment.getContent())
                 .createdDate(comment.getCreatedDate())
                 .lastModifiedDate(comment.getLastModifiedDate())
+                .like(false)
+                .build();
+    }
+
+    public static CommentResponse fromEntity(Comment comment, boolean like) {
+        return CommentResponse.builder()
+                .id(comment.getId())
+                .postId(comment.getPost().getId())
+                .author(comment.getUser().getEmail())
+                .content(comment.getContent())
+                .createdDate(comment.getCreatedDate())
+                .lastModifiedDate(comment.getLastModifiedDate())
+                .like(like)
                 .build();
     }
 }
