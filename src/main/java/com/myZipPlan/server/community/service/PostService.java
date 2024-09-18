@@ -61,7 +61,6 @@ public class    PostService {
             MultipartFile file = postCreateRequest.getImageFile();
             imageUrl = s3Service.uploadFile(file);
         }
-
         Post post = postCreateRequest.toEntity(user, imageUrl, loanAdviceResult);
         postRepository.save(post);
 
@@ -70,24 +69,55 @@ public class    PostService {
 
     // 모든 게시글 조회
     @Transactional
-    public List<PostResponse> getAllPosts() {
+    public List<PostResponse> getAllPosts(String oauthProviderId) {
+        User user = userRepository.findByOauthProviderId(oauthProviderId)
+                .orElseThrow(() -> new IllegalArgumentException("세션에 연결된 oauthProviderId를 찾을 수 없습니다."));
         List<Post> posts = postRepository.findAllWithComments();
         return posts.stream()
                 .map(post -> {
                     LoanAdviceResult loanAdviceResult = post.getLoanAdviceResult();
                     LoanAdviceSummaryResponse loanAdviceSummaryResponse = LoanAdviceSummaryResponse.fromEntity(loanAdviceResult);
-                    return PostResponse.fromEntity(post, loanAdviceSummaryResponse);
+                    boolean like = postLikeRepository.findByPostAndUser(post, user).isPresent();
+                    return PostResponse.fromEntity(post, loanAdviceSummaryResponse, like);
                 })
                 .collect(Collectors.toList());
     }
 
     @Transactional
-    public PostResponse getPostById(Long id) {
+    public PostResponse getPostById(String oauthProviderId, Long id) {
+        User user = userRepository.findByOauthProviderId(oauthProviderId)
+                .orElseThrow(() -> new IllegalArgumentException("세션에 연결된 oauthProviderId를 찾을 수 없습니다."));
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다."));
         LoanAdviceResult loanAdviceResult = post.getLoanAdviceResult();
         LoanAdviceSummaryResponse loanAdviceSummaryResponse = LoanAdviceSummaryResponse.fromEntity(loanAdviceResult);
-        return PostResponse.fromEntity(post, loanAdviceSummaryResponse);
+        boolean like = postLikeRepository.findByPostAndUser(post, user).isPresent();
+        return PostResponse.fromEntity(post, loanAdviceSummaryResponse, like);
+    }
+
+    // 게시글조회(정렬)
+    @Transactional
+    public List<PostResponse> getPostsBySortType(String oauthProviderId, PostSortType sortType) {
+        User user = userRepository.findByOauthProviderId(oauthProviderId)
+                .orElseThrow(() -> new IllegalArgumentException("세션에 연결된 oauthProviderId를 찾을 수 없습니다."));
+        List<Post> posts;
+
+        if (sortType == PostSortType.LATEST) {
+            posts = postRepository.findAllByOrderByCreatedDateAsc();
+        } else if (sortType == PostSortType.POPULAR) {
+            posts = postRepository.findAllByOrderByLikesDesc();
+        } else {
+            return Collections.emptyList();
+        }
+
+        return posts.stream()
+                .map(post -> {
+                    LoanAdviceResult loanAdviceResult = post.getLoanAdviceResult();
+                    LoanAdviceSummaryResponse loanAdviceSummaryResponse = LoanAdviceSummaryResponse.fromEntity(loanAdviceResult);
+                    boolean like = postLikeRepository.findByPostAndUser(post, user).isPresent();
+                    return PostResponse.fromEntity(post, loanAdviceSummaryResponse, like);
+                })
+                .collect(Collectors.toList());
     }
 
     @Transactional
@@ -126,8 +156,9 @@ public class    PostService {
         postUpdateRequest.updatePost(post, loanAdviceResult, imageUrl);
         postRepository.save(post);
 
+        boolean like = postLikeRepository.findByPostAndUser(post, user).isPresent();
 
-        return PostResponse.fromEntity(post, loanAdviceSummaryReport);
+        return PostResponse.fromEntity(post, loanAdviceSummaryReport, like);
     }
 
     // 게시글 삭제 로직
@@ -188,27 +219,7 @@ public class    PostService {
         postRepository.save(post);
     }
 
-    // 게시글조회(정렬)
-    @Transactional
-    public List<PostResponse> getPostsBySortType(PostSortType sortType) {
-        List<Post> posts;
 
-        if (sortType == PostSortType.LATEST) {
-            posts = postRepository.findAllByOrderByCreatedDateAsc();
-        } else if (sortType == PostSortType.POPULAR) {
-            posts = postRepository.findAllByOrderByLikesDesc();
-        } else {
-            return Collections.emptyList();
-        }
-
-        return posts.stream()
-                .map(post -> {
-                    LoanAdviceResult loanAdviceResult = post.getLoanAdviceResult();
-                    LoanAdviceSummaryResponse loanAdviceSummaryResponse = LoanAdviceSummaryResponse.fromEntity(loanAdviceResult);
-                    return PostResponse.fromEntity(post, loanAdviceSummaryResponse);
-                })
-                .collect(Collectors.toList());
-    }
 
 
     // 새로운 이미지가 있는지 여부 확인

@@ -51,29 +51,29 @@ public class PostApiController {
     // 게시글 목록 조회
     @GetMapping
     public ApiResponse<List<PostResponse>> getAllPosts() {
-        List<PostResponse> posts = postService.getAllPosts();
+        String oauthProviderId = SecurityUtils.getProviderId();
+        List<PostResponse> posts = postService.getAllPosts(oauthProviderId);
         return ApiResponse.ok(posts);
     }
 
     // 게시글 목록 조회 (정렬 기능 포함)
     @GetMapping("/sorted")
     public ApiResponse<List<PostResponse>> getPostsBySortType(@RequestParam PostSortType sortType) {
-        List<PostResponse> posts = postService.getPostsBySortType(sortType);
+        String oauthProviderId = SecurityUtils.getProviderId();
+        List<PostResponse> posts = postService.getPostsBySortType(oauthProviderId, sortType);
         return ApiResponse.ok(posts);
     }
 
     // 게시글 상세조회
     @GetMapping("/{postId}")
     public ApiResponse<PostResponse> getPostById(@PathVariable Long postId) {
+        String oauthProviderId = SecurityUtils.getProviderId();
         if (postId <= 0) {
             throw new IllegalArgumentException("올바르지 않은 게시글 ID입니다.");
         }
-        PostResponse post = postService.getPostById(postId);
+        PostResponse post = postService.getPostById(oauthProviderId, postId);
         return ApiResponse.ok(post);
     }
-
-
-
 
     @PostMapping("/{postId}/like")
     public ApiResponse<String> likePost(@PathVariable Long postId) {
