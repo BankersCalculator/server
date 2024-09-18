@@ -69,6 +69,7 @@ public class    PostService {
     }
 
     // 모든 게시글 조회
+    @Transactional
     public List<PostResponse> getAllPosts() {
         List<Post> posts = postRepository.findAllWithComments();
         return posts.stream()
