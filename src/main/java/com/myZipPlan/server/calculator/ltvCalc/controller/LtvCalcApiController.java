@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RequestMapping("/api/v1/ltvCalc")
 @RestController
-public class LtvCalcController {
+public class LtvCalcApiController {
 
     private final LtvCalcService ltvCalcService;
 

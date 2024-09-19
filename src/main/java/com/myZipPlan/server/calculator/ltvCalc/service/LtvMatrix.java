@@ -61,6 +61,6 @@ public class LtvMatrix {
     }
 
     public BigDecimal getLtvRatio(LoanPurpose loanPurpose, RegionType regionType, HouseOwnershipType houseOwnershipType) {
-        return ltvMatrix.get(loanPurpose).get(regionType).get(houseOwnershipType);
+        return ltvMatrix.get(loanPurpose).get(regionType).get(houseOwnershipType).divide(BigDecimal.valueOf(100));
     }
 }
