@@ -3,7 +3,6 @@ package com.myZipPlan.server;
 import com.myZipPlan.server.advice.loanAdvice.controller.LoanAdviceApiController;
 import com.myZipPlan.server.advice.loanAdvice.service.LoanAdviceQueryService;
 import com.myZipPlan.server.advice.loanAdvice.service.LoanAdviceService;
-import com.myZipPlan.server.calculator.dtiCalc.controller.DtiCalcController;
 import com.myZipPlan.server.calculator.dtiCalc.service.DtiCalcService;
 import com.myZipPlan.server.calculator.repaymentCalc.controller.RepaymentCalcApiController;
 import com.myZipPlan.server.calculator.repaymentCalc.service.RepaymentCalcService;
@@ -30,7 +29,7 @@ import static org.springframework.security.test.web.servlet.setup.SecurityMockMv
 
 @WithMockUser(roles = "USER")
 @WebMvcTest(controllers = {
-    RepaymentCalcApiController.class, DtiCalcController.class, LoanAdviceApiController.class})
+    RepaymentCalcApiController.class,  LoanAdviceApiController.class})
 public abstract class ControllerTestSupport {
 
 

@@ -1,58 +1,33 @@
 package com.myZipPlan.server.calculator.dtiCalc.dto;
 
-import com.myZipPlan.server.common.enums.calculator.LoanType;
 import com.myZipPlan.server.common.enums.calculator.RepaymentType;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
-/*
- * 프로그램 설명 : 사용자가 입력한 데이터를 저장하는 DTO(Data Transfer Object) 클래스
- * 개발자 : 제갈명필
- * 수정  : 2024-07-13, 리펙토링.  참조 프로그램 -> DsrCalcRequest.java
- */
+import java.math.BigDecimal;
 
 @Getter
 @Setter
-@NoArgsConstructor
-@ToString
+@Builder
 public class DtiCalcRequest {
-    private List<LoanStatus> loanStatuses = new ArrayList<>();
-    private Integer annualIncome;
 
-    @Getter
-    @Setter
-    @NoArgsConstructor
-    @ToString
+    private BigDecimal annualIncome;
+    private BigDecimal loanAmount;
+    private BigDecimal interestRate;
+    private Integer loanTerm;
+    private RepaymentType repaymentType;
+    private BigDecimal yearlyLoanInterestRepayment; // 보유대출 연이자 상환액
 
-    public static class LoanStatus {
-        private RepaymentType repaymentType;
-        private LoanType loanType;
-        private Double principal;
-        private Integer term;
-        private Double interestRatePercentage;
-    }
 
     public DtiCalcServiceRequest toServiceRequest() {
-        List<DtiCalcServiceRequest.LoanStatus> serviceLoanStatuses = loanStatuses.stream()
-            .map(loanStatus -> DtiCalcServiceRequest.LoanStatus.builder()
-                .repaymentType(loanStatus.getRepaymentType())
-                .loanType(loanStatus.getLoanType())
-                .principal(loanStatus.getPrincipal())
-                .term(loanStatus.getTerm())
-                .interestRate(loanStatus.getInterestRatePercentage() / 100)
-                .build()
-            )
-            .collect(Collectors.toList());
-
         return DtiCalcServiceRequest.builder()
-            .loanStatusList(serviceLoanStatuses)
             .annualIncome(annualIncome)
+            .loanAmount(loanAmount)
+            .interestRate(interestRate)
+            .loanTerm(loanTerm)
+            .repaymentType(repaymentType)
+            .yearlyLoanInterestRepayment(yearlyLoanInterestRepayment)
             .build();
     }
+
+
 }

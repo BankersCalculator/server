@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Getter
@@ -15,30 +16,12 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class DtiCalcServiceRequest {
-    private List<LoanStatus> loanStatusList;
-    private Integer annualIncome;
+    private BigDecimal annualIncome;
+    private BigDecimal loanAmount;
+    private BigDecimal interestRate;
+    private Integer loanTerm;
+    private RepaymentType repaymentType;
+    private BigDecimal yearlyLoanInterestRepayment; // 보유대출 연이자 상환액
 
-
-    @Getter
-    @NoArgsConstructor
-    @AllArgsConstructor
-    @Builder
-    public static class LoanStatus {
-        private RepaymentType repaymentType;
-        private LoanType loanType;
-        private Double principal;
-        private Integer term;
-        private Double interestRate;
-
-
-        public RepaymentCalcServiceRequest toRepaymentCalcServiceRequest() {
-            return RepaymentCalcServiceRequest.builder()
-                .repaymentType(repaymentType)
-                .principal(principal)
-                .term(term)
-                .interestRate(interestRate)
-                .build();
-        }
-    }
 }
 

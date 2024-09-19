@@ -1,17 +1,19 @@
 package com.myZipPlan.server.calculator.dtiCalc.dto;
 
-import com.myZipPlan.server.calculator.dtiCalc.domain.DtiCalcResult;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.util.List;
+import java.math.BigDecimal;
 
 
 @Getter
 @Builder
 public class DtiCalcResponse {
-    private Integer annualIncome;
-    private Integer totalLoanCount;
-    private List<DtiCalcResult> dtiCalcResults;
-    private Double finalDtiRatio;
+
+    private BigDecimal dtiRatio;
+    private BigDecimal annualIncome;
+    private BigDecimal annualRepaymentAmount; // 연간 원리금 상환액
+    private BigDecimal annualRepaymentPrincipal; // 연간 원금 상환액
+    private BigDecimal annualRepaymentInterest; // 연간 이자 상환액
+    private BigDecimal yearlyLoanInterestRepayment; // 보유대출 연이자 상환액
 }
