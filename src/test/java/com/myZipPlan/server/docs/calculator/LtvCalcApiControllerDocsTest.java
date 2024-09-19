@@ -73,7 +73,7 @@ public class LtvCalcApiControllerDocsTest extends RestDocsSupport {
                     fieldWithPath("regionType").type(JsonFieldType.STRING)
                         .description("지역 유형 (REGULATED_AREA: 규제지역, NON_REGULATED_CAPITAL_AREA: 규제지역 외 수도권, OTHER_AREAS: 기타)"),
                     fieldWithPath("houseOwnershipType").type(JsonFieldType.STRING)
-                        .description("주택 소유 유형\n" +
+                        .description("주택 소유 유형: [\n" +
                             "주택구입자금:\n" +
                             "  LIFETIME_FIRST: 생애최초\n" +
                             "  ORDINARY_DEMAND: 서민실수요자\n" +
@@ -82,7 +82,7 @@ public class LtvCalcApiControllerDocsTest extends RestDocsSupport {
                             "  MORE_THAN_ONE_HOUSE: 1주택 이상\n" +
                             "생활안정자금:\n" +
                             "  SINGLE_HOUSE: 1주택\n" +
-                            "  MORE_THAN_TWO_HOUSE: 2주택 이상")
+                            "  MORE_THAN_TWO_HOUSE: 2주택 이상]")
                 ),
                 responseFields(
                     fieldWithPath("code").type(JsonFieldType.NUMBER)

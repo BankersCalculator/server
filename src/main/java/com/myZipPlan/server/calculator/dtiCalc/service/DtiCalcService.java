@@ -7,12 +7,15 @@ import com.myZipPlan.server.calculator.repaymentCalc.dto.RepaymentCalcServiceReq
 import com.myZipPlan.server.calculator.repaymentCalc.service.RepaymentCalcService;
 import com.myZipPlan.server.common.enums.calculator.RepaymentType;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 @RequiredArgsConstructor
 @Service
+@Slf4j
 public class DtiCalcService {
 
     private final RepaymentCalcService repaymentCalcService;
@@ -36,12 +39,20 @@ public class DtiCalcService {
 
         RepaymentCalcResponse repaymentCalcResponse = repaymentCalcService.calculate(repaymentCalcServiceRequest);
 
-        BigDecimal annualRepaymentPrincipal = BigDecimal.valueOf(repaymentCalcResponse.getTotalPrincipal() / loanTerm);
-        BigDecimal annualRepaymentInterest = BigDecimal.valueOf(repaymentCalcResponse.getTotalInterest() / loanTerm);
+        log.info("repaymentCalcResponse.getTotalPrincipal() : " + repaymentCalcResponse.getTotalPrincipal());
+        log.info("repaymentCalcResponse.getTotalInterest() : " + repaymentCalcResponse.getTotalInterest());
+
+
+
+        BigDecimal annualRepaymentPrincipal = BigDecimal.valueOf(repaymentCalcResponse.getTotalPrincipal() / loanTerm * 12);
+        BigDecimal annualRepaymentInterest = BigDecimal.valueOf(repaymentCalcResponse.getTotalInterest() / loanTerm * 12);
+
+        log.info("annualRepaymentPrincipal : " + annualRepaymentPrincipal);
+        log.info("annualRepaymentInterest : " + annualRepaymentInterest);
 
         // DTI 계산
         BigDecimal annualRepaymentAmount = annualRepaymentPrincipal.add(annualRepaymentInterest).add(yearlyLoanInterestRepayment);
-        BigDecimal dti = annualRepaymentAmount.divide(annualIncome, 2, BigDecimal.ROUND_HALF_UP);
+        BigDecimal dti = annualRepaymentAmount.divide(annualIncome, 4, RoundingMode.HALF_UP);
 
         return DtiCalcResponse.builder()
             .dtiRatio(dti)
