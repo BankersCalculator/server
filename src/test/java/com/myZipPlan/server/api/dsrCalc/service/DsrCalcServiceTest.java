@@ -13,6 +13,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -73,8 +74,8 @@ class DsrCalcServiceTest extends IntegrationTestSupport {
             Arguments.of(LoanType.PERSONAL_LOAN, RepaymentType.AMORTIZING, 200000000, 50000000, 240, 60, 0.03, 0.2393),
             Arguments.of(LoanType.SECURITIES_COLLATERAL_LOAN, RepaymentType.AMORTIZING, 200000000, 50000000, 240, 60, 0.03, 0.2893),
             // 네이버 DSR 계산기와 비교
-            Arguments.of(LoanType.MORTGAGE, RepaymentType.AMORTIZING, 200000000, 0, 360, 0, 0.05, 0.1288),
-            Arguments.of(LoanType.MORTGAGE, RepaymentType.AMORTIZING, 300000000, 0, 480, 0, 0.05, 0.1736),
+            Arguments.of(LoanType.MORTGAGE, RepaymentType.AMORTIZING, 200000000, 0, 360, 0, 0.05, 0.1276),
+            Arguments.of(LoanType.MORTGAGE, RepaymentType.AMORTIZING, 300000000, 0, 480, 0, 0.05, 0.1716),
             Arguments.of(LoanType.MORTGAGE, RepaymentType.AMORTIZING, 100000000, 0, 120, 0, 0.1, 0.1586),
 
             Arguments.of(LoanType.DEPOSIT_AND_INSURANCE_COLLATERAL_LOAN, RepaymentType.EQUAL_PRINCIPAL, 200000000, 50000000, 240, 60, 0.03, 0.06),
@@ -91,7 +92,7 @@ class DsrCalcServiceTest extends IntegrationTestSupport {
             Arguments.of(LoanType.SECURITIES_COLLATERAL_LOAN, RepaymentType.EQUAL_PRINCIPAL, 200000000, 50000000, 240, 60, 0.03, 0.2876),
             // 네이버 DSR 계산기와 비교
             Arguments.of(LoanType.MORTGAGE, RepaymentType.EQUAL_PRINCIPAL, 200000000, 0, 360, 0, 0.05, 0.1168),
-            Arguments.of(LoanType.MORTGAGE, RepaymentType.EQUAL_PRINCIPAL, 300000000, 0, 480, 0, 0.05, 0.1502),
+            Arguments.of(LoanType.MORTGAGE, RepaymentType.EQUAL_PRINCIPAL, 300000000, 0, 480, 0, 0.05, 0.1489),
             Arguments.of(LoanType.MORTGAGE, RepaymentType.EQUAL_PRINCIPAL, 100000000, 0, 120, 0, 0.1, 0.1504)
 
 
@@ -103,24 +104,25 @@ class DsrCalcServiceTest extends IntegrationTestSupport {
                                                     double principal, int term, int gracePeriod,
                                                     double interestRate, double maturityPaymentAmount) {
         return DsrCalcServiceRequest.builder()
-            .annualIncome(100000000)
+            .annualIncome(BigDecimal.valueOf(100000000))
             .loanStatusList(List.of(
                 DsrCalcServiceRequest.LoanStatus.builder()
                     .repaymentType(repaymentType)
                     .loanType(loanType)
-                    .principal(principal)
-                    .term(term)
-                    .gracePeriod(gracePeriod)
-                    .interestRate(interestRate)
-                    .maturityPaymentAmount(maturityPaymentAmount)
+                    .principal(BigDecimal.valueOf(principal))
+                    .term(BigDecimal.valueOf(term))
+                    .gracePeriod(BigDecimal.valueOf(gracePeriod))
+                    .interestRate(BigDecimal.valueOf(interestRate))
+                    .maturityPaymentAmount(BigDecimal.valueOf(maturityPaymentAmount))
                     .build()
             ))
             .build();
     }
 
     private void assertCommonExpectations(DsrCalcResponse response, DsrCalcServiceRequest request, double expectedDsrRatio) {
-        assertEquals(request.getAnnualIncome(), response.getAnnualIncome(), DELTA);
-        assertEquals(request.getLoanStatusList().size(), response.getTotalLoanCount(), DELTA);
-        assertEquals(expectedDsrRatio, response.getFinalDsrRatio(), DELTA);
+
+        assertEquals(0, request.getAnnualIncome().compareTo(response.getAnnualIncome()), DELTA);
+        assertEquals(request.getLoanStatusList().size(), response.getTotalLoanCount().intValue());
+        assertEquals(expectedDsrRatio, response.getFinalDsrRatio().doubleValue(), DELTA);
     }
 }

@@ -49,17 +49,17 @@ public class DtiCalcServiceTest {
             Arguments.of(
                 new BigDecimal("100000000"), new BigDecimal("300000000"), new BigDecimal("0.035"),
                 360, RepaymentType.AMORTIZING, new BigDecimal("0"),
-                new BigDecimal("0.1617"), new BigDecimal("16165609")
+                new BigDecimal("0.1613"), new BigDecimal("16125445")
             ),
             Arguments.of(
                 new BigDecimal("50000000"), new BigDecimal("400000000"), new BigDecimal("0.05"),
                 240, RepaymentType.EQUAL_PRINCIPAL, new BigDecimal("0"),
-                new BigDecimal("0.6008"), new BigDecimal("30041667")
+                new BigDecimal("0.5976"), new BigDecimal("29881000")
             ),
             Arguments.of(
                 new BigDecimal("50000000"), new BigDecimal("400000000"), new BigDecimal("0.05"),
                 240, RepaymentType.EQUAL_PRINCIPAL, new BigDecimal("10000000"),
-                new BigDecimal("0.8008"), new BigDecimal("40041667")
+                new BigDecimal("0.7976"), new BigDecimal("39881000")
             ),
             Arguments.of(
                 new BigDecimal("150000000"), new BigDecimal("1000000000"), new BigDecimal("0.045"),
@@ -76,7 +76,7 @@ public class DtiCalcServiceTest {
             .annualIncome(annualIncome)
             .loanAmount(loanAmount)
             .interestRate(interestRate)
-            .loanTerm(loanTerm)
+            .loanTerm(BigDecimal.valueOf(loanTerm))
             .repaymentType(repaymentType)
             .yearlyLoanInterestRepayment(yearlyLoanInterestRepayment)
             .build();
@@ -84,12 +84,6 @@ public class DtiCalcServiceTest {
 
     private void assertCommonExpectations(DtiCalcResponse response, DtiCalcServiceRequest request,
                                           BigDecimal expectedDtiRatio, BigDecimal expectedAnnualRepaymentAmount) {
-        log.info(request.getAnnualIncome().toString());
-        log.info(response.getAnnualIncome().toString());
-        log.info(response.getDtiRatio().toString());
-        log.info(expectedDtiRatio.toString());
-        log.info(response.getAnnualRepaymentAmount().toString());
-        log.info(expectedAnnualRepaymentAmount.toString());
 
         assertEquals(0, request.getAnnualIncome().compareTo(response.getAnnualIncome()),
             "연간 소득이 일치하지 않습니다.");

@@ -42,7 +42,7 @@ public class DtiCalcApiControllerDocsTest extends RestDocsSupport {
             .annualIncome(BigDecimal.valueOf(100000000))
             .loanAmount(BigDecimal.valueOf(300000000))
             .interestRate(BigDecimal.valueOf(3.5))
-            .loanTerm(360)
+            .loanTerm(BigDecimal.valueOf(360))
             .repaymentType(RepaymentType.AMORTIZING)
             .yearlyLoanInterestRepayment(BigDecimal.valueOf(10500000))
             .build();

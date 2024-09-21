@@ -34,20 +34,16 @@ public class DtiCalcService {
             .repaymentType(repaymentType)
             .principal(loanAmount)
             .term(loanTerm)
+            .gracePeriod(BigDecimal.ZERO)
             .interestRate(interestRate)
             .build();
 
         RepaymentCalcResponse repaymentCalcResponse = repaymentCalcService.calculate(repaymentCalcServiceRequest);
 
-        log.info("repaymentCalcResponse.getTotalPrincipal() : " + repaymentCalcResponse.getTotalPrincipal());
-        log.info("repaymentCalcResponse.getTotalInterest() : " + repaymentCalcResponse.getTotalInterest());
-
 
         BigDecimal annualRepaymentPrincipal = repaymentCalcResponse.getTotalPrincipal().divide(loanTerm, 4, RoundingMode.HALF_UP).multiply(BigDecimal.valueOf(12));
         BigDecimal annualRepaymentInterest = repaymentCalcResponse.getTotalInterest().divide(loanTerm, 4, RoundingMode.DOWN).multiply(BigDecimal.valueOf(12));
 
-        log.info("annualRepaymentPrincipal : " + annualRepaymentPrincipal);
-        log.info("annualRepaymentInterest : " + annualRepaymentInterest);
 
         // DTI 계산
         BigDecimal annualRepaymentAmount = annualRepaymentPrincipal.add(annualRepaymentInterest).add(yearlyLoanInterestRepayment);

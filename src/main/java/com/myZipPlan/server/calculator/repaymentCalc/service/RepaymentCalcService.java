@@ -106,7 +106,7 @@ public class RepaymentCalcService {
             }
 
             remainingPrincipal = remainingPrincipal.subtract(principalPayment);
-            totalInterest = totalInterest.add(interestPayment);
+            totalInterest = totalInterest.add(interestPayment).setScale(0, RoundingMode.HALF_UP);
 
             RepaymentSchedule repaymentSchedule = RepaymentSchedule.builder()
                 .installmentNumber(BigDecimal.valueOf(i))
