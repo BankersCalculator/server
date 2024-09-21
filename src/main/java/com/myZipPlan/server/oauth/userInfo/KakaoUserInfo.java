@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @Slf4j
@@ -13,16 +14,15 @@ public class KakaoUserInfo {
     public static final String EMAIL = "email";
     public static final String PROVIDER = "KAKAO";
     public static final String KAKAO_ID = "id";
+    public static final String NICKNAME = "nickname";
+    public static final String THUMBNAIL_IMAGE = "thumbnail_image_url";
+    public static final String PROPERTIES = "properties";
+
 
     private Map<String, Object> attributes;
 
     public KakaoUserInfo(Map<String, Object> attributes) {
         this.attributes = attributes;
-    }
-
-    public String getEmail() {
-        Map<String, Object> account = getObjectMap();
-        return (String) account.get(EMAIL);
     }
 
     public String getProvider() {
@@ -34,12 +34,56 @@ public class KakaoUserInfo {
         return id != null ? id.toString() : null;
     }
 
+    public UserProfile getUserProfile() {
+        Map<String, Object> allInfo = getObjectMap();
+
+        String nickname = "";
+        String email = "";
+        String thumbnailImage = "";
+
+        email = (String) allInfo.get(EMAIL);
+        nickname = (String) allInfo.get(NICKNAME);
+        thumbnailImage = (String) allInfo.get(THUMBNAIL_IMAGE);
+
+        return UserProfile.builder()
+            .email(email)
+            .nickname(nickname)
+            .thumbnailImage(thumbnailImage)
+            .build();
+    }
+
+
     private Map<String, Object> getObjectMap() {
         ObjectMapper objectMapper = new ObjectMapper();
-        TypeReference<Map<String, Object>> typeReference = new TypeReference<Map<String, Object>>() {};
+        Map<String, Object> result = new HashMap<>();
 
-        Object kakaoAccount = attributes.get(KAKAO_ACCOUNT);
-        Map<String, Object> account = objectMapper.convertValue(kakaoAccount, typeReference);
-        return account;
+        // kakao_account 처리
+        if (attributes.containsKey(KAKAO_ACCOUNT)) {
+            Object kakaoAccount = attributes.get(KAKAO_ACCOUNT);
+            result.putAll(objectMapper.convertValue(kakaoAccount, new TypeReference<Map<String, Object>>() {}));
+        }
+
+        // properties 처리
+        if (attributes.containsKey(PROPERTIES)) {
+            Object properties = attributes.get(PROPERTIES);
+            result.putAll(objectMapper.convertValue(properties, new TypeReference<Map<String, Object>>() {}));
+        }
+
+        // 기타 최상위 속성들 추가
+        for (Map.Entry<String, Object> entry : attributes.entrySet()) {
+            if (!entry.getKey().equals(KAKAO_ACCOUNT) && !entry.getKey().equals(PROPERTIES)) {
+                result.put(entry.getKey(), entry.getValue());
+            }
+        }
+
+        return result;
+    }
+
+    public void logAllAttributes() {
+        log.info("KakaoUserInfo attributes");
+        for (Map.Entry<String, Object> entry : attributes.entrySet()) {
+            log.info("{}: {}", entry.getKey(), entry.getValue());
+        }
+        log.info("KakaoUserInfo attributes end");
     }
 }

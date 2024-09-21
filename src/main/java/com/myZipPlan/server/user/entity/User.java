@@ -19,6 +19,9 @@ public class User extends BaseTimeEntity {
     private Long id;
 
     @Column
+    private String name;
+
+    @Column
     private String oauthProvider;
 
     @Column
@@ -28,13 +31,19 @@ public class User extends BaseTimeEntity {
     private String email;
 
     @Column
+    private String profileImageUrl;
+
+    @Column
     private RoleType roleType;
 
-    public static User create(String oauthProvider, String oauthProviderId, String email, RoleType roleType) {
+    public static User create(String oauthProvider, String oauthProviderId, String nickname, String email,
+                              String thumbnailImage, RoleType roleType) {
         return User.builder()
             .oauthProvider(oauthProvider)
             .oauthProviderId(oauthProviderId)
+            .name(nickname)
             .email(email)
+            .profileImageUrl(thumbnailImage)
             .roleType(roleType)
             .build();
     }
@@ -43,6 +52,7 @@ public class User extends BaseTimeEntity {
         return User.builder()
             .oauthProvider("temp")
             .oauthProviderId(tempUserId)
+            .name("temp")
             .email(tempUserId)
             .roleType(RoleType.USER)
             .build();
