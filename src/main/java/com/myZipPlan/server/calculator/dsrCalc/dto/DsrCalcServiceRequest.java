@@ -42,6 +42,7 @@ public class DsrCalcServiceRequest {
             return RepaymentCalcServiceRequest.builder()
                 .repaymentType(repaymentType)
                 .principal(principal)
+
                 .term(term)
                 .gracePeriod(gracePeriod)
                 .interestRate(interestRate)

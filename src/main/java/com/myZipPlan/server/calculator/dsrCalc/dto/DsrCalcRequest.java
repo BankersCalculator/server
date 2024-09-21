@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -18,7 +19,7 @@ import java.util.stream.Collectors;
 @Setter
 @NoArgsConstructor
 @ToString
-
+@Slf4j
 public class DsrCalcRequest {
 
     // TODO: @Valid 추가할 것.
@@ -45,23 +46,42 @@ public class DsrCalcRequest {
 
     public DsrCalcServiceRequest toServiceRequest() {
         List<DsrCalcServiceRequest.LoanStatus> serviceLoanStatusList = loanStatuses.stream()
-            .map(loanStatus -> DsrCalcServiceRequest.LoanStatus.builder()
-                .repaymentType(loanStatus.getRepaymentType())
-                .loanType(loanStatus.getLoanType())
-                .principal(loanStatus.getPrincipal())
-                .maturityPaymentAmount(loanStatus.maturityPaymentAmount)
-                .term(loanStatus.getTerm())
-                .gracePeriod(loanStatus.getGracePeriod())
-                .interestRate(loanStatus.getInterestRatePercentage().divide(BigDecimal.valueOf(100), 4, RoundingMode.DOWN))
-                .isMetroArea(loanStatus.getIsMetroArea())
-                .interestRateType(loanStatus.getInterestRateType())
-                .build())
-            .collect(Collectors.toList());
+            .map(loanStatus -> {
+                BigDecimal interestRate = loanStatus.getInterestRatePercentage().divide(BigDecimal.valueOf(100), 4, RoundingMode.DOWN);
+                BigDecimal interestRateAddition = getInterestRateAddition(loanStatus.getIsMetroArea(), loanStatus.getInterestRateType());
 
+                log.info("interestRate: {}", interestRate);
+                log.info("interestRateAddition: {}", interestRateAddition);
+                interestRate = interestRate.add(interestRateAddition);
+                log.info("interestRate: {}", interestRate);
+                return DsrCalcServiceRequest.LoanStatus.builder()
+                    .repaymentType(loanStatus.getRepaymentType())
+                    .loanType(loanStatus.getLoanType())
+                    .principal(loanStatus.getPrincipal())
+                    .maturityPaymentAmount(loanStatus.maturityPaymentAmount)
+                    .term(loanStatus.getTerm())
+                    .gracePeriod(loanStatus.getGracePeriod())
+                    .interestRate(interestRate)
+                    .isMetroArea(loanStatus.getIsMetroArea())
+                    .interestRateType(loanStatus.getInterestRateType())
+                    .build();
+
+            })
+            .collect(Collectors.toList());
         return DsrCalcServiceRequest.builder()
             .loanStatusList(serviceLoanStatusList)
             .annualIncome(annualIncome)
             .build();
+    }
+
+    // interestRateType에 따른 가산금리 계산
+    private BigDecimal getInterestRateAddition(Boolean isMetroArea, InterestRateType interestRateType) {
+        if (isMetroArea) {
+            return interestRateType.getMetroAreaInterestRateAddition();
+        } else {
+            return interestRateType.getNonMetroAreaInterestRateAddition();
+        }
+
     }
 
 

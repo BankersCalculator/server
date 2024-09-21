@@ -23,8 +23,8 @@ public class DsrCommonCalculator {
         BigDecimal term = loanStatus.getTerm();
         BigDecimal interestRate = loanStatus.getInterestRate();
 
-        BigDecimal annualPrincipalRepayment = principal.divide(maxTerm, 4, RoundingMode.DOWN).multiply(BigDecimal.valueOf(12));
-        BigDecimal annalInterestRepayment = principal.multiply(interestRate);
+        BigDecimal annualPrincipalRepayment = principal.divide(maxTerm, 4, RoundingMode.HALF_UP).multiply(BigDecimal.valueOf(12)).setScale(0, RoundingMode.DOWN);
+        BigDecimal annalInterestRepayment = principal.multiply(interestRate).setScale(0, RoundingMode.DOWN);
 
         return DsrCalcResult.builder()
             .principal(principal)
@@ -41,8 +41,8 @@ public class DsrCommonCalculator {
         RepaymentCalcResponse repaymentCalcResponse = repaymentCalcService.calculate(loanStatus.toRepaymentCalcServiceRequest());
         BigDecimal totalInterest = repaymentCalcResponse.getTotalInterest();
 
-        BigDecimal annualPrincipalRepayment = principal.divide(maxTerm, 4, RoundingMode.DOWN).multiply(BigDecimal.valueOf(12));
-        BigDecimal annalInterestRepayment = totalInterest.divide(term, 4, RoundingMode.DOWN).multiply(BigDecimal.valueOf(12));
+        BigDecimal annualPrincipalRepayment = principal.divide(maxTerm, 4, RoundingMode.DOWN).multiply(BigDecimal.valueOf(12)).setScale(0, RoundingMode.DOWN);
+        BigDecimal annalInterestRepayment = totalInterest.divide(term, 4, RoundingMode.DOWN).multiply(BigDecimal.valueOf(12)).setScale(0, RoundingMode.DOWN);
 
         return DsrCalcResult.builder()
             .principal(principal)
@@ -59,8 +59,8 @@ public class DsrCommonCalculator {
         RepaymentCalcResponse repaymentCalcResponse = repaymentCalcService.calculate(loanStatus.toRepaymentCalcServiceRequest());
         BigDecimal totalInterest = repaymentCalcResponse.getTotalInterest();
 
-        BigDecimal annualPrincipalRepayment = principal.divide(maxTerm, 4, RoundingMode.DOWN).multiply(BigDecimal.valueOf(12));
-        BigDecimal annalInterestRepayment = totalInterest.divide(term, 4, RoundingMode.DOWN).multiply(BigDecimal.valueOf(12));
+        BigDecimal annualPrincipalRepayment = principal.divide(maxTerm, 4, RoundingMode.DOWN).multiply(BigDecimal.valueOf(12)).setScale(0, RoundingMode.DOWN);
+        BigDecimal annalInterestRepayment = totalInterest.divide(term, 4, RoundingMode.DOWN).multiply(BigDecimal.valueOf(12)).setScale(0, RoundingMode.DOWN);
 
         return DsrCalcResult.builder()
             .principal(principal)
