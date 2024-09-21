@@ -13,7 +13,7 @@ public class DtiCalcRequest {
     private BigDecimal annualIncome;
     private BigDecimal loanAmount;
     private BigDecimal interestRate;
-    private Integer loanTerm;
+    private BigDecimal loanTerm;
     private RepaymentType repaymentType;
     private BigDecimal yearlyLoanInterestRepayment; // 보유대출 연이자 상환액
 

@@ -8,6 +8,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 @Component
 @RequiredArgsConstructor
 @Slf4j
@@ -15,31 +18,13 @@ public class DsrCommonCalculator {
 
     private final RepaymentCalcService repaymentCalcService;
 
-    public DsrCalcResult dsrCalcForBulletLoan(DsrCalcServiceRequest.LoanStatus loanStatus, int maxTerm) {
-        double principal = loanStatus.getPrincipal();
-        int term = loanStatus.getTerm();
-        double interestRate = loanStatus.getInterestRate();
+    public DsrCalcResult dsrCalcForBulletLoan(DsrCalcServiceRequest.LoanStatus loanStatus, BigDecimal maxTerm) {
+        BigDecimal principal = loanStatus.getPrincipal();
+        BigDecimal term = loanStatus.getTerm();
+        BigDecimal interestRate = loanStatus.getInterestRate();
 
-        double annualPrincipalRepayment = principal / maxTerm * 12;
-        double annalInterestRepayment = principal * interestRate;
-
-        return DsrCalcResult.builder()
-            .principal(principal)
-            .term(term)
-            .annualPrincipalRepayment(annualPrincipalRepayment)
-            .annualInterestRepayment(annalInterestRepayment)
-            .build();
-    }
-
-    public DsrCalcResult dsrCalcForAmortizingLoan(DsrCalcServiceRequest.LoanStatus loanStatus, int maxTerm) {
-        double principal = loanStatus.getPrincipal();
-        int term = loanStatus.getTerm();
-
-        RepaymentCalcResponse repaymentCalcResponse = repaymentCalcService.calculate(loanStatus.toRepaymentCalcServiceRequest());
-        double totalInterest = repaymentCalcResponse.getTotalInterest();
-
-        double annualPrincipalRepayment = principal / maxTerm * 12;
-        double annalInterestRepayment = totalInterest / term * 12;
+        BigDecimal annualPrincipalRepayment = principal.divide(maxTerm, 4, RoundingMode.DOWN).multiply(BigDecimal.valueOf(12));
+        BigDecimal annalInterestRepayment = principal.multiply(interestRate);
 
         return DsrCalcResult.builder()
             .principal(principal)
@@ -49,15 +34,33 @@ public class DsrCommonCalculator {
             .build();
     }
 
-    public DsrCalcResult dsrCalcForEqualPrincipalLoan(DsrCalcServiceRequest.LoanStatus loanStatus, int maxTerm) {
-        double principal = loanStatus.getPrincipal();
-        int term = loanStatus.getTerm();
+    public DsrCalcResult dsrCalcForAmortizingLoan(DsrCalcServiceRequest.LoanStatus loanStatus, BigDecimal maxTerm) {
+        BigDecimal principal = loanStatus.getPrincipal();
+        BigDecimal term = loanStatus.getTerm();
 
         RepaymentCalcResponse repaymentCalcResponse = repaymentCalcService.calculate(loanStatus.toRepaymentCalcServiceRequest());
-        double totalInterest = repaymentCalcResponse.getTotalInterest();
+        BigDecimal totalInterest = repaymentCalcResponse.getTotalInterest();
 
-        double annualPrincipalRepayment = principal / maxTerm * 12;
-        double annalInterestRepayment = totalInterest / term * 12;
+        BigDecimal annualPrincipalRepayment = principal.divide(maxTerm, 4, RoundingMode.DOWN).multiply(BigDecimal.valueOf(12));
+        BigDecimal annalInterestRepayment = totalInterest.divide(term, 4, RoundingMode.DOWN).multiply(BigDecimal.valueOf(12));
+
+        return DsrCalcResult.builder()
+            .principal(principal)
+            .term(term)
+            .annualPrincipalRepayment(annualPrincipalRepayment)
+            .annualInterestRepayment(annalInterestRepayment)
+            .build();
+    }
+
+    public DsrCalcResult dsrCalcForEqualPrincipalLoan(DsrCalcServiceRequest.LoanStatus loanStatus, BigDecimal maxTerm) {
+        BigDecimal principal = loanStatus.getPrincipal();
+        BigDecimal term = loanStatus.getTerm();
+
+        RepaymentCalcResponse repaymentCalcResponse = repaymentCalcService.calculate(loanStatus.toRepaymentCalcServiceRequest());
+        BigDecimal totalInterest = repaymentCalcResponse.getTotalInterest();
+
+        BigDecimal annualPrincipalRepayment = principal.divide(maxTerm, 4, RoundingMode.DOWN).multiply(BigDecimal.valueOf(12));
+        BigDecimal annalInterestRepayment = totalInterest.divide(term, 4, RoundingMode.DOWN).multiply(BigDecimal.valueOf(12));
 
         return DsrCalcResult.builder()
             .principal(principal)
@@ -69,12 +72,12 @@ public class DsrCommonCalculator {
 
 
     public DsrCalcResult dsrCalcWithoutPrincipalRepayment(DsrCalcServiceRequest.LoanStatus loanStatus) {
-        double principal = loanStatus.getPrincipal();
-        int term = loanStatus.getTerm();
-        double interestRate = loanStatus.getInterestRate();
+        BigDecimal principal = loanStatus.getPrincipal();
+        BigDecimal term = loanStatus.getTerm();
+        BigDecimal interestRate = loanStatus.getInterestRate();
 
-        double annualPrincipalRepayment = 0;
-        double annalInterestRepayment = principal * interestRate;
+        BigDecimal annualPrincipalRepayment = BigDecimal.ZERO;
+        BigDecimal annalInterestRepayment = principal.multiply(interestRate);
 
         return DsrCalcResult.builder()
             .principal(principal)

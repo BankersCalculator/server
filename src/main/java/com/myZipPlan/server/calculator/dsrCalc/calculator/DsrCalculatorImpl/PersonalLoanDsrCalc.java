@@ -7,11 +7,13 @@ import com.myZipPlan.server.common.enums.calculator.LoanType;
 import com.myZipPlan.server.common.enums.calculator.RepaymentType;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
+
 @Component
 public class PersonalLoanDsrCalc implements DsrCalculator {
 
-    private static final int MAX_TERM_FOR_BULLET = 60;
-    private static final int MAX_TERM_FOR_EQUALPRINCIPAL_AND_AMORTIZING = 120;
+    private static final BigDecimal MAX_TERM_FOR_BULLET = BigDecimal.valueOf(60);
+    private static final BigDecimal MAX_TERM_FOR_EQUALPRINCIPAL_AND_AMORTIZING = BigDecimal.valueOf(120);
 
     @Override
     public LoanType getLoanType() {
@@ -19,12 +21,12 @@ public class PersonalLoanDsrCalc implements DsrCalculator {
     }
 
     @Override
-    public int getMaxTermForBullet() {
+    public BigDecimal getMaxTermForBullet() {
         return MAX_TERM_FOR_BULLET;
     }
 
     @Override
-    public int getMaxTermForEqualPrincipalAndAmortizing() {
+    public BigDecimal getMaxTermForEqualPrincipalAndAmortizing() {
         return MAX_TERM_FOR_EQUALPRINCIPAL_AND_AMORTIZING;
     }
 
@@ -35,27 +37,28 @@ public class PersonalLoanDsrCalc implements DsrCalculator {
         DsrCalcResult dsrCalcResult = DsrCalcResult.builder().build();
 
         if (repaymentType == RepaymentType.BULLET) {
-            int maxTermForBullet = getMaxTermForBullet();
+            BigDecimal maxTermForBullet = getMaxTermForBullet();
 
             dsrCalcResult = dsrCommonCaclulator.dsrCalcForBulletLoan(loanStatus, maxTermForBullet);
         }
         if (repaymentType == RepaymentType.AMORTIZING) {
-            int term = calculateAdjustedTerm(loanStatus);
+            BigDecimal term = calculateAdjustedTerm(loanStatus);
 
             dsrCalcResult = dsrCommonCaclulator.dsrCalcForAmortizingLoan(loanStatus, term);
         }
         if (repaymentType == RepaymentType.EQUAL_PRINCIPAL) {
-            int term = calculateAdjustedTerm(loanStatus);
+            BigDecimal term = calculateAdjustedTerm(loanStatus);
 
             dsrCalcResult = dsrCommonCaclulator.dsrCalcForEqualPrincipalLoan(loanStatus, term);
         }
         return dsrCalcResult;
     }
 
-    private int calculateAdjustedTerm(DsrCalcServiceRequest.LoanStatus loanStatus) {
-        int maxTerm = getMaxTermForEqualPrincipalAndAmortizing();
-        int actualTerm = loanStatus.getTerm();
-        return Math.max(Math.min(maxTerm, actualTerm), 60);
+    private BigDecimal calculateAdjustedTerm(DsrCalcServiceRequest.LoanStatus loanStatus) {
+        BigDecimal maxTerm = getMaxTermForEqualPrincipalAndAmortizing();
+        BigDecimal actualTerm = loanStatus.getTerm();
+        BigDecimal minTerm = BigDecimal.valueOf(60);
 
+        return actualTerm.min(maxTerm).max(minTerm);
     }
 }

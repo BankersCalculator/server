@@ -1,5 +1,6 @@
 package com.myZipPlan.server.calculator.dsrCalc.dto;
 
+import com.myZipPlan.server.common.enums.calculator.InterestRateType;
 import com.myZipPlan.server.common.enums.calculator.LoanType;
 import com.myZipPlan.server.common.enums.calculator.RepaymentType;
 import lombok.Getter;
@@ -7,6 +8,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,7 +25,7 @@ public class DsrCalcRequest {
 
     private List<LoanStatus> loanStatuses = new ArrayList<>();
 
-    private Integer annualIncome;
+    private BigDecimal annualIncome;
 
     @Getter
     @Setter
@@ -31,11 +34,13 @@ public class DsrCalcRequest {
     public static class LoanStatus {
         private RepaymentType repaymentType;
         private LoanType loanType;
-        private Double principal;
-        private Double maturityPaymentAmount;
-        private Integer term;
-        private Integer gracePeriod;
-        private Double interestRatePercentage;
+        private BigDecimal principal;
+        private BigDecimal maturityPaymentAmount;
+        private BigDecimal term;
+        private BigDecimal gracePeriod;
+        private BigDecimal interestRatePercentage;
+        private Boolean isMetroArea;
+        private InterestRateType interestRateType;
     }
 
     public DsrCalcServiceRequest toServiceRequest() {
@@ -47,7 +52,9 @@ public class DsrCalcRequest {
                 .maturityPaymentAmount(loanStatus.maturityPaymentAmount)
                 .term(loanStatus.getTerm())
                 .gracePeriod(loanStatus.getGracePeriod())
-                .interestRate(loanStatus.getInterestRatePercentage() / 100)
+                .interestRate(loanStatus.getInterestRatePercentage().divide(BigDecimal.valueOf(100), 4, RoundingMode.DOWN))
+                .isMetroArea(loanStatus.getIsMetroArea())
+                .interestRateType(loanStatus.getInterestRateType())
                 .build())
             .collect(Collectors.toList());
 

@@ -24,7 +24,7 @@ public class DtiCalcService {
 
         BigDecimal loanAmount = request.getLoanAmount();
         BigDecimal interestRate = request.getInterestRate();
-        Integer loanTerm = request.getLoanTerm();
+        BigDecimal loanTerm = request.getLoanTerm();
         RepaymentType repaymentType = request.getRepaymentType();
         BigDecimal yearlyLoanInterestRepayment = request.getYearlyLoanInterestRepayment();
         BigDecimal annualIncome = request.getAnnualIncome();
@@ -32,9 +32,9 @@ public class DtiCalcService {
         // 본건 주담대 연간원리금상환액 계산
         RepaymentCalcServiceRequest repaymentCalcServiceRequest = RepaymentCalcServiceRequest.builder()
             .repaymentType(repaymentType)
-            .principal(loanAmount.doubleValue())
+            .principal(loanAmount)
             .term(loanTerm)
-            .interestRate(interestRate.doubleValue())
+            .interestRate(interestRate)
             .build();
 
         RepaymentCalcResponse repaymentCalcResponse = repaymentCalcService.calculate(repaymentCalcServiceRequest);
@@ -43,9 +43,8 @@ public class DtiCalcService {
         log.info("repaymentCalcResponse.getTotalInterest() : " + repaymentCalcResponse.getTotalInterest());
 
 
-
-        BigDecimal annualRepaymentPrincipal = BigDecimal.valueOf(repaymentCalcResponse.getTotalPrincipal() / loanTerm * 12);
-        BigDecimal annualRepaymentInterest = BigDecimal.valueOf(repaymentCalcResponse.getTotalInterest() / loanTerm * 12);
+        BigDecimal annualRepaymentPrincipal = repaymentCalcResponse.getTotalPrincipal().divide(loanTerm, 4, RoundingMode.HALF_UP).multiply(BigDecimal.valueOf(12));
+        BigDecimal annualRepaymentInterest = repaymentCalcResponse.getTotalInterest().divide(loanTerm, 4, RoundingMode.DOWN).multiply(BigDecimal.valueOf(12));
 
         log.info("annualRepaymentPrincipal : " + annualRepaymentPrincipal);
         log.info("annualRepaymentInterest : " + annualRepaymentInterest);
