@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,33 +21,25 @@ public class DsrCalcService {
 
     private final DsrCalculatorFactory dsrCalculatorFactory;
 
-    /***
-     *
-     * @param request
-     * @return DsrCalcResponse
-     *
-     * TODO: 개발이 필요한 사항
-     * 1. 스트레스 금리 적용
-     * 2. 초년도 기준(필요없을지도?)
-     */
     public DsrCalcResponse dsrCalculate(DsrCalcServiceRequest request) {
-        double totalDsrAmount = 0;
-        int annualIncome = request.getAnnualIncome();
-        int totalLoanCount = 0;
+        BigDecimal totalDsrAmount = BigDecimal.ZERO;
+        BigDecimal annualIncome = request.getAnnualIncome();
+        BigDecimal totalLoanCount = BigDecimal.ZERO;
 
         List<DsrCalcResult> dsrCalcResultList = new ArrayList<>();
         for (DsrCalcServiceRequest.LoanStatus loanStatus : request.getLoanStatusList()) {
             DsrCalculator calculator = dsrCalculatorFactory.getCalculator(loanStatus.getLoanType());
             DsrCalcResult dsrCalcResult = calculator.calculateDsr(loanStatus);
 
-            dsrCalcResult.setSerial(++totalLoanCount);
-            totalDsrAmount += dsrCalcResult.getAnnualPrincipalRepayment();
-            totalDsrAmount += dsrCalcResult.getAnnualInterestRepayment();
+            totalLoanCount = totalLoanCount.add(BigDecimal.ONE);
+            dsrCalcResult.setSerial(totalLoanCount);
+            totalDsrAmount = totalDsrAmount.add(dsrCalcResult.getAnnualPrincipalRepayment());
+            totalDsrAmount = totalDsrAmount.add(dsrCalcResult.getAnnualInterestRepayment());
 
             dsrCalcResultList.add(dsrCalcResult);
         }
 
-        double totalDsrRatio = (totalDsrAmount / annualIncome);
+        BigDecimal totalDsrRatio = (totalDsrAmount.divide(annualIncome, 4, RoundingMode.DOWN));
 
         return DsrCalcResponse.builder()
             .annualIncome(annualIncome)

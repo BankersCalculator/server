@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,9 +18,7 @@ import java.util.List;
 @Service
 public class RepaymentCalcService {
 
-    // TODO: 언젠가(사용자가 생기면..) BigDecimal로 자료형 바꿀 것.
-
-    public RepaymentCalcResponse calculateRepayment(RepaymentCalcServiceRequest repaymentCalcServiceRequest) {
+    public RepaymentCalcResponse calculate(RepaymentCalcServiceRequest repaymentCalcServiceRequest) {
         RepaymentType repaymentType = repaymentCalcServiceRequest.getRepaymentType();
 
         RepaymentCalcResponse response = RepaymentCalcResponse.builder().build();
@@ -38,28 +38,30 @@ public class RepaymentCalcService {
 
     private RepaymentCalcResponse calculateBulletLoanRepayment(RepaymentCalcServiceRequest repaymentCalcServiceRequest) {
 
-        double principalAmount = repaymentCalcServiceRequest.getPrincipal();
-        int repaymentTermInMonths = repaymentCalcServiceRequest.getTerm();
-        double annualInterestRate = repaymentCalcServiceRequest.getInterestRate();
+        BigDecimal principalAmount = repaymentCalcServiceRequest.getPrincipal();
+        BigDecimal repaymentTermInMonths = repaymentCalcServiceRequest.getTerm();
+        BigDecimal annualInterestRate = repaymentCalcServiceRequest.getInterestRate();
 
-        double annualInterest = principalAmount * annualInterestRate;
-        double monthlyInterest = annualInterest / 12;
-        double totalInterest = monthlyInterest * repaymentTermInMonths;
+        BigDecimal annualInterest = principalAmount.multiply(annualInterestRate);
+        BigDecimal monthlyInterest = annualInterest.divide(BigDecimal.valueOf(12), 4, RoundingMode.DOWN);
+        BigDecimal totalInterest = monthlyInterest.multiply(repaymentTermInMonths);
 
         List<RepaymentSchedule> repaymentScheduleList = new ArrayList<>();
-        double remainingPrincipal = principalAmount;
+        BigDecimal remainingPrincipal = principalAmount;
 
-        for (int i = 1; i <= repaymentTermInMonths; i++) {
+        int repaymentTermInMonthsInt = repaymentTermInMonths.intValue();
 
-            boolean lastInstallment = i == repaymentTermInMonths;
-            double principalPayment = lastInstallment ? principalAmount : 0;
-            remainingPrincipal -= principalPayment;
+        for (int i = 1; i <= repaymentTermInMonthsInt; i++) {
+
+            boolean lastInstallment = i == repaymentTermInMonthsInt;
+            BigDecimal principalPayment = lastInstallment ? principalAmount : BigDecimal.ZERO;
+            remainingPrincipal = remainingPrincipal.subtract(principalPayment);
 
             RepaymentSchedule repaymentSchedule = RepaymentSchedule.builder()
-                .installmentNumber(i)
+                .installmentNumber(BigDecimal.valueOf(i))
                 .principalPayment(principalPayment)
                 .interestPayment(monthlyInterest)
-                .totalPayment(principalPayment + monthlyInterest)
+                .totalPayment(principalPayment.add(monthlyInterest))
                 .remainingPrincipal(remainingPrincipal)
                 .build();
             repaymentScheduleList.add(repaymentSchedule);
@@ -69,41 +71,45 @@ public class RepaymentCalcService {
             .repaymentSchedules(repaymentScheduleList)
             .totalPrincipal(principalAmount)
             .totalInterest(totalInterest)
-            .totalInstallments(repaymentScheduleList.size())
+            .totalInstallments(BigDecimal.valueOf(repaymentScheduleList.size()))
             .build();
     }
 
     private RepaymentCalcResponse calculateAmortizingLoanRepayment(RepaymentCalcServiceRequest repaymentCalcServiceRequest) {
-        double principalAmount = repaymentCalcServiceRequest.getPrincipal();
-        int repaymentTermInMonths = repaymentCalcServiceRequest.getTerm();
-        int gracePeriod = repaymentCalcServiceRequest.getGracePeriod();
-        double monthlyInterestRate = repaymentCalcServiceRequest.getInterestRate() / 12;
+        BigDecimal principalAmount = repaymentCalcServiceRequest.getPrincipal();
+        BigDecimal repaymentTermInMonths = repaymentCalcServiceRequest.getTerm();
+        BigDecimal gracePeriod = repaymentCalcServiceRequest.getGracePeriod();
+        BigDecimal monthlyInterestRate = repaymentCalcServiceRequest.getInterestRate().divide(BigDecimal.valueOf(12), 4, RoundingMode.DOWN);
 
         List<RepaymentSchedule> repaymentScheduleList = new ArrayList<>();
-        int numberOfPayments = repaymentTermInMonths - gracePeriod;
-        double monthlyPayment = calculateAmortizingLoanMonthlyPayment(principalAmount, monthlyInterestRate, numberOfPayments);
+        BigDecimal numberOfPayments = repaymentTermInMonths.subtract(gracePeriod);
+        BigDecimal monthlyPayment = calculateAmortizingLoanMonthlyPayment(principalAmount, monthlyInterestRate, numberOfPayments);
 
-        double remainingPrincipal = principalAmount;
-        double totalInterest = 0;
+        BigDecimal remainingPrincipal = principalAmount;
+        BigDecimal totalInterest = BigDecimal.ZERO;
 
-        for (int i = 1; i <= repaymentTermInMonths; i++) {
-            double interestPayment = remainingPrincipal * monthlyInterestRate;
-            double principalPayment;
-            double totalPayment;
+        int repaymentTermInMonthsInt = repaymentTermInMonths.intValue();
 
-            if (i <= gracePeriod) {
-                principalPayment = 0;
+        for (int i = 1; i <= repaymentTermInMonthsInt; i++) {
+
+            BigDecimal interestPayment = remainingPrincipal.multiply(monthlyInterestRate);
+            BigDecimal principalPayment;
+            BigDecimal totalPayment;
+
+            BigDecimal currentMonth = BigDecimal.valueOf(i);
+            if (currentMonth.compareTo(gracePeriod) <= 0) {
+                principalPayment = BigDecimal.ZERO;
                 totalPayment = interestPayment;
             } else {
-                principalPayment = monthlyPayment - interestPayment;
+                principalPayment = monthlyPayment.subtract(interestPayment);
                 totalPayment = monthlyPayment;
             }
 
-            remainingPrincipal -= principalPayment;
-            totalInterest += interestPayment;
+            remainingPrincipal = remainingPrincipal.subtract(principalPayment);
+            totalInterest = totalInterest.add(interestPayment).setScale(0, RoundingMode.HALF_UP);
 
             RepaymentSchedule repaymentSchedule = RepaymentSchedule.builder()
-                .installmentNumber(i)
+                .installmentNumber(BigDecimal.valueOf(i))
                 .principalPayment(principalPayment)
                 .interestPayment(interestPayment)
                 .totalPayment(totalPayment)
@@ -117,41 +123,44 @@ public class RepaymentCalcService {
             .repaymentSchedules(repaymentScheduleList)
             .totalPrincipal(principalAmount)
             .totalInterest(totalInterest)
-            .totalInstallments(repaymentScheduleList.size())
+            .totalInstallments(BigDecimal.valueOf(repaymentScheduleList.size()))
             .build();
     }
 
     private RepaymentCalcResponse calculateEqualPrincipalLoanRepayment(RepaymentCalcServiceRequest repaymentCalcServiceRequest) {
-        double principalAmount = repaymentCalcServiceRequest.getPrincipal();
-        int repaymentTermInMonths = repaymentCalcServiceRequest.getTerm();
-        int gracePeriod = repaymentCalcServiceRequest.getGracePeriod();
-        double monthlyInterestRate = repaymentCalcServiceRequest.getInterestRate() / 12;
+        BigDecimal principalAmount = repaymentCalcServiceRequest.getPrincipal();
+        BigDecimal repaymentTermInMonths = repaymentCalcServiceRequest.getTerm();
+        BigDecimal gracePeriod = repaymentCalcServiceRequest.getGracePeriod();
+        BigDecimal monthlyInterestRate = repaymentCalcServiceRequest.getInterestRate().divide(BigDecimal.valueOf(12), 4, RoundingMode.DOWN);
 
         List<RepaymentSchedule> repaymentScheduleList = new ArrayList<>();
-        int numberOfPayments = repaymentTermInMonths - gracePeriod;
-        double monthlyPayment = principalAmount / numberOfPayments;
+        BigDecimal numberOfPayments = repaymentTermInMonths.subtract(gracePeriod);
+        BigDecimal monthlyPayment = principalAmount.divide(numberOfPayments, 4, RoundingMode.DOWN);
 
-        double remainingPrincipal = principalAmount;
-        double totalInterest = 0;
+        BigDecimal remainingPrincipal = principalAmount;
+        BigDecimal totalInterest = BigDecimal.ZERO;
 
-        for (int i = 1; i <= repaymentTermInMonths; i++) {
-            double interestPayment = remainingPrincipal * monthlyInterestRate;
-            double principalPayment;
-            double totalPayment;
+        int repaymentTermInMonthsInt = repaymentTermInMonths.intValue();
 
-            if (i <= gracePeriod) {
-                principalPayment = 0;
+        for (int i = 1; i <= repaymentTermInMonthsInt; i++) {
+            BigDecimal interestPayment = remainingPrincipal.multiply(monthlyInterestRate);
+            BigDecimal principalPayment;
+            BigDecimal totalPayment;
+
+            BigDecimal currentMonth = BigDecimal.valueOf(i);
+            if (currentMonth.compareTo(gracePeriod) <= 0) {
+                principalPayment = BigDecimal.ZERO;
                 totalPayment = interestPayment;
             } else {
                 principalPayment = monthlyPayment;
-                totalPayment = monthlyPayment + interestPayment;
+                totalPayment = monthlyPayment.add( interestPayment);
             }
 
-            remainingPrincipal -= principalPayment;
-            totalInterest += interestPayment;
+            remainingPrincipal = remainingPrincipal .subtract(principalPayment);
+            totalInterest = totalInterest.add( interestPayment);
 
             RepaymentSchedule repaymentSchedule = RepaymentSchedule.builder()
-                .installmentNumber(i)
+                .installmentNumber(BigDecimal.valueOf(i))
                 .principalPayment(principalPayment)
                 .interestPayment(interestPayment)
                 .totalPayment(totalPayment)
@@ -164,12 +173,16 @@ public class RepaymentCalcService {
             .repaymentSchedules(repaymentScheduleList)
             .totalPrincipal(principalAmount)
             .totalInterest(totalInterest)
-            .totalInstallments(repaymentScheduleList.size())
+            .totalInstallments(BigDecimal.valueOf(repaymentScheduleList.size()))
             .build();
     }
 
-    private double calculateAmortizingLoanMonthlyPayment(double principal, double monthlyInterestRate, int numberOfPayments) {
-        return principal * (monthlyInterestRate * Math.pow(1 + monthlyInterestRate, numberOfPayments))
-            / (Math.pow(1 + monthlyInterestRate, numberOfPayments) - 1);
+    private BigDecimal calculateAmortizingLoanMonthlyPayment(BigDecimal principal, BigDecimal monthlyInterestRate, BigDecimal numberOfPayments) {
+        BigDecimal one = BigDecimal.ONE;
+        BigDecimal onePlusRate = one.add(monthlyInterestRate);
+        BigDecimal denominator = onePlusRate.pow(numberOfPayments.intValue()).subtract(one);
+        BigDecimal numerator = principal.multiply(monthlyInterestRate).multiply(onePlusRate.pow(numberOfPayments.intValue()));
+
+        return numerator.divide(denominator, 10, RoundingMode.HALF_UP);
     }
 }

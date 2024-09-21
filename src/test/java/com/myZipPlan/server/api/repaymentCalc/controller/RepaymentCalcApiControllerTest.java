@@ -7,6 +7,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 
+import java.math.BigDecimal;
+
 import static com.myZipPlan.server.common.message.ValidationMessage.MAX_VALUE_INTEREST_RATE_PERCENTAGE;
 import static com.myZipPlan.server.common.message.ValidationMessage.NOT_NULL_REPAYMENT_TYPE;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -26,11 +28,11 @@ class RepaymentCalcApiControllerTest extends ControllerTestSupport {
         //given
         RepaymentCalcRequest request = RepaymentCalcRequest.builder()
             .repaymentType(RepaymentType.AMORTIZING)
-            .principal(300000000)
-            .term(60)
-            .gracePeriod(0)
-            .interestRatePercentage(4)
-            .maturityPaymentAmount(0)
+            .principal(BigDecimal.valueOf(300000000))
+            .term(BigDecimal.valueOf(60))
+            .gracePeriod(BigDecimal.valueOf(0))
+            .interestRatePercentage(BigDecimal.valueOf(4))
+            .maturityPaymentAmount(BigDecimal.valueOf(0))
             .build();
 
         //when //then
@@ -52,11 +54,11 @@ class RepaymentCalcApiControllerTest extends ControllerTestSupport {
         //given
         RepaymentCalcRequest request = RepaymentCalcRequest.builder()
             .repaymentType(RepaymentType.BULLET)
-            .principal(300000000)
-            .term(60)
-            .gracePeriod(0)
-            .interestRatePercentage(4)
-            .maturityPaymentAmount(0)
+            .principal(BigDecimal.valueOf(300000000))
+            .term(BigDecimal.valueOf(60))
+            .gracePeriod(BigDecimal.valueOf(0))
+            .interestRatePercentage(BigDecimal.valueOf(4))
+            .maturityPaymentAmount(BigDecimal.valueOf(0))
             .build();
 
         //when //then
@@ -77,11 +79,11 @@ class RepaymentCalcApiControllerTest extends ControllerTestSupport {
     void CalcRepaymentOnAmortizingLoanWithoutRepaymentType() throws Exception {
         //given
         RepaymentCalcRequest request = RepaymentCalcRequest.builder()
-            .principal(300000000)
-            .term(60)
-            .gracePeriod(0)
-            .interestRatePercentage(4)
-            .maturityPaymentAmount(0)
+            .principal(BigDecimal.valueOf(300000000))
+            .term(BigDecimal.valueOf(60))
+            .gracePeriod(BigDecimal.valueOf(0))
+            .interestRatePercentage(BigDecimal.valueOf(4))
+            .maturityPaymentAmount(BigDecimal.valueOf(0))
             .build();
 
         //when //then
@@ -103,11 +105,11 @@ class RepaymentCalcApiControllerTest extends ControllerTestSupport {
         //given
         RepaymentCalcRequest request = RepaymentCalcRequest.builder()
             .repaymentType(RepaymentType.BULLET)
-            .principal(300000000)
-            .term(60)
-            .gracePeriod(0)
-            .interestRatePercentage(77)
-            .maturityPaymentAmount(0)
+            .principal(BigDecimal.valueOf(300000000))
+            .term(BigDecimal.valueOf(60))
+            .gracePeriod(BigDecimal.valueOf(0))
+            .interestRatePercentage(BigDecimal.valueOf(77))
+            .maturityPaymentAmount(BigDecimal.valueOf(0))
             .build();
 
         //when //then

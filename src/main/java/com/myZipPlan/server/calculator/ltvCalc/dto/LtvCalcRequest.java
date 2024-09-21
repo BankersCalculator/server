@@ -1,11 +1,15 @@
 package com.myZipPlan.server.calculator.ltvCalc.dto;
 
+import com.myZipPlan.server.common.enums.calculator.HouseOwnershipType;
 import com.myZipPlan.server.common.enums.calculator.HousingType;
+import com.myZipPlan.server.common.enums.calculator.LoanPurpose;
 import com.myZipPlan.server.common.enums.calculator.RegionType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.math.BigDecimal;
 
 @Getter
 @NoArgsConstructor
@@ -13,25 +17,18 @@ import lombok.NoArgsConstructor;
 @Builder
 public class LtvCalcRequest {
 
-    private Double loanAmount;  // 대출금액
-    private Double collateralValue; // 담보가치
-    private Double priorMortgage;   // 선순위채권
-    private Integer numberOfRooms; // 방 수
-    private HousingType housingType; // 주택유형
+    private LoanPurpose loanPurpose;    // 대출목적
+    private BigDecimal collateralValue; // 담보가치
     private RegionType regionType; // 지역
-    private Double currentLeaseDeposit; // 현재임차보증금
-//    private HouseOwnershipType houseOwnershipType;  // 주택보유유형
-//    private LoanPurpose loanPurpose;    // 대출목적
+    private HouseOwnershipType houseOwnershipType;  // 주택보유유형
+
 
     public LtvCalcServiceRequest toServiceRequest() {
         return LtvCalcServiceRequest.builder()
-            .loanAmount(loanAmount)
+            .loanPurpose(loanPurpose)
             .collateralValue(collateralValue)
-            .priorMortgage(priorMortgage)
-            .numberOfRooms(numberOfRooms)
-            .housingType(housingType)
             .regionType(regionType)
-            .currentLeaseDeposit(currentLeaseDeposit)
+            .houseOwnershipType(houseOwnershipType)
             .build();
     }
 }

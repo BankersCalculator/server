@@ -1,16 +1,20 @@
 package com.myZipPlan.server.docs.calculator;
 
 import com.myZipPlan.server.RestDocsSupport;
-import com.myZipPlan.server.calculator.ltvCalc.controller.LtvCalcController;
+import com.myZipPlan.server.calculator.ltvCalc.controller.LtvCalcApiController;
 import com.myZipPlan.server.calculator.ltvCalc.dto.LtvCalcRequest;
 import com.myZipPlan.server.calculator.ltvCalc.dto.LtvCalcResponse;
 import com.myZipPlan.server.calculator.ltvCalc.service.LtvCalcService;
+import com.myZipPlan.server.common.enums.calculator.HouseOwnershipType;
 import com.myZipPlan.server.common.enums.calculator.HousingType;
+import com.myZipPlan.server.common.enums.calculator.LoanPurpose;
 import com.myZipPlan.server.common.enums.calculator.RegionType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
+
+import java.math.BigDecimal;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
@@ -29,34 +33,26 @@ public class LtvCalcApiControllerDocsTest extends RestDocsSupport {
 
     @Override
     protected Object initController() {
-        return new LtvCalcController(ltvCalcService);
+        return new LtvCalcApiController(ltvCalcService);
     }
 
     @DisplayName("LTV 계산기 API")
     @Test
     void calculateLtv() throws Exception {
         LtvCalcRequest request = LtvCalcRequest.builder()
-            .loanAmount(300000000.0)
-            .collateralValue(500000000.0)
-            .priorMortgage(50000000.0)
-            .numberOfRooms(3)
-            .housingType(HousingType.APARTMENT)
-            .regionType(RegionType.SEOUL)
-            .currentLeaseDeposit(20000000.0)
+            .loanPurpose(LoanPurpose.HOME_PURCHASE)
+            .collateralValue(BigDecimal.valueOf(500000000))
+            .regionType(RegionType.REGULATED_AREA)
+            .houseOwnershipType(HouseOwnershipType.NO_HOUSE)
             .build();
 
         LtvCalcResponse response = LtvCalcResponse.builder()
-            .loanAmount(300000000.0)
-            .collateralValue(500000000.0)
-            .priorMortgage(50000000.0)
-            .numbersOfRooms(3)
-            .smallAmountLeaseDeposit(55000000.0)
-            .topPriorityRepaymentAmount(105000000.0)
-            .totalLoanExposure(350000000.0)
-            .ltvRatio(70.0)
-            .build();
+                .ltvRatio(BigDecimal.valueOf(0.6))
+                .collateralValue(BigDecimal.valueOf(500000000))
+                .possibleLoanAmount(BigDecimal.valueOf(300000000))
+                .build();
 
-        when(ltvCalcService.ltvCalculate(any()))
+        when(ltvCalcService.calculate(any()))
             .thenReturn(response);
 
         mockMvc.perform(post(BASE_URL)
@@ -70,21 +66,23 @@ public class LtvCalcApiControllerDocsTest extends RestDocsSupport {
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint()),
                 requestFields(
-                    fieldWithPath("loanAmount").type(JsonFieldType.NUMBER)
-                        .description("대출금액"),
+                    fieldWithPath("loanPurpose").type(JsonFieldType.STRING)
+                        .description("대출 목적 (HOME_PURCHASE: 주택구입자금, LIVING_STABILITY: 생활안정자금)"),
                     fieldWithPath("collateralValue").type(JsonFieldType.NUMBER)
                         .description("담보가치"),
-                    fieldWithPath("priorMortgage").type(JsonFieldType.NUMBER)
-                        .description("선순위채권"),
-                    fieldWithPath("numberOfRooms").type(JsonFieldType.NUMBER)
-                        .description("방 수"),
-                    fieldWithPath("housingType").type(JsonFieldType.STRING)
-                        .description("주택유형 (APARTMENT: 아파트, DETACHED_HOUSE: 단독주택, MULTI_FAMILY_HOUSE: 다가구주택, " +
-                            "MULTI_HOUSEHOLD_HOUSE: 다세대주택, OFFICETEL: 오피스텔, OTHER: 기타)"),
                     fieldWithPath("regionType").type(JsonFieldType.STRING)
-                        .description("지역 (SEOUL: 서울, CAPITAL_AREA: 수도권(+세종시), METROPOLITAN_CITY: 광역시, OTHER_AREAS: 기타)"),
-                    fieldWithPath("currentLeaseDeposit").type(JsonFieldType.NUMBER)
-                        .description("현재임차보증금")
+                        .description("지역 유형 (REGULATED_AREA: 규제지역, NON_REGULATED_CAPITAL_AREA: 규제지역 외 수도권, OTHER_AREAS: 기타)"),
+                    fieldWithPath("houseOwnershipType").type(JsonFieldType.STRING)
+                        .description("주택 소유 유형: [\n" +
+                            "주택구입자금:\n" +
+                            "  LIFETIME_FIRST: 생애최초\n" +
+                            "  ORDINARY_DEMAND: 서민실수요자\n" +
+                            "  NO_HOUSE: 무주택\n" +
+                            "  SINGLE_HOUSE_DISPOSAL: 1주택 처분 조건\n" +
+                            "  MORE_THAN_ONE_HOUSE: 1주택 이상\n" +
+                            "생활안정자금:\n" +
+                            "  SINGLE_HOUSE: 1주택\n" +
+                            "  MORE_THAN_TWO_HOUSE: 2주택 이상]")
                 ),
                 responseFields(
                     fieldWithPath("code").type(JsonFieldType.NUMBER)
@@ -95,22 +93,12 @@ public class LtvCalcApiControllerDocsTest extends RestDocsSupport {
                         .description("응답 메시지"),
                     fieldWithPath("data").type(JsonFieldType.OBJECT)
                         .description("응답 데이터"),
-                    fieldWithPath("data.loanAmount").type(JsonFieldType.NUMBER)
-                        .description("대출금액"),
+                    fieldWithPath("data.ltvRatio").type(JsonFieldType.NUMBER)
+                        .description("LTV 비율"),
                     fieldWithPath("data.collateralValue").type(JsonFieldType.NUMBER)
                         .description("담보가치"),
-                    fieldWithPath("data.priorMortgage").type(JsonFieldType.NUMBER)
-                        .description("선순위채권"),
-                    fieldWithPath("data.numbersOfRooms").type(JsonFieldType.NUMBER)
-                        .description("방 수"),
-                    fieldWithPath("data.smallAmountLeaseDeposit").type(JsonFieldType.NUMBER)
-                        .description("소액임차보증금"),
-                    fieldWithPath("data.topPriorityRepaymentAmount").type(JsonFieldType.NUMBER)
-                        .description("최우선변제금"),
-                    fieldWithPath("data.totalLoanExposure").type(JsonFieldType.NUMBER)
-                        .description("총대출노출액"),
-                    fieldWithPath("data.ltvRatio").type(JsonFieldType.NUMBER)
-                        .description("LTV 비율")
+                    fieldWithPath("data.possibleLoanAmount").type(JsonFieldType.NUMBER)
+                        .description("가능한 대출 금액")
                 )
             ));
     }
