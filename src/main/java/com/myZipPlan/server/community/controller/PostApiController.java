@@ -62,7 +62,7 @@ public class PostApiController {
     // 게시글 목록 조회 (정렬 기능 포함)
     @GetMapping("/sorted")
     public ApiResponse<List<PostResponse>> getPostsBySortType(
-            @RequestParam PostSortType sortType,
+            @RequestParam(defaultValue = "LATEST") PostSortType sortType,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
         String oauthProviderId = SecurityUtils.getProviderId();
