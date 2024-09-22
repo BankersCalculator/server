@@ -62,7 +62,7 @@ public class HousingInfoApiControllerDocsTest extends RestDocsSupport {
                 "}";
 
         // Perform the request
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/housingInfoApi")
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/housingInfoApi")
                         .content(requestBody)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
