@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/v1/housingInfoApi")
+@RequestMapping("/api/v1/housingInfo")
 @RequiredArgsConstructor
 public class HousingInfoApiController {
     private final HousingInfoService housingInfoService;
