@@ -47,7 +47,7 @@ public class Post {
     @Column(name = "likes", nullable = false)
     private int likes;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "loan_advice_result_id")
     private LoanAdviceResult loanAdviceResult;
 

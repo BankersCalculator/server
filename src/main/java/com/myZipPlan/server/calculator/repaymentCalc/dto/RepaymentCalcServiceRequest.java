@@ -4,24 +4,26 @@ import com.myZipPlan.server.common.enums.calculator.RepaymentType;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.math.BigDecimal;
+
 @Getter
 public class RepaymentCalcServiceRequest {
 
     private RepaymentType repaymentType;
 
-    private Double principal; // 원금
+    private BigDecimal principal; // 원금
 
-    private Integer term; // 기간(개월수)
+    private BigDecimal term; // 기간(개월수)
 
-    private Integer gracePeriod; // 거치기간
+    private BigDecimal gracePeriod; // 거치기간
 
-    private Double interestRate; // 연이자율
+    private BigDecimal interestRate; // 연이자율
 
-    private Double maturityPaymentAmount; // 만기상환액
+    private BigDecimal maturityPaymentAmount; // 만기상환액
 
 
     @Builder
-    public RepaymentCalcServiceRequest(double principal, int term, int gracePeriod, double interestRate, RepaymentType repaymentType, double maturityPaymentAmount) {
+    public RepaymentCalcServiceRequest(BigDecimal principal, BigDecimal term, BigDecimal gracePeriod, BigDecimal interestRate, RepaymentType repaymentType, BigDecimal maturityPaymentAmount) {
         this.principal = principal;
         this.term = term;
         this.gracePeriod = gracePeriod;

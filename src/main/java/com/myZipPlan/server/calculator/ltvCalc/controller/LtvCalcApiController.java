@@ -16,13 +16,13 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RequestMapping("/api/v1/ltvCalc")
 @RestController
-public class LtvCalcController {
+public class LtvCalcApiController {
 
     private final LtvCalcService ltvCalcService;
 
     @PostMapping
     public ApiResponse<LtvCalcResponse> calculateLtv(@Valid @RequestBody LtvCalcRequest ltvCalcRequest) {
-        LtvCalcResponse ltvCalcResponse = ltvCalcService.ltvCalculate(ltvCalcRequest.toServiceRequest());
+        LtvCalcResponse ltvCalcResponse = ltvCalcService.calculate(ltvCalcRequest.toServiceRequest());
 
         return ApiResponse.ok(ltvCalcResponse);
     }

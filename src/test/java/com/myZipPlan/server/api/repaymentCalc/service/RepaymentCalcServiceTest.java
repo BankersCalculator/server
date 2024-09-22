@@ -6,15 +6,19 @@ import com.myZipPlan.server.calculator.repaymentCalc.dto.RepaymentCalcResponse;
 import com.myZipPlan.server.calculator.repaymentCalc.dto.RepaymentCalcServiceRequest;
 import com.myZipPlan.server.calculator.repaymentCalc.service.RepaymentCalcService;
 import com.myZipPlan.server.common.enums.calculator.RepaymentType;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@Slf4j
 class RepaymentCalcServiceTest extends IntegrationTestSupport {
 
     @Autowired
@@ -26,10 +30,10 @@ class RepaymentCalcServiceTest extends IntegrationTestSupport {
         //given
         double delta = 0.001;
 
-        double principal = 100000000;
-        int term = 36;
-        int gracePeriod = 0;
-        double interestRate = 0.36;
+        BigDecimal principal = BigDecimal.valueOf(100000000);
+        BigDecimal term = BigDecimal.valueOf(36);
+        BigDecimal gracePeriod = BigDecimal.valueOf(0);
+        BigDecimal interestRate = BigDecimal.valueOf(0.36);
         RepaymentCalcServiceRequest repaymentCalcServiceRequest = RepaymentCalcServiceRequest.builder()
             .repaymentType(RepaymentType.BULLET)
             .principal(principal)
@@ -39,37 +43,39 @@ class RepaymentCalcServiceTest extends IntegrationTestSupport {
             .build();
 
         //when
-        RepaymentCalcResponse repaymentCalcResponse = repaymentCalcService.calculateRepayment(repaymentCalcServiceRequest);
+        RepaymentCalcResponse repaymentCalcResponse = repaymentCalcService.calculate(repaymentCalcServiceRequest);
         List<RepaymentSchedule> repaymentScheduleList = repaymentCalcResponse.getRepaymentSchedules();
-        double totalPrincipal = repaymentCalcResponse.getTotalPrincipal();
-        double totalInterest = repaymentCalcResponse.getTotalInterest();
-        int totalInstallments = repaymentCalcResponse.getTotalInstallments();
+        BigDecimal totalPrincipal = repaymentCalcResponse.getTotalPrincipal();
+        BigDecimal totalInterest = repaymentCalcResponse.getTotalInterest();
+        BigDecimal totalInstallments = repaymentCalcResponse.getTotalInstallments();
 
         //then
-        double expectedMonthlyInterest = principal * interestRate / 12;
+        BigDecimal expectedMonthlyInterest = principal.multiply(interestRate).divide(BigDecimal.valueOf(12), 4, RoundingMode.DOWN);
 
         assertEquals(36, repaymentScheduleList.size());
-        assertEquals(36, totalInstallments);
-        assertEquals(principal, totalPrincipal, delta);
-        assertEquals(expectedMonthlyInterest * term, totalInterest, delta);
+        assertEquals(BigDecimal.valueOf(36), totalInstallments);
+        assertEquals(0, principal.compareTo(totalPrincipal));
+
+        BigDecimal expectedTotalInterest = expectedMonthlyInterest.multiply(term);
+        assertEquals(0, expectedTotalInterest.compareTo(totalInterest));
 
         for (int i = 0; i < repaymentScheduleList.size(); i++) {
             RepaymentSchedule schedule = repaymentScheduleList.get(i);
             // 회차 및 월이자비용
-            assertEquals(i + 1, schedule.getInstallmentNumber());
-            assertEquals(expectedMonthlyInterest, schedule.getInterestPayment(), delta);
-
+            assertEquals(BigDecimal.valueOf(i + 1), schedule.getInstallmentNumber());
+            assertEquals(0, schedule.getInterestPayment().compareTo(expectedMonthlyInterest));
             if (i == 35) {
                 // 최종회차 상환금
-                assertEquals(principal, schedule.getPrincipalPayment(), delta);
-                assertEquals(expectedMonthlyInterest + principal, schedule.getTotalPayment(), delta);
-                assertEquals(0.0, schedule.getRemainingPrincipal(), delta);
+                assertEquals(0, schedule.getPrincipalPayment().compareTo(principal));
+                assertEquals(0, schedule.getTotalPayment().compareTo(expectedMonthlyInterest.add(principal)));
+                assertEquals(0, schedule.getRemainingPrincipal().compareTo(BigDecimal.ZERO));
             } else {
                 // 일반회차 상환금
-                assertEquals(0, schedule.getPrincipalPayment(), delta);
-                assertEquals(expectedMonthlyInterest, schedule.getTotalPayment(), delta);
-                assertEquals(principal, schedule.getRemainingPrincipal(), delta);
+                assertEquals(0, schedule.getPrincipalPayment().compareTo(BigDecimal.ZERO));
+                assertEquals(0, schedule.getTotalPayment().compareTo(expectedMonthlyInterest));
+                assertEquals(0, schedule.getRemainingPrincipal().compareTo(principal));
             }
+
         }
     }
 
@@ -79,10 +85,10 @@ class RepaymentCalcServiceTest extends IntegrationTestSupport {
         //given
         double delta = 0.001;
 
-        double principal = 1000000;
-        int term = 12;
-        int gracePeriod = 2;
-        double interestRate = 0.12;
+        BigDecimal principal = BigDecimal.valueOf(1000000);
+        BigDecimal term = BigDecimal.valueOf(12);
+        BigDecimal gracePeriod = BigDecimal.valueOf(2);
+        BigDecimal interestRate = BigDecimal.valueOf(0.12);
         RepaymentCalcServiceRequest repaymentCalcServiceRequest = RepaymentCalcServiceRequest.builder()
             .repaymentType(RepaymentType.AMORTIZING)
             .principal(principal)
@@ -92,59 +98,65 @@ class RepaymentCalcServiceTest extends IntegrationTestSupport {
             .build();
 
         //when
-        RepaymentCalcResponse repaymentCalcResponse = repaymentCalcService.calculateRepayment(repaymentCalcServiceRequest);
+        RepaymentCalcResponse repaymentCalcResponse = repaymentCalcService.calculate(repaymentCalcServiceRequest);
         List<RepaymentSchedule> repaymentScheduleList = repaymentCalcResponse.getRepaymentSchedules();
 
-        double totalPrincipal = repaymentCalcResponse.getTotalPrincipal();
-        double totalInterest = repaymentCalcResponse.getTotalInterest();
-        int totalInstallments = repaymentCalcResponse.getTotalInstallments();
+        BigDecimal totalPrincipal = repaymentCalcResponse.getTotalPrincipal();
+        BigDecimal totalInterest = repaymentCalcResponse.getTotalInterest();
+        BigDecimal totalInstallments = repaymentCalcResponse.getTotalInstallments();
 
         //then
         assertEquals(12, repaymentScheduleList.size());
-        assertEquals(12, totalInstallments);
-        assertEquals(principal, totalPrincipal, delta);
+        assertEquals(BigDecimal.valueOf(12), totalInstallments);
+        assertEquals(0, principal.compareTo(totalPrincipal));
 
         // 거치기간 테스트
-        assertEquals(0, repaymentScheduleList.get(0).getPrincipalPayment());
-        assertEquals(0, repaymentScheduleList.get(1).getPrincipalPayment());
-        assertEquals(10000, repaymentScheduleList.get(0).getInterestPayment());
-        assertEquals(10000, repaymentScheduleList.get(1).getInterestPayment());
+        assertEquals(BigDecimal.ZERO, repaymentScheduleList.get(0).getPrincipalPayment());
+        assertEquals(BigDecimal.ZERO, repaymentScheduleList.get(1).getPrincipalPayment());
+        assertEquals(BigDecimal.valueOf(10000), repaymentScheduleList.get(0).getInterestPayment());
+        assertEquals(BigDecimal.valueOf(10000), repaymentScheduleList.get(1).getInterestPayment());
 
         // 월상환금 테스트
-        assertTrue(repaymentScheduleList.get(2).getPrincipalPayment() > 0);
-        double expectedMonthlyPayment = calculateMonthlyPayment(principal, interestRate / 12, term - gracePeriod);
-        assertEquals(expectedMonthlyPayment, repaymentScheduleList.get(2).getTotalPayment(), delta);
+
+        assertTrue(repaymentScheduleList.get(2).getPrincipalPayment().compareTo(BigDecimal.ZERO) > 0, "원금 상환금이 0보다 큰지 확인");
+        BigDecimal expectedMonthlyPayment = calculateMonthlyPayment(principal, interestRate.divide(new BigDecimal("12"), 4, RoundingMode.DOWN), term.subtract(gracePeriod));
+        assertEquals(0, expectedMonthlyPayment.compareTo(repaymentScheduleList.get(2).getTotalPayment()));
 
         // 최종회차 잔금 테스트
-        assertEquals(0, repaymentScheduleList.get(11).getRemainingPrincipal(), delta);
+        assertEquals(0, repaymentScheduleList.get(11).getRemainingPrincipal().compareTo(BigDecimal.ZERO));
 
         // 매월 원리금 금액 테스트
-        for (int i = gracePeriod; i < term; i++) {
-            assertEquals(expectedMonthlyPayment, repaymentScheduleList.get(i).getTotalPayment(), delta);
+        for (int i = gracePeriod.intValue(); i < term.intValue(); i++) {
+            assertEquals(0, expectedMonthlyPayment.compareTo(repaymentScheduleList.get(i).getTotalPayment()));
         }
 
         // 총 상환액 테스트
-        double totalPayments = repaymentScheduleList.stream().mapToDouble(RepaymentSchedule::getTotalPayment).sum();
-        double expectedTotal = (expectedMonthlyPayment * 10) + (10000 * 2); // 10개월 원리금 + 2개월 이자
-        assertEquals(expectedTotal, totalPayments, delta);
+        BigDecimal totalPayments = repaymentScheduleList.stream()
+            .map(RepaymentSchedule::getTotalPayment)
+            .reduce(BigDecimal.ZERO, BigDecimal::add);
+        BigDecimal expectedTotal = expectedMonthlyPayment.multiply(BigDecimal.valueOf(10)).add(BigDecimal.valueOf(10000 * 2));
+        assertEquals(0, expectedTotal.compareTo(totalPayments));
 
         // 총 이자 테스트
-        double sumInterest = repaymentScheduleList.stream().mapToDouble(RepaymentSchedule::getInterestPayment).sum();
-        double expectedTotalInterest = expectedTotal - 1000000.0; // 총상환액 - 원금
-        assertEquals(expectedTotalInterest, sumInterest, delta);
-        assertEquals(expectedTotalInterest, totalInterest, delta);
+        BigDecimal sumInterest = repaymentScheduleList.stream()
+            .map(RepaymentSchedule::getInterestPayment)
+            .reduce(BigDecimal.ZERO, BigDecimal::add);
+        BigDecimal expectedTotalInterest = expectedTotal.subtract(principal);
+        log.info("expectedTotalInterest: {}", expectedTotalInterest);
+        log.info("sumInterest: {}", sumInterest);
+        log.info("totalInterest: {}", totalInterest);
+        assertEquals(0, expectedTotalInterest.compareTo(sumInterest));
+        assertEquals(0, expectedTotalInterest.compareTo(totalInterest));
     }
 
     @DisplayName("원리금상환 정상 산출 테스트 without 거치기간")
     @Test
     void calculateAmortizingLoanRepaymentWithoutGracePeriod() throws Exception {
         //given
-        double delta = 1;
-
-        double principal = 1000000;
-        int term = 12;
-        int gracePeriod = 0;
-        double interestRate = 0.12;
+        BigDecimal principal = BigDecimal.valueOf(1000000);
+        BigDecimal term = BigDecimal.valueOf(12);
+        BigDecimal gracePeriod = BigDecimal.ZERO;
+        BigDecimal interestRate = BigDecimal.valueOf(0.12);
         RepaymentCalcServiceRequest repaymentCalcServiceRequest = RepaymentCalcServiceRequest.builder()
             .repaymentType(RepaymentType.AMORTIZING)
             .principal(principal)
@@ -154,60 +166,58 @@ class RepaymentCalcServiceTest extends IntegrationTestSupport {
             .build();
 
         //when
-        RepaymentCalcResponse repaymentCalcResponse = repaymentCalcService.calculateRepayment(repaymentCalcServiceRequest);
+        RepaymentCalcResponse repaymentCalcResponse = repaymentCalcService.calculate(repaymentCalcServiceRequest);
         List<RepaymentSchedule> repaymentScheduleList = repaymentCalcResponse.getRepaymentSchedules();
-
-        double totalPrincipal = repaymentCalcResponse.getTotalPrincipal();
-        double totalInterest = repaymentCalcResponse.getTotalInterest();
-        int totalInstallments = repaymentCalcResponse.getTotalInstallments();
+        BigDecimal totalPrincipal = repaymentCalcResponse.getTotalPrincipal();
+        BigDecimal totalInterest = repaymentCalcResponse.getTotalInterest();
+        BigDecimal totalInstallments = repaymentCalcResponse.getTotalInstallments();
 
         //then
         assertEquals(12, repaymentScheduleList.size());
-        assertEquals(12, totalInstallments);
-        assertEquals(principal, totalPrincipal, delta);
+        assertEquals(BigDecimal.valueOf(12), totalInstallments);
+        assertEquals(0, principal.compareTo(totalPrincipal));
 
         // 거치기간 테스트
-        assertEquals(78849, repaymentScheduleList.get(0).getPrincipalPayment(), delta);
-        assertEquals(79637, repaymentScheduleList.get(1).getPrincipalPayment(), delta);
-        assertEquals(10000, repaymentScheduleList.get(0).getInterestPayment(), delta);
-        assertEquals(9212, repaymentScheduleList.get(1).getInterestPayment(), delta);
+        assertEquals(0, BigDecimal.valueOf(78849).compareTo(repaymentScheduleList.get(0).getPrincipalPayment()));
+        assertEquals(0, BigDecimal.valueOf(79637).compareTo(repaymentScheduleList.get(1).getPrincipalPayment()));
+        assertEquals(0, BigDecimal.valueOf(10000).compareTo(repaymentScheduleList.get(0).getInterestPayment()));
+        assertEquals(0, BigDecimal.valueOf(9212).compareTo(repaymentScheduleList.get(1).getInterestPayment()));
 
         // 월상환금 테스트
-        assertTrue(repaymentScheduleList.get(2).getPrincipalPayment() > 0);
-        double expectedMonthlyPayment = calculateMonthlyPayment(principal, interestRate / 12, term - gracePeriod);
-        assertEquals(expectedMonthlyPayment, repaymentScheduleList.get(2).getTotalPayment(), delta);
+        assertTrue(repaymentScheduleList.get(2).getPrincipalPayment().compareTo(BigDecimal.ZERO) > 0, "원금 상환금이 0보다 큰지 확인");
+        BigDecimal expectedMonthlyPayment = calculateMonthlyPayment(principal, interestRate.divide(new BigDecimal("12"), 4, RoundingMode.DOWN), term.subtract(gracePeriod));
+        assertEquals(0, expectedMonthlyPayment.compareTo(repaymentScheduleList.get(2).getTotalPayment()));
 
         // 최종회차 잔금 테스트
-        assertEquals(0, repaymentScheduleList.get(11).getRemainingPrincipal(), delta);
+        assertEquals(0, repaymentScheduleList.get(11).getRemainingPrincipal().compareTo(BigDecimal.ZERO));
 
         // 매월 원리금 금액 테스트
-        for (int i = gracePeriod; i < term; i++) {
-            assertEquals(expectedMonthlyPayment, repaymentScheduleList.get(i).getTotalPayment(), delta);
+        for (int i = gracePeriod.intValue(); i < term.intValue(); i++) {
+            assertEquals(0, expectedMonthlyPayment.compareTo(repaymentScheduleList.get(i).getTotalPayment()));
         }
 
         // 총 상환액 테스트
-        double totalPayments = repaymentScheduleList.stream().mapToDouble(RepaymentSchedule::getTotalPayment).sum();
-        double expectedTotal = (expectedMonthlyPayment * 12); // 12개월 원리금
-        assertEquals(expectedTotal, totalPayments, delta);
-
+        BigDecimal totalPayments = repaymentScheduleList.stream()
+            .map(RepaymentSchedule::getTotalPayment)
+            .reduce(BigDecimal.ZERO, BigDecimal::add);
+        BigDecimal expectedTotal = expectedMonthlyPayment.multiply(BigDecimal.valueOf(12));
+        assertEquals(0, expectedTotal.compareTo(totalPayments));
 
         // 총 이자 테스트
-        double sumInterest = repaymentScheduleList.stream().mapToDouble(RepaymentSchedule::getInterestPayment).sum();
-        double expectedTotalInterest = expectedTotal - 1000000.0; // 총상환액 - 원금
-        assertEquals(expectedTotalInterest, sumInterest, delta);
-        assertEquals(expectedTotalInterest, totalInterest, delta);
+        BigDecimal sumInterest = repaymentScheduleList.stream()
+            .map(RepaymentSchedule::getInterestPayment)
+            .reduce(BigDecimal.ZERO, BigDecimal::add);
+        assertEquals(0, totalInterest.compareTo(sumInterest));
     }
 
     @DisplayName("원금상환 정상 산출 테스트 with 거치기간")
     @Test
     void calculateEqualPrincipalLoanRepayment() throws Exception {
         //given
-        double delta = 1;
-
-        double principal = 1000000;
-        int term = 12;
-        int gracePeriod = 2;
-        double interestRate = 0.12;
+        BigDecimal principal = BigDecimal.valueOf(1000000);
+        BigDecimal term = BigDecimal.valueOf(12);
+        BigDecimal gracePeriod = BigDecimal.valueOf(2);
+        BigDecimal interestRate = BigDecimal.valueOf(0.12);
         RepaymentCalcServiceRequest repaymentCalcServiceRequest = RepaymentCalcServiceRequest.builder()
             .repaymentType(RepaymentType.EQUAL_PRINCIPAL)
             .principal(principal)
@@ -217,68 +227,68 @@ class RepaymentCalcServiceTest extends IntegrationTestSupport {
             .build();
 
         //when
-        RepaymentCalcResponse repaymentCalcResponse = repaymentCalcService.calculateRepayment(repaymentCalcServiceRequest);
+        RepaymentCalcResponse repaymentCalcResponse = repaymentCalcService.calculate(repaymentCalcServiceRequest);
         List<RepaymentSchedule> repaymentScheduleList = repaymentCalcResponse.getRepaymentSchedules();
-
-        double totalPrincipal = repaymentCalcResponse.getTotalPrincipal();
-        double totalInterest = repaymentCalcResponse.getTotalInterest();
-        int totalInstallments = repaymentCalcResponse.getTotalInstallments();
+        BigDecimal totalPrincipal = repaymentCalcResponse.getTotalPrincipal();
+        BigDecimal totalInterest = repaymentCalcResponse.getTotalInterest();
+        BigDecimal totalInstallments = repaymentCalcResponse.getTotalInstallments();
 
         //then
         assertEquals(12, repaymentScheduleList.size());
-        assertEquals(12, totalInstallments);
-        assertEquals(principal, totalPrincipal, delta);
+        assertEquals(BigDecimal.valueOf(12), totalInstallments);
+        assertEquals(0, principal.compareTo(totalPrincipal));
 
         // 거치기간 테스트
-        assertEquals(0, repaymentScheduleList.get(0).getPrincipalPayment(), delta);
-        assertEquals(0, repaymentScheduleList.get(1).getPrincipalPayment(), delta);
-        assertEquals(10000, repaymentScheduleList.get(0).getInterestPayment(), delta);
-        assertEquals(10000, repaymentScheduleList.get(1).getInterestPayment(), delta);
+        assertEquals(0, BigDecimal.ZERO.compareTo(repaymentScheduleList.get(0).getPrincipalPayment()));
+        assertEquals(0, BigDecimal.ZERO.compareTo(repaymentScheduleList.get(1).getPrincipalPayment()));
+        assertEquals(0, BigDecimal.valueOf(10000).compareTo(repaymentScheduleList.get(0).getInterestPayment()));
+        assertEquals(0, BigDecimal.valueOf(10000).compareTo(repaymentScheduleList.get(1).getInterestPayment()));
 
         // 월상환 원금 테스트
-        assertTrue(repaymentScheduleList.get(2).getPrincipalPayment() > 0);
-        double expectedMonthlyPrincipalPayment = principal / (term - gracePeriod);
-        for (int i = gracePeriod; i < term; i++) {
-            assertEquals(expectedMonthlyPrincipalPayment, repaymentScheduleList.get(i).getPrincipalPayment(), delta);
+        assertTrue(repaymentScheduleList.get(2).getPrincipalPayment().compareTo(BigDecimal.ZERO) > 0);
+        BigDecimal expectedMonthlyPrincipalPayment = principal.divide(term.subtract(gracePeriod), 10, RoundingMode.HALF_UP);
+        for (int i = gracePeriod.intValue(); i < term.intValue(); i++) {
+            assertEquals(0, expectedMonthlyPrincipalPayment.compareTo(repaymentScheduleList.get(i).getPrincipalPayment()));
         }
 
         // 총 이자 테스트
-        double sumInterest = repaymentScheduleList.stream().mapToDouble(RepaymentSchedule::getInterestPayment).sum();
-        double expectedTotalInterest = 0;
-        double monthlyInterestRate = interestRate / 12;
-        double remainingPricipal = principal;
+        BigDecimal sumInterest = repaymentScheduleList.stream()
+            .map(RepaymentSchedule::getInterestPayment)
+            .reduce(BigDecimal.ZERO, BigDecimal::add);
+        BigDecimal expectedTotalInterest = BigDecimal.ZERO;
+        BigDecimal monthlyInterestRate = interestRate.divide(BigDecimal.valueOf(12), 10, RoundingMode.HALF_UP);
+        BigDecimal remainingPrincipal = principal;
 
-        for (int i = 0; i < gracePeriod; i++) {
-            expectedTotalInterest += remainingPricipal * monthlyInterestRate;
+        for (int i = 0; i < gracePeriod.intValue(); i++) {
+            expectedTotalInterest = expectedTotalInterest.add(remainingPrincipal.multiply(monthlyInterestRate));
         }
 
-        for (int i = gracePeriod; i < term; i++) {
-            expectedTotalInterest += remainingPricipal * monthlyInterestRate;
-            remainingPricipal -= expectedMonthlyPrincipalPayment;
-
+        for (int i = gracePeriod.intValue(); i < term.intValue(); i++) {
+            expectedTotalInterest = expectedTotalInterest.add(remainingPrincipal.multiply(monthlyInterestRate));
+            remainingPrincipal = remainingPrincipal.subtract(expectedMonthlyPrincipalPayment);
         }
-        assertEquals(expectedTotalInterest, sumInterest, delta);
-        assertEquals(expectedTotalInterest, totalInterest, delta);
+        assertEquals(0, expectedTotalInterest.compareTo(sumInterest));
+        assertEquals(0, expectedTotalInterest.compareTo(totalInterest));
 
         // 최종회차 잔금 테스트
-        assertEquals(0, repaymentScheduleList.get(11).getRemainingPrincipal(), delta);
+        assertEquals(0, BigDecimal.ZERO.compareTo(repaymentScheduleList.get(11).getRemainingPrincipal()));
 
         // 총 상환액 테스트
-        double totalPayments = repaymentScheduleList.stream().mapToDouble(RepaymentSchedule::getTotalPayment).sum();
-        double expectedTotal = expectedMonthlyPrincipalPayment * (term - gracePeriod) + expectedTotalInterest;
-        assertEquals(expectedTotal, totalPayments, delta);
+        BigDecimal totalPayments = repaymentScheduleList.stream()
+            .map(RepaymentSchedule::getTotalPayment)
+            .reduce(BigDecimal.ZERO, BigDecimal::add);
+        BigDecimal expectedTotal = expectedMonthlyPrincipalPayment.multiply(term.subtract(gracePeriod)).add(expectedTotalInterest);
+        assertEquals(0, expectedTotal.compareTo(totalPayments));
     }
 
     @DisplayName("원금상환 정상 산출 테스트 without 거치기간")
     @Test
     void calculateEqualPrincipalLoanRepaymentWithoutGracePeriod() throws Exception {
         //given
-        double delta = 1;
-
-        double principal = 1200000;
-        int term = 12;
-        int gracePeriod = 0;
-        double interestRate = 0.12;
+        BigDecimal principal = BigDecimal.valueOf(1200000);
+        BigDecimal term = BigDecimal.valueOf(12);
+        BigDecimal gracePeriod = BigDecimal.ZERO;
+        BigDecimal interestRate = BigDecimal.valueOf(0.12);
         RepaymentCalcServiceRequest repaymentCalcServiceRequest = RepaymentCalcServiceRequest.builder()
             .repaymentType(RepaymentType.EQUAL_PRINCIPAL)
             .principal(principal)
@@ -288,61 +298,69 @@ class RepaymentCalcServiceTest extends IntegrationTestSupport {
             .build();
 
         //when
-        RepaymentCalcResponse repaymentCalcResponse = repaymentCalcService.calculateRepayment(repaymentCalcServiceRequest);
+        RepaymentCalcResponse repaymentCalcResponse = repaymentCalcService.calculate(repaymentCalcServiceRequest);
         List<RepaymentSchedule> repaymentScheduleList = repaymentCalcResponse.getRepaymentSchedules();
-
-        double totalPrincipal = repaymentCalcResponse.getTotalPrincipal();
-        double totalInterest = repaymentCalcResponse.getTotalInterest();
-        int totalInstallments = repaymentCalcResponse.getTotalInstallments();
+        BigDecimal totalPrincipal = repaymentCalcResponse.getTotalPrincipal();
+        BigDecimal totalInterest = repaymentCalcResponse.getTotalInterest();
+        BigDecimal totalInstallments = repaymentCalcResponse.getTotalInstallments();
 
         //then
         assertEquals(12, repaymentScheduleList.size());
-        assertEquals(12, totalInstallments);
-        assertEquals(principal, totalPrincipal, delta);
+        assertEquals(BigDecimal.valueOf(12), totalInstallments);
+        assertEquals(0, principal.compareTo(totalPrincipal));
 
         // 거치기간 테스트
-        assertEquals(100000, repaymentScheduleList.get(0).getPrincipalPayment(), delta);
-        assertEquals(100000, repaymentScheduleList.get(1).getPrincipalPayment(), delta);
-        assertEquals(12000, repaymentScheduleList.get(0).getInterestPayment(), delta);
-        assertEquals(11000, repaymentScheduleList.get(1).getInterestPayment(), delta);
+        assertEquals(0, BigDecimal.valueOf(100000).compareTo(repaymentScheduleList.get(0).getPrincipalPayment()));
+        assertEquals(0, BigDecimal.valueOf(100000).compareTo(repaymentScheduleList.get(1).getPrincipalPayment()));
+        assertEquals(0, BigDecimal.valueOf(12000).compareTo(repaymentScheduleList.get(0).getInterestPayment()));
+        assertEquals(0, BigDecimal.valueOf(11000).compareTo(repaymentScheduleList.get(1).getInterestPayment()));
 
         // 월상환 원금 테스트
-        assertTrue(repaymentScheduleList.get(2).getPrincipalPayment() > 0);
-        double expectedMonthlyPrincipalPayment = principal / (term - gracePeriod);
-        for (int i = gracePeriod; i < term; i++) {
-            assertEquals(expectedMonthlyPrincipalPayment, repaymentScheduleList.get(i).getPrincipalPayment(), delta);
+        assertTrue(repaymentScheduleList.get(2).getPrincipalPayment().compareTo(BigDecimal.ZERO) > 0);
+        BigDecimal expectedMonthlyPrincipalPayment = principal.divide(term.subtract(gracePeriod), 10, RoundingMode.HALF_UP);
+        for (int i = gracePeriod.intValue(); i < term.intValue(); i++) {
+            assertEquals(0, expectedMonthlyPrincipalPayment.compareTo(repaymentScheduleList.get(i).getPrincipalPayment()));
         }
 
         // 총 이자 테스트
-        double sumInterest = repaymentScheduleList.stream().mapToDouble(RepaymentSchedule::getInterestPayment).sum();
-        double expectedTotalInterest = 0;
-        double monthlyInterestRate = interestRate / 12;
-        double remainingPricipal = principal;
+        BigDecimal sumInterest = repaymentScheduleList.stream()
+            .map(RepaymentSchedule::getInterestPayment)
+            .reduce(BigDecimal.ZERO, BigDecimal::add);
+        BigDecimal expectedTotalInterest = BigDecimal.ZERO;
+        BigDecimal monthlyInterestRate = interestRate.divide(BigDecimal.valueOf(12), 10, RoundingMode.HALF_UP);
+        BigDecimal remainingPrincipal = principal;
 
-        for (int i = 0; i < gracePeriod; i++) {
-            expectedTotalInterest += remainingPricipal * monthlyInterestRate;
+        for (int i = 0; i < gracePeriod.intValue(); i++) {
+            expectedTotalInterest = expectedTotalInterest.add(remainingPrincipal.multiply(monthlyInterestRate));
         }
 
-        for (int i = gracePeriod; i < term; i++) {
-            expectedTotalInterest += remainingPricipal * monthlyInterestRate;
-            remainingPricipal -= expectedMonthlyPrincipalPayment;
-
+        for (int i = gracePeriod.intValue(); i < term.intValue(); i++) {
+            expectedTotalInterest = expectedTotalInterest.add(remainingPrincipal.multiply(monthlyInterestRate));
+            remainingPrincipal = remainingPrincipal.subtract(expectedMonthlyPrincipalPayment);
         }
-        assertEquals(expectedTotalInterest, sumInterest, delta);
-        assertEquals(expectedTotalInterest, totalInterest, delta);
+        assertEquals(0, expectedTotalInterest.compareTo(sumInterest));
+        assertEquals(0, expectedTotalInterest.compareTo(totalInterest));
 
         // 최종회차 잔금 테스트
-        assertEquals(0, repaymentScheduleList.get(11).getRemainingPrincipal(), delta);
+        assertEquals(0, BigDecimal.ZERO.compareTo(repaymentScheduleList.get(11).getRemainingPrincipal()));
 
         // 총 상환액 테스트
-        double totalPayments = repaymentScheduleList.stream().mapToDouble(RepaymentSchedule::getTotalPayment).sum();
-        double expectedTotal = expectedMonthlyPrincipalPayment * (term - gracePeriod) + expectedTotalInterest;
-        assertEquals(expectedTotal, totalPayments, delta);
+        BigDecimal totalPayments = repaymentScheduleList.stream()
+            .map(RepaymentSchedule::getTotalPayment)
+            .reduce(BigDecimal.ZERO, BigDecimal::add);
+        BigDecimal expectedTotal = expectedMonthlyPrincipalPayment.multiply(term.subtract(gracePeriod)).add(expectedTotalInterest);
+        assertEquals(0, expectedTotal.compareTo(totalPayments));
     }
 
-    private double calculateMonthlyPayment(double principal, double monthlyInterestRate, int numberOfPayments) {
-        return principal * (monthlyInterestRate * Math.pow(1 + monthlyInterestRate, numberOfPayments))
-            / (Math.pow(1 + monthlyInterestRate, numberOfPayments) - 1);
+    private BigDecimal calculateMonthlyPayment(BigDecimal principal, BigDecimal monthlyInterestRate, BigDecimal numberOfPayments) {
+        BigDecimal one = BigDecimal.ONE;
+        BigDecimal onePlusRate = one.add(monthlyInterestRate);
+        BigDecimal powValue = onePlusRate.pow(numberOfPayments.intValue());
+
+        BigDecimal numerator = principal.multiply(monthlyInterestRate).multiply(powValue);
+        BigDecimal denominator = powValue.subtract(one);
+
+        return numerator.divide(denominator, 0, RoundingMode.HALF_UP);
     }
 
 

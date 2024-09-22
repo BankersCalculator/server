@@ -4,11 +4,13 @@ import com.myZipPlan.server.calculator.dsrCalc.calculator.DsrCalculator;
 import com.myZipPlan.server.common.enums.calculator.LoanType;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
+
 @Component
 public class InterimPaymentAndMovingLoanDsrCalc implements DsrCalculator {
 
-    private static final int MAX_TERM_FOR_BULLET = 300;
-    private static final int MAX_TERM_FOR_EQUALPRINCIPAL_AND_AMORTIZING = 300;
+    private static final BigDecimal MAX_TERM_FOR_BULLET = BigDecimal.valueOf(300);
+    private static final BigDecimal MAX_TERM_FOR_EQUALPRINCIPAL_AND_AMORTIZING = BigDecimal.valueOf(300);
 
     @Override
     public LoanType getLoanType() {
@@ -16,12 +18,12 @@ public class InterimPaymentAndMovingLoanDsrCalc implements DsrCalculator {
     }
 
     @Override
-    public int getMaxTermForBullet() {
+    public BigDecimal getMaxTermForBullet() {
         return MAX_TERM_FOR_BULLET;
     }
 
     @Override
-    public int getMaxTermForEqualPrincipalAndAmortizing() {
+    public BigDecimal getMaxTermForEqualPrincipalAndAmortizing() {
         return MAX_TERM_FOR_EQUALPRINCIPAL_AND_AMORTIZING;
     }
 }

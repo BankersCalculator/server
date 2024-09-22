@@ -1,12 +1,13 @@
 package com.myZipPlan.server.community.controller;
 
 import com.myZipPlan.server.common.api.ApiResponse;
-import com.myZipPlan.server.community.domain.Comment;
 import com.myZipPlan.server.community.dto.comment.*;
 import com.myZipPlan.server.community.service.CommentService;
 import com.myZipPlan.server.oauth.userInfo.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/comment")
@@ -50,5 +51,12 @@ public class CommentApiController {
         String oauthProviderId = SecurityUtils.getProviderId();
         commentService.unlikeComment(oauthProviderId, commentId);
         return ApiResponse.ok("좋아요를 성공적으로 취소하였습니다.");
+    }
+
+    @GetMapping("/{postId}")
+    public ApiResponse<List<CommentResponse>> getComments (@PathVariable Long postId) {
+        String oauthProviderId = SecurityUtils.getProviderId();
+        List<CommentResponse> comments = commentService.getComments(oauthProviderId, postId);
+        return ApiResponse.ok(comments);
     }
 }

@@ -3,65 +3,93 @@ package com.myZipPlan.server.api.dtiCalc.service;
 import com.myZipPlan.server.calculator.dtiCalc.dto.DtiCalcResponse;
 import com.myZipPlan.server.calculator.dtiCalc.dto.DtiCalcServiceRequest;
 import com.myZipPlan.server.calculator.dtiCalc.service.DtiCalcService;
-import com.myZipPlan.server.common.enums.calculator.LoanType;
 import com.myZipPlan.server.common.enums.calculator.RepaymentType;
+import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.text.DecimalFormat;
-import java.util.Arrays;
+import java.math.BigDecimal;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
+@Slf4j
 public class DtiCalcServiceTest {
 
-	@Autowired
+    @Autowired
     private DtiCalcService dtiCalcService;
 
-    @Test
-    public void testDtiCalculate_withMultipleLoans() {
-        DtiCalcServiceRequest.LoanStatus loan1 = DtiCalcServiceRequest.LoanStatus.builder()
-                .loanType(LoanType.MORTGAGE)
-                .repaymentType(RepaymentType.AMORTIZING)
-                .principal(400000000.0)
-                .term(120)
-                .interestRate(0.03)
-                .build();
+    private static final double DELTA = 0.001;
 
-        DtiCalcServiceRequest.LoanStatus loan2 = DtiCalcServiceRequest.LoanStatus.builder()
-                .loanType(LoanType.OTHER_LOAN)
-                .repaymentType(RepaymentType.EQUAL_PRINCIPAL)
-                .principal(40000000.0)
-                .term(360)
-                .interestRate(0.04)
-                .build();
+    @DisplayName("DTI 정상 산출 테스트")
+    @MethodSource("provideTestCases")
+    @ParameterizedTest
+    void calculateDti(BigDecimal annualIncome, BigDecimal loanAmount,
+                      BigDecimal interestRate, Integer loanTerm,
+                      RepaymentType repaymentType, BigDecimal yearlyLoanInterestRepayment,
+                      BigDecimal expectedDtiRatio, BigDecimal expectedAnnualRepaymentAmount)
+        throws Exception {
 
-        DtiCalcServiceRequest.LoanStatus loan3 = DtiCalcServiceRequest.LoanStatus.builder()
-                .loanType(LoanType.PERSONAL_LOAN)
-                .repaymentType(RepaymentType.BULLET)
-                .principal(0.0)
-                .term(12)
-                .interestRate(0.03)
-                .build();
-
-        DtiCalcServiceRequest request = DtiCalcServiceRequest.builder()
-                .annualIncome(40000000)
-                .loanStatusList(Arrays.asList(loan1, loan2, loan3))
-                .build();
+        DtiCalcServiceRequest request = createTestRequest(annualIncome, loanAmount, interestRate,
+            loanTerm, repaymentType, yearlyLoanInterestRepayment);
 
         DtiCalcResponse response = dtiCalcService.dtiCalculate(request);
-        DecimalFormat decimalFormat = new DecimalFormat("#,###");
 
+        assertCommonExpectations(response, request, expectedDtiRatio, expectedAnnualRepaymentAmount);
+    }
 
-        // 결과를 출력
-        System.out.println("Annual Interest Repayment for Loan 1: " + decimalFormat.format(response.getDtiCalcResults().get(0).getAnnualInterestRepayment()));
-        System.out.println("Annual Interest Repayment for Loan 2: " + decimalFormat.format(response.getDtiCalcResults().get(1).getAnnualInterestRepayment()));
-        System.out.println("Annual Interest Repayment for Loan 3: " + decimalFormat.format(response.getDtiCalcResults().get(2).getAnnualInterestRepayment()));
+    private static Stream<Arguments> provideTestCases() {
+        return Stream.of(
+            Arguments.of(
+                new BigDecimal("100000000"), new BigDecimal("300000000"), new BigDecimal("0.035"),
+                360, RepaymentType.AMORTIZING, new BigDecimal("0"),
+                new BigDecimal("0.1613"), new BigDecimal("16125445")
+            ),
+            Arguments.of(
+                new BigDecimal("50000000"), new BigDecimal("400000000"), new BigDecimal("0.05"),
+                240, RepaymentType.EQUAL_PRINCIPAL, new BigDecimal("0"),
+                new BigDecimal("0.5976"), new BigDecimal("29881000")
+            ),
+            Arguments.of(
+                new BigDecimal("50000000"), new BigDecimal("400000000"), new BigDecimal("0.05"),
+                240, RepaymentType.EQUAL_PRINCIPAL, new BigDecimal("10000000"),
+                new BigDecimal("0.7976"), new BigDecimal("39881000")
+            ),
+            Arguments.of(
+                new BigDecimal("150000000"), new BigDecimal("1000000000"), new BigDecimal("0.045"),
+                360, RepaymentType.BULLET, new BigDecimal("0"),
+                new BigDecimal("0.5222"), new BigDecimal("78333333")
+            )
+        );
+    }
 
-        System.out.println("Final DTI Ratio: " + Math.round(response.getFinalDtiRatio()));
-        System.out.println("Total Loan Count: " + decimalFormat.format(response.getTotalLoanCount()));
-        assertEquals(119.87, response.getFinalDtiRatio(), 1);
+    private DtiCalcServiceRequest createTestRequest(BigDecimal annualIncome, BigDecimal loanAmount,
+                                                    BigDecimal interestRate, Integer loanTerm,
+                                                    RepaymentType repaymentType, BigDecimal yearlyLoanInterestRepayment) {
+        return DtiCalcServiceRequest.builder()
+            .annualIncome(annualIncome)
+            .loanAmount(loanAmount)
+            .interestRate(interestRate)
+            .loanTerm(BigDecimal.valueOf(loanTerm))
+            .repaymentType(repaymentType)
+            .yearlyLoanInterestRepayment(yearlyLoanInterestRepayment)
+            .build();
+    }
+
+    private void assertCommonExpectations(DtiCalcResponse response, DtiCalcServiceRequest request,
+                                          BigDecimal expectedDtiRatio, BigDecimal expectedAnnualRepaymentAmount) {
+
+        assertEquals(0, request.getAnnualIncome().compareTo(response.getAnnualIncome()),
+            "연간 소득이 일치하지 않습니다.");
+        assertEquals(0, expectedDtiRatio.compareTo(response.getDtiRatio()),
+            "DTI 비율이 일치하지 않습니다.");
+        assertEquals(0, expectedAnnualRepaymentAmount.compareTo(response.getAnnualRepaymentAmount()),
+            "연간 상환액이 일치하지 않습니다.");
     }
 }
