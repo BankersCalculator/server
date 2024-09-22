@@ -25,7 +25,8 @@ public class SecurityPathConfig {
         "/api/v1/repaymentCalc",
         "/api/v1/housing-info/**",
         "/api/v1/addressSearch",
-        "/api/v1/loanAdvice/simple"
+        "/api/v1/loanAdvice/simple",
+        "/api/v1/addressSearch"
     );
 
     public String[] getPublicPaths() {
