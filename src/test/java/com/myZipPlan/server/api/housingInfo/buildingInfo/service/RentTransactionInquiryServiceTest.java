@@ -35,7 +35,7 @@
                     lawdCd, rentHousingType, months, emdNm, jibun);
 
             // When
-            RentTransactionInquiryResponse response = inquiryService.getRentTransactionsResult(lawdCd, rentHousingType, months, emdNm, jibun);
+            RentTransactionInquiryResponse response = inquiryService.getRentTransactions(lawdCd, rentHousingType, months, emdNm, jibun);
 
             // Then
             assertNotNull(response, "응답은 null이 아니어야 합니다.");

@@ -77,7 +77,7 @@ public class HousingInfoService {
                 }
 
                 // Step 4: 임대 거래 데이터
-                RentTransactionInquiryResponse rentTransactionResponse = rentTransactionInquiryService.getRentTransactionsResult(
+                RentTransactionInquiryResponse rentTransactionResponse = rentTransactionInquiryService.getRentTransactions(
                         districtCodeFirst5, rentHousingType, 3, dongName, jibun);
 
                 // Step 5: 평균 보증금과 거래 건수를 추출하고, 정보를 활용

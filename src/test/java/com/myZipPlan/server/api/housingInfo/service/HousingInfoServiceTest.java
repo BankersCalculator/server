@@ -106,7 +106,7 @@ public class HousingInfoServiceTest {
             logger.info("Mapped Rent Housing Type: {}", rentHousingType);
 
             // Step 4: 임대 거래 데이터
-            RentTransactionInquiryResponse rentTransactionResponse = rentTransactionInquiryService.getRentTransactionsResult(districtCodeFirst5, rentHousingType, 3, dongName, jibun);
+            RentTransactionInquiryResponse rentTransactionResponse = rentTransactionInquiryService.getRentTransactions(districtCodeFirst5, rentHousingType, 3, dongName, jibun);
 
             assertNotNull(rentTransactionResponse, "RentTransactionResponse should not be null");
             logger.info("Step 4: RentTransactionResponse received");
