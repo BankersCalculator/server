@@ -1,18 +1,15 @@
 package com.myZipPlan.server.community.dto.post.response;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.myZipPlan.server.advice.loanAdvice.dto.response.LoanAdviceSummaryResponse;
+import com.myZipPlan.server.common.util.DateTimeUtil;
 import com.myZipPlan.server.community.domain.Post;
 import com.myZipPlan.server.community.dto.comment.CommentResponse;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -73,7 +70,7 @@ public class PostResponse {
                 .createdDate(post.getCreatedDate())
                 .lastModifiedDate(post.getLastModifiedDate())
                 .avatarUrl("카카오프로필")  // (임시) 작성자의 아바타 URL. 사용할 이미지 공유 받으면 대체할 것.
-                .timeAgo(calculateTimeAgo(post.getCreatedDate()))  // "n시간 전"으로 작성 시간 표시
+                .timeAgo(DateTimeUtil.calculateTimeAgo(post.getCreatedDate()))  // "n시간 전"으로 작성 시간 표시
                 .loanAdviceSummaryReport(loanAdviceSummaryReport)
                 .like(false)
                 .build();
@@ -94,37 +91,9 @@ public class PostResponse {
                 .createdDate(post.getCreatedDate())
                 .lastModifiedDate(post.getLastModifiedDate())
                 .avatarUrl("카카오프로필")  // (임시) 작성자의 아바타 URL. 사용할 이미지 공유 받으면 대체할 것.
-                .timeAgo(calculateTimeAgo(post.getCreatedDate()))  // "n시간 전"으로 작성 시간 표시
+                .timeAgo(DateTimeUtil.calculateTimeAgo(post.getCreatedDate()))  // "n시간 전"으로 작성 시간 표시
                 .loanAdviceSummaryReport(loanAdviceSummaryReport)
                 .like(like)
                 .build();
     }
-
-
-
-
-    // "n시간 전", "n일 전", "n개월 전", "n년 전" 과 같은 형태로 변환하는 유틸리티 메소드
-    private static String calculateTimeAgo(LocalDateTime createdDate) {
-        LocalDateTime now = LocalDateTime.now();
-        Duration duration = Duration.between(createdDate, now);
-
-        long minutes = duration.toMinutes();
-        long hours = duration.toHours();
-        long days = duration.toDays();
-        long months = ChronoUnit.MONTHS.between(createdDate, now);  // To calculate the number of months
-        long years = ChronoUnit.YEARS.between(createdDate, now);  // To calculate the number of years
-
-        if (minutes < 60) {
-            return minutes + "분 전"; // Less than an hour ago
-        } else if (hours < 13) {
-            return hours + "시간 전";  // Less than 13 hours ago
-        } else if (days < 31) {
-            return days + "일 전";  // Less than 31 days ago
-        } else if (months < 12) {
-            return months + "개월 전";  // Less than 12 months ago
-        } else {
-            return years + "년 전";  // 1 year or more
-        }
-    }
-
 }

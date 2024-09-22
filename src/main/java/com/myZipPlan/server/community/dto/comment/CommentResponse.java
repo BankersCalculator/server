@@ -1,5 +1,6 @@
 package com.myZipPlan.server.community.dto.comment;
 
+import com.myZipPlan.server.common.util.DateTimeUtil;
 import com.myZipPlan.server.community.domain.Comment;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,10 +18,17 @@ public class CommentResponse {
     private final LocalDateTime createdDate;  // 작성일
     private final LocalDateTime lastModifiedDate;  // 수정일
     private final boolean like; //유저 댓글 좋아요 여부
+    private final int likes;                 // 좋아요 수
+    private final String timeAgo;            // "n시간 전"과 같은 형태로 변환된 작성 시간
+
 
 
     @Builder
-    public CommentResponse(Long id, Long postId, String author, String content, LocalDateTime createdDate, LocalDateTime lastModifiedDate, boolean like ) {
+    public CommentResponse(Long id, Long postId, String author, String content
+                          , LocalDateTime createdDate, LocalDateTime lastModifiedDate
+                          , boolean like
+                          , int likes
+                          , String timeAgo) {
         this.id = id;
         this.postId = postId;
         this.author = author;
@@ -28,6 +36,8 @@ public class CommentResponse {
         this.createdDate = createdDate;
         this.lastModifiedDate = lastModifiedDate;
         this.like = like;
+        this.likes = likes;
+        this.timeAgo = timeAgo;
     }
 
     public static CommentResponse fromEntity(Comment comment) {
@@ -36,9 +46,11 @@ public class CommentResponse {
                 .postId(comment.getPost().getId())
                 .author(comment.getUser().getEmail())
                 .content(comment.getContent())
+                .likes(comment.getLikes())
                 .createdDate(comment.getCreatedDate())
                 .lastModifiedDate(comment.getLastModifiedDate())
                 .like(false)
+                .timeAgo(DateTimeUtil.calculateTimeAgo(comment.getCreatedDate()))
                 .build();
     }
 
@@ -48,9 +60,11 @@ public class CommentResponse {
                 .postId(comment.getPost().getId())
                 .author(comment.getUser().getEmail())
                 .content(comment.getContent())
+                .likes(comment.getLikes())
                 .createdDate(comment.getCreatedDate())
                 .lastModifiedDate(comment.getLastModifiedDate())
                 .like(like)
+                .timeAgo(DateTimeUtil.calculateTimeAgo(comment.getCreatedDate()))
                 .build();
     }
 }

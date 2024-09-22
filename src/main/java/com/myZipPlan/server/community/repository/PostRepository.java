@@ -2,6 +2,8 @@ package com.myZipPlan.server.community.repository;
 
 import com.myZipPlan.server.advice.loanAdvice.entity.LoanAdviceResult;
 import com.myZipPlan.server.community.domain.Post;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -16,11 +18,12 @@ import java.util.Optional;
  수 있게 해줍니다.
  */
 public interface PostRepository extends JpaRepository<Post, Long> {
-    List<Post> findAllByOrderByCreatedDateAsc();
-    List<Post> findAllByOrderByLikesDesc();
+    Page<Post> findAllByOrderByCreatedDateDesc(Pageable pageable); // 최신순으로 정렬
+    Page<Post> findAllByOrderByLikesDesc(Pageable pageable);       // 인기순으로 정렬
+
     @Query("SELECT p FROM Post p JOIN FETCH p.user WHERE p.id = :postId")
     Optional<Post> findByIdWithUser(@Param("postId") Long postId);
 
     @Query("SELECT p FROM Post p LEFT JOIN FETCH p.comments")
-    List<Post> findAllWithComments();
+    Page<Post> findAllWithComments(Pageable pageable);
 }
