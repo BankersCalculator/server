@@ -2,7 +2,6 @@ package com.myZipPlan.server.docs.community;
 
 import com.myZipPlan.server.RestDocsSupport;
 import com.myZipPlan.server.advice.loanAdvice.dto.response.LoanAdviceSummaryResponse;
-import com.myZipPlan.server.advice.loanAdvice.repository.LoanAdviceResultRepository;
 import com.myZipPlan.server.common.enums.community.PostSortType;
 import com.myZipPlan.server.community.controller.PostApiController;
 import com.myZipPlan.server.community.dto.comment.CommentResponse;
@@ -19,7 +18,6 @@ import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockPart;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.math.BigDecimal;
@@ -38,7 +36,6 @@ import static org.springframework.restdocs.headers.HeaderDocumentation.requestHe
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
@@ -75,6 +72,7 @@ public class PostApiDocsTest extends RestDocsSupport {
                 .content("후... 금리 장난아니네요")
                 .createdDate(LocalDateTime.now())
                 .lastModifiedDate(LocalDateTime.now())
+                .timeAgo("방금 전")
                 .build();
 
         CommentResponse commentResponse2 = CommentResponse.builder()
@@ -82,8 +80,9 @@ public class PostApiDocsTest extends RestDocsSupport {
                 .postId(2L)
                 .author("호*이")
                 .content("어 혹시, 수도권 인건가요? 물권 정보 공유 받을 수 있을까요...?")
-                .createdDate(LocalDateTime.now())
+                .createdDate(LocalDateTime.now().minusMonths(2))
                 .lastModifiedDate(LocalDateTime.now())
+                .timeAgo("2개월 전")
                 .build();
 
         List<CommentResponse> comments = new ArrayList<>();
@@ -100,9 +99,9 @@ public class PostApiDocsTest extends RestDocsSupport {
                 .likes(5)
                 .comments(comments)
                 .loanAdviceSummaryReport(loanAdviceSummaryResponse)
-                .createdDate(LocalDateTime.now())
+                .createdDate(LocalDateTime.now().minusYears(1))
                 .lastModifiedDate(LocalDateTime.now())
-                .timeAgo("4시간 전")
+                .timeAgo("1년 전")
                 .like(true)
                 .build();
 
@@ -162,6 +161,9 @@ public class PostApiDocsTest extends RestDocsSupport {
                                             fieldWithPath("data[].comments[].createdDate").description("댓글 생성 날짜"),
                                             fieldWithPath("data[].comments[].lastModifiedDate").description("댓글 수정 날짜"),
                                             fieldWithPath("data[].comments[].like").type(JsonFieldType.BOOLEAN).description("댓글 좋아요 여부"),
+                                            fieldWithPath("data[].comments[].likes").type(JsonFieldType.NUMBER).description("댓글 좋아요 수"),
+                                            fieldWithPath("data[].comments[].timeAgo").type(JsonFieldType.STRING).description("얼마 전에 작성되었는지"),
+
 
                                             fieldWithPath("data[].commentCount").description("댓글 수").optional(),
                                             fieldWithPath("data[].createdDate").description("게시글 생성 날짜"),
@@ -200,6 +202,7 @@ public class PostApiDocsTest extends RestDocsSupport {
                 .createdDate(LocalDateTime.now())
                 .lastModifiedDate(LocalDateTime.now())
                 .like(true)
+                .timeAgo("방금 전")
                 .build();
 
         CommentResponse commentResponse2 = CommentResponse.builder()
@@ -207,8 +210,9 @@ public class PostApiDocsTest extends RestDocsSupport {
                 .postId(2L)
                 .author("호*이")
                 .content("어 혹시, 수도권 인건가요? 물권 정보 공유 받을 수 있을까요...?")
-                .createdDate(LocalDateTime.now())
+                .createdDate(LocalDateTime.now().minusDays(5))
                 .lastModifiedDate(LocalDateTime.now())
+                .timeAgo("5일 전")
                 .like(true)
                 .build();
 
@@ -226,9 +230,9 @@ public class PostApiDocsTest extends RestDocsSupport {
                 .likes(5)
                 .comments(comments)
                 .loanAdviceSummaryReport(loanAdviceSummaryResponse)
-                .createdDate(LocalDateTime.now())
+                .createdDate(LocalDateTime.now().minusMonths(1))
                 .lastModifiedDate(LocalDateTime.now())
-                .timeAgo("4시간 전")
+                .timeAgo("1일 전")
                 .like(true)
                 .build();
 
@@ -270,13 +274,14 @@ public class PostApiDocsTest extends RestDocsSupport {
                                     fieldWithPath("data.comments[].createdDate").type(JsonFieldType.ARRAY).description("댓글 생성 날짜 [년, 월, 일, 시, 분, 초, 나노초]"),
                                     fieldWithPath("data.comments[].lastModifiedDate").type(JsonFieldType.ARRAY).description("댓글 수정 날짜 [년, 월, 일, 시, 분, 초, 나노초]"),
                                     fieldWithPath("data.comments[].like").type(JsonFieldType.BOOLEAN).description("댓글 좋아요 여부"),
+                                    fieldWithPath("data.comments[].likes").type(JsonFieldType.NUMBER).description("댓글 좋아요 수"),
+                                    fieldWithPath("data.comments[].timeAgo").type(JsonFieldType.STRING).description("얼마 전에 작성되었는지"),
 
                                     fieldWithPath("data.commentCount").type(JsonFieldType.NUMBER).description("댓글 수"),
                                     fieldWithPath("data.createdDate").type(JsonFieldType.ARRAY).description("작성일자").optional(),
                                     fieldWithPath("data.lastModifiedDate").type(JsonFieldType.ARRAY).description("수정일자").optional(),
                                     fieldWithPath("data.avatarUrl").type(JsonFieldType.STRING).description("작성자 아바타 URL").optional(),
                                     fieldWithPath("data.timeAgo").type(JsonFieldType.STRING).description("얼마 전에 작성되었는지").optional(),
-
                                     fieldWithPath("data.like").description("유저 게시글 좋아요 여부"),
 
                                     fieldWithPath("data.loanAdviceSummaryReport").type(JsonFieldType.OBJECT).description("대출 상담 결과").optional(),
@@ -308,6 +313,7 @@ public class PostApiDocsTest extends RestDocsSupport {
                 .content("후... 금리 장난아니네요")
                 .createdDate(LocalDateTime.now())
                 .lastModifiedDate(LocalDateTime.now())
+                .timeAgo("방금 전")
                 .build();
 
         CommentResponse commentResponse2 = CommentResponse.builder()
@@ -315,8 +321,9 @@ public class PostApiDocsTest extends RestDocsSupport {
                 .postId(2L)
                 .author("호*이")
                 .content("어 혹시, 수도권 인건가요? 물권 정보 공유 받을 수 있을까요...?")
-                .createdDate(LocalDateTime.now())
+                .createdDate(LocalDateTime.now().minusMinutes(5))
                 .lastModifiedDate(LocalDateTime.now())
+                .timeAgo("5분 전")
                 .build();
 
         List<CommentResponse> comments = new ArrayList<>();
@@ -334,7 +341,7 @@ public class PostApiDocsTest extends RestDocsSupport {
                 .comments(comments)
                 .loanAdviceSummaryReport(loanAdviceSummaryResponse)
                 .createdDate(LocalDateTime.now())
-                .lastModifiedDate(LocalDateTime.now())
+                .lastModifiedDate(LocalDateTime.now().minusHours(4))
                 .timeAgo("4시간 전")
                 .like(true)
                 .build();
@@ -350,7 +357,7 @@ public class PostApiDocsTest extends RestDocsSupport {
                 .likes(10)
                 .comments(comments)
                 .loanAdviceSummaryReport(loanAdviceSummaryResponse)
-                .createdDate(LocalDateTime.now())
+                .createdDate(LocalDateTime.now().minusMinutes(30))
                 .lastModifiedDate(LocalDateTime.now())
                 .timeAgo("30분 전")
                 .build();
@@ -404,6 +411,8 @@ public class PostApiDocsTest extends RestDocsSupport {
                                     fieldWithPath("data[].comments[].createdDate").type(JsonFieldType.ARRAY).description("댓글 생성 날짜 [년, 월, 일, 시, 분, 초, 나노초]"),
                                     fieldWithPath("data[].comments[].lastModifiedDate").type(JsonFieldType.ARRAY).description("댓글 수정 날짜 [년, 월, 일, 시, 분, 초, 나노초]"),
                                     fieldWithPath("data[].comments[].like").type(JsonFieldType.BOOLEAN).description("댓글 좋아요 여부"),
+                                    fieldWithPath("data[].comments[].likes").type(JsonFieldType.NUMBER).description("댓글 좋아요 수"),
+                                    fieldWithPath("data[].comments[].timeAgo").type(JsonFieldType.STRING).description("얼마 전에 작성되었는지"),
 
                                     fieldWithPath("data[].commentCount").type(JsonFieldType.NUMBER).description("댓글 수").optional(),
                                     fieldWithPath("data[].createdDate").type(JsonFieldType.ARRAY).description("작성일자").optional(),
