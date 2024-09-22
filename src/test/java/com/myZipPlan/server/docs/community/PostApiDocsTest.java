@@ -126,16 +126,20 @@ public class PostApiDocsTest extends RestDocsSupport {
         posts.add(response);
         posts.add(response2);
 
-        when(postService.getAllPosts(anyString()))
+        when(postService.getAllPosts(anyString(), anyInt(), anyInt()))
                 .thenReturn(posts);
 
         try (MockedStatic<SecurityUtils> mockedSecurityUtils = Mockito.mockStatic(SecurityUtils.class)) {
             mockedSecurityUtils.when(SecurityUtils::getProviderId).thenReturn("mockedProviderId");
 
             mockMvc.perform(get(BASE_URL)
+                            .param("page", "0")
+                            .param("size", "10")
                             .contentType(MediaType.APPLICATION_JSON)
                             .accept(MediaType.APPLICATION_JSON)
                             .header("AccessToken", "액세스 토큰"))
+
+
                     .andExpect(status().isOk())
                     .andDo(print())
                     .andDo(document("post/get-all-posts",
@@ -143,6 +147,10 @@ public class PostApiDocsTest extends RestDocsSupport {
                                     preprocessResponse(prettyPrint()),
                                     requestHeaders(
                                             headerWithName("AccessToken").description("액세스 토큰")
+                                    ),
+                                    queryParameters(
+                                            parameterWithName("page").description("페이지 번호, 기본값 : 0").optional(),
+                                            parameterWithName("size").description("페이지 당 게시글 수, 기본값 : 10").optional()
                                     ),
                                     responseFields(
                                             fieldWithPath("code").description("응답 코드"),

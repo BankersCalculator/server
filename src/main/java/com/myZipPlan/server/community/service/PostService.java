@@ -76,11 +76,17 @@ public class    PostService {
 
     // 모든 게시글 조회
     @Transactional
-    public List<PostResponse> getAllPosts(String oauthProviderId) {
+    public List<PostResponse> getAllPosts(String oauthProviderId
+                                         , int page, int size) {
         User user = userRepository.findByOauthProviderId(oauthProviderId)
                 .orElseThrow(() -> new IllegalArgumentException("세션에 연결된 oauthProviderId를 찾을 수 없습니다."));
-        List<Post> posts = postRepository.findAllWithComments();
-        return posts.stream()
+
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Post> postsPage = postRepository.findAllWithComments(pageable);
+
+
+
+        return postsPage.stream()
                 .map(post -> {
                     List<CommentResponse> comments = commentService.getComments(oauthProviderId, post.getId());
                     LoanAdviceResult loanAdviceResult = post.getLoanAdviceResult();

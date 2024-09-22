@@ -50,9 +50,12 @@ public class PostApiController {
 
     // 게시글 목록 조회
     @GetMapping
-    public ApiResponse<List<PostResponse>> getAllPosts() {
+    public ApiResponse<List<PostResponse>> getAllPosts(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
         String oauthProviderId = SecurityUtils.getProviderId();
-        List<PostResponse> posts = postService.getAllPosts(oauthProviderId);
+        List<PostResponse> posts = postService.getAllPosts(oauthProviderId,page,size);
         return ApiResponse.ok(posts);
     }
 
