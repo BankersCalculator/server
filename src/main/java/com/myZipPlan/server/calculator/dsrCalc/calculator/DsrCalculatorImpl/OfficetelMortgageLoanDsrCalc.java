@@ -10,6 +10,9 @@ import com.myZipPlan.server.common.enums.calculator.RepaymentType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 @Component
 public class OfficetelMortgageLoanDsrCalc implements DsrCalculator {
 
@@ -17,8 +20,8 @@ public class OfficetelMortgageLoanDsrCalc implements DsrCalculator {
     @Autowired
     RepaymentCalcService repaymentCalcService;
 
-    private static final int MAX_TERM_FOR_BULLET = 96;
-    private static final int MAX_TERM_FOR_EQUALPRINCIPAL_AND_AMORTIZING = -1;
+    private static final BigDecimal MAX_TERM_FOR_BULLET = BigDecimal.valueOf(96);
+    private static final BigDecimal MAX_TERM_FOR_EQUALPRINCIPAL_AND_AMORTIZING = BigDecimal.valueOf(-1);
 
 
     @Override
@@ -27,12 +30,12 @@ public class OfficetelMortgageLoanDsrCalc implements DsrCalculator {
     }
 
     @Override
-    public int getMaxTermForBullet() {
+    public BigDecimal getMaxTermForBullet() {
         return MAX_TERM_FOR_BULLET;
     }
 
     @Override
-    public int getMaxTermForEqualPrincipalAndAmortizing() {
+    public BigDecimal getMaxTermForEqualPrincipalAndAmortizing() {
         return MAX_TERM_FOR_EQUALPRINCIPAL_AND_AMORTIZING;
     }
 
@@ -42,7 +45,7 @@ public class OfficetelMortgageLoanDsrCalc implements DsrCalculator {
         DsrCalcResult dsrCalcResult = DsrCalcResult.builder().build();
 
         if (repaymentType == RepaymentType.BULLET) {
-            int maxTermForBullet = getMaxTermForBullet();
+            BigDecimal maxTermForBullet = getMaxTermForBullet();
             dsrCalcResult = dsrCommonCaclulator.dsrCalcForBulletLoan(loanStatus, maxTermForBullet);
         }
         if (repaymentType == RepaymentType.AMORTIZING) {
@@ -64,19 +67,19 @@ public class OfficetelMortgageLoanDsrCalc implements DsrCalculator {
      *  연이자상환액 = 총이자액 / 대출기간 * 12
      */
     private DsrCalcResult dsrCalcForInstallmentRepaymentOfficetelLoan(DsrCalcServiceRequest.LoanStatus loanStatus) {
-        double principal = loanStatus.getPrincipal();
-        double maturityPaymentAmount = loanStatus.getMaturityPaymentAmount();
-        int term = loanStatus.getTerm();
-        int gracePeriod = loanStatus.getGracePeriod();
-        int actualRepaymentTerm = term - gracePeriod;
+        BigDecimal principal = loanStatus.getPrincipal();
+        BigDecimal maturityPaymentAmount = loanStatus.getMaturityPaymentAmount();
+        BigDecimal term = loanStatus.getTerm();
+        BigDecimal gracePeriod = loanStatus.getGracePeriod();
+        BigDecimal actualRepaymentTerm = term.subtract(gracePeriod);
 
-        double installmentRepayment = (principal - maturityPaymentAmount) / term * 12;
-        double maturityRepayment = maturityPaymentAmount / actualRepaymentTerm;
-        double annualPrincipalRepayment = installmentRepayment + maturityRepayment;
+        BigDecimal installmentRepayment = (principal.subtract(maturityPaymentAmount)).divide(term, 4, RoundingMode.DOWN).multiply(BigDecimal.valueOf(12));
+        BigDecimal maturityRepayment = maturityPaymentAmount.divide(actualRepaymentTerm, 4, RoundingMode.DOWN);
+        BigDecimal annualPrincipalRepayment = installmentRepayment.add(maturityRepayment);
 
-        RepaymentCalcResponse repaymentCalcResponse = repaymentCalcService.calculateRepayment(loanStatus.toRepaymentCalcServiceRequest());
-        double totalInterest = repaymentCalcResponse.getTotalInterest();
-        double annalInterestRepayment = totalInterest / term * 12;
+        RepaymentCalcResponse repaymentCalcResponse = repaymentCalcService.calculate(loanStatus.toRepaymentCalcServiceRequest());
+        BigDecimal totalInterest = repaymentCalcResponse.getTotalInterest();
+        BigDecimal annalInterestRepayment = totalInterest.divide(term, 4, RoundingMode.DOWN).multiply(BigDecimal.valueOf(12));
 
         return DsrCalcResult.builder()
             .principal(principal)

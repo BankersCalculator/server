@@ -4,14 +4,15 @@ import com.myZipPlan.server.calculator.dsrCalc.domain.DsrCalcResult;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Getter
 @Builder
 public class DsrCalcResponse {
 
-    private Integer annualIncome;
-    private Integer totalLoanCount;
+    private BigDecimal annualIncome;
+    private BigDecimal totalLoanCount;
     private List<DsrCalcResult> dsrCalcResults;
-    private Double finalDsrRatio;
+    private BigDecimal finalDsrRatio;
 }

@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -40,23 +41,23 @@ public class RepaymentCalcApiControllerDocsTest extends RestDocsSupport {
     void calculateRepayment() throws Exception {
         RepaymentCalcRequest request = RepaymentCalcRequest.builder()
             .repaymentType(RepaymentType.AMORTIZING)
-            .principal(300000000)
-            .term(60)
-            .gracePeriod(0)
-            .interestRatePercentage(4)
-            .maturityPaymentAmount(0)
+            .principal(BigDecimal.valueOf(300000000))
+            .term(BigDecimal.valueOf(60))
+            .gracePeriod(BigDecimal.valueOf(0))
+            .interestRatePercentage(BigDecimal.valueOf(4))
+            .maturityPaymentAmount(BigDecimal.valueOf(0))
             .build();
 
         RepaymentCalcResponse response = RepaymentCalcResponse.builder()
             .repaymentSchedules(Arrays.asList(
-                new RepaymentSchedule(1, 1000000, 5000000, 500000, 295000000),
-                new RepaymentSchedule(2, 2000000, 7000000, 450000, 200000000)
+                new RepaymentSchedule(BigDecimal.valueOf(1), BigDecimal.valueOf(1000000), BigDecimal.valueOf(5000000), BigDecimal.valueOf(500000),BigDecimal.valueOf( 295000000)),
+                new RepaymentSchedule(BigDecimal.valueOf(2), BigDecimal.valueOf(2000000),BigDecimal.valueOf( 7000000),BigDecimal.valueOf( 450000),BigDecimal.valueOf( 200000000))
             ))
-            .totalPrincipal(300000000.0)
-            .totalInterest(3500000.0)
-            .totalInstallments(60)
+            .totalPrincipal(BigDecimal.valueOf(300000000))
+            .totalInterest(BigDecimal.valueOf(3500000))
+            .totalInstallments(BigDecimal.valueOf(60))
             .build();
-        when(repaymentCalcService.calculateRepayment(any()))
+        when(repaymentCalcService.calculate(any()))
             .thenReturn(response);
 
         mockMvc.perform(post(BASE_URL)

@@ -47,7 +47,6 @@ public class Oauth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         KakaoUserInfo kakaoUserInfo = new KakaoUserInfo(oAuth2User.getAttributes());
 
         String provider = kakaoUserInfo.getProvider();
-        String email = kakaoUserInfo.getEmail();
         String providerId = kakaoUserInfo.getProviderId();
 
         User user = userRepository.findByOauthProviderAndOauthProviderId(provider, providerId)

@@ -7,11 +7,13 @@ import com.myZipPlan.server.common.enums.calculator.LoanType;
 import com.myZipPlan.server.common.enums.calculator.RepaymentType;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
+
 @Component
 public class OtherLoanDsrCalc implements DsrCalculator {
 
-    private static final int MAX_TERM_FOR_BULLET = -1;
-    private static final int MAX_TERM_FOR_EQUALPRINCIPAL_AND_AMORTIZING = -1;
+    private static final BigDecimal MAX_TERM_FOR_BULLET = BigDecimal.valueOf(-1);
+    private static final BigDecimal MAX_TERM_FOR_EQUALPRINCIPAL_AND_AMORTIZING = BigDecimal.valueOf(-1);
 
     @Override
     public LoanType getLoanType() {
@@ -19,12 +21,12 @@ public class OtherLoanDsrCalc implements DsrCalculator {
     }
 
     @Override
-    public int getMaxTermForBullet() {
+    public BigDecimal getMaxTermForBullet() {
         return MAX_TERM_FOR_BULLET;
     }
 
     @Override
-    public int getMaxTermForEqualPrincipalAndAmortizing() {
+    public BigDecimal getMaxTermForEqualPrincipalAndAmortizing() {
         return MAX_TERM_FOR_EQUALPRINCIPAL_AND_AMORTIZING;
     }
 
@@ -32,7 +34,7 @@ public class OtherLoanDsrCalc implements DsrCalculator {
     public DsrCalcResult calculateDsr(DsrCalcServiceRequest.LoanStatus loanStatus) {
         RepaymentType repaymentType = loanStatus.getRepaymentType();
         DsrCalcResult dsrCalcResult = DsrCalcResult.builder().build();
-        int term = loanStatus.getTerm();
+        BigDecimal term = loanStatus.getTerm();
 
         if (repaymentType == RepaymentType.BULLET) {
             dsrCalcResult = dsrCommonCaclulator.dsrCalcForBulletLoan(loanStatus, term);

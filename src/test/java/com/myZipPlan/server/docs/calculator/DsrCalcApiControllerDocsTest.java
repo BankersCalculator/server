@@ -6,6 +6,7 @@ import com.myZipPlan.server.calculator.dsrCalc.domain.DsrCalcResult;
 import com.myZipPlan.server.calculator.dsrCalc.dto.DsrCalcRequest;
 import com.myZipPlan.server.calculator.dsrCalc.dto.DsrCalcResponse;
 import com.myZipPlan.server.calculator.dsrCalc.service.DsrCalcService;
+import com.myZipPlan.server.common.enums.calculator.InterestRateType;
 import com.myZipPlan.server.common.enums.calculator.LoanType;
 import com.myZipPlan.server.common.enums.calculator.RepaymentType;
 import org.junit.jupiter.api.DisplayName;
@@ -13,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -42,22 +44,26 @@ public class DsrCalcApiControllerDocsTest extends RestDocsSupport {
         DsrCalcRequest.LoanStatus loanStatus = new DsrCalcRequest.LoanStatus();
         loanStatus.setRepaymentType(RepaymentType.AMORTIZING);
         loanStatus.setLoanType(LoanType.MORTGAGE);
-        loanStatus.setPrincipal(300000000.0);
+        loanStatus.setPrincipal(BigDecimal.valueOf(300000000));
 
-        loanStatus.setMaturityPaymentAmount(0.0);
-        loanStatus.setTerm(360);
-        loanStatus.setGracePeriod(0);
-        loanStatus.setInterestRatePercentage(3.5);
+        loanStatus.setMaturityPaymentAmount(BigDecimal.valueOf(0));
+        loanStatus.setTerm(BigDecimal.valueOf(360));
+        loanStatus.setGracePeriod(BigDecimal.valueOf(0));
+        loanStatus.setInterestRatePercentage(BigDecimal.valueOf(3.5));
+        loanStatus.setIsMetroArea(false);
+        loanStatus.setInterestRateType(InterestRateType.MIXED);
         request.getLoanStatuses().add(loanStatus);
-        request.setAnnualIncome(50000000);
+        request.setAnnualIncome(BigDecimal.valueOf(50000000));
 
         DsrCalcResponse response = DsrCalcResponse.builder()
-            .annualIncome(50000000)
-            .totalLoanCount(1)
+            .annualIncome(BigDecimal.valueOf(50000000))
+            .totalLoanCount(BigDecimal.valueOf(1))
             .dsrCalcResults(List.of(
-                new DsrCalcResult(1, 300000000, 295000000, 360, 5000000, 10500000)
+                new DsrCalcResult(BigDecimal.ONE, BigDecimal.valueOf(300000000),
+                    BigDecimal.valueOf(295000000), BigDecimal.valueOf(360),
+                    BigDecimal.valueOf(5000000), BigDecimal.valueOf(10500000))
             ))
-            .finalDsrRatio(31.0)
+            .finalDsrRatio(BigDecimal.valueOf(31.0))
             .build();
 
         when(dsrCalcService.dsrCalculate(any()))
@@ -97,6 +103,10 @@ public class DsrCalcApiControllerDocsTest extends RestDocsSupport {
                         .description("거치기간"),
                     fieldWithPath("loanStatuses[].interestRatePercentage").type(JsonFieldType.NUMBER)
                         .description("연이자율(%)"),
+                    fieldWithPath("loanStatuses[].isMetroArea").type(JsonFieldType.BOOLEAN)
+                        .description("대상 주택 수도권 여부"),
+                    fieldWithPath("loanStatuses[].interestRateType").type(JsonFieldType.STRING)
+                        .description("스트레스 DSR 금리변동유형: (VARIABLE: 변동형, MIXED: 혼합형, PERIODIC: 주기형)"),
                     fieldWithPath("annualIncome").type(JsonFieldType.NUMBER)
                         .description("연간 소득")
                 ),

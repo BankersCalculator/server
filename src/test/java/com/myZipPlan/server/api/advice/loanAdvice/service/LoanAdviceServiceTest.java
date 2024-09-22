@@ -158,7 +158,8 @@ class LoanAdviceServiceTest extends IntegrationTestSupport {
             new UsernamePasswordAuthenticationToken(userDetails, null, Collections.emptyList());
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        User user = User.create("Kakao", "test_provider_id", "test_email", RoleType.USER);
+        User user = User.create("Kakao", "test_provider_id", "test_email", ""
+            ,"", RoleType.USER);
         userRepository.save(user);
     }
 }
