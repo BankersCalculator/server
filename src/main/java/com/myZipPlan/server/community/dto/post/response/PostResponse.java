@@ -100,10 +100,6 @@ public class PostResponse {
                 .build();
     }
 
-
-
-
-    // "n시간 전", "n일 전", "n개월 전", "n년 전" 과 같은 형태로 변환하는 유틸리티 메소드
     private static String calculateTimeAgo(LocalDateTime createdDate) {
         LocalDateTime now = LocalDateTime.now();
         Duration duration = Duration.between(createdDate, now);
@@ -111,19 +107,21 @@ public class PostResponse {
         long minutes = duration.toMinutes();
         long hours = duration.toHours();
         long days = duration.toDays();
-        long months = ChronoUnit.MONTHS.between(createdDate, now);  // To calculate the number of months
-        long years = ChronoUnit.YEARS.between(createdDate, now);  // To calculate the number of years
+        long months = ChronoUnit.MONTHS.between(createdDate, now);
+        long years = ChronoUnit.YEARS.between(createdDate, now);
 
-        if (minutes < 60) {
-            return minutes + "분 전"; // Less than an hour ago
-        } else if (hours < 13) {
-            return hours + "시간 전";  // Less than 13 hours ago
-        } else if (days < 31) {
-            return days + "일 전";  // Less than 31 days ago
-        } else if (months < 12) {
-            return months + "개월 전";  // Less than 12 months ago
+        if (years > 0) {
+            return years + "년 전"; // 1년 이상 차이
+        } else if (months > 0) {
+            return months + "개월 전"; // 1개월 이상 차이
+        } else if (days > 0) {
+            return days + "일 전"; // 1일 이상 차이
+        } else if (hours > 0) {
+            return hours + "시간 전"; // 1시간 이상 차이
+        } else if (minutes > 0) {
+            return minutes + "분 전"; // 1분 이상 차이
         } else {
-            return years + "년 전";  // 1 year or more
+            return "방금 전"; // 1분 미만
         }
     }
 
