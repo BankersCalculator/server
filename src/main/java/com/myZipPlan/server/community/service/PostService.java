@@ -18,6 +18,9 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -104,20 +107,25 @@ public class    PostService {
 
     // 게시글조회(정렬)
     @Transactional
-    public List<PostResponse> getPostsBySortType(String oauthProviderId, PostSortType sortType) {
+    public List<PostResponse> getPostsBySortType(
+            String oauthProviderId
+            , PostSortType sortType
+            , int page, int size) {
         User user = userRepository.findByOauthProviderId(oauthProviderId)
                 .orElseThrow(() -> new IllegalArgumentException("세션에 연결된 oauthProviderId를 찾을 수 없습니다."));
-        List<Post> posts;
+
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Post> postsPage;
 
         if (sortType == PostSortType.LATEST) {
-            posts = postRepository.findAllByOrderByCreatedDateAsc();
+            postsPage = postRepository.findAllByOrderByCreatedDateDesc(pageable);
         } else if (sortType == PostSortType.POPULAR) {
-            posts = postRepository.findAllByOrderByLikesDesc();
+            postsPage = postRepository.findAllByOrderByLikesDesc(pageable);
         } else {
             return Collections.emptyList();
         }
 
-        return posts.stream()
+        return postsPage.stream()
                 .map(post -> {
                     List<CommentResponse> comments = commentService.getComments(oauthProviderId, post.getId());
                     LoanAdviceResult loanAdviceResult = post.getLoanAdviceResult();

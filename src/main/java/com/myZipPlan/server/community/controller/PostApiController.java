@@ -58,9 +58,12 @@ public class PostApiController {
 
     // 게시글 목록 조회 (정렬 기능 포함)
     @GetMapping("/sorted")
-    public ApiResponse<List<PostResponse>> getPostsBySortType(@RequestParam PostSortType sortType) {
+    public ApiResponse<List<PostResponse>> getPostsBySortType(
+            @RequestParam PostSortType sortType,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
         String oauthProviderId = SecurityUtils.getProviderId();
-        List<PostResponse> posts = postService.getPostsBySortType(oauthProviderId, sortType);
+        List<PostResponse> posts = postService.getPostsBySortType(oauthProviderId, sortType, page, size);
         return ApiResponse.ok(posts);
     }
 
