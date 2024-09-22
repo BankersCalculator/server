@@ -17,7 +17,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -57,7 +57,7 @@ public class AddressSearchApiControllerDocsTest extends RestDocsSupport {
 
         when(addressSearchApiClient.searchAddress(anyString())).thenReturn(response);
 
-        mockMvc.perform(post(BASE_URL)
+        mockMvc.perform(get(BASE_URL)
                         .content("{\"keyword\": \"청라한내로 100번길\"}")  // JSON 형식으로 요청 본문을 전달
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
