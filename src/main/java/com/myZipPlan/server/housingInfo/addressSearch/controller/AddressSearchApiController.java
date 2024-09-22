@@ -16,8 +16,10 @@ public class AddressSearchApiController {
     private final AddressSearchApiClient addressSearchApiClient;
 
     @GetMapping
-    public ApiResponse<Map<String, Object>> searchAddress(@RequestBody AddressSearchApiRequest request) throws IOException {
-            Map<String, Object> response = addressSearchApiClient.searchAddress(request.getKeyword());
+    public ApiResponse<Map<String, Object>> searchAddress(
+            @RequestBody AddressSearchApiRequest request,
+            @RequestParam(defaultValue = "0") int page) throws IOException {
+            Map<String, Object> response = addressSearchApiClient.searchAddress(request.getKeyword(), page);
             return ApiResponse.ok(response);
     }
 }
