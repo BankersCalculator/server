@@ -3,6 +3,7 @@ package com.myZipPlan.server.docs.community;
 import com.myZipPlan.server.RestDocsSupport;
 import com.myZipPlan.server.advice.loanAdvice.dto.response.LoanAdviceSummaryResponse;
 import com.myZipPlan.server.advice.loanAdvice.repository.LoanAdviceResultRepository;
+import com.myZipPlan.server.common.enums.community.PostSortType;
 import com.myZipPlan.server.community.controller.PostApiController;
 import com.myZipPlan.server.community.dto.comment.CommentResponse;
 import com.myZipPlan.server.community.dto.post.request.PostCreateRequest;
@@ -291,7 +292,7 @@ public class PostApiDocsTest extends RestDocsSupport {
     @DisplayName("게시글 목록 정렬 조회 API")
     @Test
     void getPostsBySortType() throws Exception {
-        //PostResponse1
+        // PostResponse1
         LoanAdviceSummaryResponse loanAdviceSummaryResponse = LoanAdviceSummaryResponse.builder()
                 .loanAdviceResultId(1L)
                 .loanProductName("Test Loan Product")
@@ -322,14 +323,13 @@ public class PostApiDocsTest extends RestDocsSupport {
         comments.add(commentResponse2);
         comments.add(commentResponse);
 
-
         PostResponse response = PostResponse.builder()
                 .id(1L)
                 .title("후, 지난주에 할걸그랬어요")
                 .content("3개월 만에 0.5% 올라버림 ㅋ 지금이라도 사렵니다~~ 바로 은행가보려구요")
                 .author("무지무지")
                 .imageUrl("amazonS3ImageUrl")
-                .avatarUrl("amazonS3Avataurl")
+                .avatarUrl("amazonS3AvatarUrl")
                 .likes(1)
                 .comments(comments)
                 .loanAdviceSummaryReport(loanAdviceSummaryResponse)
@@ -339,7 +339,7 @@ public class PostApiDocsTest extends RestDocsSupport {
                 .like(true)
                 .build();
 
-        //PostResponse2
+        // PostResponse2
         PostResponse response2 = PostResponse.builder()
                 .id(2L)
                 .title("이 앱 믿어도되나요?")
@@ -359,66 +359,71 @@ public class PostApiDocsTest extends RestDocsSupport {
         posts.add(response2);
         posts.add(response);
 
-
-        when(postService.getPostsBySortType(anyString(), any()))
+        when(postService.getPostsBySortType(anyString(), any(PostSortType.class), anyInt(), anyInt()))
                 .thenReturn(posts);
+
         try (MockedStatic<SecurityUtils> mockedSecurityUtils = Mockito.mockStatic(SecurityUtils.class)) {
             mockedSecurityUtils.when(SecurityUtils::getProviderId).thenReturn("mockedProviderId");
 
-        mockMvc.perform(get(BASE_URL + "/sorted")
-                        .param("sortType", "POPULAR")
-                        .header("AccessToken", "액세스 토큰")
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andDo(print())
-                .andDo(document("post/get-sorted-posts",
-                        preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint()),
-                        requestHeaders(
-                                headerWithName("AccessToken").description("액세스 토큰")
-                        ),
-                        queryParameters(
-                                parameterWithName("sortType").description("정렬 타입: LATEST(최신순), POPULAR(인기순)")
-                        ),
-                        responseFields(
-                                fieldWithPath("code").type(JsonFieldType.NUMBER).description("응답 코드"),
-                                fieldWithPath("status").type(JsonFieldType.STRING).description("응답 상태"),
-                                fieldWithPath("message").type(JsonFieldType.STRING).description("응답 메시지"),
-                                fieldWithPath("data").type(JsonFieldType.ARRAY).description("게시글 목록"),
-                                fieldWithPath("data[].id").type(JsonFieldType.NUMBER).description("게시글 ID"),
-                                fieldWithPath("data[].title").type(JsonFieldType.STRING).description("게시글 제목"),
-                                fieldWithPath("data[].content").type(JsonFieldType.STRING).description("게시글 내용"),
-                                fieldWithPath("data[].author").type(JsonFieldType.STRING).description("작성자"),
-                                fieldWithPath("data[].likes").type(JsonFieldType.NUMBER).description("좋아요 수"),
-                                fieldWithPath("data[].imageUrl").type(JsonFieldType.STRING).description("이미지 URL").optional(),
+            mockMvc.perform(get(BASE_URL + "/sorted")
+                            .param("sortType", "POPULAR")
+                            .param("page", "0")
+                            .param("size", "10")
+                            .header("AccessToken", "액세스 토큰")
+                            .accept(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isOk())
+                    .andDo(print())
+                    .andDo(document("post/get-sorted-posts",
+                            preprocessRequest(prettyPrint()),
+                            preprocessResponse(prettyPrint()),
+                            requestHeaders(
+                                    headerWithName("AccessToken").description("액세스 토큰")
+                            ),
+                            queryParameters(
+                                    parameterWithName("sortType").description("정렬 타입: LATEST(최신순), POPULAR(인기순)"),
+                                    parameterWithName("page").description("페이지 번호, 기본값 : 0").optional(),
+                                    parameterWithName("size").description("페이지 당 게시글 수, 기본값 : 10").optional()
+                            ),
+                            responseFields(
+                                    fieldWithPath("code").type(JsonFieldType.NUMBER).description("응답 코드"),
+                                    fieldWithPath("status").type(JsonFieldType.STRING).description("응답 상태"),
+                                    fieldWithPath("message").type(JsonFieldType.STRING).description("응답 메시지"),
+                                    fieldWithPath("data").type(JsonFieldType.ARRAY).description("게시글 목록"),
+                                    fieldWithPath("data[].id").type(JsonFieldType.NUMBER).description("게시글 ID"),
+                                    fieldWithPath("data[].title").type(JsonFieldType.STRING).description("게시글 제목"),
+                                    fieldWithPath("data[].content").type(JsonFieldType.STRING).description("게시글 내용"),
+                                    fieldWithPath("data[].author").type(JsonFieldType.STRING).description("작성자"),
+                                    fieldWithPath("data[].likes").type(JsonFieldType.NUMBER).description("좋아요 수"),
+                                    fieldWithPath("data[].imageUrl").type(JsonFieldType.STRING).description("이미지 URL").optional(),
 
-                                fieldWithPath("data[].comments").type(JsonFieldType.ARRAY).description("댓글 목록").optional(),
-                                fieldWithPath("data[].comments[].id").type(JsonFieldType.NUMBER).description("댓글 ID"),
-                                fieldWithPath("data[].comments[].postId").type(JsonFieldType.NUMBER).description("댓글이 달린 게시글 ID"),
-                                fieldWithPath("data[].comments[].author").type(JsonFieldType.STRING).description("댓글 작성자"),
-                                fieldWithPath("data[].comments[].content").type(JsonFieldType.STRING).description("댓글 내용"),
-                                fieldWithPath("data[].comments[].createdDate").type(JsonFieldType.ARRAY).description("댓글 생성 날짜 [년, 월, 일, 시, 분, 초, 나노초]"),
-                                fieldWithPath("data[].comments[].lastModifiedDate").type(JsonFieldType.ARRAY).description("댓글 수정 날짜 [년, 월, 일, 시, 분, 초, 나노초]"),
-                                fieldWithPath("data[].comments[].like").type(JsonFieldType.BOOLEAN).description("댓글 좋아요 여부"),
+                                    fieldWithPath("data[].comments").type(JsonFieldType.ARRAY).description("댓글 목록").optional(),
+                                    fieldWithPath("data[].comments[].id").type(JsonFieldType.NUMBER).description("댓글 ID"),
+                                    fieldWithPath("data[].comments[].postId").type(JsonFieldType.NUMBER).description("댓글이 달린 게시글 ID"),
+                                    fieldWithPath("data[].comments[].author").type(JsonFieldType.STRING).description("댓글 작성자"),
+                                    fieldWithPath("data[].comments[].content").type(JsonFieldType.STRING).description("댓글 내용"),
+                                    fieldWithPath("data[].comments[].createdDate").type(JsonFieldType.ARRAY).description("댓글 생성 날짜 [년, 월, 일, 시, 분, 초, 나노초]"),
+                                    fieldWithPath("data[].comments[].lastModifiedDate").type(JsonFieldType.ARRAY).description("댓글 수정 날짜 [년, 월, 일, 시, 분, 초, 나노초]"),
+                                    fieldWithPath("data[].comments[].like").type(JsonFieldType.BOOLEAN).description("댓글 좋아요 여부"),
 
-                                fieldWithPath("data[].commentCount").type(JsonFieldType.NUMBER).description("댓글 수").optional(),
-                                fieldWithPath("data[].createdDate").type(JsonFieldType.ARRAY).description("작성일자").optional(),
-                                fieldWithPath("data[].lastModifiedDate").type(JsonFieldType.ARRAY).description("수정일자").optional(),
-                                fieldWithPath("data[].avatarUrl").type(JsonFieldType.STRING).description("작성자 아바타 URL").optional(),
-                                fieldWithPath("data[].timeAgo").type(JsonFieldType.STRING).description("얼마 전에 작성되었는지").optional(),
+                                    fieldWithPath("data[].commentCount").type(JsonFieldType.NUMBER).description("댓글 수").optional(),
+                                    fieldWithPath("data[].createdDate").type(JsonFieldType.ARRAY).description("작성일자").optional(),
+                                    fieldWithPath("data[].lastModifiedDate").type(JsonFieldType.ARRAY).description("수정일자").optional(),
+                                    fieldWithPath("data[].avatarUrl").type(JsonFieldType.STRING).description("작성자 아바타 URL").optional(),
+                                    fieldWithPath("data[].timeAgo").type(JsonFieldType.STRING).description("얼마 전에 작성되었는지").optional(),
 
-                                fieldWithPath("data[].like").description("유저 게시글 좋아요 여부"),
+                                    fieldWithPath("data[].like").type(JsonFieldType.BOOLEAN).description("유저 게시글 좋아요 여부"),
 
-                                fieldWithPath("data[].loanAdviceSummaryReport").type(JsonFieldType.OBJECT).description("대출 상담 결과").optional(),
-                                fieldWithPath("data[].loanAdviceSummaryReport.loanAdviceResultId").type(JsonFieldType.NUMBER).description("대출 상담 결과 ID").optional(),
-                                fieldWithPath("data[].loanAdviceSummaryReport.loanProductName").type(JsonFieldType.STRING).description("대출 상품명").optional(),
-                                fieldWithPath("data[].loanAdviceSummaryReport.loanProductCode").type(JsonFieldType.STRING).description("대출 상품 코드").optional(),
-                                fieldWithPath("data[].loanAdviceSummaryReport.possibleLoanLimit").type(JsonFieldType.NUMBER).description("가능한 대출 한도").optional(),
-                                fieldWithPath("data[].loanAdviceSummaryReport.expectedLoanRate").type(JsonFieldType.NUMBER).description("예상 대출 금리").optional()
-                        )
-                ));
+                                    fieldWithPath("data[].loanAdviceSummaryReport").type(JsonFieldType.OBJECT).description("대출 상담 결과").optional(),
+                                    fieldWithPath("data[].loanAdviceSummaryReport.loanAdviceResultId").type(JsonFieldType.NUMBER).description("대출 상담 결과 ID").optional(),
+                                    fieldWithPath("data[].loanAdviceSummaryReport.loanProductName").type(JsonFieldType.STRING).description("대출 상품명").optional(),
+                                    fieldWithPath("data[].loanAdviceSummaryReport.loanProductCode").type(JsonFieldType.STRING).description("대출 상품 코드").optional(),
+                                    fieldWithPath("data[].loanAdviceSummaryReport.possibleLoanLimit").type(JsonFieldType.NUMBER).description("가능한 대출 한도").optional(),
+                                    fieldWithPath("data[].loanAdviceSummaryReport.expectedLoanRate").type(JsonFieldType.NUMBER).description("예상 대출 금리").optional()
+                            )
+                    ));
         }
     }
+
     @Test
     @DisplayName("게시글 생성 API")
     @WithMockUser(username = "testUser", roles = {"USER"})
