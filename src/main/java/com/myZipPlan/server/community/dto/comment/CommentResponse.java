@@ -1,5 +1,6 @@
 package com.myZipPlan.server.community.dto.comment;
 
+import com.myZipPlan.server.common.util.DateTimeUtil;
 import com.myZipPlan.server.community.domain.Comment;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,6 +19,7 @@ public class CommentResponse {
     private final LocalDateTime lastModifiedDate;  // 수정일
     private final boolean like; //유저 댓글 좋아요 여부
     private final int likes;                 // 좋아요 수
+    private final String timeAgo;            // "n시간 전"과 같은 형태로 변환된 작성 시간
 
 
 
@@ -25,7 +27,8 @@ public class CommentResponse {
     public CommentResponse(Long id, Long postId, String author, String content
                           , LocalDateTime createdDate, LocalDateTime lastModifiedDate
                           , boolean like
-                          , int likes) {
+                          , int likes
+                          , String timeAgo) {
         this.id = id;
         this.postId = postId;
         this.author = author;
@@ -34,6 +37,7 @@ public class CommentResponse {
         this.lastModifiedDate = lastModifiedDate;
         this.like = like;
         this.likes = likes;
+        this.timeAgo = timeAgo;
     }
 
     public static CommentResponse fromEntity(Comment comment) {
@@ -46,6 +50,7 @@ public class CommentResponse {
                 .createdDate(comment.getCreatedDate())
                 .lastModifiedDate(comment.getLastModifiedDate())
                 .like(false)
+                .timeAgo(DateTimeUtil.calculateTimeAgo(comment.getCreatedDate()))
                 .build();
     }
 
@@ -59,6 +64,7 @@ public class CommentResponse {
                 .createdDate(comment.getCreatedDate())
                 .lastModifiedDate(comment.getLastModifiedDate())
                 .like(like)
+                .timeAgo(DateTimeUtil.calculateTimeAgo(comment.getCreatedDate()))
                 .build();
     }
 }
