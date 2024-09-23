@@ -8,7 +8,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class HousingInfoResponse {
-    private String rentHousingTypeName;
+        private String rentHousingTypeName;
     private Double exclusiveArea;
     private Double averageDeposit;
     private Double averageMonthlyRent;

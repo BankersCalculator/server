@@ -11,7 +11,7 @@ import java.util.Map;
 @AllArgsConstructor
 public class RentTransactionInquiryResponse {
     private Map<String, AverageInfo> averageInfoByExcluUseAr;
-    private List<TransactionDetail> transactions;
+    private List<TransactionDetail> TransactionDetails;
 
     @Getter
     @Setter

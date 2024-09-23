@@ -18,7 +18,11 @@ public class RentTransactionInquiryController {
 
     @GetMapping
     public ApiResponse<RentTransactionInquiryResponse> getRentTransactions(@RequestBody RentTransactionInquiryRequest request) {
-        RentTransactionInquiryResponse rentTransactionInquiryResponse = rentTransactionInquiryService.getRentTransactions(request.getDistrictCodeFirst5(), request.getRentHousingType(),request.getMonths(), request.getDongName(), request.getJibun());
+        RentTransactionInquiryResponse rentTransactionInquiryResponse = rentTransactionInquiryService.getRentTransactions(request.getDistrictCodeFirst5()
+                , request.getRentHousingType()
+                , request.getMonths()
+                , request.getDongName()
+                , request.getJibun());
         return ApiResponse.ok(rentTransactionInquiryResponse);
     }
 }
