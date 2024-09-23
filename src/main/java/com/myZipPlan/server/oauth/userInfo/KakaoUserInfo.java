@@ -15,7 +15,7 @@ public class KakaoUserInfo {
     public static final String PROVIDER = "KAKAO";
     public static final String KAKAO_ID = "id";
     public static final String NICKNAME = "nickname";
-    public static final String THUMBNAIL_IMAGE = "thumbnail_image_url";
+    public static final String THUMBNAIL_IMAGE = "thumbnail_image";
     public static final String PROPERTIES = "properties";
 
 
@@ -36,7 +36,6 @@ public class KakaoUserInfo {
 
     public UserProfile getUserProfile() {
         Map<String, Object> allInfo = getObjectMap();
-
         String nickname = "";
         String email = "";
         String thumbnailImage = "";
@@ -44,6 +43,7 @@ public class KakaoUserInfo {
         email = (String) allInfo.get(EMAIL);
         nickname = (String) allInfo.get(NICKNAME);
         thumbnailImage = (String) allInfo.get(THUMBNAIL_IMAGE);
+
 
         return UserProfile.builder()
             .email(email)
