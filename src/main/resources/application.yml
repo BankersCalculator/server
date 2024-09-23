@@ -1,4 +1,7 @@
 spring:
+  ai:
+    openai:
+      api-key: ${ai.openai.api-key}
   security:
     oauth2:
       client:
@@ -55,7 +58,6 @@ spring:
         generate_statistics: true
         dialect: org.hibernate.dialect.MySQLDialect
     defer-datasource-initialization: true
-
   servlet:
     multipart:
       enabled: true
