@@ -1,5 +1,6 @@
 package com.myZipPlan.server.advice.loanAdvice.service;
 
+import com.myZipPlan.server.advice.aiReportGenerator.service.AiReportGeneratorService;
 import com.myZipPlan.server.advice.loanAdvice.dto.internal.AdditionalInformation;
 import com.myZipPlan.server.advice.loanAdvice.dto.internal.BestLoanProductResult;
 import com.myZipPlan.server.advice.loanAdvice.dto.internal.FilterProductResultDto;
@@ -41,7 +42,7 @@ public class LoanAdviceService {
     private final LoanLimitAndRateCalculator loanLimitAndRateCalculator;
     private final ProductComparator productComparator;
     private final AdditionalInfoGenerator additionalInfoGenerator;
-    private final AiReportGenerator aiReportGenerator;
+    private final AiReportGeneratorService aiReportGeneratorService;
 
 
     private final UserService userService;
@@ -134,10 +135,10 @@ public class LoanAdviceService {
         List<LoanLimitAndRateResultDto> loanTerms = calculateLoanTerms(request, filterResults);
         BestLoanProductResult bestProduct = findBestLoanProduct(request, loanTerms);
         AdditionalInformation additionalInfo = generateAdditionalInfo(request, bestProduct);
-        String aiReport = generateAiReport();
         List<RecommendedProductDto> recommendedProducts = createRecommendedProductListExcludingBestLoan(filterResults, loanTerms, bestProduct);
         User user = fetchCurrentUser();
         UserInputInfo userInputInfo = createUserInputInfo(request, user);
+        String aiReport = generateAiReport(userInputInfo, bestProduct, additionalInfo, recommendedProducts);
 
         return new LoanAdviceComponents(bestProduct, additionalInfo, aiReport, recommendedProducts, user, userInputInfo);
     }
@@ -154,8 +155,20 @@ public class LoanAdviceService {
         return additionalInfoGenerator.generateAdditionalInfo(request, bestProduct);
     }
 
-    private String generateAiReport() {
-        return aiReportGenerator.generateAiReport();
+    private String generateAiReport(UserInputInfo userInputInfo, BestLoanProductResult bestProduct,
+                                    AdditionalInformation additionalInfo, List<RecommendedProductDto> recommendedProducts) {
+
+        StringBuilder promptInfoBuilder = new StringBuilder();
+        promptInfoBuilder.append("사용자 입력 정보: ").append(userInputInfo.toString()).append("\n")
+                        .append("최적 상품 정보: ").append(bestProduct.toString()).append("\n")
+                        .append("추가 정보: ").append(additionalInfo.toString()).append("\n")
+                        .append("기타 추천 상품 목록: \n ");
+        recommendedProducts.forEach(recommendedProduct ->
+            promptInfoBuilder.append(recommendedProduct.toString()).append("\n"));
+
+        String promptInfoData = promptInfoBuilder.toString();
+
+        return aiReportGeneratorService.generateAiReport(promptInfoData);
     }
 
     // 최적상품 외의 상품들도 한도와 금리, 부적합사유를 만들어서 반환
