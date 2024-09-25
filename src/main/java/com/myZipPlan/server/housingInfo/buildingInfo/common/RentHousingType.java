@@ -12,6 +12,4 @@ public enum RentHousingType {
    , FAMILY_HOUSE("단독/다가구");
 
     private final String description;
-
-
 }

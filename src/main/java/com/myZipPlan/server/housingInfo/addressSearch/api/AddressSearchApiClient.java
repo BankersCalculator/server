@@ -23,14 +23,14 @@ public class AddressSearchApiClient {
 
     private static final String API_URL = "https://business.juso.go.kr/addrlink/addrLinkApi.do";
     private static final String API_KEY = "devU01TX0FVVEgyMDI0MDgwNTIxMTIzNjExNDk4OTM=";
-    private static final String CURRENT_PAGE = "1";
-    private static final String COUNT_PER_PAGE = "10";
+    private static final String COUNT_PER_PAGE = "5";
     private static final String RESULT_TYPE = "json";
 
-    private String buildApiUrl(String keyword) throws IOException {
+    private String buildApiUrl(String keyword, int page) throws IOException {
+        int currentPage = page + 1;
         return API_URL
                 + "?confmKey=" + API_KEY
-                + "&currentPage=" + CURRENT_PAGE
+                + "&currentPage=" + currentPage
                 + "&countPerPage=" + COUNT_PER_PAGE
                 + "&resultType=" + RESULT_TYPE
                 + "&keyword=" + URLEncoder.encode(keyword, "UTF-8");
@@ -76,8 +76,8 @@ public class AddressSearchApiClient {
         return addressInfoList;
     }
 
-    public Map<String, Object> searchAddress(String keyword) throws IOException, JSONException {
-        String apiUrl = buildApiUrl(keyword);
+    public Map<String, Object> searchAddress(String keyword, int page) throws IOException, JSONException {
+        String apiUrl = buildApiUrl(keyword, page);
         String apiResponse = callAddressSerarchApi(apiUrl);
         JSONObject jsonObject = new JSONObject(apiResponse);
         JSONObject common = jsonObject.getJSONObject("results").getJSONObject("common");

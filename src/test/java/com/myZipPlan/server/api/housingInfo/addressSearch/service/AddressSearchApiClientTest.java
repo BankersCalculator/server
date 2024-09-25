@@ -33,14 +33,14 @@ public class AddressSearchApiClientTest {
         String keyword7 = "SELECT";
 
         // 실제 API 호출
-        Map<String, Object> result0 = addressSearchApiClient.searchAddress(keyword0);
-        Map<String, Object> result1 = addressSearchApiClient.searchAddress(keyword1);
-        Map<String, Object> result2 = addressSearchApiClient.searchAddress(keyword2);
-        Map<String, Object> result3 = addressSearchApiClient.searchAddress(keyword3);
-        Map<String, Object> result4 = addressSearchApiClient.searchAddress(keyword4);
-        Map<String, Object> result5 = addressSearchApiClient.searchAddress(keyword5);
-        Map<String, Object> result6 = addressSearchApiClient.searchAddress(keyword6);
-        Map<String, Object> result7 = addressSearchApiClient.searchAddress(keyword7);
+        Map<String, Object> result0 = addressSearchApiClient.searchAddress(keyword0, 0);
+        Map<String, Object> result1 = addressSearchApiClient.searchAddress(keyword1,0);
+        Map<String, Object> result2 = addressSearchApiClient.searchAddress(keyword2,0);
+        Map<String, Object> result3 = addressSearchApiClient.searchAddress(keyword3,0);
+        Map<String, Object> result4 = addressSearchApiClient.searchAddress(keyword4,0);
+        Map<String, Object> result5 = addressSearchApiClient.searchAddress(keyword5,0);
+        Map<String, Object> result6 = addressSearchApiClient.searchAddress(keyword6,0);
+        Map<String, Object> result7 = addressSearchApiClient.searchAddress(keyword7,0);
 
         // 결과 검증
         @SuppressWarnings("unchecked")

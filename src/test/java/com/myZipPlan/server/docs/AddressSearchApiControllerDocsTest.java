@@ -13,13 +13,16 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -55,10 +58,11 @@ public class AddressSearchApiControllerDocsTest extends RestDocsSupport {
         response.put("apiResultMessage", "Success");
         response.put("addressInfos", Collections.singletonList(addressSearchApiResponse));
 
-        when(addressSearchApiClient.searchAddress(anyString())).thenReturn(response);
+        when(addressSearchApiClient.searchAddress(anyString(),anyInt() )).thenReturn(response);
 
-        mockMvc.perform(post(BASE_URL)
+        mockMvc.perform(get(BASE_URL)
                         .content("{\"keyword\": \"청라한내로 100번길\"}")  // JSON 형식으로 요청 본문을 전달
+                        .param("page", "0")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -66,6 +70,9 @@ public class AddressSearchApiControllerDocsTest extends RestDocsSupport {
                 .andDo(document("address/search",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
+                        queryParameters(
+                                parameterWithName("page").description("페이지 번호, 기본값 : 0").optional()
+                        ),
                         requestFields(
                                 fieldWithPath("keyword").type(JsonFieldType.STRING).description("주소 검색을 위한 키워드")
                         ),

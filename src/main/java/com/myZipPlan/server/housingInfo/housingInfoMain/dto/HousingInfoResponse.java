@@ -1,4 +1,4 @@
-package com.myZipPlan.server.housingInfo.dto;
+package com.myZipPlan.server.housingInfo.housingInfoMain.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,7 +10,9 @@ import lombok.Setter;
 public class HousingInfoResponse {
     private String rentHousingTypeName;
     private Double exclusiveArea;
+    private Integer exclusiveAreaPy;
     private Double averageDeposit;
     private Double averageMonthlyRent;
     private Integer transactionCount;
+
 }

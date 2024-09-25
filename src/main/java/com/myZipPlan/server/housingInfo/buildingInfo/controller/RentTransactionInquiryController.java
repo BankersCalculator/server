@@ -5,10 +5,7 @@ import com.myZipPlan.server.housingInfo.buildingInfo.dto.RentTransactionInquiryR
 import com.myZipPlan.server.housingInfo.buildingInfo.dto.RentTransactionInquiryResponse;
 import com.myZipPlan.server.housingInfo.buildingInfo.service.RentTransactionInquiryService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 
@@ -19,9 +16,13 @@ import java.io.IOException;
 public class RentTransactionInquiryController {
     private final RentTransactionInquiryService rentTransactionInquiryService;
 
-    @PostMapping
-    public ApiResponse<RentTransactionInquiryResponse> getRentTransactions(@RequestBody RentTransactionInquiryRequest request) throws IOException {
-        RentTransactionInquiryResponse rentTransactionInquiryResponse = rentTransactionInquiryService.getRentTransactionsResult(request.getDistrictCodeFirst5(), request.getRentHousingType(),request.getMonths(), request.getDongName(), request.getJibun());
+    @GetMapping
+    public ApiResponse<RentTransactionInquiryResponse> getRentTransactions(@RequestBody RentTransactionInquiryRequest request) {
+        RentTransactionInquiryResponse rentTransactionInquiryResponse = rentTransactionInquiryService.getRentTransactions(request.getDistrictCodeFirst5()
+                , request.getRentHousingType()
+                , request.getMonths()
+                , request.getDongName()
+                , request.getJibun());
         return ApiResponse.ok(rentTransactionInquiryResponse);
     }
 }

@@ -1,9 +1,9 @@
 package com.myZipPlan.server.docs;
-import com.myZipPlan.server.housingInfo.controller.HousingInfoApiController;
-import com.myZipPlan.server.RestDocsSupport;
-import com.myZipPlan.server.housingInfo.dto.HousingInfoResponse;
-import com.myZipPlan.server.housingInfo.service.HousingInfoService;
 
+import com.myZipPlan.server.RestDocsSupport;
+import com.myZipPlan.server.housingInfo.housingInfoMain.controller.HousingInfoApiController;
+import com.myZipPlan.server.housingInfo.housingInfoMain.dto.HousingInfoResponse;
+import com.myZipPlan.server.housingInfo.housingInfoMain.service.HousingInfoService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -41,8 +41,8 @@ public class HousingInfoApiControllerDocsTest extends RestDocsSupport {
 
         // Mock the service response
         List<HousingInfoResponse> responseList = Arrays.asList(
-                new HousingInfoResponse("오피스텔", 20.98, 1000.0, 110.0, 2),
-                new HousingInfoResponse("오피스텔", 20.52, 1000.0, 107.5, 2)
+                new HousingInfoResponse("오피스텔", 20.98, 6, 1000.0, 110.0, 2),
+                new HousingInfoResponse("오피스텔", 20.52, 6, 1000.0, 107.5, 2)
         );
 
         // Mock the service to return the correct response format
@@ -53,7 +53,6 @@ public class HousingInfoApiControllerDocsTest extends RestDocsSupport {
 
         when(housingInfoService.getHousingInfo(anyString(), anyString(), anyString())).thenReturn(serviceResponse);
 
-
         // Create request body
         String requestBody = "{\n" +
                 "  \"districtCode\": \"1168010100\",\n" +
@@ -62,7 +61,7 @@ public class HousingInfoApiControllerDocsTest extends RestDocsSupport {
                 "}";
 
         // Perform the request
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/housingInfoApi")
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/housingInfo")
                         .content(requestBody)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -83,14 +82,14 @@ public class HousingInfoApiControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("data").type(JsonFieldType.OBJECT).description("응답 데이터"),
                                 fieldWithPath("data.apiResultCode").type(JsonFieldType.STRING).description("API 결과 코드"),
                                 fieldWithPath("data.apiResultMessage").type(JsonFieldType.STRING).description("API 결과 메시지"),
-                                fieldWithPath("data.housingInfoList").type(JsonFieldType.ARRAY).description("주택정보 목록"),
+                                fieldWithPath("data.housingInfoList").type(JsonFieldType.ARRAY).description("주택 정보 목록"),
                                 fieldWithPath("data.housingInfoList[].rentHousingTypeName").type(JsonFieldType.STRING).description("임대 주택 유형 이름"),
-                                fieldWithPath("data.housingInfoList[].exclusiveArea").type(JsonFieldType.NUMBER).description("전용 면적"),
+                                fieldWithPath("data.housingInfoList[].exclusiveArea").type(JsonFieldType.NUMBER).description("전용 면적 (제곱미터)"),
+                                fieldWithPath("data.housingInfoList[].exclusiveAreaPy").type(JsonFieldType.NUMBER).description("평수"),
                                 fieldWithPath("data.housingInfoList[].averageDeposit").type(JsonFieldType.NUMBER).description("평균 보증금"),
-                                fieldWithPath("data.housingInfoList[].averageMonthlyRent").optional().type(JsonFieldType.NUMBER).description("평균 월세"),
+                                fieldWithPath("data.housingInfoList[].averageMonthlyRent").type(JsonFieldType.NUMBER).description("평균 월세"),
                                 fieldWithPath("data.housingInfoList[].transactionCount").type(JsonFieldType.NUMBER).description("거래 건수")
                         )
                 ));
-
     }
 }
