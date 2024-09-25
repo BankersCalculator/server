@@ -68,7 +68,13 @@ public class HousingInfoService {
             // Step 3: exclusiveArea와 rentHousingTypeName 기준으로 그룹핑하여 최종 HousingInfoResponse 생성
             List<HousingInfoResponse> housingInfoList = groupByExcluUseArAndCreateResponse(allTransactions);
 
-            housingInfoResult.put("housingInfoList", housingInfoList);
+            if (housingInfoList.isEmpty()) {
+                // housingInfoList가 비어있는 경우
+                housingInfoResult.put("apiResultCode", "N");
+                housingInfoResult.put("apiResultMessage", "검색결과가 없습니다.");
+            } else {
+                housingInfoResult.put("housingInfoList", housingInfoList);
+            }
         }
         return housingInfoResult;
     }
