@@ -586,6 +586,7 @@ public class PostApiDocsTest extends RestDocsSupport {
                             .file("imageFile", "updated-image-content".getBytes()) // 이미지 파일
                             .part(new MockPart("title", "수정된 제목".getBytes(StandardCharsets.UTF_8))) // 제목
                             .part(new MockPart("content", "수정된 내용".getBytes(StandardCharsets.UTF_8))) // 내용
+                            .part(new MockPart("existingImageUrl", "기존 이미지 URL".getBytes(StandardCharsets.UTF_8)))
                             .param("loanAdviceResultId", "2") // 새로운 LoanAdviceResult ID 추가
                             .contentType(MediaType.MULTIPART_FORM_DATA)
                             .accept(MediaType.APPLICATION_JSON)
@@ -606,6 +607,7 @@ public class PostApiDocsTest extends RestDocsSupport {
                                     partWithName("imageFile").description("첨부 이미지 파일").optional(),
                                     partWithName("title").description("수정된 게시글 제목"),
                                     partWithName("content").description("수정된 게시글 내용"),
+                                    partWithName("existingImageUrl").description("기존 이미지 URL").optional(),
                                     partWithName("loanAdviceResultId").description("대출 상담 결과 ID").optional()
                             ),
                             responseFields(
