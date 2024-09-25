@@ -24,7 +24,7 @@ public class RentTransactionInquiryResponse {
         private String excluUseAr;
         private String floor;
         private String monthlyRent;
-        private String contractType;
+        private String contractType; 
     }
 
     @Getter
