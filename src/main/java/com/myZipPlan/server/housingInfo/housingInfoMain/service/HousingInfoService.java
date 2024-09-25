@@ -49,7 +49,8 @@ public class HousingInfoService {
         Map<String, Object> housingInfoResult = new HashMap<>();
 
         // Step 1: 주택 유형 및 평형 정보 조회
-        Map<String, Object> housingTypeResponse = fetchHousingTypeInfo(districtCodeFirst5, districtCodeLast5, parsedJibun[0], parsedJibun[1]);
+        Map<String, Object> housingTypeResponse = fetchHousingTypeInfo(
+                districtCodeFirst5, districtCodeLast5, parsedJibun[0], parsedJibun[1]);
 
         housingInfoResult.put("apiResultCode", housingTypeResponse.get("apiResultCode"));
         housingInfoResult.put("apiResultMessage", housingTypeResponse.get("apiResultMessage"));
@@ -57,10 +58,12 @@ public class HousingInfoService {
         if ("Y".equals(housingTypeResponse.get("apiResultCode"))) {
             // 참고로 사용할 주택 유형 정보 수집
             List<HousingTypeAndExclusiveAreaApiResponse.ApiResponseItem> housingItems =
-                    (List<HousingTypeAndExclusiveAreaApiResponse.ApiResponseItem>) housingTypeResponse.get("housingTypeAndExclusiveAreaList");
+                    (List<HousingTypeAndExclusiveAreaApiResponse.ApiResponseItem>)
+                            housingTypeResponse.get("housingTypeAndExclusiveAreaList");
 
             // Step 2: 임대 거래 데이터 수집 및 그룹핑
-            List<Map.Entry<RentTransactionInquiryResponse.TransactionDetail, String>> allTransactions = collectRentTransactionData(districtCodeFirst5, housingItems, dongName, jibun);
+            List<Map.Entry<RentTransactionInquiryResponse.TransactionDetail, String>> allTransactions =
+                    collectRentTransactionData(districtCodeFirst5, housingItems, dongName, jibun);
 
             // Step 3: exclusiveArea와 rentHousingTypeName 기준으로 그룹핑하여 최종 HousingInfoResponse 생성
             List<HousingInfoResponse> housingInfoList = groupByExcluUseArAndCreateResponse(allTransactions);
@@ -71,7 +74,14 @@ public class HousingInfoService {
     }
 
     /**
-     * 임대 거래 데이터를 수집하는 메서드
+     * 임대 거래 데이터를 수집하고 각 거래와 주택 유형명을 쌍으로 반환합니다.
+     *
+     * @param districtCodeFirst5 법정동 코드의 앞 5자리
+     * @param housingItems       주택 유형 및 전용 면적 정보 목록
+     * @param dongName           동 이름
+     * @param jibun              지번
+     * @return 각 거래와 주택 유형명을 포함한 리스트
+     * @throws IOException API 호출 시 발생한 예외
      */
     private List<Map.Entry<RentTransactionInquiryResponse.TransactionDetail, String>> collectRentTransactionData(
             String districtCodeFirst5,
@@ -91,7 +101,8 @@ public class HousingInfoService {
                 String queryKey = districtCodeFirst5 + "-" + dealYmd + "-" + rentHousingType + "-" + dongName + "-" + jibun;
                 if (!visited.contains(queryKey)) {
                     visited.add(queryKey);
-                    allTransactions.addAll(fetchTransactionsForMonth(districtCodeFirst5, dealYmd, rentHousingType, dongName, jibun)
+                    allTransactions.addAll(fetchTransactionsForMonth(
+                            districtCodeFirst5, dealYmd, rentHousingType, dongName, jibun)
                             .map(transactionDetail -> new AbstractMap.SimpleEntry<>(transactionDetail, rentHousingTypeName))
                             .collect(Collectors.toList()));
                 }
@@ -101,7 +112,10 @@ public class HousingInfoService {
     }
 
     /**
-     * 임대 거래 데이터를 excluUseAr 기준으로 그룹핑하고 HousingInfoResponse 객체로 변환
+     * 임대 거래 데이터를 전용 면적과 주택 유형명으로 그룹핑하고 HousingInfoResponse 객체로 변환합니다.
+     *
+     * @param transactionDetailsWithType 거래 정보와 주택 유형명 쌍의 리스트
+     * @return HousingInfoResponse 객체의 리스트
      */
     private List<HousingInfoResponse> groupByExcluUseArAndCreateResponse(
             List<Map.Entry<RentTransactionInquiryResponse.TransactionDetail, String>> transactionDetailsWithType) {
@@ -122,13 +136,19 @@ public class HousingInfoService {
                             .map(Map.Entry::getKey)
                             .collect(Collectors.toList());
 
-                    return createHousingInfoResponseFromTransactions(formattedExclusiveArea, transactionList, rentHousingTypeName);
+                    return createHousingInfoResponseFromTransactions(
+                            formattedExclusiveArea, transactionList, rentHousingTypeName);
                 })
                 .collect(Collectors.toList());
     }
 
     /**
-     * 각 excluUseAr 그룹의 임대 거래 데이터로 HousingInfoResponse 객체 생성
+     * 각 전용 면적 그룹의 임대 거래 데이터로 HousingInfoResponse 객체를 생성합니다.
+     *
+     * @param formattedExclusiveArea 전용 면적 (포맷된 문자열)
+     * @param transactionList        해당 전용 면적의 거래 목록
+     * @param rentHousingTypeName    주택 유형명
+     * @return HousingInfoResponse 객체
      */
     private HousingInfoResponse createHousingInfoResponseFromTransactions(String formattedExclusiveArea,
                                                                           List<RentTransactionInquiryResponse.TransactionDetail> transactionList,
@@ -160,53 +180,38 @@ public class HousingInfoService {
         );
     }
 
-
     /**
-     * 주택 유형과 평형 정보 매핑
+     * 주택 유형 및 전용 면적 정보를 조회합니다.
+     *
+     * @param districtCodeFirst5 법정동 코드의 앞 5자리
+     * @param districtCodeLast5  법정동 코드의 뒤 5자리
+     * @param jibunMain          지번의 메인 번호
+     * @param jibunSub           지번의 서브 번호
+     * @return 주택 유형 및 전용 면적 정보를 포함한 Map 객체
+     * @throws IOException API 호출 시 발생한 예외
      */
-    private Map<String, String> createRentHousingTypeNameMap(List<HousingTypeAndExclusiveAreaApiResponse.ApiResponseItem> housingItems) {
-        return housingItems.stream()
-                .map(item -> item.getRentHousingTypeCode())
-                .distinct()
-                .collect(Collectors.toMap(
-                        code -> code,
-                        code -> mapRentHousingType(code).getDescription()
-                ));
-    }
-
-    private Map<String, String> createExclusiveAreaToTypeCodeMap(List<HousingTypeAndExclusiveAreaApiResponse.ApiResponseItem> housingItems) {
-        return housingItems.stream()
-                .collect(Collectors.toMap(
-                        item -> formatExclusiveArea(item.getExclusiveArea()),
-                        item -> item.getRentHousingTypeCode(),
-                        (existing, replacement) -> existing // 동일한 exclusiveArea에 대해 첫 번째 값을 유지
-                ));
-    }
-
-
-
-    private Map<String, String> createHousingTypeNameMap(List<HousingTypeAndExclusiveAreaApiResponse.ApiResponseItem> housingItems) {
-        return housingItems.stream()
-                .collect(Collectors.toMap(
-                        item -> String.valueOf(item.getExclusiveArea()) ,
-                        item -> mapRentHousingType(item.getRentHousingTypeCode()).getDescription() // RentHousingType의 description을 값으로 사용
-                ));
-    }
-
-    /**
-     * 주택 유형 및 평형 정보를 조회합니다.
-     */
-    private Map<String, Object> fetchHousingTypeInfo(String districtCodeFirst5, String districtCodeLast5, String jibunMain, String jibunSub) throws IOException {
-        return housingTypeAndExclusiveAreaApiClient.InquiryHousingTypeAndExclusiveArea(districtCodeFirst5, districtCodeLast5, jibunMain, jibunSub);
+    private Map<String, Object> fetchHousingTypeInfo(String districtCodeFirst5, String districtCodeLast5,
+                                                     String jibunMain, String jibunSub) throws IOException {
+        return housingTypeAndExclusiveAreaApiClient.InquiryHousingTypeAndExclusiveArea(
+                districtCodeFirst5, districtCodeLast5, jibunMain, jibunSub);
     }
 
     /**
      * 특정 월에 대한 임대 거래 데이터를 조회합니다.
+     *
+     * @param districtCodeFirst5 법정동 코드의 앞 5자리
+     * @param dealYmd            조회할 연월 (yyyyMM 형식)
+     * @param rentHousingType    임대 주택 유형
+     * @param dongName           동 이름
+     * @param jibun              지번
+     * @return 거래 상세 정보의 스트림
      */
-    private Stream<RentTransactionInquiryResponse.TransactionDetail> fetchTransactionsForMonth(String districtCodeFirst5, String dealYmd,
-                                                                                               RentHousingType rentHousingType, String dongName, String jibun) {
+    private Stream<RentTransactionInquiryResponse.TransactionDetail> fetchTransactionsForMonth(
+            String districtCodeFirst5, String dealYmd,
+            RentHousingType rentHousingType, String dongName, String jibun) {
         try {
-            Map<String, Object> apiResponse = rentTransactionApiClient.inquiryRentTransaction(districtCodeFirst5, dealYmd, rentHousingType);
+            Map<String, Object> apiResponse = rentTransactionApiClient.inquiryRentTransaction(
+                    districtCodeFirst5, dealYmd, rentHousingType);
             List<RentTransactionApiResponse.ApiResponseItem> items = extractTransactionItems(apiResponse);
 
             return items.stream()
@@ -219,8 +224,12 @@ public class HousingInfoService {
 
     /**
      * 거래 항목을 TransactionDetail 객체로 변환합니다.
+     *
+     * @param item 거래 항목
+     * @return TransactionDetail 객체
      */
-    private RentTransactionInquiryResponse.TransactionDetail convertToTransactionDetail(RentTransactionApiResponse.ApiResponseItem item) {
+    private RentTransactionInquiryResponse.TransactionDetail convertToTransactionDetail(
+            RentTransactionApiResponse.ApiResponseItem item) {
         return new RentTransactionInquiryResponse.TransactionDetail(
                 item.getAptNm(),
                 item.getDealYear(),
@@ -235,6 +244,9 @@ public class HousingInfoService {
 
     /**
      * 주택 유형 코드를 RentHousingType으로 매핑합니다.
+     *
+     * @param rentHousingTypeCode 주택 유형 코드
+     * @return RentHousingType 열거형 값
      */
     private RentHousingType mapRentHousingType(String rentHousingTypeCode) {
         switch (Integer.parseInt(rentHousingTypeCode)) {
@@ -255,6 +267,9 @@ public class HousingInfoService {
 
     /**
      * 지번을 파싱하여 메인 지번과 서브 지번으로 분리합니다.
+     *
+     * @param jibun 지번 문자열
+     * @return 메인 지번과 서브 지번의 배열
      */
     public static String[] parseJibun(String jibun) {
         String[] parts = jibun.split("-");
@@ -265,26 +280,42 @@ public class HousingInfoService {
 
     /**
      * 지번의 특정 부분을 4자리 형식으로 변환합니다.
+     *
+     * @param part 지번의 부분 문자열
+     * @return 4자리로 포맷된 지번 부분
      */
     private static String formatJibunPart(String part) {
         return String.format("%04d", Integer.parseInt(part));
     }
 
+    /**
+     * 전용 면적을 소수점 둘째 자리까지 포맷된 문자열로 변환합니다.
+     *
+     * @param exclusiveArea 전용 면적
+     * @return 소수점 둘째 자리까지 포맷된 문자열
+     */
     private String formatExclusiveArea(double exclusiveArea) {
         return String.format("%.2f", exclusiveArea);
     }
 
-
     /**
      * API 응답에서 거래 항목 목록을 추출합니다.
+     *
+     * @param apiResponse API 응답 맵 객체
+     * @return 거래 항목 목록
      */
     @SuppressWarnings("unchecked")
     private List<RentTransactionApiResponse.ApiResponseItem> extractTransactionItems(Map<String, Object> apiResponse) {
-        return (List<RentTransactionApiResponse.ApiResponseItem>) apiResponse.getOrDefault("rentTransactionInfoList", List.of());
+        return (List<RentTransactionApiResponse.ApiResponseItem>)
+                apiResponse.getOrDefault("rentTransactionInfoList", List.of());
     }
 
     /**
      * 요청된 개월 수에 따른 날짜 범위를 생성합니다.
+     *
+     * @param currentDate 기준 날짜
+     * @param months      개월 수
+     * @return 날짜 문자열의 스트림
      */
     private Stream<String> generateDateRange(LocalDate currentDate, int months) {
         return currentDate.minusMonths(BASE_MONTH_OFFSET)
