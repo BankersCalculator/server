@@ -133,9 +133,14 @@ public class HousingInfoService {
                 .average()
                 .orElse(0);
 
+        avgDeposit = Math.round(avgMonthlyRent * 10) / 10.0;
+        avgMonthlyRent = Math.round(avgMonthlyRent * 10) / 10.0;
+        int exclusiveAreaPy = (int) Math.round(Double.parseDouble(excluUseAr) / 3.3);
+
         return new HousingInfoResponse(
                 rentHousingTypeName,      // 주택 유형명 (RentHousingType의 description)
                 Double.parseDouble(excluUseAr), // 전용 면적
+                exclusiveAreaPy,
                 avgDeposit,                // 평균 보증금
                 avgMonthlyRent,            // 평균 월세
                 transactionList.size()     // 거래 건수

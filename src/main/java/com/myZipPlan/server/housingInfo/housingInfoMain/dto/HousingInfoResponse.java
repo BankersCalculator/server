@@ -8,9 +8,11 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class HousingInfoResponse {
-        private String rentHousingTypeName;
+    private String rentHousingTypeName;
     private Double exclusiveArea;
+    private Integer exclusiveAreaPy;
     private Double averageDeposit;
     private Double averageMonthlyRent;
     private Integer transactionCount;
+
 }
