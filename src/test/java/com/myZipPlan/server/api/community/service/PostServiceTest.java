@@ -74,7 +74,7 @@ public class PostServiceTest {
 
         Pageable pageable = PageRequest.of(0, 10);
         Page<Post> postPage = new PageImpl<>(posts, pageable, posts.size());
-        when(postRepository.findAllByOrderByCreatedDateDesc(pageable)).thenReturn(postPage);
+        when(postRepository.findAllByOrderByCreatedDateAsc(pageable)).thenReturn(postPage);
 
         when(commentService.getComments(anyString(), anyLong())).thenReturn(Collections.emptyList());
         when(postLikeRepository.findByPostAndUser(any(Post.class), eq(user))).thenReturn(Optional.empty());
@@ -141,13 +141,13 @@ public class PostServiceTest {
         Pageable pageablePage0 = PageRequest.of(0, 10);
         List<Post> page0Posts = allPosts.subList(0, 10);
         Page<Post> postPage0 = new PageImpl<>(page0Posts, pageablePage0, allPosts.size());
-        when(postRepository.findAllByOrderByCreatedDateDesc(pageablePage0)).thenReturn(postPage0);
+        when(postRepository.findAllByOrderByCreatedDateAsc(pageablePage0)).thenReturn(postPage0);
 
         // 두 번째 페이지
         Pageable pageablePage1 = PageRequest.of(1, 10);
         List<Post> page1Posts = allPosts.subList(10, 15);
         Page<Post> postPage1 = new PageImpl<>(page1Posts, pageablePage1, allPosts.size());
-        when(postRepository.findAllByOrderByCreatedDateDesc(pageablePage1)).thenReturn(postPage1);
+        when(postRepository.findAllByOrderByCreatedDateAsc(pageablePage1)).thenReturn(postPage1);
 
         when(commentService.getComments(anyString(), anyLong())).thenReturn(Collections.emptyList());
         when(postLikeRepository.findByPostAndUser(any(Post.class), eq(user))).thenReturn(Optional.empty());
