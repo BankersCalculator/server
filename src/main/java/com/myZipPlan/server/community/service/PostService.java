@@ -124,7 +124,7 @@ public class    PostService {
         Page<Post> postsPage;
 
         if (sortType == PostSortType.LATEST) {
-            postsPage = postRepository.findAllByOrderByCreatedDateAsc(pageable);
+            postsPage = postRepository.findAllByOrderByCreatedDateDesc(pageable);
         } else if (sortType == PostSortType.POPULAR) {
             postsPage = postRepository.findAllByOrderByLikesDesc(pageable);
         } else {

@@ -18,7 +18,7 @@ import java.util.Optional;
  수 있게 해줍니다.
  */
 public interface PostRepository extends JpaRepository<Post, Long> {
-    Page<Post> findAllByOrderByCreatedDateAsc(Pageable pageable); // 최신순으로 정렬
+    Page<Post> findAllByOrderByCreatedDateDesc(Pageable pageable); // 최신순으로 정렬
     Page<Post> findAllByOrderByLikesDesc(Pageable pageable);       // 인기순으로 정렬
 
     @Query("SELECT p FROM Post p JOIN FETCH p.user WHERE p.id = :postId")
