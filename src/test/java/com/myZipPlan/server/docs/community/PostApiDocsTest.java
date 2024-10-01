@@ -42,10 +42,7 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 
 public class PostApiDocsTest extends RestDocsSupport {
-
     private final PostService postService = mock(PostService.class);
-
-
     private static final String BASE_URL = "/api/v1/post";
 
     @Override
@@ -105,6 +102,7 @@ public class PostApiDocsTest extends RestDocsSupport {
                 .lastModifiedDate(LocalDateTime.now())
                 .timeAgo("1년 전")
                 .like(true)
+                .updateDeleteAuthority("ALL")
                 .build();
 
         //PostResponse2
@@ -122,6 +120,7 @@ public class PostApiDocsTest extends RestDocsSupport {
                 .lastModifiedDate(LocalDateTime.now())
                 .timeAgo("30분 전")
                 .like(false)
+                .updateDeleteAuthority("N")
                 .build();
 
         List<PostResponse> posts = new ArrayList<>();
@@ -163,7 +162,14 @@ public class PostApiDocsTest extends RestDocsSupport {
                                             fieldWithPath("data[].content").description("게시글 내용"),
                                             fieldWithPath("data[].author").description("게시글 작성자"),
                                             fieldWithPath("data[].imageUrl").description("게시글 이미지 URL").optional(),
-                                            fieldWithPath("data[].likes").description("게시글 좋아요 수"),
+                                            fieldWithPath("data[].likes").description("게시글 좋아요 수"),                                            fieldWithPath("data[].commentCount").description("댓글 수").optional(),
+                                            fieldWithPath("data[].createdDate").description("게시글 생성 날짜"),
+                                            fieldWithPath("data[].lastModifiedDate").description("게시글 수정 날짜"),
+                                            fieldWithPath("data[].avatarUrl").description("작성자 아바타 URL").optional(),
+                                            fieldWithPath("data[].timeAgo").description("게시글 작성 시간 경과 정보"),
+                                            fieldWithPath("data[].like").description("유저 게시글 좋아요 여부"),
+                                            fieldWithPath("data[].updateDeleteAuthority").description("수정/삭제 권한"),
+
                                             fieldWithPath("data[].comments[].id").description("댓글 ID"),
                                             fieldWithPath("data[].comments[].postId").description("댓글이 달린 게시글 ID"),
                                             fieldWithPath("data[].comments[].author").description("댓글 작성자"),
@@ -175,13 +181,6 @@ public class PostApiDocsTest extends RestDocsSupport {
                                             fieldWithPath("data[].comments[].timeAgo").type(JsonFieldType.STRING).description("얼마 전에 작성되었는지"),
                                             fieldWithPath("data[].comments[].avatarUrl").type(JsonFieldType.STRING).description("작성자 아바타 URL"),
 
-
-                                            fieldWithPath("data[].commentCount").description("댓글 수").optional(),
-                                            fieldWithPath("data[].createdDate").description("게시글 생성 날짜"),
-                                            fieldWithPath("data[].lastModifiedDate").description("게시글 수정 날짜"),
-                                            fieldWithPath("data[].avatarUrl").description("작성자 아바타 URL").optional(),
-                                            fieldWithPath("data[].timeAgo").description("게시글 작성 시간 경과 정보"),
-                                            fieldWithPath("data[].like").description("유저 게시글 좋아요 여부"),
                                             fieldWithPath("data[].loanAdviceSummaryReport.loanAdviceResultId").description("대출 상담 결과 ID"),
                                             fieldWithPath("data[].loanAdviceSummaryReport.loanProductName").description("대출 상품 이름"),
                                             fieldWithPath("data[].loanAdviceSummaryReport.loanProductCode").description("대출 상품 코드"),
@@ -247,6 +246,7 @@ public class PostApiDocsTest extends RestDocsSupport {
                 .lastModifiedDate(LocalDateTime.now())
                 .timeAgo("1일 전")
                 .like(true)
+                .updateDeleteAuthority("ALL")
                 .build();
 
          when(postService.getPostById(anyString(), any()))
@@ -279,6 +279,14 @@ public class PostApiDocsTest extends RestDocsSupport {
                                     fieldWithPath("data.author").type(JsonFieldType.STRING).description("작성자"),
                                     fieldWithPath("data.likes").type(JsonFieldType.NUMBER).description("좋아요 수"),
                                     fieldWithPath("data.imageUrl").type(JsonFieldType.STRING).description("이미지 URL").optional(),
+                                    fieldWithPath("data.commentCount").type(JsonFieldType.NUMBER).description("댓글 수"),
+                                    fieldWithPath("data.createdDate").type(JsonFieldType.ARRAY).description("작성일자").optional(),
+                                    fieldWithPath("data.lastModifiedDate").type(JsonFieldType.ARRAY).description("수정일자").optional(),
+                                    fieldWithPath("data.avatarUrl").type(JsonFieldType.STRING).description("작성자 아바타 URL").optional(),
+                                    fieldWithPath("data.timeAgo").type(JsonFieldType.STRING).description("얼마 전에 작성되었는지").optional(),
+                                    fieldWithPath("data.like").description("유저 게시글 좋아요 여부"),
+                                    fieldWithPath("data.updateDeleteAuthority").description("수정/삭제 권한"),
+
                                     fieldWithPath("data.comments").type(JsonFieldType.ARRAY).description("댓글 목록").optional(),
                                     fieldWithPath("data.comments[].id").type(JsonFieldType.NUMBER).description("댓글 ID"),
                                     fieldWithPath("data.comments[].postId").type(JsonFieldType.NUMBER).description("댓글이 달린 게시글 ID"),
@@ -290,13 +298,6 @@ public class PostApiDocsTest extends RestDocsSupport {
                                     fieldWithPath("data.comments[].likes").type(JsonFieldType.NUMBER).description("댓글 좋아요 수"),
                                     fieldWithPath("data.comments[].timeAgo").type(JsonFieldType.STRING).description("얼마 전에 작성되었는지"),
                                     fieldWithPath("data.comments[].avatarUrl").type(JsonFieldType.STRING).description("작성자 아바타 URL"),
-
-                                    fieldWithPath("data.commentCount").type(JsonFieldType.NUMBER).description("댓글 수"),
-                                    fieldWithPath("data.createdDate").type(JsonFieldType.ARRAY).description("작성일자").optional(),
-                                    fieldWithPath("data.lastModifiedDate").type(JsonFieldType.ARRAY).description("수정일자").optional(),
-                                    fieldWithPath("data.avatarUrl").type(JsonFieldType.STRING).description("작성자 아바타 URL").optional(),
-                                    fieldWithPath("data.timeAgo").type(JsonFieldType.STRING).description("얼마 전에 작성되었는지").optional(),
-                                    fieldWithPath("data.like").description("유저 게시글 좋아요 여부"),
 
                                     fieldWithPath("data.loanAdviceSummaryReport").type(JsonFieldType.OBJECT).description("대출 상담 결과").optional(),
                                     fieldWithPath("data.loanAdviceSummaryReport.loanAdviceResultId").type(JsonFieldType.NUMBER).description("대출 상담 결과 ID").optional(),
@@ -360,6 +361,7 @@ public class PostApiDocsTest extends RestDocsSupport {
                 .lastModifiedDate(LocalDateTime.now().minusHours(4))
                 .timeAgo("4시간 전")
                 .like(true)
+                .updateDeleteAuthority("ALL")
                 .build();
 
         // PostResponse2
@@ -376,6 +378,8 @@ public class PostApiDocsTest extends RestDocsSupport {
                 .createdDate(LocalDateTime.now().minusMinutes(30))
                 .lastModifiedDate(LocalDateTime.now())
                 .timeAgo("30분 전")
+                .like(false)
+                .updateDeleteAuthority("N")
                 .build();
 
         List<PostResponse> posts = new ArrayList<>();
@@ -418,6 +422,13 @@ public class PostApiDocsTest extends RestDocsSupport {
                                     fieldWithPath("data[].author").type(JsonFieldType.STRING).description("작성자"),
                                     fieldWithPath("data[].likes").type(JsonFieldType.NUMBER).description("좋아요 수"),
                                     fieldWithPath("data[].imageUrl").type(JsonFieldType.STRING).description("이미지 URL").optional(),
+                                    fieldWithPath("data[].commentCount").type(JsonFieldType.NUMBER).description("댓글 수").optional(),
+                                    fieldWithPath("data[].createdDate").type(JsonFieldType.ARRAY).description("작성일자").optional(),
+                                    fieldWithPath("data[].lastModifiedDate").type(JsonFieldType.ARRAY).description("수정일자").optional(),
+                                    fieldWithPath("data[].avatarUrl").type(JsonFieldType.STRING).description("작성자 아바타 URL").optional(),
+                                    fieldWithPath("data[].timeAgo").type(JsonFieldType.STRING).description("얼마 전에 작성되었는지").optional(),
+                                    fieldWithPath("data[].like").type(JsonFieldType.BOOLEAN).description("유저 게시글 좋아요 여부"),
+                                    fieldWithPath("data[].updateDeleteAuthority").description("수정/삭제 권한"),
 
                                     fieldWithPath("data[].comments").type(JsonFieldType.ARRAY).description("댓글 목록").optional(),
                                     fieldWithPath("data[].comments[].id").type(JsonFieldType.NUMBER).description("댓글 ID"),
@@ -430,14 +441,6 @@ public class PostApiDocsTest extends RestDocsSupport {
                                     fieldWithPath("data[].comments[].likes").type(JsonFieldType.NUMBER).description("댓글 좋아요 수"),
                                     fieldWithPath("data[].comments[].timeAgo").type(JsonFieldType.STRING).description("얼마 전에 작성되었는지"),
                                     fieldWithPath("data[].comments[].avatarUrl").type(JsonFieldType.STRING).description("작성자 아바타 URL"),
-
-                                    fieldWithPath("data[].commentCount").type(JsonFieldType.NUMBER).description("댓글 수").optional(),
-                                    fieldWithPath("data[].createdDate").type(JsonFieldType.ARRAY).description("작성일자").optional(),
-                                    fieldWithPath("data[].lastModifiedDate").type(JsonFieldType.ARRAY).description("수정일자").optional(),
-                                    fieldWithPath("data[].avatarUrl").type(JsonFieldType.STRING).description("작성자 아바타 URL").optional(),
-                                    fieldWithPath("data[].timeAgo").type(JsonFieldType.STRING).description("얼마 전에 작성되었는지").optional(),
-
-                                    fieldWithPath("data[].like").type(JsonFieldType.BOOLEAN).description("유저 게시글 좋아요 여부"),
 
                                     fieldWithPath("data[].loanAdviceSummaryReport").type(JsonFieldType.OBJECT).description("대출 상담 결과").optional(),
                                     fieldWithPath("data[].loanAdviceSummaryReport.loanAdviceResultId").type(JsonFieldType.NUMBER).description("대출 상담 결과 ID").optional(),
@@ -483,6 +486,7 @@ public class PostApiDocsTest extends RestDocsSupport {
                 .timeAgo("0분 전")
                 .loanAdviceSummaryReport(loanAdviceSummaryResponse)
                 .like(false)
+                .updateDeleteAuthority("N")
                 .build();
 
         // Mocking PostService의 createPost 메서드
@@ -531,8 +535,8 @@ public class PostApiDocsTest extends RestDocsSupport {
                                     fieldWithPath("data.lastModifiedDate").type(JsonFieldType.ARRAY).description("수정일자 [년, 월, 일, 시, 분, 초, 나노초]"),
                                     fieldWithPath("data.avatarUrl").type(JsonFieldType.STRING).description("작성자 아바타 URL"),
                                     fieldWithPath("data.timeAgo").type(JsonFieldType.STRING).description("얼마 전에 작성되었는지"),
-
                                     fieldWithPath("data.like").description("유저 게시글 좋아요 여부"),
+                                    fieldWithPath("data.updateDeleteAuthority").description("수정/삭제 권한"),
 
                                     fieldWithPath("data.loanAdviceSummaryReport").type(JsonFieldType.OBJECT).description("대출 상담 결과").optional(),
                                     fieldWithPath("data.loanAdviceSummaryReport.loanAdviceResultId").type(JsonFieldType.NUMBER).description("대출 상담 결과 ID").optional(),
@@ -578,6 +582,7 @@ public class PostApiDocsTest extends RestDocsSupport {
                 .timeAgo("5분 전")
                 .like(false)
                 .loanAdviceSummaryReport(loanAdviceSummaryResponse)
+                .updateDeleteAuthority("ALL")
                 .build();
 
         // Mocking PostService의 updatePost 메서드
@@ -634,6 +639,8 @@ public class PostApiDocsTest extends RestDocsSupport {
                                     fieldWithPath("data.avatarUrl").type(JsonFieldType.STRING).description("작성자 아바타 URL"),
                                     fieldWithPath("data.timeAgo").type(JsonFieldType.STRING).description("얼마 전에 작성되었는지"),
                                     fieldWithPath("data.like").description("유저 게시글 좋아요 여부"),
+                                    fieldWithPath("data.updateDeleteAuthority").description("수정/삭제 권한"),
+
                                     fieldWithPath("data.loanAdviceSummaryReport").type(JsonFieldType.OBJECT).description("대출 상담 결과").optional(),
                                     fieldWithPath("data.loanAdviceSummaryReport.loanAdviceResultId").type(JsonFieldType.NUMBER).description("대출 상담 결과 ID").optional(),
                                     fieldWithPath("data.loanAdviceSummaryReport.loanProductName").type(JsonFieldType.STRING).description("대출 상품명").optional(),
