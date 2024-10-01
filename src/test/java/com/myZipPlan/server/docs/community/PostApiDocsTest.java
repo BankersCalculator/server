@@ -17,7 +17,6 @@ import org.mockito.Mockito;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockPart;
 import org.springframework.restdocs.payload.JsonFieldType;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.math.BigDecimal;

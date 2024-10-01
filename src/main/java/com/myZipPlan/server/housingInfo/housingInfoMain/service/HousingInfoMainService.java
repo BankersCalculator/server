@@ -91,7 +91,7 @@ public class HousingInfoMainService {
     private List<Map.Entry<RentTransactionInquiryResponse.TransactionDetail, String>> collectRentTransactionData(
             String districtCodeFirst5,
             List<HousingTypeAndExclusiveAreaApiResponse.ApiResponseItem> housingItems,
-            String dongName, String jibun) throws IOException {
+            String dongName, String jibun){
 
         LocalDate currentDate = LocalDate.now();
         List<Map.Entry<RentTransactionInquiryResponse.TransactionDetail, String>> allTransactions = new ArrayList<>();
@@ -196,7 +196,7 @@ public class HousingInfoMainService {
      * @throws IOException API 호출 시 발생한 예외
      */
     private Map<String, Object> fetchHousingTypeInfo(String districtCodeFirst5, String districtCodeLast5,
-                                                     String jibunMain, String jibunSub) throws IOException {
+                                                     String jibunMain, String jibunSub) {
         return housingTypeAndExclusiveAreaApiClient.InquiryHousingTypeAndExclusiveArea(
                 districtCodeFirst5, districtCodeLast5, jibunMain, jibunSub);
     }

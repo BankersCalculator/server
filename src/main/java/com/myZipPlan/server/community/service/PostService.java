@@ -38,7 +38,6 @@ public class PostService {
     private final S3Service s3Service;
     private final PostLikeRepository postLikeRepository;
     private final LoanAdviceResultRepository loanAdviceResultRepository;
-    private static final Logger logger = LoggerFactory.getLogger(PostService.class);
     private final CommentService commentService;
 
     @Transactional

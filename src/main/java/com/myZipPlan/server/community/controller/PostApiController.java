@@ -10,7 +10,6 @@ import com.myZipPlan.server.community.service.PostService;
 import com.myZipPlan.server.oauth.userInfo.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;

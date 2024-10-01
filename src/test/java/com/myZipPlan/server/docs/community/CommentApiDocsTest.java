@@ -24,7 +24,6 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.put;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
@@ -41,7 +40,6 @@ public class CommentApiDocsTest extends RestDocsSupport {
 
     @Test
     @DisplayName("댓글 작성 API")
-    @WithMockUser(username = "testUser", roles = {"USER"})
     void createComment() throws Exception {
         // Mock CommentCreateRequest 객체 생성
         CommentCreateRequest request = new CommentCreateRequest();
