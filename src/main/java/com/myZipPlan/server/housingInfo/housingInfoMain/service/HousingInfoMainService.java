@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service
-public class HousingInfoService {
+public class HousingInfoMainService {
 
     private static final int DEFAULT_MONTHS = 3;
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyyMM");
@@ -26,8 +26,8 @@ public class HousingInfoService {
     private final HousingTypeAndExclusiveAreaApiClient housingTypeAndExclusiveAreaApiClient;
     private final RentTransactionApiClient rentTransactionApiClient;
 
-    public HousingInfoService(HousingTypeAndExclusiveAreaApiClient housingTypeApiClient,
-                              RentTransactionApiClient rentTransactionApiClient) {
+    public HousingInfoMainService(HousingTypeAndExclusiveAreaApiClient housingTypeApiClient,
+                                  RentTransactionApiClient rentTransactionApiClient) {
         this.housingTypeAndExclusiveAreaApiClient = housingTypeApiClient;
         this.rentTransactionApiClient = rentTransactionApiClient;
     }
@@ -58,8 +58,7 @@ public class HousingInfoService {
         if ("Y".equals(housingTypeResponse.get("apiResultCode"))) {
             // 참고로 사용할 주택 유형 정보 수집
             List<HousingTypeAndExclusiveAreaApiResponse.ApiResponseItem> housingItems =
-                    (List<HousingTypeAndExclusiveAreaApiResponse.ApiResponseItem>)
-                            housingTypeResponse.get("housingTypeAndExclusiveAreaList");
+                    extractHousingItems(housingTypeResponse.get("housingTypeAndExclusiveAreaList"));
 
             // Step 2: 임대 거래 데이터 수집 및 그룹핑
             List<Map.Entry<RentTransactionInquiryResponse.TransactionDetail, String>> allTransactions =
@@ -310,10 +309,28 @@ public class HousingInfoService {
      * @param apiResponse API 응답 맵 객체
      * @return 거래 항목 목록
      */
-    @SuppressWarnings("unchecked")
     private List<RentTransactionApiResponse.ApiResponseItem> extractTransactionItems(Map<String, Object> apiResponse) {
-        return (List<RentTransactionApiResponse.ApiResponseItem>)
-                apiResponse.getOrDefault("rentTransactionInfoList", List.of());
+        Object rentTransactionInfoList = apiResponse.getOrDefault("rentTransactionInfoList", List.of());
+        if (rentTransactionInfoList instanceof List<?>) {
+            return ((List<?>) rentTransactionInfoList).stream()
+                    .filter(item -> item instanceof RentTransactionApiResponse.ApiResponseItem)
+                    .map(item -> (RentTransactionApiResponse.ApiResponseItem) item)
+                    .collect(Collectors.toList());
+        }
+        return List.of();
+    }
+
+    /**
+     * 주택 유형 정보 목록을 안전하게 추출합니다.
+     */
+    private List<HousingTypeAndExclusiveAreaApiResponse.ApiResponseItem> extractHousingItems(Object housingTypeAndExclusiveAreaList) {
+        if (housingTypeAndExclusiveAreaList instanceof List<?>) {
+            return ((List<?>) housingTypeAndExclusiveAreaList).stream()
+                    .filter(item -> item instanceof HousingTypeAndExclusiveAreaApiResponse.ApiResponseItem)
+                    .map(item -> (HousingTypeAndExclusiveAreaApiResponse.ApiResponseItem) item)
+                    .collect(Collectors.toList());
+        }
+        return List.of();
     }
 
     /**

@@ -1,21 +1,16 @@
 package com.myZipPlan.server.docs.community;
 
 import com.myZipPlan.server.RestDocsSupport;
-import com.myZipPlan.server.common.enums.RoleType;
 import com.myZipPlan.server.community.controller.CommentApiController;
-import com.myZipPlan.server.community.domain.Comment;
-import com.myZipPlan.server.community.domain.Post;
 import com.myZipPlan.server.community.dto.comment.*;
 import com.myZipPlan.server.community.service.CommentService;
 import com.myZipPlan.server.oauth.userInfo.SecurityUtils;
-import com.myZipPlan.server.user.entity.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
-import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.security.test.context.support.WithMockUser;
 
 import java.time.LocalDateTime;
@@ -36,8 +31,6 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 
 public class CommentApiDocsTest extends RestDocsSupport {
-
-    private static final String BASE_URL = "/api/v1/comment";
     private final CommentService commentService = mock(CommentService.class);
 
     @Override

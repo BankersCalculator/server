@@ -452,7 +452,6 @@ public class PostApiDocsTest extends RestDocsSupport {
 
     @Test
     @DisplayName("게시글 생성 API")
-    @WithMockUser(username = "testUser", roles = {"USER"})
     void createPost() throws Exception {
         // Mock PostCreateRequest 객체 생성
         PostCreateRequest request = new PostCreateRequest();
@@ -548,7 +547,6 @@ public class PostApiDocsTest extends RestDocsSupport {
 
     @Test
     @DisplayName("게시글 수정 API")
-    @WithMockUser(username = "testUser", roles = {"USER"})
     void updatePost() throws Exception {
         // Mock PostUpdateRequest 객체 생성
         PostUpdateRequest postUpdateRequest = new PostUpdateRequest();
