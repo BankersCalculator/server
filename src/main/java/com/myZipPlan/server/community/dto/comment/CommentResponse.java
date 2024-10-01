@@ -20,15 +20,15 @@ public class CommentResponse {
     private final boolean like; //유저 댓글 좋아요 여부
     private final int likes;                 // 좋아요 수
     private final String timeAgo;            // "n시간 전"과 같은 형태로 변환된 작성 시간
-
-
+    private final String avatarUrl;          // 작성자 아바타 URL
 
     @Builder
     public CommentResponse(Long id, Long postId, String author, String content
                           , LocalDateTime createdDate, LocalDateTime lastModifiedDate
                           , boolean like
                           , int likes
-                          , String timeAgo) {
+                          , String timeAgo
+                          , String avatarUrl) {
         this.id = id;
         this.postId = postId;
         this.author = author;
@@ -38,6 +38,7 @@ public class CommentResponse {
         this.like = like;
         this.likes = likes;
         this.timeAgo = timeAgo;
+        this.avatarUrl = avatarUrl;
     }
 
     public static CommentResponse fromEntity(Comment comment) {
@@ -51,6 +52,7 @@ public class CommentResponse {
                 .lastModifiedDate(comment.getLastModifiedDate())
                 .like(false)
                 .timeAgo(DateTimeUtil.calculateTimeAgo(comment.getCreatedDate()))
+                .avatarUrl(comment.getUser().getProfileImageUrl())
                 .build();
     }
 
@@ -65,6 +67,7 @@ public class CommentResponse {
                 .lastModifiedDate(comment.getLastModifiedDate())
                 .like(like)
                 .timeAgo(DateTimeUtil.calculateTimeAgo(comment.getCreatedDate()))
+                .avatarUrl(comment.getUser().getProfileImageUrl())
                 .build();
     }
 }

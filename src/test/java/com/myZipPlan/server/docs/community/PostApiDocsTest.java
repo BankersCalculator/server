@@ -73,6 +73,7 @@ public class PostApiDocsTest extends RestDocsSupport {
                 .createdDate(LocalDateTime.now())
                 .lastModifiedDate(LocalDateTime.now())
                 .timeAgo("방금 전")
+                .avatarUrl("kakaoUrl")
                 .build();
 
         CommentResponse commentResponse2 = CommentResponse.builder()
@@ -83,6 +84,7 @@ public class PostApiDocsTest extends RestDocsSupport {
                 .createdDate(LocalDateTime.now().minusMonths(2))
                 .lastModifiedDate(LocalDateTime.now())
                 .timeAgo("2개월 전")
+                .avatarUrl("kakaoUrl")
                 .build();
 
         List<CommentResponse> comments = new ArrayList<>();
@@ -171,6 +173,7 @@ public class PostApiDocsTest extends RestDocsSupport {
                                             fieldWithPath("data[].comments[].like").type(JsonFieldType.BOOLEAN).description("댓글 좋아요 여부"),
                                             fieldWithPath("data[].comments[].likes").type(JsonFieldType.NUMBER).description("댓글 좋아요 수"),
                                             fieldWithPath("data[].comments[].timeAgo").type(JsonFieldType.STRING).description("얼마 전에 작성되었는지"),
+                                            fieldWithPath("data[].comments[].avatarUrl").type(JsonFieldType.STRING).description("작성자 아바타 URL"),
 
 
                                             fieldWithPath("data[].commentCount").description("댓글 수").optional(),
@@ -211,6 +214,7 @@ public class PostApiDocsTest extends RestDocsSupport {
                 .lastModifiedDate(LocalDateTime.now())
                 .like(true)
                 .timeAgo("방금 전")
+                .avatarUrl("kakaoUrl")
                 .build();
 
         CommentResponse commentResponse2 = CommentResponse.builder()
@@ -222,6 +226,7 @@ public class PostApiDocsTest extends RestDocsSupport {
                 .lastModifiedDate(LocalDateTime.now())
                 .timeAgo("5일 전")
                 .like(true)
+                .avatarUrl("kakaoUrl")
                 .build();
 
         List<CommentResponse> comments = new ArrayList<>();
@@ -284,6 +289,7 @@ public class PostApiDocsTest extends RestDocsSupport {
                                     fieldWithPath("data.comments[].like").type(JsonFieldType.BOOLEAN).description("댓글 좋아요 여부"),
                                     fieldWithPath("data.comments[].likes").type(JsonFieldType.NUMBER).description("댓글 좋아요 수"),
                                     fieldWithPath("data.comments[].timeAgo").type(JsonFieldType.STRING).description("얼마 전에 작성되었는지"),
+                                    fieldWithPath("data.comments[].avatarUrl").type(JsonFieldType.STRING).description("작성자 아바타 URL"),
 
                                     fieldWithPath("data.commentCount").type(JsonFieldType.NUMBER).description("댓글 수"),
                                     fieldWithPath("data.createdDate").type(JsonFieldType.ARRAY).description("작성일자").optional(),
@@ -322,6 +328,7 @@ public class PostApiDocsTest extends RestDocsSupport {
                 .createdDate(LocalDateTime.now())
                 .lastModifiedDate(LocalDateTime.now())
                 .timeAgo("방금 전")
+                .avatarUrl("kakaoUrl")
                 .build();
 
         CommentResponse commentResponse2 = CommentResponse.builder()
@@ -332,6 +339,7 @@ public class PostApiDocsTest extends RestDocsSupport {
                 .createdDate(LocalDateTime.now().minusMinutes(5))
                 .lastModifiedDate(LocalDateTime.now())
                 .timeAgo("5분 전")
+                .avatarUrl("kakaoUrl")
                 .build();
 
         List<CommentResponse> comments = new ArrayList<>();
@@ -421,6 +429,7 @@ public class PostApiDocsTest extends RestDocsSupport {
                                     fieldWithPath("data[].comments[].like").type(JsonFieldType.BOOLEAN).description("댓글 좋아요 여부"),
                                     fieldWithPath("data[].comments[].likes").type(JsonFieldType.NUMBER).description("댓글 좋아요 수"),
                                     fieldWithPath("data[].comments[].timeAgo").type(JsonFieldType.STRING).description("얼마 전에 작성되었는지"),
+                                    fieldWithPath("data[].comments[].avatarUrl").type(JsonFieldType.STRING).description("작성자 아바타 URL"),
 
                                     fieldWithPath("data[].commentCount").type(JsonFieldType.NUMBER).description("댓글 수").optional(),
                                     fieldWithPath("data[].createdDate").type(JsonFieldType.ARRAY).description("작성일자").optional(),

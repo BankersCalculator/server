@@ -63,13 +63,13 @@ public class PostResponse {
                 .id(post.getId())
                 .title(post.getTitle())
                 .content(post.getContent())
-                .author(post.getUser().getName()) // (임시) 작성자 이메일로 잠시 사용. 닉네임 이후 대체
+                .author(post.getUser().getName())
                 .imageUrl(post.getImageUrl())
                 .likes(post.getLikes())
                 .comments(comments)
                 .createdDate(post.getCreatedDate())
                 .lastModifiedDate(post.getLastModifiedDate())
-                .avatarUrl(post.getUser().getProfileImageUrl())  // (임시) 작성자의 아바타 URL. 사용할 이미지 공유 받으면 대체할 것.
+                .avatarUrl(post.getUser().getProfileImageUrl())
                 .timeAgo(DateTimeUtil.calculateTimeAgo(post.getCreatedDate()))  // "n시간 전"으로 작성 시간 표시
                 .loanAdviceSummaryReport(loanAdviceSummaryReport)
                 .like(false)

@@ -65,6 +65,7 @@ public class CommentApiDocsTest extends RestDocsSupport {
                 .like(false)
                 .likes(0)
                 .timeAgo("방금 전")
+                .avatarUrl("kakaoUrl")
                 .build();
 
         // Mocking CommentService의 addComment 메서드
@@ -106,7 +107,8 @@ public class CommentApiDocsTest extends RestDocsSupport {
                                     fieldWithPath("data.lastModifiedDate").description("댓글 수정일자").optional(),
                                     fieldWithPath("data.like").description("유저 댓글 좋아요 여부"),
                                     fieldWithPath("data.likes").description("유저 댓글 좋아요 수"),
-                                    fieldWithPath("data.timeAgo").description("얼마 전에 작성되었는지")
+                                    fieldWithPath("data.timeAgo").description("얼마 전에 작성되었는지"),
+                                    fieldWithPath("data.avatarUrl").description("작성자 아바타 URL").optional()
 
                             )
                     ));
@@ -133,6 +135,7 @@ public class CommentApiDocsTest extends RestDocsSupport {
                 .like(true)
                 .likes(3)
                 .timeAgo("1일 전")
+                .avatarUrl("kakaoUrl")
                 .build();
 
         // Mocking CommentService의 updateComment 메서드
@@ -174,7 +177,8 @@ public class CommentApiDocsTest extends RestDocsSupport {
                                     fieldWithPath("data.lastModifiedDate").description("댓글 수정일자").optional(),
                                     fieldWithPath("data.like").description("유저 댓글 좋아요 여부"),
                                     fieldWithPath("data.likes").description("유저 댓글 좋아요 수"),
-                                    fieldWithPath("data.timeAgo").description("얼마 전에 작성되었는지")
+                                    fieldWithPath("data.timeAgo").description("얼마 전에 작성되었는지"),
+                                    fieldWithPath("data.avatarUrl").description("작성자 아바타 URL").optional()
                             )
                     ));
         }
