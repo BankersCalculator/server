@@ -41,7 +41,7 @@ public class HousingInfoMainService {
      * @return 주택 정보와 임대 거래 정보를 포함한 Map 객체
      * @throws IOException API 호출 시 발생한 예외
      */
-    public Map<String, Object> getHousingInfo(String districtCode, String jibun, String dongName) throws IOException {
+    public Map<String, Object> getHousingInfo(String districtCode, String jibun, String dongName) {
         String districtCodeFirst5 = districtCode.substring(0, 5);
         String districtCodeLast5 = districtCode.substring(5);
         String[] parsedJibun = parseJibun(jibun);
@@ -86,7 +86,6 @@ public class HousingInfoMainService {
      * @param dongName           동 이름
      * @param jibun              지번
      * @return 각 거래와 주택 유형명을 포함한 리스트
-     * @throws IOException API 호출 시 발생한 예외
      */
     private List<Map.Entry<RentTransactionInquiryResponse.TransactionDetail, String>> collectRentTransactionData(
             String districtCodeFirst5,
@@ -193,7 +192,6 @@ public class HousingInfoMainService {
      * @param jibunMain          지번의 메인 번호
      * @param jibunSub           지번의 서브 번호
      * @return 주택 유형 및 전용 면적 정보를 포함한 Map 객체
-     * @throws IOException API 호출 시 발생한 예외
      */
     private Map<String, Object> fetchHousingTypeInfo(String districtCodeFirst5, String districtCodeLast5,
                                                      String jibunMain, String jibunSub) {
