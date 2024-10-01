@@ -25,9 +25,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -74,24 +74,30 @@ public class    PostService {
         return PostResponse.fromEntity(post, comments, loanAdviceSummaryReport);
     }
 
-    // 모든 게시글 조회
     @Transactional
-    public List<PostResponse> getAllPosts(String oauthProviderId
-                                         , int page, int size) {
-        User user = userRepository.findByOauthProviderId(oauthProviderId)
-                .orElseThrow(() -> new IllegalArgumentException("세션에 연결된 oauthProviderId를 찾을 수 없습니다."));
+    public List<PostResponse> getAllPosts(String oauthProviderId, int page, int size) {
+        // 유저 정보가 있을 경우에만 Optional에 값을 설정, 없으면 Optional.empty()
+        Optional<User> optionalUser = (oauthProviderId != null)
+                ? userRepository.findByOauthProviderId(oauthProviderId)
+                : Optional.empty(); // oauthProviderId가 null일 경우 빈 Optional 반환
+
+        System.out.println("<=================optionalUser : " + optionalUser);
 
         Pageable pageable = PageRequest.of(page, size);
         Page<Post> postsPage = postRepository.findAllWithComments(pageable);
-
-
 
         return postsPage.stream()
                 .map(post -> {
                     List<CommentResponse> comments = commentService.getComments(oauthProviderId, post.getId());
                     LoanAdviceResult loanAdviceResult = post.getLoanAdviceResult();
                     LoanAdviceSummaryResponse loanAdviceSummaryResponse = LoanAdviceSummaryResponse.fromEntity(loanAdviceResult);
-                    boolean like = postLikeRepository.findByPostAndUser(post, user).isPresent();
+
+                    boolean like = false; // 기본값을 false로 설정
+                    if (optionalUser.isPresent()) {
+                        User user = optionalUser.get();
+                        like = postLikeRepository.findByPostAndUser(post, user).isPresent();
+                    }
+
                     return PostResponse.fromEntity(post, comments, loanAdviceSummaryResponse, like);
                 })
                 .collect(Collectors.toList());
@@ -114,15 +120,19 @@ public class    PostService {
     // 게시글조회(정렬)
     @Transactional
     public List<PostResponse> getPostsBySortType(
-            String oauthProviderId
-            , PostSortType sortType
-            , int page, int size) {
-        User user = userRepository.findByOauthProviderId(oauthProviderId)
-                .orElseThrow(() -> new IllegalArgumentException("세션에 연결된 oauthProviderId를 찾을 수 없습니다."));
+            String oauthProviderId,
+            PostSortType sortType,
+            int page, int size) {
+
+        // oauthProviderId가 null일 경우 Optional.empty() 반환 (비회원 처리)
+        Optional<User> optionalUser = (oauthProviderId != null)
+                ? userRepository.findByOauthProviderId(oauthProviderId)
+                : Optional.empty();
 
         Pageable pageable = PageRequest.of(page, size);
         Page<Post> postsPage;
 
+        // 정렬 기준에 따라 다른 조회 방식 적용
         if (sortType == PostSortType.LATEST) {
             postsPage = postRepository.findAllByOrderByCreatedDateDesc(pageable);
         } else if (sortType == PostSortType.POPULAR) {
@@ -136,11 +146,19 @@ public class    PostService {
                     List<CommentResponse> comments = commentService.getComments(oauthProviderId, post.getId());
                     LoanAdviceResult loanAdviceResult = post.getLoanAdviceResult();
                     LoanAdviceSummaryResponse loanAdviceSummaryResponse = LoanAdviceSummaryResponse.fromEntity(loanAdviceResult);
-                    boolean like = postLikeRepository.findByPostAndUser(post, user).isPresent();
+
+                    // 기본적으로 like는 false로 설정, 회원일 경우에만 좋아요 확인
+                    boolean like = false;
+                    if (optionalUser.isPresent()) {
+                        User user = optionalUser.get();
+                        like = postLikeRepository.findByPostAndUser(post, user).isPresent();
+                    }
+
                     return PostResponse.fromEntity(post, comments, loanAdviceSummaryResponse, like);
                 })
                 .collect(Collectors.toList());
     }
+
 
     @Transactional
     public PostResponse updatePost(String oauthProviderId, Long postId, PostUpdateRequest postUpdateRequest) throws IOException {

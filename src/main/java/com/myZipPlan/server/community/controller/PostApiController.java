@@ -1,20 +1,16 @@
 package com.myZipPlan.server.community.controller;
 
-import com.myZipPlan.server.advice.loanAdvice.dto.response.LoanAdviceSummaryResponse;
-import com.myZipPlan.server.advice.loanAdvice.entity.LoanAdviceResult;
-import com.myZipPlan.server.advice.loanAdvice.repository.LoanAdviceResultRepository;
+import org.slf4j.Logger;
 import com.myZipPlan.server.common.api.ApiResponse;
 import com.myZipPlan.server.common.enums.community.PostSortType;
-import com.myZipPlan.server.community.domain.Post;
 import com.myZipPlan.server.community.dto.post.request.PostCreateRequest;
-import com.myZipPlan.server.community.dto.post.request.PostSortRequest;
 import com.myZipPlan.server.community.dto.post.request.PostUpdateRequest;
 import com.myZipPlan.server.community.dto.post.response.PostResponse;
 import com.myZipPlan.server.community.service.PostService;
 import com.myZipPlan.server.oauth.userInfo.SecurityUtils;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
@@ -24,6 +20,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PostApiController {
     private final PostService postService;
+    private static final Logger log = LoggerFactory.getLogger(PostApiController.class);
+
 
     @PostMapping
     public ApiResponse<PostResponse> createPost(@ModelAttribute PostCreateRequest postCreateRequest ) throws IOException {
@@ -54,18 +52,28 @@ public class PostApiController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size
     ) {
-        String oauthProviderId = SecurityUtils.getProviderId();
+        String oauthProviderId = null;
+        try {
+            oauthProviderId = SecurityUtils.getProviderId();
+        } catch (IllegalStateException e) {
+            log.info("Security Context에 인증 정보가 없습니다. 비로그인 상태로 게시글을 조회합니다.", e);
+        }
         List<PostResponse> posts = postService.getAllPosts(oauthProviderId,page,size);
         return ApiResponse.ok(posts);
     }
 
-    // 게시글 목록 조회 (정렬 기능 포함)
+    // 게시글 목록 조회 (정렬 기능 포함, 비로그인 가능)
     @GetMapping("/sorted")
     public ApiResponse<List<PostResponse>> getPostsBySortType(
             @RequestParam(defaultValue = "LATEST") PostSortType sortType,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
-        String oauthProviderId = SecurityUtils.getProviderId();
+        String oauthProviderId = null;
+        try {
+            oauthProviderId = SecurityUtils.getProviderId();
+        } catch (IllegalStateException e) {
+            log.info("Security Context에 인증 정보가 없습니다. 비로그인 상태로 게시글을 조회합니다.", e);
+        }
         List<PostResponse> posts = postService.getPostsBySortType(oauthProviderId, sortType, page, size);
         return ApiResponse.ok(posts);
     }

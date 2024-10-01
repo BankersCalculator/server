@@ -45,6 +45,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         // 토큰이 필요없는 URI
         if (securityPathConfig.isPublicPath(request.getRequestURI())) {
+            String accessToken = request.getHeader(ACCESS_HEADER);
+            if (accessToken != null && tokenValidator.validateExpire(accessToken) && tokenValidator.validateToken(accessToken)) {
+                SecurityContextHolder.getContext().setAuthentication(tokenProvider.getAuthentication(accessToken));
+            }
             filterChain.doFilter(request, response);
             return;
         }

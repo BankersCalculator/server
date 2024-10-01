@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -116,15 +117,22 @@ public class CommentService {
 
     @Transactional
     public List<CommentResponse> getComments(String oauthProviderId, Long postId) {
-        User user = userRepository.findByOauthProviderId(oauthProviderId)
-                .orElseThrow(() -> new IllegalArgumentException("세션에 연결된 oauthProviderId를 찾을 수 없습니다."));
+        Optional<User> optionalUser = (oauthProviderId != null)
+                ? userRepository.findByOauthProviderId(oauthProviderId)
+                : Optional.empty(); // 비로그인 상태일 경우 Optional.empty()
 
         List<Comment> comments = commentRepository.findByPostId(postId);
+
         return comments.stream()
                 .map(comment -> {
-                    boolean like = commentLikeRepository.findByCommentAndUser(comment, user).isPresent();
+                    boolean like = false; // 기본적으로 like는 false로 설정
+                    if (optionalUser.isPresent()) {
+                        User user = optionalUser.get();
+                        like = commentLikeRepository.findByCommentAndUser(comment, user).isPresent();
+                    }
                     return CommentResponse.fromEntity(comment, like);
                 })
                 .collect(Collectors.toList());
     }
+
 }
