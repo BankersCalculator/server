@@ -21,6 +21,7 @@ public class CommentResponse {
     private final int likes;                 // 좋아요 수
     private final String timeAgo;            // "n시간 전"과 같은 형태로 변환된 작성 시간
     private final String avatarUrl;          // 작성자 아바타 URL
+    private final String updateDeleteAuthority;
 
     @Builder
     public CommentResponse(Long id, Long postId, String author, String content
@@ -28,7 +29,9 @@ public class CommentResponse {
                           , boolean like
                           , int likes
                           , String timeAgo
-                          , String avatarUrl) {
+                          , String avatarUrl
+                          , String updateDeleteAuthority
+                          ) {
         this.id = id;
         this.postId = postId;
         this.author = author;
@@ -39,9 +42,12 @@ public class CommentResponse {
         this.likes = likes;
         this.timeAgo = timeAgo;
         this.avatarUrl = avatarUrl;
+        this.updateDeleteAuthority = updateDeleteAuthority;
     }
 
-    public static CommentResponse fromEntity(Comment comment) {
+    public static CommentResponse fromEntity(Comment comment
+                                             , Boolean like
+                                             , String updateDeleteAuthority   ) {
         return CommentResponse.builder()
                 .id(comment.getId())
                 .postId(comment.getPost().getId())
@@ -50,24 +56,10 @@ public class CommentResponse {
                 .likes(comment.getLikes())
                 .createdDate(comment.getCreatedDate())
                 .lastModifiedDate(comment.getLastModifiedDate())
-                .like(false)
+                .like(like != null ? like : false)
                 .timeAgo(DateTimeUtil.calculateTimeAgo(comment.getCreatedDate()))
                 .avatarUrl(comment.getUser().getProfileImageUrl())
-                .build();
-    }
-
-    public static CommentResponse fromEntity(Comment comment, boolean like) {
-        return CommentResponse.builder()
-                .id(comment.getId())
-                .postId(comment.getPost().getId())
-                .author(comment.getUser().getName())
-                .content(comment.getContent())
-                .likes(comment.getLikes())
-                .createdDate(comment.getCreatedDate())
-                .lastModifiedDate(comment.getLastModifiedDate())
-                .like(like)
-                .timeAgo(DateTimeUtil.calculateTimeAgo(comment.getCreatedDate()))
-                .avatarUrl(comment.getUser().getProfileImageUrl())
+                .updateDeleteAuthority(updateDeleteAuthority)
                 .build();
     }
 }

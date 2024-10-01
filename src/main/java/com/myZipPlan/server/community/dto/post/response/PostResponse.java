@@ -68,7 +68,7 @@ public class PostResponse {
                                           , List<CommentResponse> comments
                                           , LoanAdviceSummaryResponse loanAdviceSummaryReport
                                           , Boolean like
-                                          , String authority) {
+                                          , String updateDeleteAuthority) {
         return PostResponse.builder()
                 .id(post.getId())
                 .title(post.getTitle())
@@ -83,7 +83,7 @@ public class PostResponse {
                 .timeAgo(DateTimeUtil.calculateTimeAgo(post.getCreatedDate()))  // "n시간 전"으로 작성 시간 표시
                 .loanAdviceSummaryReport(loanAdviceSummaryReport)
                 .like(like != null ? like : false)
-                .updateDeleteAuthority(authority)
+                .updateDeleteAuthority(updateDeleteAuthority)
                 .build();
     }
 }

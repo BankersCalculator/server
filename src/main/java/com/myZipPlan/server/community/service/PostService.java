@@ -17,8 +17,6 @@ import com.myZipPlan.server.user.entity.User;
 import com.myZipPlan.server.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -66,7 +64,8 @@ public class PostService {
         User user = getUserByOauthProviderId(oauthProviderId);
         Post post = getPostById(postId);
 
-        checkPostOwnership(user, post);
+        String authority = determineAuthority(user, post);
+        validateUserAuthority(user, post, authority);
 
         LoanAdviceResult loanAdviceResult = getLoanAdviceResult(postUpdateRequest.getLoanAdviceResultId());
         LoanAdviceSummaryResponse loanAdviceSummaryReport = LoanAdviceSummaryResponse.fromEntity(loanAdviceResult);
@@ -77,7 +76,6 @@ public class PostService {
 
         boolean like = postLikeRepository.findByPostAndUser(post, user).isPresent();
         List<CommentResponse> comments = commentService.getComments(oauthProviderId, post.getId());
-        String authority = determineAuthority(user, post);
 
         return PostResponse.fromEntity(post, comments, loanAdviceSummaryReport, like, authority);
     }
@@ -88,10 +86,7 @@ public class PostService {
         Post post = getPostById(postId);
 
         String authority = determineAuthority(user, post);
-
-        if (!isPostOwner(user, post) && !(authority.equals("DELETE") || authority.equals("ALL"))) {
-            throw new IllegalArgumentException("해당 글 작성자만 삭제할 수 있습니다.");
-        }
+        validateUserAuthority(user, post, authority);
 
         deleteImageIfExists(post);
         postRepository.delete(post);
@@ -221,12 +216,6 @@ public class PostService {
         return post.getUser().getOauthProviderId().equals(user.getOauthProviderId());
     }
 
-    private void checkPostOwnership(User user, Post post) {
-        if (!isPostOwner(user, post)) {
-            throw new IllegalArgumentException("작성자만 게시글을 수정할 수 있습니다.");
-        }
-    }
-
     private String uploadImage(MultipartFile imageFile) throws IOException {
         if (imageFile != null && !imageFile.isEmpty()) {
             return s3Service.uploadFile(imageFile);
@@ -280,5 +269,12 @@ public class PostService {
             return "N";
         }
     }
+
+    private void validateUserAuthority(User user, Post post, String authority) {
+        if (!isPostOwner(user, post) && !(authority.equals("DELETE") || authority.equals("ALL"))) {
+            throw new IllegalArgumentException("권한이 없습니다.");
+        }
+    }
+
 }
 
