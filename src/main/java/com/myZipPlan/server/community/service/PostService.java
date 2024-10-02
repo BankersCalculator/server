@@ -261,10 +261,10 @@ public class PostService {
     }
 
     private String determineAuthority(User user, Post post) {
-        if (user.getRoleType() == RoleType.ADMIN) {
-            return "DELETE";
-        } else if (isPostOwner(user, post)) {
+        if (isPostOwner(user, post))  {
             return "ALL";
+        } else if  (user.getRoleType() == RoleType.ADMIN){
+            return "DELETE";
         } else {
             return "N";
         }
