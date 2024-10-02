@@ -1,21 +1,16 @@
 package com.myZipPlan.server.docs.community;
 
 import com.myZipPlan.server.RestDocsSupport;
-import com.myZipPlan.server.common.enums.RoleType;
 import com.myZipPlan.server.community.controller.CommentApiController;
-import com.myZipPlan.server.community.domain.Comment;
-import com.myZipPlan.server.community.domain.Post;
 import com.myZipPlan.server.community.dto.comment.*;
 import com.myZipPlan.server.community.service.CommentService;
 import com.myZipPlan.server.oauth.userInfo.SecurityUtils;
-import com.myZipPlan.server.user.entity.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
-import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.security.test.context.support.WithMockUser;
 
 import java.time.LocalDateTime;
@@ -29,15 +24,12 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.put;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 
 public class CommentApiDocsTest extends RestDocsSupport {
-
-    private static final String BASE_URL = "/api/v1/comment";
     private final CommentService commentService = mock(CommentService.class);
 
     @Override
@@ -48,7 +40,6 @@ public class CommentApiDocsTest extends RestDocsSupport {
 
     @Test
     @DisplayName("댓글 작성 API")
-    @WithMockUser(username = "testUser", roles = {"USER"})
     void createComment() throws Exception {
         // Mock CommentCreateRequest 객체 생성
         CommentCreateRequest request = new CommentCreateRequest();
@@ -65,6 +56,8 @@ public class CommentApiDocsTest extends RestDocsSupport {
                 .like(false)
                 .likes(0)
                 .timeAgo("방금 전")
+                .avatarUrl("kakaoUrl")
+                .updateDeleteAuthority("N")
                 .build();
 
         // Mocking CommentService의 addComment 메서드
@@ -106,7 +99,9 @@ public class CommentApiDocsTest extends RestDocsSupport {
                                     fieldWithPath("data.lastModifiedDate").description("댓글 수정일자").optional(),
                                     fieldWithPath("data.like").description("유저 댓글 좋아요 여부"),
                                     fieldWithPath("data.likes").description("유저 댓글 좋아요 수"),
-                                    fieldWithPath("data.timeAgo").description("얼마 전에 작성되었는지")
+                                    fieldWithPath("data.timeAgo").description("얼마 전에 작성되었는지"),
+                                    fieldWithPath("data.avatarUrl").description("작성자 아바타 URL").optional(),
+                                    fieldWithPath("data.updateDeleteAuthority").description("댓글 수정/삭제권한").optional()
 
                             )
                     ));
@@ -133,6 +128,8 @@ public class CommentApiDocsTest extends RestDocsSupport {
                 .like(true)
                 .likes(3)
                 .timeAgo("1일 전")
+                .avatarUrl("kakaoUrl")
+                .updateDeleteAuthority("ALL")
                 .build();
 
         // Mocking CommentService의 updateComment 메서드
@@ -174,7 +171,9 @@ public class CommentApiDocsTest extends RestDocsSupport {
                                     fieldWithPath("data.lastModifiedDate").description("댓글 수정일자").optional(),
                                     fieldWithPath("data.like").description("유저 댓글 좋아요 여부"),
                                     fieldWithPath("data.likes").description("유저 댓글 좋아요 수"),
-                                    fieldWithPath("data.timeAgo").description("얼마 전에 작성되었는지")
+                                    fieldWithPath("data.timeAgo").description("얼마 전에 작성되었는지"),
+                                    fieldWithPath("data.avatarUrl").description("작성자 아바타 URL").optional(),
+                                    fieldWithPath("data.updateDeleteAuthority").description("댓글 수정/삭제권한").optional()
                             )
                     ));
         }

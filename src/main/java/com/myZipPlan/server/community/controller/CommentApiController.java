@@ -1,10 +1,12 @@
 package com.myZipPlan.server.community.controller;
 
+import org.slf4j.Logger;
 import com.myZipPlan.server.common.api.ApiResponse;
 import com.myZipPlan.server.community.dto.comment.*;
 import com.myZipPlan.server.community.service.CommentService;
 import com.myZipPlan.server.oauth.userInfo.SecurityUtils;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,6 +16,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CommentApiController {
     private final CommentService commentService;
+    private static final Logger log = LoggerFactory.getLogger(CommentApiController.class);
+
 
     // 댓글 작성
     @PostMapping("/{postId}")
@@ -54,8 +58,13 @@ public class CommentApiController {
     }
 
     @GetMapping("/{postId}")
-    public ApiResponse<List<CommentResponse>> getComments (@PathVariable Long postId) {
-        String oauthProviderId = SecurityUtils.getProviderId();
+    public ApiResponse<List<CommentResponse>> getComments(@PathVariable Long postId) {
+        String oauthProviderId = null;
+        try {
+            oauthProviderId = SecurityUtils.getProviderId();
+        } catch (IllegalStateException e) {
+            log.info("Security Context에 인증 정보가 없습니다. 비로그인 상태로 댓글을 조회합니다.", e);
+        }
         List<CommentResponse> comments = commentService.getComments(oauthProviderId, postId);
         return ApiResponse.ok(comments);
     }

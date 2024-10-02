@@ -3,7 +3,7 @@ package com.myZipPlan.server.docs;
 import com.myZipPlan.server.RestDocsSupport;
 import com.myZipPlan.server.housingInfo.housingInfoMain.controller.HousingInfoApiController;
 import com.myZipPlan.server.housingInfo.housingInfoMain.dto.HousingInfoResponse;
-import com.myZipPlan.server.housingInfo.housingInfoMain.service.HousingInfoService;
+import com.myZipPlan.server.housingInfo.housingInfoMain.service.HousingInfoMainService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -28,11 +28,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 public class HousingInfoApiControllerDocsTest extends RestDocsSupport {
 
-    private final HousingInfoService housingInfoService = mock(HousingInfoService.class);
+    private final HousingInfoMainService HousingInfoMainService = mock(HousingInfoMainService.class);
 
     @Override
     protected Object initController() {
-        return new HousingInfoApiController(housingInfoService);
+        return new HousingInfoApiController(HousingInfoMainService);
     }
 
     @DisplayName("주택 정보 조회 API")
@@ -51,7 +51,7 @@ public class HousingInfoApiControllerDocsTest extends RestDocsSupport {
         serviceResponse.put("apiResultMessage", "Success");
         serviceResponse.put("housingInfoList", responseList);
 
-        when(housingInfoService.getHousingInfo(anyString(), anyString(), anyString())).thenReturn(serviceResponse);
+        when(HousingInfoMainService.getHousingInfo(anyString(), anyString(), anyString())).thenReturn(serviceResponse);
 
         // Create request body
         String requestBody = "{\n" +

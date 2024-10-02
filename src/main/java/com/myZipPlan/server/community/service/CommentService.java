@@ -1,5 +1,6 @@
 package com.myZipPlan.server.community.service;
 
+import com.myZipPlan.server.common.enums.RoleType;
 import com.myZipPlan.server.community.domain.Comment;
 import com.myZipPlan.server.community.domain.CommentLike;
 import com.myZipPlan.server.community.domain.Post;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -31,58 +33,46 @@ public class CommentService {
     // 댓글 작성
     @Transactional
     public CommentResponse createComment(String oauthProviderId, Long postId, CommentCreateRequest commentCreateRequest) {
-        User user = userRepository.findByOauthProviderId(oauthProviderId)
-                .orElseThrow(() -> new IllegalArgumentException("세션에 연결된 oauthProviderId를 찾을 수 없습니다."));
-        Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다."));
+        User user = getUserByOauthProviderId(oauthProviderId);
+        Post post = getPostById(postId);
 
         Comment comment = new Comment(post, user, commentCreateRequest.getContent());
         comment = commentRepository.save(comment);
-        return CommentResponse.fromEntity(comment);
+        return CommentResponse.fromEntity(comment, false, "N");
     }
 
     // 댓글 수정
     @Transactional
     public CommentResponse updateComment(String oauthProviderId, Long commentId, CommentUpdateRequest commentUpdateRequest) {
-        User user = userRepository.findByOauthProviderId(oauthProviderId)
-                .orElseThrow(() -> new IllegalArgumentException("세션에 연결된 oauthProviderId를 찾을 수 없습니다."));
+        User user = getUserByOauthProviderId(oauthProviderId);
+        Comment comment = getCommentById(commentId);
 
-        Comment comment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new IllegalArgumentException("Comment not found"));
-
-        if (!comment.getUser().getOauthProviderId().equals(user.getOauthProviderId())) {
-            throw new IllegalArgumentException("해당 글 작성자만 수정이 할 수 있습니다.");
-        }
+        String authority = determineAuthority(user, comment);
+        validateUserAuthority(user, comment, authority);
 
         comment.setContent(commentUpdateRequest.getUpdatedContent());
         comment.setLastModifiedDate(LocalDateTime.now());
 
         boolean like = commentLikeRepository.findByCommentAndUser(comment, user).isPresent();
-        return CommentResponse.fromEntity(comment, like);
+        return CommentResponse.fromEntity(comment, like, authority);
     }
 
     //댓글 삭제
     @Transactional
     public void deleteComment(String oauthProviderId, Long commentId) {
-        User user = userRepository.findByOauthProviderId(oauthProviderId)
-                .orElseThrow(() -> new IllegalArgumentException("세션에 연결된 oauthProviderId를 찾을 수 없습니다."));
+        User user = getUserByOauthProviderId(oauthProviderId);
+        Comment comment = getCommentById(commentId);
 
-        Comment comment = commentRepository.findByIdWithUser(commentId)
-                .orElseThrow(() -> new IllegalArgumentException("Comment not found"));
-
-        if (!comment.getUser().getOauthProviderId().equals(user.getOauthProviderId())) {
-            throw new IllegalArgumentException("해당 글의 작성자만 삭제 할 수 있습니다.");
-        }
+        String authority = determineAuthority(user, comment);
+        validateUserAuthority(user, comment, authority);
 
         commentRepository.delete(comment);
     }
 
     @Transactional
     public void likeComment(String oauthProviderId, Long commentId) {
-        User user = userRepository.findByOauthProviderId(oauthProviderId)
-                .orElseThrow(() -> new IllegalArgumentException("세션에 연결된 oauthProviderId를 찾을 수 없습니다."));
-        Comment comment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new IllegalArgumentException("댓글을 찾을 수 없습니다."));
+        User user = getUserByOauthProviderId(oauthProviderId);
+        Comment comment = getCommentById(commentId);
 
         // 이미 좋아요를 눌렀는지 확인
         boolean alreadyLiked = commentLikeRepository.findByCommentAndUser(comment, user).isPresent();
@@ -116,15 +106,59 @@ public class CommentService {
 
     @Transactional
     public List<CommentResponse> getComments(String oauthProviderId, Long postId) {
-        User user = userRepository.findByOauthProviderId(oauthProviderId)
-                .orElseThrow(() -> new IllegalArgumentException("세션에 연결된 oauthProviderId를 찾을 수 없습니다."));
+        Optional<User> optionalUser = (oauthProviderId != null)
+                ? userRepository.findByOauthProviderId(oauthProviderId)
+                : Optional.empty(); // 비로그인 상태일 경우 Optional.empty()
 
         List<Comment> comments = commentRepository.findByPostId(postId);
+
         return comments.stream()
                 .map(comment -> {
-                    boolean like = commentLikeRepository.findByCommentAndUser(comment, user).isPresent();
-                    return CommentResponse.fromEntity(comment, like);
+
+                    boolean like = false;
+                    String authority = "N";
+                    if (optionalUser.isPresent()) {
+                        User user = optionalUser.get();
+                        like = commentLikeRepository.findByCommentAndUser(comment, user).isPresent();
+                        authority = determineAuthority(user, comment);
+                    }
+                    return CommentResponse.fromEntity(comment, like, authority);
                 })
                 .collect(Collectors.toList());
+    }
+
+    private String determineAuthority(User user, Comment comment) {
+        if (user.getRoleType() == RoleType.ADMIN) {
+            return "DELETE";
+        } else if (isCommentOwner(user, comment)) {
+            return "ALL";
+        } else {
+            return "N";
+        }
+    }
+
+    private User getUserByOauthProviderId(String oauthProviderId) {
+        return userRepository.findByOauthProviderId(oauthProviderId)
+                .orElseThrow(() -> new IllegalArgumentException("세션에 연결된 oauthProviderId를 찾을 수 없습니다."));
+    }
+
+    private Comment getCommentById(Long commentId) {
+        return commentRepository.findById(commentId)
+                .orElseThrow(() -> new IllegalArgumentException("댓글을 찾을 수 없습니다."));
+    }
+
+    private Post getPostById(Long postId) {
+        return postRepository.findByIdWithUser(postId)
+                .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다."));
+    }
+
+    private boolean isCommentOwner(User user, Comment comment) {
+        return comment.getUser().getOauthProviderId().equals(user.getOauthProviderId());
+    }
+
+    private void validateUserAuthority(User user, Comment comment, String authority) {
+        if (!isCommentOwner(user, comment) && !(authority.equals("DELETE") || authority.equals("ALL"))) {
+            throw new IllegalArgumentException("권한이 없습니다.");
+        }
     }
 }
