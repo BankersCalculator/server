@@ -128,10 +128,10 @@ public class CommentService {
     }
 
     private String determineAuthority(User user, Comment comment) {
-        if (user.getRoleType() == RoleType.ADMIN) {
-            return "DELETE";
-        } else if (isCommentOwner(user, comment)) {
+        if (isCommentOwner(user, comment)) {
             return "ALL";
+        } else if (user.getRoleType() == RoleType.ADMIN) {
+            return "DELETE";
         } else {
             return "N";
         }
