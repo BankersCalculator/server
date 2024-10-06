@@ -13,7 +13,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -29,11 +28,12 @@ import java.util.List;
 @Slf4j
 @Component
 public class Oauth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
+
     private static final int COOKIE_MAX_AGE = 7 * 24 * 60 * 60; // 7일
     // 인증 완료 후 Client에게 토큰반환할 URI
     //TODO: 도메인 구매 후 쿠키전달방식으로 수정
-    @Value("${app.redirect-uri-base}")
-    private String redirectUriBase;
+    private static final String REDIRECT_URI = "http://localhost:5173/login-result?accessToken=%s&refreshToken=%s";
+
 
     private final TokenProvider tokenProvider;
     private final UserRepository userRepository;
@@ -42,7 +42,6 @@ public class Oauth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     @Transactional
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-        String redirectUri = redirectUriBase + "/login-result?accessToken=%s&refreshToken=%s";
 
         OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
         KakaoUserInfo kakaoUserInfo = new KakaoUserInfo(oAuth2User.getAttributes());
@@ -62,7 +61,7 @@ public class Oauth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         addTokenCookie(response, "accessToken", tokenDto.getAccessToken());
         addTokenCookie(response, "refreshToken", tokenDto.getRefreshToken());
 
-        String redirectURI = String.format(redirectUri,
+        String redirectURI = String.format(REDIRECT_URI,
             tokenDto.getAccessToken(), tokenDto.getRefreshToken());
 
         getRedirectStrategy().sendRedirect(request, response, redirectURI);

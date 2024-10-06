@@ -92,7 +92,3 @@ cloud:
       static: ap-northeast-2
     s3:
       bucket: myzipplan-service-storage
-
-
-app:
-  redirect-uri-base: ${REDIRECT_URI_BASE:http://localhost:5173}
