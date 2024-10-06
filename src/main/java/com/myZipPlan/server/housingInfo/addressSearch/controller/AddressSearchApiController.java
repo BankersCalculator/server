@@ -15,7 +15,7 @@ import java.util.Map;
 public class AddressSearchApiController {
     private final AddressSearchApiClient addressSearchApiClient;
 
-    @GetMapping
+    @PostMapping
     public ApiResponse<Map<String, Object>> searchAddress(
             @RequestBody AddressSearchApiRequest request,
             @RequestParam(defaultValue = "0") int page) throws IOException {

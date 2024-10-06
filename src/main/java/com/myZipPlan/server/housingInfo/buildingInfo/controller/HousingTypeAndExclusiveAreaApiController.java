@@ -14,7 +14,7 @@ import java.util.Map;
 public class HousingTypeAndExclusiveAreaApiController {
     private final HousingTypeAndExclusiveAreaApiClient housingTypeAndExclusiveAreaApiClient;
 
-    @GetMapping
+    @PostMapping
     public ApiResponse<Map<String, Object>> getHousingTypeAndExclusiveArea(
             @RequestBody HousingTypeAndExclusiveAreaApiRequest request) {
         Map<String, Object> response = housingTypeAndExclusiveAreaApiClient.InquiryHousingTypeAndExclusiveArea(

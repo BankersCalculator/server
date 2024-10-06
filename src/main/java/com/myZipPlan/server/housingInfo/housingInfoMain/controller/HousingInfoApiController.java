@@ -14,7 +14,7 @@ import java.util.Map;
 public class HousingInfoApiController {
     private final HousingInfoMainService HousingInfoMainService;
 
-    @GetMapping
+    @PostMapping
     public ApiResponse<Map<String, Object>> getHousingInfo(
             @RequestBody HousingInfoRequest housingInfoRequest)  throws IOException {
 
