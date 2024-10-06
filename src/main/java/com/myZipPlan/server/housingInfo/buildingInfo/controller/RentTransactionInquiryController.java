@@ -16,7 +16,7 @@ import java.io.IOException;
 public class RentTransactionInquiryController {
     private final RentTransactionInquiryService rentTransactionInquiryService;
 
-    @GetMapping
+    @PostMapping
     public ApiResponse<RentTransactionInquiryResponse> getRentTransactions(@RequestBody RentTransactionInquiryRequest request) {
         RentTransactionInquiryResponse rentTransactionInquiryResponse = rentTransactionInquiryService.getRentTransactions(request.getDistrictCodeFirst5()
                 , request.getRentHousingType()

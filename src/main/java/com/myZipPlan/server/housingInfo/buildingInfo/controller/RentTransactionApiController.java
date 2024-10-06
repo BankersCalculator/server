@@ -16,7 +16,7 @@ import java.util.Map;
 public class RentTransactionApiController {
     private final RentTransactionApiClient rentTransactionApiClient;
 
-    @GetMapping
+    @PostMapping
     public ApiResponse<Map<String, Object>> inquiryRentTransaction(@RequestBody RentTransactionApiRequest request) throws IOException, JSONException {
         Map<String, Object> response = rentTransactionApiClient.inquiryRentTransaction(request.getDistrictCodeFirst5()
                                                                         , request.getDealYmd()
