@@ -73,3 +73,5 @@ cloud:
       bucket: myzipplan-service-storage
 
 
+app:
+  redirect-uri-base: ${REDIRECT_URI_BASE:http://localhost:5173}
