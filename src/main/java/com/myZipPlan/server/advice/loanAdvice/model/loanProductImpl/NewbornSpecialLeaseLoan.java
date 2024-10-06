@@ -143,7 +143,7 @@ public class NewbornSpecialLeaseLoan implements LoanProduct {
         BigDecimal rentalDeposit = request.getRentalDeposit();
         BigDecimal calculatedLimit = rentalDeposit.multiply(new BigDecimal("0.8"));
 
-        return calculatedLimit.compareTo(LOAN_LIMIT) > 0 ? LOAN_LIMIT : calculatedLimit;
+        return calculatedLimit.min(LOAN_LIMIT);
 
     }
 
