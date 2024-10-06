@@ -27,7 +27,8 @@ public enum BaseRate {
     // 금융채 금리
     FINANCIAL_BOND_3M("금융채 3개월물"),
     FINANCIAL_BOND_6M("금융채 6개월물"),
-    FINANCIAL_BOND_12M("금융채 12개월물");
+    FINANCIAL_BOND_12M("금융채 12개월물"),
+    FINANCIAL_BOND_24M("금융채 24개월물");
 
     private final String description;
 

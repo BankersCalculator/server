@@ -16,6 +16,8 @@ public enum Bank {
     IM("iM뱅크"),
     BNK("BNK부산은행");
 
+
+
     private final String description;
 
 }
