@@ -86,12 +86,12 @@ jwt:
 cloud:
   aws:
     credentials:
-      access-key: AKIATAVAA3FNYHXWF775
-      secret-key: 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
+      access-key: ${AWS_ACCESS_KEY:AKIAT4GVSAAD4DUWG7FL}
+      secret-key: ${AWS_SECRET_KEY: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}
     region:
       static: ap-northeast-2
     s3:
-      bucket: myzipplan-service-storage
+      bucket: ${AWS_S3_BUCKET:myzipplan-service-storage-dev}
 
 app:
   redirect-uri-base: ${REDIRECT_URI_BASE:http://localhost:5173}
