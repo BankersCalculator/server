@@ -107,11 +107,12 @@ public class LoanAdviceService {
         List<RecommendedProductDto> recommendedProductDtos = new ArrayList<>();
         for (FilterProductResultDto filterResult : filterResults) {
             JeonseLoanProductType productType = filterResult.getProductType();
+            LoanLimitAndRateResultDto loanLimitAndRateResultDto = loanLimitAndRateCalculator.calculateMaxLoanLimitAndMinRate(productType);
             RecommendedProductDto recommendedProductDto = RecommendedProductDto.create(
                 productType.getProductName(),
                 productType.getProductCode(),
-                BigDecimal.ZERO,
-                BigDecimal.ZERO,
+                loanLimitAndRateResultDto.getPossibleLoanLimit(),
+                loanLimitAndRateResultDto.getExpectedLoanRate(),
                 filterResult.getNotEligibleReasons()
             );
             recommendedProductDtos.add(recommendedProductDto);
