@@ -8,6 +8,7 @@ import com.myZipPlan.server.advice.rateProvider.service.RateProviderService;
 import com.myZipPlan.server.common.enums.Bank;
 import com.myZipPlan.server.common.enums.calculator.HouseOwnershipType;
 import com.myZipPlan.server.common.enums.loanAdvice.ChildStatus;
+import com.myZipPlan.server.common.enums.loanAdvice.JeonseHouseOwnershipType;
 import com.myZipPlan.server.common.enums.loanAdvice.JeonseLoanProductType;
 import com.myZipPlan.server.common.enums.loanAdvice.MaritalStatus;
 import lombok.RequiredArgsConstructor;
@@ -68,7 +69,7 @@ public class NewbornSpecialLeaseLoan implements LoanProduct {
         }
 
         // 2. 무주택 세대 여부
-        if (request.getHouseOwnershipType() != HouseOwnershipType.NO_HOUSE) {
+        if (request.getHouseOwnershipType() != JeonseHouseOwnershipType.NO_HOUSE) {
             notEligibleReasons.add("무주택자만 가능합니다.");
         }
 

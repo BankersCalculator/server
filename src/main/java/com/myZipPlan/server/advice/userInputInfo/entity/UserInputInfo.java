@@ -5,6 +5,7 @@ import com.myZipPlan.server.advice.loanAdvice.entity.LoanAdviceResult;
 import com.myZipPlan.server.common.domain.BaseTimeEntity;
 import com.myZipPlan.server.common.enums.calculator.HouseOwnershipType;
 import com.myZipPlan.server.common.enums.loanAdvice.ChildStatus;
+import com.myZipPlan.server.common.enums.loanAdvice.JeonseHouseOwnershipType;
 import com.myZipPlan.server.common.enums.loanAdvice.MaritalStatus;
 import com.myZipPlan.server.housingInfo.buildingInfo.common.RentHousingType;
 import com.myZipPlan.server.user.entity.User;
@@ -48,7 +49,7 @@ public class UserInputInfo extends BaseTimeEntity {
     private ChildStatus childStatus;  // 자녀상태
     private Boolean hasNewborn;       // 신생아여부
 
-    private HouseOwnershipType houseOwnershipType; // 주택소유형태
+    private JeonseHouseOwnershipType houseOwnershipType; // 주택소유형태
 
     private Boolean isSMEEmployee;      // 중소기업재직여부
     private Boolean isNetAssetOver345M;  // 순자산 3.45억 초과 여부

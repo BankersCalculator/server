@@ -8,6 +8,7 @@ import com.myZipPlan.server.advice.rateProvider.service.RateProviderService;
 import com.myZipPlan.server.common.enums.Bank;
 import com.myZipPlan.server.common.enums.calculator.HouseOwnershipType;
 import com.myZipPlan.server.common.enums.loanAdvice.BaseRate;
+import com.myZipPlan.server.common.enums.loanAdvice.JeonseHouseOwnershipType;
 import com.myZipPlan.server.common.enums.loanAdvice.JeonseLoanProductType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -60,7 +61,7 @@ public class YouthLeaseLoan implements LoanProduct {
         List<String> notEligibleReasons = new ArrayList<>();
 
         // 1. 무주택 여부
-        if (request.getHouseOwnershipType() != HouseOwnershipType.NO_HOUSE) {
+        if (request.getHouseOwnershipType() != JeonseHouseOwnershipType.NO_HOUSE) {
             notEligibleReasons.add("무주택자만 가능합니다.");
         }
 

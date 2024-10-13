@@ -7,10 +7,7 @@ import com.myZipPlan.server.advice.loanAdvice.model.LoanProduct;
 import com.myZipPlan.server.advice.rateProvider.service.RateProviderService;
 import com.myZipPlan.server.common.enums.Bank;
 import com.myZipPlan.server.common.enums.calculator.HouseOwnershipType;
-import com.myZipPlan.server.common.enums.loanAdvice.BaseRate;
-import com.myZipPlan.server.common.enums.loanAdvice.ChildStatus;
-import com.myZipPlan.server.common.enums.loanAdvice.JeonseLoanProductType;
-import com.myZipPlan.server.common.enums.loanAdvice.MaritalStatus;
+import com.myZipPlan.server.common.enums.loanAdvice.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -80,7 +77,7 @@ public class SeoulNewlyWedLeaseLoan implements LoanProduct {
         }
 
         // 4. 무주택자 여부
-        if (request.getHouseOwnershipType() != HouseOwnershipType.NO_HOUSE) {
+        if (request.getHouseOwnershipType() != JeonseHouseOwnershipType.NO_HOUSE) {
             notEligibleReasons.add("무주택자만 가능합니다.");
         }
 
