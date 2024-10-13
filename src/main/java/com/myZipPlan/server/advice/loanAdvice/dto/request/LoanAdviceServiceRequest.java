@@ -39,6 +39,11 @@ public class LoanAdviceServiceRequest {
 
     private String specificRequestProductCode; // 특정 상품 요청 코드
 
+    // 합산소득
+    public BigDecimal getSumIncome() {
+        return annualIncome.add(spouseAnnualIncome);
+    }
+
     public static LoanAdviceServiceRequest fromUserInputInfo(UserInputInfo info, String productCode) {
         return LoanAdviceServiceRequest.builder()
             .rentalDeposit(info.getRentalDeposit())
