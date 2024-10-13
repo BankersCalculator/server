@@ -31,7 +31,7 @@ public class SmeYouthMonthlyRentLoan implements LoanProduct {
 
     @Override
     public JeonseLoanProductType getProductType() {
-        return JeonseLoanProductType.HF_LEASE_LOAN;
+        return JeonseLoanProductType.SME_YOUTH_MONTHLY_RENT_LOAN;
     }
 
 
