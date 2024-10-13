@@ -8,8 +8,9 @@ import com.myZipPlan.server.advice.rateProvider.service.RateProviderService;
 import com.myZipPlan.server.common.enums.Bank;
 import com.myZipPlan.server.common.enums.calculator.HouseOwnershipType;
 import com.myZipPlan.server.common.enums.loanAdvice.BaseRate;
-import com.myZipPlan.server.common.enums.loanAdvice.JeonseHouseOwnershipType;
+import com.myZipPlan.server.common.enums.loanAdvice.ChildStatus;
 import com.myZipPlan.server.common.enums.loanAdvice.JeonseLoanProductType;
+import com.myZipPlan.server.common.enums.loanAdvice.MaritalStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -20,24 +21,24 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Component
-public class YouthLeaseLoan implements LoanProduct {
+public class SeoulYouthLeaseLoan implements LoanProduct {
 
     private final RateProviderService rateProviderService;
 
-    private static final BigDecimal COMBINED_INCOME_LIMIT = new BigDecimal("70000000");
-    private static final BigDecimal SINGLE_INCOME_LIMIT = new BigDecimal("70000000");
+    private static final BigDecimal INCOME_LIMIT = new BigDecimal("40000000");
     private static final BigDecimal LOAN_LIMIT = new BigDecimal("200000000");
+
 
 
     @Override
     public JeonseLoanProductType getProductType() {
-        return JeonseLoanProductType.YOUTH_LEASE_LOAN;
+        return JeonseLoanProductType.SEOUL_YOUTH_LEASE_LOAN;
     }
 
     @Override
     public LoanLimitAndRateResultDto calculateMaxLoanLimitAndMinRate(BigDecimal rentalAmount) {
 
-        BigDecimal minRate = calculateFinalRate();
+        BigDecimal minRate = calculateMinRate();
 
         return LoanLimitAndRateResultDto.builder()
             .productType(getProductType())
@@ -49,42 +50,42 @@ public class YouthLeaseLoan implements LoanProduct {
 
     @Override
     public FilterProductResultDto filtering(LoanAdviceServiceRequest request) {
-
         /*
-          1. 무주택 세대주
-          2. 만 34세 이하
-          3. 합산연소득 7천만원 이하
-          4. 수도권 임차보증금 7억 이하
-          5. 지방 임차보증금 5억 이하
+          서울시청년임차보증금대출
+          검증 목록
+          1. 주거지 서울 여부
+          2. 만 39세 이하 무주택
+          3. 임차보증금 3억 이하
+          4. 월세 70만원 이하
+          5. 연소득 4천만원 이하
          */
 
         List<String> notEligibleReasons = new ArrayList<>();
 
-        // 1. 무주택 여부
-        if (request.getHouseOwnershipType() != JeonseHouseOwnershipType.NO_HOUSE) {
-            notEligibleReasons.add("무주택자만 가능합니다.");
+        // 1. 주거지 서울 여부. 법정동코드 11 - 서울시
+        if (!request.getDistrictCode().startsWith("11")) {
+            notEligibleReasons.add("서울시 거주자만 가능합니다.");
         }
 
-        // 2. 만 34세 이하 여부
-        if (request.getAge() > 34) {
-            notEligibleReasons.add("만 34세 이하만 가능합니다.");
+        // 2. 만 39세 이하 무주택
+        if (request.getAge() > 39) {
+            notEligibleReasons.add("만 39세 이하만 가능합니다.");
         }
 
-        // 3. 부부합산소득 7천만원 이하 여부
-        if (request.getAnnualIncome().add(request.getSpouseAnnualIncome()).compareTo(COMBINED_INCOME_LIMIT) > 0) {
-            notEligibleReasons.add("합산소득 7천만원 이하만 가능합니다.");
+
+        // 3. 임차보증금 3억 이하
+        if (request.getRentalDeposit().compareTo(new BigDecimal("300000000")) > 0) {
+            notEligibleReasons.add("임차보증금 3억 이하만 가능합니다.");
         }
 
-        // 4. 임차보증금 수도권 7억 이하 여부
-        if (isMetropolitanArea(request.getDistrictCode())
-            && request.getRentalDeposit().compareTo(new BigDecimal("700000000")) > 0) {
-            notEligibleReasons.add("수도권 임차보증금 7억 이하만 가능합니다.");
+        // 4. 월세 70만원 이하
+        if (request.getMonthlyRent().compareTo(new BigDecimal("700000")) > 0) {
+            notEligibleReasons.add("월세 70만원 이하만 가능합니다.");
         }
 
-        // 6. 임차보증금 비수도권 5억 이하 여부
-        if (!isMetropolitanArea(request.getDistrictCode())
-            && request.getRentalDeposit().compareTo(new BigDecimal("500000000")) > 0) {
-            notEligibleReasons.add("비수도권 임차보증금 5억 이하만 가능합니다.");
+        // 5. 연소득 4천만원 이하
+        if (request.getAnnualIncome().compareTo(INCOME_LIMIT) > 0) {
+            notEligibleReasons.add("연소득 4천만원 이하만 가능합니다.");
         }
 
         return FilterProductResultDto.builder()
@@ -95,14 +96,10 @@ public class YouthLeaseLoan implements LoanProduct {
     }
 
 
-
-
     // 기타비용산출(보증요율, 보증보험료 등)
     @Override
     public BigDecimal getGuaranteeInsuranceFee(BigDecimal loanAmount) {
-        // TODO: 보증료 근거자료 찾을 수 없음.
-        // 우선 임의로 최저보증료 0.02%로 설정 * 2년치
-        return loanAmount.multiply(new BigDecimal("0.0004"));
+        return loanAmount.multiply(new BigDecimal("0.001"));
     }
 
     @Override
@@ -125,21 +122,30 @@ public class YouthLeaseLoan implements LoanProduct {
 
     }
 
-    private boolean isMetropolitanArea(String districtCode) {
-        // 행정표준코드관리시스템 상으로 11 서울, 41 경기, 28 인천
-        return districtCode.startsWith("11") || districtCode.startsWith("41") || districtCode.startsWith("28");
-    }
-
     private BigDecimal calculateLoanLimit(LoanAdviceServiceRequest request) {
         BigDecimal rentalDeposit = request.getRentalDeposit();
         BigDecimal calculatedLimit = rentalDeposit.multiply(new BigDecimal("0.9"));
 
-        return calculatedLimit.compareTo(LOAN_LIMIT) > 0 ? LOAN_LIMIT : calculatedLimit;
+        // min 값을 반환
+        return calculatedLimit.min(LOAN_LIMIT);
     }
 
     private BigDecimal calculateFinalRate() {
-        // 하나은행 홈피 기준. 금융채6개월물 + 1.04%
-        return rateProviderService.getBaseRate(BaseRate.FINANCIAL_BOND_6M).add(new BigDecimal("1.04"));
+
+        BigDecimal baseRate = rateProviderService.getBaseRate(BaseRate.COFIX_NEW_BALANCE); // 신잔액기준COFIX
+        BigDecimal marginRate = new BigDecimal("1.45");
+        BigDecimal discountRate = new BigDecimal("2.0");
+        BigDecimal calculatedRate = baseRate.add(marginRate).subtract(discountRate);
+
+        return calculatedRate.compareTo(BigDecimal.ONE) < 0 ? BigDecimal.ONE : calculatedRate;
     }
 
+    private BigDecimal calculateMinRate() {
+        BigDecimal baseRate = rateProviderService.getBaseRate(BaseRate.COFIX_NEW_BALANCE);
+        BigDecimal marginRate = new BigDecimal("1.45");
+        BigDecimal discountRate = new BigDecimal("2.0");
+        BigDecimal calculatedRate = baseRate.add(marginRate).subtract(discountRate);
+
+        return calculatedRate.compareTo(BigDecimal.ONE) < 0 ? BigDecimal.ONE : calculatedRate;
+    }
 }

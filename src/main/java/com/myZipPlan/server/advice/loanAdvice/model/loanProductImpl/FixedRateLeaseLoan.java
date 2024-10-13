@@ -20,18 +20,16 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Component
-public class YouthLeaseLoan implements LoanProduct {
+public class FixedRateLeaseLoan implements LoanProduct {
 
     private final RateProviderService rateProviderService;
 
-    private static final BigDecimal COMBINED_INCOME_LIMIT = new BigDecimal("70000000");
-    private static final BigDecimal SINGLE_INCOME_LIMIT = new BigDecimal("70000000");
-    private static final BigDecimal LOAN_LIMIT = new BigDecimal("200000000");
+    private static final BigDecimal LOAN_LIMIT = new BigDecimal("400000000");
 
 
     @Override
     public JeonseLoanProductType getProductType() {
-        return JeonseLoanProductType.YOUTH_LEASE_LOAN;
+        return JeonseLoanProductType.FIXED_RATE_LEASE_LOAN;
     }
 
     @Override
@@ -51,11 +49,9 @@ public class YouthLeaseLoan implements LoanProduct {
     public FilterProductResultDto filtering(LoanAdviceServiceRequest request) {
 
         /*
-          1. 무주택 세대주
-          2. 만 34세 이하
-          3. 합산연소득 7천만원 이하
-          4. 수도권 임차보증금 7억 이하
-          5. 지방 임차보증금 5억 이하
+           1. 무주택
+           2. 수도권 보증금 7억 이하
+           3. 지방 보증금 5억 이하
          */
 
         List<String> notEligibleReasons = new ArrayList<>();
@@ -65,23 +61,13 @@ public class YouthLeaseLoan implements LoanProduct {
             notEligibleReasons.add("무주택자만 가능합니다.");
         }
 
-        // 2. 만 34세 이하 여부
-        if (request.getAge() > 34) {
-            notEligibleReasons.add("만 34세 이하만 가능합니다.");
-        }
-
-        // 3. 부부합산소득 7천만원 이하 여부
-        if (request.getAnnualIncome().add(request.getSpouseAnnualIncome()).compareTo(COMBINED_INCOME_LIMIT) > 0) {
-            notEligibleReasons.add("합산소득 7천만원 이하만 가능합니다.");
-        }
-
-        // 4. 임차보증금 수도권 7억 이하 여부
+        // 2. 임차보증금 수도권 7억 이하 여부
         if (isMetropolitanArea(request.getDistrictCode())
             && request.getRentalDeposit().compareTo(new BigDecimal("700000000")) > 0) {
             notEligibleReasons.add("수도권 임차보증금 7억 이하만 가능합니다.");
         }
 
-        // 6. 임차보증금 비수도권 5억 이하 여부
+        // 3. 임차보증금 비수도권 5억 이하 여부
         if (!isMetropolitanArea(request.getDistrictCode())
             && request.getRentalDeposit().compareTo(new BigDecimal("500000000")) > 0) {
             notEligibleReasons.add("비수도권 임차보증금 5억 이하만 가능합니다.");
@@ -100,11 +86,11 @@ public class YouthLeaseLoan implements LoanProduct {
     // 기타비용산출(보증요율, 보증보험료 등)
     @Override
     public BigDecimal getGuaranteeInsuranceFee(BigDecimal loanAmount) {
-        // TODO: 보증료 근거자료 찾을 수 없음.
-        // 우선 임의로 최저보증료 0.02%로 설정 * 2년치
-        return loanAmount.multiply(new BigDecimal("0.0004"));
+        // 0.02% ~ 0.1% 로 나와 있음. 0.05 * 2 = 0.1%로 가정
+        return loanAmount.multiply(new BigDecimal("0.001"));
     }
 
+    // TODO: 경남은행, K뱅크, 기업은행 추가할 것
     @Override
     public List<Bank> getAvailableBanks() {
         return List.of(Bank.HANA);
@@ -134,12 +120,16 @@ public class YouthLeaseLoan implements LoanProduct {
         BigDecimal rentalDeposit = request.getRentalDeposit();
         BigDecimal calculatedLimit = rentalDeposit.multiply(new BigDecimal("0.9"));
 
-        return calculatedLimit.compareTo(LOAN_LIMIT) > 0 ? LOAN_LIMIT : calculatedLimit;
+        BigDecimal combinedIncome = request.getAnnualIncome().add(request.getSpouseAnnualIncome());
+        BigDecimal baseOnIncome = combinedIncome.multiply(new BigDecimal("5"));
+
+        return calculatedLimit.min(baseOnIncome).min(LOAN_LIMIT);
+
     }
 
     private BigDecimal calculateFinalRate() {
-        // 하나은행 홈피 기준. 금융채6개월물 + 1.04%
-        return rateProviderService.getBaseRate(BaseRate.FINANCIAL_BOND_6M).add(new BigDecimal("1.04"));
+        // 하나은행 홈피 기준. 금융채2년물 + 1.0%
+        return rateProviderService.getBaseRate(BaseRate.FINANCIAL_BOND_24M).add(new BigDecimal("1.0"));
     }
 
 }

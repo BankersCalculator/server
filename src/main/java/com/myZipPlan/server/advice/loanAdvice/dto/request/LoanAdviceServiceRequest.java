@@ -3,6 +3,7 @@ package com.myZipPlan.server.advice.loanAdvice.dto.request;
 import com.myZipPlan.server.advice.userInputInfo.entity.UserInputInfo;
 import com.myZipPlan.server.common.enums.calculator.HouseOwnershipType;
 import com.myZipPlan.server.common.enums.loanAdvice.ChildStatus;
+import com.myZipPlan.server.common.enums.loanAdvice.JeonseHouseOwnershipType;
 import com.myZipPlan.server.common.enums.loanAdvice.MaritalStatus;
 import com.myZipPlan.server.housingInfo.buildingInfo.common.RentHousingType;
 import lombok.Builder;
@@ -25,7 +26,7 @@ public class LoanAdviceServiceRequest {
     private BigDecimal spouseAnnualIncome;    // 배우자연소득
     private ChildStatus childStatus;    // 자녀상태
     private Boolean hasNewborn; // 신생아여부
-    private HouseOwnershipType houseOwnershipType; // 주택소유형태
+    private JeonseHouseOwnershipType houseOwnershipType; // 주택소유형태
     private Boolean isSMEEmployee; // 중소기업재직여부(SME: SmallMediumEnterprise);
     private Boolean isNetAssetOver345M; // 순자산 3.45억 초과 여부
 
@@ -38,6 +39,11 @@ public class LoanAdviceServiceRequest {
     private String jibun;   // 지번
 
     private String specificRequestProductCode; // 특정 상품 요청 코드
+
+    // 합산소득
+    public BigDecimal getSumIncome() {
+        return annualIncome.add(spouseAnnualIncome);
+    }
 
     public static LoanAdviceServiceRequest fromUserInputInfo(UserInputInfo info, String productCode) {
         return LoanAdviceServiceRequest.builder()

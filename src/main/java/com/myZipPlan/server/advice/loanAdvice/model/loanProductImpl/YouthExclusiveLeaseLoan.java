@@ -7,6 +7,7 @@ import com.myZipPlan.server.advice.loanAdvice.model.LoanProduct;
 import com.myZipPlan.server.advice.rateProvider.service.RateProviderService;
 import com.myZipPlan.server.common.enums.Bank;
 import com.myZipPlan.server.common.enums.calculator.HouseOwnershipType;
+import com.myZipPlan.server.common.enums.loanAdvice.BaseRate;
 import com.myZipPlan.server.common.enums.loanAdvice.JeonseHouseOwnershipType;
 import com.myZipPlan.server.common.enums.loanAdvice.JeonseLoanProductType;
 import com.myZipPlan.server.common.enums.loanAdvice.MaritalStatus;
@@ -20,25 +21,25 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Component
-public class SmeYouthMonthlyRentLoan implements LoanProduct {
+public class YouthExclusiveLeaseLoan implements LoanProduct {
 
     private final RateProviderService rateProviderService;
 
-    private static final BigDecimal COMBINED_INCOME_LIMIT = new BigDecimal("50000000");
+    private static final BigDecimal COMBINED_INCOME_LIMIT = new BigDecimal("75000000");
     private static final BigDecimal SINGLE_INCOME_LIMIT = new BigDecimal("50000000");
-    private static final BigDecimal LOAN_LIMIT = new BigDecimal("100000000");
+    private static final BigDecimal LOAN_LIMIT = new BigDecimal("200000000");
 
 
     @Override
     public JeonseLoanProductType getProductType() {
-        return JeonseLoanProductType.SME_YOUTH_MONTHLY_RENT_LOAN;
+        return JeonseLoanProductType.YOUTH_EXCLUSIVE_LEASE_LOAN;
     }
 
 
     @Override
     public LoanLimitAndRateResultDto calculateMaxLoanLimitAndMinRate(BigDecimal rentalAmount) {
 
-        BigDecimal minRate = calculateFinalRate();
+        BigDecimal minRate = calculateMinRate();
 
         return LoanLimitAndRateResultDto.builder()
             .productType(getProductType())
@@ -51,59 +52,52 @@ public class SmeYouthMonthlyRentLoan implements LoanProduct {
     @Override
     public FilterProductResultDto filtering(LoanAdviceServiceRequest request) {
         /*
-          1. 무주택 여부
-          2. 부부합산소득 5천만원 이하 여부
-          3. 단독세대주 소득 35백만원 이하 여부
-          4. 만 34세 이하 여부
-          5. 중소기업 재직여부
-          6. 자산 3.45억 초과 여부
-          7. 임차전용면적 85제곱미터 이하 여부
-          8. 임차보증금 2억 이하 여부
+            1. 만 34세 이하
+            2. 무주택자
+            3. 부부합산소득 5천만원 이하
+            4. 본인소득 5천만원 이하
+            5. 순자산 3.45억 이하
+            6. 임차전용면저 85m2 이하
+            7. 임차보증금 3억 이하
          */
 
         List<String> notEligibleReasons = new ArrayList<>();
 
-        // 1. 무주택 여부
+        // 1. 만 34세 이하
+        if (request.getAge() > 34) {
+            notEligibleReasons.add("만 34세 이하가 아닙니다.");
+        }
+
+        // 2. 무주택자
         if (request.getHouseOwnershipType() != JeonseHouseOwnershipType.NO_HOUSE) {
             notEligibleReasons.add("무주택자만 가능합니다.");
         }
 
-
-        // 2. 부부합산소득 5천만원 이하 여부
+        // 3. 부부합산소득 7500만원 이하
         if (request.getAnnualIncome().add(request.getSpouseAnnualIncome()).compareTo(COMBINED_INCOME_LIMIT) > 0) {
-            notEligibleReasons.add("부부합산소득 5천만원 이하만 가능합니다.");
+            notEligibleReasons.add("합산소득 7500만원 이하만 가능합니다.");
         }
 
-        // 3. 단독세대주 소득 35백만원 이하 여부
-        if (request.getMaritalStatus() == MaritalStatus.SINGLE
-            && request.getAnnualIncome().compareTo(SINGLE_INCOME_LIMIT) > 0) {
-            notEligibleReasons.add("단독세대주 소득 35백만원 이하만 가능합니다.");
+        // 4. 본인소득 5천만원 이하
+        if (request.getAnnualIncome().compareTo(SINGLE_INCOME_LIMIT) > 0) {
+            notEligibleReasons.add("본인소득 5천만원 이하만 가능합니다.");
         }
 
-        // 4. 만 34세 이하 여부
-        if (request.getAge() > 34) {
-            notEligibleReasons.add("만 34세 이하만 가능합니다.");
-        }
-
-        // 5. 중소기업 재직여부
-        if (!request.getIsSMEEmployee()) {
-            notEligibleReasons.add("중소기업 재직자만 가능합니다.");
-        }
-
-        // 6. 자산 3.45억 초과 여부
+        // 5. 순자산 3.45억 이하
         if (request.getIsNetAssetOver345M()) {
-            notEligibleReasons.add("자산 3.45억 초과시 대출 불가능합니다.");
+            notEligibleReasons.add("순자산 3.45억 이하만 가능합니다.");
         }
 
-        // 7. 임차전용면적 85제곱미터 이하 여부
+        // 6. 임차전용면적 85m2 이하
         if (request.getExclusiveArea().compareTo(new BigDecimal("85")) > 0) {
-            notEligibleReasons.add("임차전용면적 85제곱미터 이하만 가능합니다.");
+            notEligibleReasons.add("임차전용면적 85m2 이하만 가능합니다.");
         }
 
-        // 8. 임차보증금 2억 이하 여부
-        if (request.getRentalDeposit().compareTo(new BigDecimal("200000000")) > 0) {
-            notEligibleReasons.add("임차보증금 2억 이하만 가능합니다.");
+        // 7. 임차보증금 3억 이하
+        if (request.getRentalDeposit().compareTo(new BigDecimal("300000000")) > 0) {
+            notEligibleReasons.add("임차보증금 3억 이하만 가능합니다.");
         }
+
 
         return FilterProductResultDto.builder()
             .productType(getProductType())
@@ -116,8 +110,8 @@ public class SmeYouthMonthlyRentLoan implements LoanProduct {
     // 기타비용산출(보증요율, 보증보험료 등)
     @Override
     public BigDecimal getGuaranteeInsuranceFee(BigDecimal loanAmount) {
-        // 하나은행 홈피 기준. 0.154%(보증료) + 0.031%(반환보증) * 2년
-        return loanAmount.multiply(new BigDecimal("0.00370"));
+        // TODO: HF, HUG 보증료가 다름
+        return loanAmount.multiply(new BigDecimal("0.003"));
     }
 
     @Override
@@ -130,7 +124,7 @@ public class SmeYouthMonthlyRentLoan implements LoanProduct {
         // 한도산출
         BigDecimal possibleLoanLimit = calculateLoanLimit(request);
         // 금리산출
-        BigDecimal finalRate = calculateFinalRate();
+        BigDecimal finalRate = calculateFinalRate(request);
 
         return LoanLimitAndRateResultDto.builder()
             .productType(getProductType())
@@ -147,7 +141,24 @@ public class SmeYouthMonthlyRentLoan implements LoanProduct {
         return calculatedLimit.min(LOAN_LIMIT);
     }
 
-    private BigDecimal calculateFinalRate() {
-        return new BigDecimal("1.5");
+    private BigDecimal calculateFinalRate(LoanAdviceServiceRequest request) {
+        BigDecimal annualIncome = request.getAnnualIncome();
+        BigDecimal spouseAnnualIncome = request.getSpouseAnnualIncome();
+        BigDecimal combinedIncome = annualIncome.add(spouseAnnualIncome);
+
+        if (combinedIncome.compareTo(new BigDecimal("20000000")) <= 0) {
+            return new BigDecimal("2.0");
+        } else if (combinedIncome.compareTo(new BigDecimal("40000000")) <= 0) {
+            return new BigDecimal("2.3");
+        } else if (combinedIncome.compareTo(new BigDecimal("60000000")) <= 0) {
+            return new BigDecimal("2.7");
+        } else {
+            return new BigDecimal("3.1");
+        }
+    }
+
+    private BigDecimal calculateMinRate() {
+        // 각종 우대금리 다 충족될 경우 최저금리
+        return BigDecimal.valueOf(1.0);
     }
 }

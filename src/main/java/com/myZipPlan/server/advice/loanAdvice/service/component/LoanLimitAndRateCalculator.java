@@ -5,6 +5,7 @@ import com.myZipPlan.server.advice.loanAdvice.dto.internal.LoanLimitAndRateResul
 import com.myZipPlan.server.advice.loanAdvice.dto.request.LoanAdviceServiceRequest;
 import com.myZipPlan.server.advice.loanAdvice.model.LoanProduct;
 import com.myZipPlan.server.advice.loanAdvice.model.LoanProductFactory;
+import com.myZipPlan.server.common.enums.loanAdvice.JeonseLoanProductType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -44,5 +45,12 @@ public class LoanLimitAndRateCalculator {
         }
 
         return result;
+    }
+
+
+    public LoanLimitAndRateResultDto calculateMaxLoanLimitAndMinRate(JeonseLoanProductType productType) {
+
+        LoanProduct loanProduct = loanProductFactory.getLoanProduct(productType);
+        return loanProduct.calculateMaxLoanLimitAndMinRate(BigDecimal.valueOf(9999999999L));
     }
 }
