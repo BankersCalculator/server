@@ -11,6 +11,7 @@ import com.myZipPlan.server.advice.loanAdvice.service.LoanAdviceQueryService;
 import com.myZipPlan.server.advice.loanAdvice.service.LoanAdviceService;
 import com.myZipPlan.server.common.enums.Bank;
 import com.myZipPlan.server.common.enums.loanAdvice.ChildStatus;
+import com.myZipPlan.server.common.enums.loanAdvice.JeonseHouseOwnershipType;
 import com.myZipPlan.server.common.enums.loanAdvice.MaritalStatus;
 import com.myZipPlan.server.common.enums.calculator.HouseOwnershipType;
 import com.myZipPlan.server.housingInfo.buildingInfo.common.RentHousingType;
@@ -263,7 +264,7 @@ public class LoanAdviceApiControllerDocsTest extends RestDocsSupport {
             .spouseAnnualIncome(BigDecimal.valueOf(40000000))
             .childStatus(ChildStatus.ONE_CHILD)
             .hasNewborn(true)
-            .houseOwnershipType(HouseOwnershipType.NO_HOUSE)
+            .houseOwnershipType(JeonseHouseOwnershipType.NO_HOUSE)
             .isSMEEmployee(false)
             .isNetAssetOver345M(false)
             .rentHousingType(RentHousingType.APARTMENT)
