@@ -35,7 +35,6 @@ public class Oauth2Controller {
             .refreshToken(refreshToken)
             .build());
     }
-
     @GetMapping("/health-check")
     public ApiResponse<String> healthCheck() {
         return ApiResponse.ok("로그인 상태 정상");
