@@ -6,6 +6,7 @@ import com.myZipPlan.server.advice.loanAdvice.dto.response.LoanAdviceResponse;
 import com.myZipPlan.server.advice.loanAdvice.dto.response.RecommendedProductDto;
 import com.myZipPlan.server.common.enums.Bank;
 import com.myZipPlan.server.common.enums.loanAdvice.ChildStatus;
+import com.myZipPlan.server.common.enums.loanAdvice.JeonseHouseOwnershipType;
 import com.myZipPlan.server.common.enums.loanAdvice.MaritalStatus;
 import com.myZipPlan.server.common.enums.calculator.HouseOwnershipType;
 import com.myZipPlan.server.housingInfo.buildingInfo.common.RentHousingType;
@@ -43,7 +44,7 @@ class LoanAdviceApiControllerTest extends ControllerTestSupport {
             .spouseAnnualIncome(new BigDecimal("40000000"))
             .childStatus(ChildStatus.ONE_CHILD)
             .hasNewborn(false)
-            .houseOwnershipType(HouseOwnershipType.NO_HOUSE)
+            .houseOwnershipType(JeonseHouseOwnershipType.NO_HOUSE)
             .isSMEEmployee(true)
             .isNetAssetOver345M(false)
             .rentHousingType(RentHousingType.APARTMENT)
