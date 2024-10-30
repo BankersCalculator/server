@@ -7,13 +7,21 @@ import lombok.ToString;
 
 import java.math.BigDecimal;
 
-@Builder
 @Getter
 @ToString
 public class BestLoanProductResult {
 
     private JeonseLoanProductType productType;
+    private String productName;
     private BigDecimal possibleLoanLimit;
     private BigDecimal expectedLoanRate;
 
+
+    @Builder
+    public BestLoanProductResult(JeonseLoanProductType productType, BigDecimal possibleLoanLimit, BigDecimal expectedLoanRate) {
+        this.productType = productType;
+        this.productName = productType.getProductName();
+        this.possibleLoanLimit = possibleLoanLimit;
+        this.expectedLoanRate = expectedLoanRate;
+    }
 }
