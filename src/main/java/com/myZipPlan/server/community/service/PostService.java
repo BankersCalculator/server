@@ -151,7 +151,7 @@ public class PostService {
         List<CommentResponse> comments = commentService.getComments(oauthProviderId, post.getId());
         String authority = determineAuthority(user, post);
 
-        return PostResponse.fromEntity(post, comments, loanAdviceSummaryResponse, like, authority);
+        return PostResponse.fromEntity(user, post, comments, loanAdviceSummaryResponse, like, authority);
     }
 
 

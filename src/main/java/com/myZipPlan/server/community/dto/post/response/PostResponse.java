@@ -4,6 +4,7 @@ import com.myZipPlan.server.advice.loanAdvice.dto.response.LoanAdviceSummaryResp
 import com.myZipPlan.server.common.util.DateTimeUtil;
 import com.myZipPlan.server.community.domain.Post;
 import com.myZipPlan.server.community.dto.comment.CommentResponse;
+import com.myZipPlan.server.user.entity.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -33,6 +34,8 @@ public class PostResponse {
 
     private final String updateDeleteAuthority;
 
+    private final String loginUserName;
+
 
     @Builder
     public PostResponse(Long id, String title, String content, String author
@@ -43,6 +46,7 @@ public class PostResponse {
                        , LoanAdviceSummaryResponse loanAdviceSummaryReport
                        , Boolean like
                        , String updateDeleteAuthority
+                       , String loginUserName
                        ) {
         this.id = id;
         this.title = title;
@@ -61,14 +65,40 @@ public class PostResponse {
         this.like = like;
 
         this.updateDeleteAuthority = updateDeleteAuthority;
+
+        this.loginUserName = loginUserName;
     }
 
 
-    public static PostResponse fromEntity(Post post
+    public static PostResponse fromEntity(User user, Post post
                                           , List<CommentResponse> comments
                                           , LoanAdviceSummaryResponse loanAdviceSummaryReport
                                           , Boolean like
                                           , String updateDeleteAuthority) {
+        return PostResponse.builder()
+                .loginUserName(user.getName())
+                .id(post.getId())
+                .title(post.getTitle())
+                .content(post.getContent())
+                .author(post.getUser().getName())
+                .imageUrl(post.getImageUrl())
+                .likes(post.getLikes())
+                .comments(comments)
+                .createdDate(post.getCreatedDate())
+                .lastModifiedDate(post.getLastModifiedDate())
+                .avatarUrl(post.getUser().getProfileImageUrl())
+                .timeAgo(DateTimeUtil.calculateTimeAgo(post.getCreatedDate()))  // "n시간 전"으로 작성 시간 표시
+                .loanAdviceSummaryReport(loanAdviceSummaryReport)
+                .like(like != null ? like : false)
+                .updateDeleteAuthority(updateDeleteAuthority)
+                .build();
+    }
+
+    public static PostResponse fromEntity(Post post
+                                        , List<CommentResponse> comments
+                                        , LoanAdviceSummaryResponse loanAdviceSummaryReport
+                                        , Boolean like
+                                        , String updateDeleteAuthority) {
         return PostResponse.builder()
                 .id(post.getId())
                 .title(post.getTitle())
