@@ -22,7 +22,7 @@ import java.util.Map;
 public class AddressSearchApiClient {
 
     private static final String API_URL = "https://business.juso.go.kr/addrlink/addrLinkApi.do";
-    private static final String API_KEY = "devU01TX0FVVEgyMDI0MDgwNTIxMTIzNjExNDk4OTM=";
+    private static final String API_KEY = "U01TX0FVVEgyMDI0MTEwNDIwNDU1MjExNTIxMjk=";
     private static final String COUNT_PER_PAGE = "5";
     private static final String RESULT_TYPE = "json";
 
