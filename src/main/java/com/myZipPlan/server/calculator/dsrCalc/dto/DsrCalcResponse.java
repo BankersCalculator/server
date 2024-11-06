@@ -13,6 +13,7 @@ public class DsrCalcResponse {
 
     private BigDecimal annualIncome;
     private BigDecimal totalLoanCount;
+    private BigDecimal totalAnnualRepayment;
     private List<DsrCalcResult> dsrCalcResults;
     private BigDecimal finalDsrRatio;
 }
