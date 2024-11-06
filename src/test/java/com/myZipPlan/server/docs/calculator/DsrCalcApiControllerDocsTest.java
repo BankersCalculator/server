@@ -58,12 +58,13 @@ public class DsrCalcApiControllerDocsTest extends RestDocsSupport {
         DsrCalcResponse response = DsrCalcResponse.builder()
             .annualIncome(BigDecimal.valueOf(50000000))
             .totalLoanCount(BigDecimal.valueOf(1))
+            .totalAnnualRepayment(BigDecimal.valueOf(40000000))
             .dsrCalcResults(List.of(
                 new DsrCalcResult(BigDecimal.ONE, BigDecimal.valueOf(300000000),
                     BigDecimal.valueOf(295000000), BigDecimal.valueOf(360),
                     BigDecimal.valueOf(5000000), BigDecimal.valueOf(10500000))
             ))
-            .finalDsrRatio(BigDecimal.valueOf(31.0))
+            .finalDsrRatio(BigDecimal.valueOf(80.0))
             .build();
 
         when(dsrCalcService.dsrCalculate(any()))
@@ -121,8 +122,12 @@ public class DsrCalcApiControllerDocsTest extends RestDocsSupport {
                         .description("응답 데이터"),
                     fieldWithPath("data.annualIncome").type(JsonFieldType.NUMBER)
                         .description("연간 소득"),
+                    fieldWithPath("data.totalAnnualRepayment").type(JsonFieldType.NUMBER)
+                        .description("연간 원리금 상환액"),
                     fieldWithPath("data.totalLoanCount").type(JsonFieldType.NUMBER)
                         .description("총 대출 건수"),
+                    fieldWithPath("data.finalDsrRatio").type(JsonFieldType.NUMBER)
+                        .description("최종 DSR 비율"),
                     fieldWithPath("data.dsrCalcResults").type(JsonFieldType.ARRAY)
                         .description("DSR 계산 결과 목록"),
                     fieldWithPath("data.dsrCalcResults[].serial").type(JsonFieldType.NUMBER)
@@ -136,9 +141,7 @@ public class DsrCalcApiControllerDocsTest extends RestDocsSupport {
                     fieldWithPath("data.dsrCalcResults[].annualPrincipalRepayment").type(JsonFieldType.NUMBER)
                         .description("연간 원금 상환액"),
                     fieldWithPath("data.dsrCalcResults[].annualInterestRepayment").type(JsonFieldType.NUMBER)
-                        .description("연간 이자 상환액"),
-                    fieldWithPath("data.finalDsrRatio").type(JsonFieldType.NUMBER)
-                        .description("최종 DSR 비율")
+                        .description("연간 이자 상환액")
                 )
             ));
     }

@@ -22,7 +22,7 @@ public class DsrCalcService {
     private final DsrCalculatorFactory dsrCalculatorFactory;
 
     public DsrCalcResponse dsrCalculate(DsrCalcServiceRequest request) {
-        BigDecimal totalDsrAmount = BigDecimal.ZERO;
+        BigDecimal totalAnnualRepayment = BigDecimal.ZERO;
         BigDecimal annualIncome = request.getAnnualIncome();
         BigDecimal totalLoanCount = BigDecimal.ZERO;
 
@@ -33,18 +33,19 @@ public class DsrCalcService {
 
             totalLoanCount = totalLoanCount.add(BigDecimal.ONE);
             dsrCalcResult.setSerial(totalLoanCount);
-            totalDsrAmount = totalDsrAmount.add(dsrCalcResult.getAnnualPrincipalRepayment());
-            totalDsrAmount = totalDsrAmount.add(dsrCalcResult.getAnnualInterestRepayment());
+            totalAnnualRepayment = totalAnnualRepayment.add(dsrCalcResult.getAnnualPrincipalRepayment());
+            totalAnnualRepayment = totalAnnualRepayment.add(dsrCalcResult.getAnnualInterestRepayment());
 
             dsrCalcResultList.add(dsrCalcResult);
         }
 
-        BigDecimal totalDsrRatio = (totalDsrAmount.divide(annualIncome, 4, RoundingMode.DOWN));
+        BigDecimal totalDsrRatio = (totalAnnualRepayment.divide(annualIncome, 4, RoundingMode.DOWN));
 
         return DsrCalcResponse.builder()
             .annualIncome(annualIncome)
             .totalLoanCount(totalLoanCount)
             .dsrCalcResults(dsrCalcResultList)
+            .totalAnnualRepayment(totalAnnualRepayment)
             .finalDsrRatio(totalDsrRatio)
             .build();
     }
