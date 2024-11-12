@@ -27,6 +27,7 @@ public class DsrCommonCalculator {
         BigDecimal annalInterestRepayment = principal.multiply(interestRate).setScale(0, RoundingMode.DOWN);
 
         return DsrCalcResult.builder()
+            .loanDescription(loanStatus.getLoanType().getDescription())
             .principal(principal)
             .term(term)
             .annualPrincipalRepayment(annualPrincipalRepayment)
@@ -45,6 +46,7 @@ public class DsrCommonCalculator {
         BigDecimal annalInterestRepayment = totalInterest.divide(term, 4, RoundingMode.DOWN).multiply(BigDecimal.valueOf(12)).setScale(0, RoundingMode.DOWN);
 
         return DsrCalcResult.builder()
+            .loanDescription(loanStatus.getLoanType().getDescription())
             .principal(principal)
             .term(term)
             .annualPrincipalRepayment(annualPrincipalRepayment)
@@ -63,6 +65,7 @@ public class DsrCommonCalculator {
         BigDecimal annalInterestRepayment = totalInterest.divide(term, 4, RoundingMode.DOWN).multiply(BigDecimal.valueOf(12)).setScale(0, RoundingMode.DOWN);
 
         return DsrCalcResult.builder()
+            .loanDescription(loanStatus.getLoanType().getDescription())
             .principal(principal)
             .term(term)
             .annualPrincipalRepayment(annualPrincipalRepayment)
