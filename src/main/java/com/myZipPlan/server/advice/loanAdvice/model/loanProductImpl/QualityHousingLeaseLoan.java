@@ -71,6 +71,10 @@ public class QualityHousingLeaseLoan implements LoanProduct {
     }
 
     @Override
+    public List<String> getProductFeatures() {
+        return List.of("높은한도", "우량차주대상", "서울보증");
+    }
+    @Override
     public LoanLimitAndRateResultDto calculateLoanLimitAndRate(LoanAdviceServiceRequest request) {
         // 한도산출
         BigDecimal possibleLoanLimit = calculateLoanLimit(request);

@@ -107,6 +107,11 @@ public class SeoulNewlyWedLeaseLoan implements LoanProduct {
     }
 
     @Override
+    public List<String> getProductFeatures() {
+        return List.of("신혼부부추천", "낮은금리", "서울만가능");
+    }
+
+    @Override
     public LoanLimitAndRateResultDto calculateLoanLimitAndRate(LoanAdviceServiceRequest request) {
         // 한도산출
         BigDecimal possibleLoanLimit = calculateLoanLimit(request);
@@ -118,7 +123,6 @@ public class SeoulNewlyWedLeaseLoan implements LoanProduct {
             .possibleLoanLimit(possibleLoanLimit)
             .expectedLoanRate(finalRate)
             .build();
-
     }
 
     private BigDecimal calculateLoanLimit(LoanAdviceServiceRequest request) {

@@ -37,4 +37,9 @@ public class LoanProductFactory {
         JeonseLoanProductType productType = JeonseLoanProductType.findByProductCode(productCode);
         return getLoanProduct(productType).getAvailableBanks();
     }
+
+    public List<String> getProductFeatures(String productCode) {
+        JeonseLoanProductType productType = JeonseLoanProductType.findByProductCode(productCode);
+        return getLoanProduct(productType).getProductFeatures();
+    }
 }

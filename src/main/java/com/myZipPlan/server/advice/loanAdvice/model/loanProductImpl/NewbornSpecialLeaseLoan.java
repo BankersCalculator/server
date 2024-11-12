@@ -119,6 +119,10 @@ public class NewbornSpecialLeaseLoan implements LoanProduct {
     }
 
     @Override
+    public List<String> getProductFeatures() {
+        return List.of("신생아특례", "저렴한금리", "최대3억");
+    }
+    @Override
     public LoanLimitAndRateResultDto calculateLoanLimitAndRate(LoanAdviceServiceRequest request) {
         // 한도산출
         BigDecimal possibleLoanLimit = calculateLoanLimit(request);

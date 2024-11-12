@@ -30,6 +30,9 @@ public class AdditionalInformation {
     // 취급 가능 은행
     private List<Bank> availableBanks;
 
+    // 상품 특징
+    private List<String> productFeatures;
+
     // 전세 대출 가이드
     private String rentalLoanGuide;
 }

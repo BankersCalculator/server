@@ -127,8 +127,9 @@ public class LoanAdviceService {
 
         Long userInputInfoId = components.userInputInfo.getId();
         List<Bank> availableBanks = components.additionalInfo.getAvailableBanks();
+        List<String> productFeatures = components.additionalInfo.getProductFeatures();
         loanAdviceResultRepository.save(result);
-        return LoanAdviceResponse.of(result, userInputInfoId, availableBanks);
+        return LoanAdviceResponse.of(result, userInputInfoId, availableBanks, productFeatures);
     }
 
     // 대출상품 추천을 위한 전체 프로세스를 수행
