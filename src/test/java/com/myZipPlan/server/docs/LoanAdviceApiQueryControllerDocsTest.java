@@ -147,6 +147,7 @@ public class LoanAdviceApiQueryControllerDocsTest extends RestDocsSupport {
                     fieldWithPath("data.recommendedProducts[].expectedLoanRate").type(JsonFieldType.NUMBER).description("예상 대출 금리"),
                     fieldWithPath("data.recommendedProducts[].notEligibleReasons").type(JsonFieldType.ARRAY).optional().description("부적격 사유"),
                     fieldWithPath("data.availableBanks").type(JsonFieldType.ARRAY).description("이용 가능한 은행 목록"),
+                    fieldWithPath("data.productFeatures").type(JsonFieldType.ARRAY).description("상품 특징"),
                     fieldWithPath("data.rentalLoanGuide").type(JsonFieldType.STRING).description("전세 대출 가이드")
                 )
             ));
@@ -189,6 +190,7 @@ public class LoanAdviceApiQueryControllerDocsTest extends RestDocsSupport {
                     .build()
             ))
             .availableBanks(Arrays.asList(Bank.KB, Bank.SHINHAN, Bank.WOORI))
+            .productFeatures(Arrays.asList("신혼부부추천", "낮은금리", "최대한도"))
             .rentalLoanGuide("전세자금대출 이용 시 주의사항:\n1. 대출 기간 동안 이자를 꾸준히 납부해야 합니다.\n2. 전세 계약 만료 시 대출금 상환 계획을 미리 세워야 합니다.")
             .build();
     }
