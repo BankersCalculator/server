@@ -93,6 +93,10 @@ public class HfLeaseLoan implements LoanProduct {
     public List<Bank> getAvailableBanks() {
         return List.of(Bank.HANA, Bank.SHINHAN, Bank.KB, Bank.WOORI, Bank.NH, Bank.BNK, Bank.KAKAO, Bank.TOSS);
     }
+    @Override
+    public List<String> getProductFeatures() {
+        return List.of("일반전세", "소득4.5배가능", "다양한감면조건");
+    }
 
     @Override
     public LoanLimitAndRateResultDto calculateLoanLimitAndRate(LoanAdviceServiceRequest request) {

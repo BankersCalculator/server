@@ -110,6 +110,12 @@ public class YouthLeaseLoan implements LoanProduct {
         return List.of(Bank.HANA);
     }
 
+
+    @Override
+    public List<String> getProductFeatures() {
+        return List.of("청년추천", "낮은금리", "쉬운조건");
+    }
+
     @Override
     public LoanLimitAndRateResultDto calculateLoanLimitAndRate(LoanAdviceServiceRequest request) {
         // 한도산출

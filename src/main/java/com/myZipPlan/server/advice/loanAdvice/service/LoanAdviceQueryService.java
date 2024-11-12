@@ -53,9 +53,11 @@ public class LoanAdviceQueryService {
         LoanAdviceResult loanAdviceResult = loanAdviceResultRepository.findById(loanAdviceResultId)
             .orElseThrow(() -> new IllegalArgumentException("대출 상품 추천 결과가 없습니다."));
 
-        List<Bank> availableBanks = getAvailableBanks(loanAdviceResult.getLoanProductCode());
+        String loanProductCode = loanAdviceResult.getLoanProductCode();
+        List<Bank> availableBanks = getAvailableBanks(loanProductCode);
+        List<String> productFeatures = getProductFeatures(loanProductCode);
         Long userInputInfoId = loanAdviceResult.getUserInputInfo().getId();
-        return LoanAdviceResponse.of(loanAdviceResult, userInputInfoId, availableBanks);
+        return LoanAdviceResponse.of(loanAdviceResult, userInputInfoId, availableBanks, productFeatures);
     }
 
 
@@ -66,5 +68,9 @@ public class LoanAdviceQueryService {
 
     private List<Bank> getAvailableBanks(String productCode) {
         return loanProductFactory.getAvailableBanks(productCode);
+    }
+
+    private List<String> getProductFeatures(String productCode) {
+        return loanProductFactory.getProductFeatures(productCode);
     }
 }

@@ -53,6 +53,9 @@ public class LoanAdviceResponse {
     // 취급 가능 은행
     private List<Bank> availableBanks;
 
+    // 상품 특징
+    private List<String> productFeatures;
+
     // 전세 대출 가이드
     private String rentalLoanGuide;
 
@@ -67,7 +70,7 @@ public class LoanAdviceResponse {
 
 
 
-    public static LoanAdviceResponse of(LoanAdviceResult result, Long userInputInfoId, List<Bank> availableBanks) {
+    public static LoanAdviceResponse of(LoanAdviceResult result, Long userInputInfoId, List<Bank> availableBanks, List<String> productFeatures) {
 
         BigDecimal totalLivingCost = result.getMonthlyRent().add(result.getMonthlyRent());
 
@@ -101,6 +104,7 @@ public class LoanAdviceResponse {
                     .build())
                 .collect(Collectors.toList()))
             .availableBanks(availableBanks)
+            .productFeatures(productFeatures)
             .rentalLoanGuide(result.getRentalLoanGuide())
             .build();
     }

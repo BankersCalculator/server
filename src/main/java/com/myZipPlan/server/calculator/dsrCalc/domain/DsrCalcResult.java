@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 public class DsrCalcResult {
 
     private BigDecimal serial;
+    private String loanDescription;
     private BigDecimal principal;
     private BigDecimal balance;
     private BigDecimal term;
@@ -16,8 +17,9 @@ public class DsrCalcResult {
     private BigDecimal annualInterestRepayment;
 
     @Builder
-    public DsrCalcResult(BigDecimal serial, BigDecimal principal, BigDecimal balance, BigDecimal term, BigDecimal annualPrincipalRepayment, BigDecimal annualInterestRepayment) {
+    public DsrCalcResult(BigDecimal serial, String loanDescription, BigDecimal principal, BigDecimal balance, BigDecimal term, BigDecimal annualPrincipalRepayment, BigDecimal annualInterestRepayment) {
         this.serial = serial;
+        this.loanDescription = loanDescription;
         this.principal = principal;
         this.balance = balance;
         this.term = term;

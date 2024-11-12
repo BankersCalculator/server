@@ -53,6 +53,9 @@ public class AdditionalInfoGenerator {
         // 취급 가능 은행
         List<Bank> availableBanks = loanProduct.getAvailableBanks();
 
+        // 상품 특징
+        List<String> productFeatures = loanProduct.getProductFeatures();
+
         return AdditionalInformation.builder()
             .ownFunds(ownFunds)
             .monthlyInterestCost(monthlyInterestCost)
@@ -63,7 +66,8 @@ public class AdditionalInfoGenerator {
             .guaranteeInsuranceFee(guaranteeInsuranceFee)
             .stampDuty(stampDuty)
             .availableBanks(availableBanks)
-            .rentalLoanGuide("전세대출 가이드")    // TODO: 어떻게 구현하는 게 좋을지.. 고민 필요
+            .productFeatures(productFeatures)
+            .rentalLoanGuide("전세대출 가이드")
             .build();
     }
 

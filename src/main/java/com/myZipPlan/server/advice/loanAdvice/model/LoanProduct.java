@@ -48,4 +48,6 @@ public interface LoanProduct {
 
     List<Bank> getAvailableBanks();
 
+    List<String> getProductFeatures();
+
 }

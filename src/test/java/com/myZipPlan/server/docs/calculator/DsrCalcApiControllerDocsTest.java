@@ -60,7 +60,8 @@ public class DsrCalcApiControllerDocsTest extends RestDocsSupport {
             .totalLoanCount(BigDecimal.valueOf(1))
             .totalAnnualRepayment(BigDecimal.valueOf(40000000))
             .dsrCalcResults(List.of(
-                new DsrCalcResult(BigDecimal.ONE, BigDecimal.valueOf(300000000),
+                new DsrCalcResult(BigDecimal.ONE,"주택담보대출",
+                    BigDecimal.valueOf(300000000),
                     BigDecimal.valueOf(295000000), BigDecimal.valueOf(360),
                     BigDecimal.valueOf(5000000), BigDecimal.valueOf(10500000))
             ))
@@ -132,6 +133,8 @@ public class DsrCalcApiControllerDocsTest extends RestDocsSupport {
                         .description("DSR 계산 결과 목록"),
                     fieldWithPath("data.dsrCalcResults[].serial").type(JsonFieldType.NUMBER)
                         .description("일련번호"),
+                    fieldWithPath("data.dsrCalcResults[].loanDescription").type(JsonFieldType.STRING)
+                        .description("대출과목명"),
                     fieldWithPath("data.dsrCalcResults[].principal").type(JsonFieldType.NUMBER)
                         .description("원금"),
                     fieldWithPath("data.dsrCalcResults[].balance").type(JsonFieldType.NUMBER)

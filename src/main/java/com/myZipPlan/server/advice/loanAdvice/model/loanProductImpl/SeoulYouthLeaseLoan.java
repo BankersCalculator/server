@@ -108,6 +108,11 @@ public class SeoulYouthLeaseLoan implements LoanProduct {
     }
 
     @Override
+    public List<String> getProductFeatures() {
+        return List.of("청년추천", "낮은금리", "서울만가능");
+    }
+
+    @Override
     public LoanLimitAndRateResultDto calculateLoanLimitAndRate(LoanAdviceServiceRequest request) {
         // 한도산출
         BigDecimal possibleLoanLimit = calculateLoanLimit(request);

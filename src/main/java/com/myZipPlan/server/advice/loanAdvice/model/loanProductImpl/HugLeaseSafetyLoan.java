@@ -97,6 +97,10 @@ public class HugLeaseSafetyLoan implements LoanProduct {
     }
 
     @Override
+    public List<String> getProductFeatures() {
+        return List.of("안심전세", "보증보험", "까다로운심사");
+    }
+    @Override
     public LoanLimitAndRateResultDto calculateLoanLimitAndRate(LoanAdviceServiceRequest request) {
         // 한도산출
         BigDecimal possibleLoanLimit = calculateLoanLimit(request);
