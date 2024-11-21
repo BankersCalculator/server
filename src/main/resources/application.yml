@@ -42,6 +42,8 @@ spring:
     url: ${datasource.url}
     username: ${datasource.username}
     password: ${datasource.password}
+    hikari:
+      maximum-pool-size: 15
   data:
     redis:
       host: localhost
@@ -67,16 +69,16 @@ logging:
   level:
     org:
       hibernate:
-        SQL: DEBUG
+        SQL: WARN
         type:
           descriptor:
-            sql: TRACE
-        stat: DEBUG
+            sql: WARN
+        stat: INFO
         event:
-          internal: TRACE
-        transaction: DEBUG
+          internal: INFO
+        transaction: INFO
       springframework:
-        transaction: TRACE
+        transaction: INFO
 
 jwt:
   secret-key: ${jwt.secret-key} # TODO: change to UUID
