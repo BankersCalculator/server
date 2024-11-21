@@ -44,4 +44,8 @@ public class ApiResponse<T> {
     public static <T> ApiResponse<T> noContent(T data) {
         return new ApiResponse<>(NO_CONTENT, "NO_CONTENT", data);
     }
+
+    public static <T> ApiResponse<T> fail(String message) {
+        return new ApiResponse<>(HttpStatus.BAD_REQUEST, message, null);
+    }
 }
