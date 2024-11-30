@@ -76,11 +76,11 @@ public class PostResponse {
                                           , Boolean like
                                           , String updateDeleteAuthority) {
         return PostResponse.builder()
-                .loginUserName(user.getName())
+                .loginUserName(user.getAnimalUserName())
                 .id(post.getId())
                 .title(post.getTitle())
                 .content(post.getContent())
-                .author(post.getUser().getName())
+                .author(post.getUser().getAnimalUserName())
                 .imageUrl(post.getImageUrl())
                 .likes(post.getLikes())
                 .comments(comments)
@@ -109,7 +109,7 @@ public class PostResponse {
                 .comments(comments)
                 .createdDate(post.getCreatedDate())
                 .lastModifiedDate(post.getLastModifiedDate())
-                .avatarUrl(post.getUser().getProfileImageUrl())
+                .avatarUrl(post.getUser().getAnimalProfileImageUrl())
                 .timeAgo(DateTimeUtil.calculateTimeAgo(post.getCreatedDate()))  // "n시간 전"으로 작성 시간 표시
                 .loanAdviceSummaryReport(loanAdviceSummaryReport)
                 .like(like != null ? like : false)
