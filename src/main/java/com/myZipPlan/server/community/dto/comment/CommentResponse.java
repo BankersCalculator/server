@@ -58,7 +58,7 @@ public class CommentResponse {
                 .lastModifiedDate(comment.getLastModifiedDate())
                 .like(like != null ? like : false)
                 .timeAgo(DateTimeUtil.calculateTimeAgo(comment.getCreatedDate()))
-                .avatarUrl(comment.getUser().getProfileImageUrl())
+                .avatarUrl(comment.getUser().getAnimalProfileImageUrl())
                 .updateDeleteAuthority(updateDeleteAuthority)
                 .build();
     }

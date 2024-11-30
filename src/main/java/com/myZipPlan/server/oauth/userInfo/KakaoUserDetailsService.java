@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
+import java.util.Random;
 
 
 @RequiredArgsConstructor
@@ -22,6 +23,9 @@ import java.util.Collections;
 public class KakaoUserDetailsService extends DefaultOAuth2UserService {
 
     private static final String PROVIDER = "KAKAO";
+    private static final String ANIMAL_PROFILE_IMAGE_URL_TEMPLATE = "https://myzipplan-service-storage-dev.s3.ap-northeast-2.amazonaws.com/user-profile/comunity-profile-%02d.png";
+    private static final int ANIMAL_PROFILE_IMAGE_COUNT = 12;
+
 
     private final UserRepository userRepository;
 
@@ -38,10 +42,11 @@ public class KakaoUserDetailsService extends DefaultOAuth2UserService {
         String email = userProfile.getEmail();
         String thumbnailImage = userProfile.getThumbnailImage();
         String providerId = kakaoUserInfo.getProviderId();
+        String animalProfileImageUrl = generateRandomAnimalProfileImageUrl();
 
         User user = userRepository.findByOauthProviderAndOauthProviderId(PROVIDER, providerId)
             .orElseGet(() -> userRepository.save(
-                User.create("KAKAO", providerId, nickname, email, thumbnailImage, RoleType.USER)
+                User.create("KAKAO", providerId, nickname, email, thumbnailImage, animalProfileImageUrl, RoleType.USER)
             ));
 
         SimpleGrantedAuthority authority = new SimpleGrantedAuthority(user.getRoleType().getCode());
@@ -49,5 +54,10 @@ public class KakaoUserDetailsService extends DefaultOAuth2UserService {
         return new KakaoUserDetails(String.valueOf(user.getEmail()),
             Collections.singletonList(authority),
             oAuth2User.getAttributes());
+    }
+
+    public String generateRandomAnimalProfileImageUrl() {
+        int randomIndex = new Random().nextInt(ANIMAL_PROFILE_IMAGE_COUNT) + 1;
+        return String.format(ANIMAL_PROFILE_IMAGE_URL_TEMPLATE, randomIndex);
     }
 }

@@ -86,7 +86,7 @@ public class PostResponse {
                 .comments(comments)
                 .createdDate(post.getCreatedDate())
                 .lastModifiedDate(post.getLastModifiedDate())
-                .avatarUrl(post.getUser().getProfileImageUrl())
+                .avatarUrl(post.getUser().getAnimalProfileImageUrl())
                 .timeAgo(DateTimeUtil.calculateTimeAgo(post.getCreatedDate()))  // "n시간 전"으로 작성 시간 표시
                 .loanAdviceSummaryReport(loanAdviceSummaryReport)
                 .like(like != null ? like : false)
