@@ -34,21 +34,25 @@ public class User extends BaseTimeEntity {
     private String profileImageUrl;
 
     @Column
+    private RoleType roleType;
+
+    @Column
     private String animalProfileImageUrl;
 
     @Column
-    private RoleType roleType;
+    private String animalUserName;
 
     public static User create(String oauthProvider, String oauthProviderId, String nickname, String email,
-                              String thumbnailImage, String animalProfileImageUrl,  RoleType roleType) {
+                              String thumbnailImage, RoleType roleType, String animalProfileImageUrl, String animalUserName) {
         return User.builder()
             .oauthProvider(oauthProvider)
             .oauthProviderId(oauthProviderId)
             .name(nickname)
             .email(email)
             .profileImageUrl(thumbnailImage)
-            .animalProfileImageUrl(animalProfileImageUrl)
             .roleType(roleType)
+            .animalProfileImageUrl(animalProfileImageUrl)
+            .animalUserName(animalUserName)
             .build();
     }
 

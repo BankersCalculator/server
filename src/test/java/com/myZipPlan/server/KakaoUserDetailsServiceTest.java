@@ -29,4 +29,17 @@ public class KakaoUserDetailsServiceTest {
             assertTrue(pattern.matcher(url).matches(), "The generated URL does not match the expected pattern: " + url);
         }
     }
+
+    @Test
+    public void testGenerateRandomAnimalUsername() {
+        // Test the username pattern multiple times to verify randomness
+        for (int i = 0; i < 10; i++) {
+            String nickname = kakaoUserDetailsService.generateRandomAnimalUsername();
+            String expectedPattern = "[가-힣]+ [가-힣]+";
+            Pattern pattern = Pattern.compile(expectedPattern);
+
+            logger.info("Generated Nickname: " + nickname);
+            assertTrue(pattern.matcher(nickname).matches(), "The generated nickname does not match the expected pattern: " + nickname);
+        }
+    }
 }

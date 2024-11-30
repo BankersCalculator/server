@@ -51,7 +51,7 @@ public class CommentResponse {
         return CommentResponse.builder()
                 .id(comment.getId())
                 .postId(comment.getPost().getId())
-                .author(comment.getUser().getName())
+                .author(comment.getUser().getAnimalUserName())
                 .content(comment.getContent())
                 .likes(comment.getLikes())
                 .createdDate(comment.getCreatedDate())

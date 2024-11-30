@@ -103,7 +103,7 @@ public class PostResponse {
                 .id(post.getId())
                 .title(post.getTitle())
                 .content(post.getContent())
-                .author(post.getUser().getName())
+                .author(post.getUser().getAnimalUserName())
                 .imageUrl(post.getImageUrl())
                 .likes(post.getLikes())
                 .comments(comments)
