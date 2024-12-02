@@ -26,7 +26,7 @@ public class RepaymentCalcApiController {
         BigDecimal term = request.getTerm();
         BigDecimal gracePeriod = request.getGracePeriod();
 
-        if (term.compareTo(gracePeriod) < 0) {
+        if (term.compareTo(gracePeriod) <= 0) {
             return ApiResponse.fail("거치기간은 대출기간보다 작아야 합니다.");
         }
 
