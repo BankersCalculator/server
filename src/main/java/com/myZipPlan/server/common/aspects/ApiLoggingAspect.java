@@ -21,7 +21,7 @@ public class ApiLoggingAspect {
     private final ApiLogRepository apiLogRepository;
     private final UserService userService;
 
-    @AfterReturning("execution(* com.myZipPlan.server..*Controller.*(..))")
+    @AfterReturning("execution(* com.myZipPlan.server..*Controller.*(..)) && !execution(* com.myZipPlan.server.housingInfo..*(..))")
     public void logApiCall(JoinPoint jointPoint) {
         String methodName = jointPoint.getSignature().toShortString();
         String calledTime = LocalDateTime.now().toString();
