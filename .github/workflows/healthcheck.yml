@@ -2,7 +2,7 @@ name: Health Check and Notify
 
 on:
   schedule:
-    - cron: '0 */1 * * *' # 매 시간마다 실행 (CRON 표현식)
+    - cron: '*/5 * * * *' # 매 5분마다 실행
 
 jobs:
   healthcheck:
@@ -14,7 +14,7 @@ jobs:
 
     - name: Perform Health Check
       run: |
-        if curl -fsS https://your-service-url.com/health | grep "status: healthy"; then
+        if curl -fsS https://myzipplan.com/community | grep "status: healthy"; then
           echo "Health check passed."
         else
           echo "Health check failed."
@@ -27,4 +27,4 @@ jobs:
         curl -H "Content-Type: application/json" \
           -X POST \
           -d '{"content": "**Health Check Failed!**\nCheck the system immediately!"}' \
-          ${{ secrets.DISCORD_WEBHOOK_URL }}
+          https://discord.com/api/webhooks/1316397029789925447/yB3jx6r54lGlmtVSpo8zZNYUBu3kGAxgQevv4gvUm6IbwROiw6owHI9HEYNYpw_DMvPc
