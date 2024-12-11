@@ -1,27 +1,32 @@
 name: Health Check and Notify
 
 on:
-  workflow_dispatch: {} # 수동 실행 트리거
+  workflow_dispatch: {} # 수동 실행 추가
   schedule:
-    - cron: '*/5 * * * *' # 매 5분마다 실행
+    - cron: '0 * * * *' # 매 1시간마다 실행
 
 jobs:
   healthcheck:
     runs-on: ubuntu-latest
 
     steps:
+    # 레포지토리 코드를 가져오는 단계
     - name: Checkout code
       uses: actions/checkout@v3
 
+    # 헬스체크를 수행하는 단계
     - name: Perform Health Check
       run: |
-        if curl -fsS https://myzipplan.com/community | grep "status: healthy"; then
+        RESPONSE=$(curl -fsS https://myzipplan.com/api/v1/post)
+        STATUS=$(echo "$RESPONSE" | jq -r '.status')
+        if [ "$STATUS" == "OK" ]; then
           echo "Health check passed."
         else
-          echo "Health check failed."
+          echo "Health check failed: Status is $STATUS"
           exit 1
         fi
 
+    # Discord 알림을 보내는 단계 (실패 시)
     - name: Notify Discord
       if: failure()
       run: |
