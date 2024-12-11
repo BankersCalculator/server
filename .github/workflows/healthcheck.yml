@@ -1,0 +1,30 @@
+name: Health Check and Notify
+
+on:
+  schedule:
+    - cron: '0 */1 * * *' # 매 시간마다 실행 (CRON 표현식)
+
+jobs:
+  healthcheck:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Perform Health Check
+      run: |
+        if curl -fsS https://your-service-url.com/health | grep "status: healthy"; then
+          echo "Health check passed."
+        else
+          echo "Health check failed."
+          exit 1
+        fi
+
+    - name: Notify Discord
+      if: failure()
+      run: |
+        curl -H "Content-Type: application/json" \
+          -X POST \
+          -d '{"content": "**Health Check Failed!**\nCheck the system immediately!"}' \
+          ${{ secrets.DISCORD_WEBHOOK_URL }}
