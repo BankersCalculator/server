@@ -1,6 +1,7 @@
 name: Health Check and Notify
 
 on:
+  workflow_dispatch: {} # 수동 실행 트리거
   schedule:
     - cron: '*/5 * * * *' # 매 5분마다 실행
 
