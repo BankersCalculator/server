@@ -134,7 +134,7 @@ public class FixedRateLeaseLoan implements LoanProduct {
 
     private BigDecimal calculateFinalRate() {
         // 하나은행 홈피 기준. 금융채2년물 + 1.0%
-        return rateProviderService.getBaseRate(BaseRate.FINANCIAL_BOND_24M).add(new BigDecimal("1.0"));
+        return rateProviderService.getBaseRate(BaseRate.FINANCIAL_BOND_24M).add(new BigDecimal("2.5"));
     }
 
 }
