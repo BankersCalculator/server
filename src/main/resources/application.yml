@@ -1,4 +1,6 @@
 spring:
+  profiles:
+    active: dev
   ai:
     openai:
       api-key: ${ai.openai.api-key}
@@ -97,3 +99,8 @@ cloud:
 
 app:
   redirect-uri-base: ${REDIRECT_URI_BASE:http://localhost:5173}
+
+
+discord:
+  webhook:
+    url: "https://discord.com/api/webhooks/1316397029789925447/yB3jx6r54lGlmtVSpo8zZNYUBu3kGAxgQevv4gvUm6IbwROiw6owHI9HEYNYpw_DMvPc"

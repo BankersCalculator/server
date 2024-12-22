@@ -1,4 +1,6 @@
 spring:
+  profiles:
+    active: dev
   ai:
     openai:
       api-key: "adasdasrR"
@@ -75,3 +77,7 @@ cloud:
 
 app:
   redirect-uri-base: ${REDIRECT_URI_BASE:http://localhost:5173}
+
+discord:
+  webhook:
+    url: ""

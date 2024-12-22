@@ -1,0 +1,36 @@
+<configuration>
+    <!-- Spring 프로퍼티 활성화 -->
+    <springProperty name="discordWebhookUrl" source="discord.webhook.url"/>
+
+    <!-- 콘솔 출력 설정 -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- 운영 환경에서만 활성화되는 디스코드 웹훅 설정 -->
+    <springProfile name="prod">
+        <appender name="DISCORD" class="com.myZipPlan.server.common.webhook.DiscordWebhookAppender">
+            <webhookUrl>${discordWebhookUrl}</webhookUrl>
+            <!-- ERROR 레벨 이상만 처리 -->
+            <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+                <level>ERROR</level>
+            </filter>
+        </appender>
+
+        <!-- 운영 환경 루트 로거 -->
+        <root level="DEBUG">
+            <appender-ref ref="CONSOLE" />
+            <appender-ref ref="DISCORD" />
+        </root>
+    </springProfile>
+
+    <!-- 개발 환경 설정 (운영 환경이 아닌 경우) -->
+    <springProfile name="!prod">
+        <!-- 개발 환경 루트 로거 -->
+        <root level="DEBUG">
+            <appender-ref ref="CONSOLE" />
+        </root>
+    </springProfile>
+</configuration>
