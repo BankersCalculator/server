@@ -17,7 +17,7 @@ jobs:
     # 헬스체크를 수행하는 단계
     - name: Perform Health Check
       run: |
-        RESPONSE=$(curl -fsS https://myzipplan.com/api/v1/post)
+        RESPONSE=$(curl -fsS https://myzipplan.com/api/v1/webhook/github-actions/health-check)
         STATUS=$(echo "$RESPONSE" | jq -r '.status')
         if [ "$STATUS" == "OK" ]; then
           echo "Health check passed."
