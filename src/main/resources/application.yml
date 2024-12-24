@@ -103,4 +103,4 @@ app:
 
 discord:
   webhook:
-    url: "https://discord.com/api/webhooks/1316397029789925447/yB3jx6r54lGlmtVSpo8zZNYUBu3kGAxgQevv4gvUm6IbwROiw6owHI9HEYNYpw_DMvPc"
+    url: ${DISCORD_WEBHOOK_URL:https://discord.com/api/webhooks/1316397029789925447/yB3jx6r54lGlmtVSpo8zZNYUBu3kGAxgQevv4gvUm6IbwROiw6owHI9HEYNYpw_DMvPc}
