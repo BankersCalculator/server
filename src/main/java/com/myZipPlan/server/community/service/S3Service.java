@@ -1,11 +1,9 @@
 package com.myZipPlan.server.community.service;
 
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.myZipPlan.server.community.dto.post.request.PostUpdateRequest;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,8 +22,10 @@ public class S3Service {
     private final AmazonS3 amazonS3;
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
-    private static final Logger logger = LoggerFactory.getLogger(S3Service.class);
+    @Value("${cloud.aws.s3.region")
+    private String region;
 
+    private static final Logger logger = LoggerFactory.getLogger(S3Service.class);
 
     public String uploadFile(MultipartFile file) throws IOException {
         String fileName = UUID.randomUUID() + "-" + file.getOriginalFilename();
@@ -51,14 +51,21 @@ public class S3Service {
             // 리전이 포함된 URL 처리 (예: s3.ap-northeast-2.amazonaws.com)
             fileKey = imageUri.substring(imageUri.indexOf(".amazonaws.com/") + 15);
         }
-
         // URL 디코딩
         String decodedFileKey = URLDecoder.decode(fileKey, StandardCharsets.UTF_8);
         logger.info("Decoded file key: {}", decodedFileKey); // 디코딩된 파일 경로 로그
 
-
         // S3에서 파일 삭제
         amazonS3.deleteObject(bucket, decodedFileKey);
         logger.info("File deleted from S3: {}", decodedFileKey); // 삭제 완료 로그
+    }
+    // 특정 디렉토리의 기본 URL 가져오기
+    public String getS3DirectoryUrl(String dirName) {
+        // S3 버킷의 특정 디렉토리에 대한 URL 생성
+        return String.format("https://%s.s3.%s.amazonaws.com/%s",
+                bucket,
+                region,
+                dirName
+        );
     }
 }
