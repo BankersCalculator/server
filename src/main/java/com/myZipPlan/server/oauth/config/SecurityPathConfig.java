@@ -32,7 +32,10 @@ public class SecurityPathConfig {
         "/api/v1/housingInfo",
         "/api/v1/post",
         "/api/v1/post/sorted",
-        "api/v1/webhook/github-actions/health-check"
+        "api/v1/webhook/github-actions/health-check",
+
+        "/h2-console/**"
+
     );
 
     public String[] getPublicPaths() {
