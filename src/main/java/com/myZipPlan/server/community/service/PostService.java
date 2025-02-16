@@ -184,7 +184,7 @@ public class PostService {
     }
 
     private User getUserByOauthProviderId(String oauthProviderId) {
-        return userRepository.findByOauthProviderId(oauthProviderId)
+        return userRepository.findByProviderId(oauthProviderId)
                 .orElseThrow(() -> new IllegalArgumentException("세션에 연결된 oauthProviderId를 찾을 수 없습니다."));
     }
 
@@ -194,7 +194,7 @@ public class PostService {
     }
 
     private Optional<User> getOptionalUserByOauthProviderId(String oauthProviderId) {
-        return (oauthProviderId != null) ? userRepository.findByOauthProviderId(oauthProviderId) : Optional.empty();
+        return (oauthProviderId != null) ? userRepository.findByProviderId(oauthProviderId) : Optional.empty();
     }
 
     private LoanAdviceResult getLoanAdviceResult(Long loanAdviceResultId) {
@@ -213,7 +213,7 @@ public class PostService {
     }
 
     private boolean isPostOwner(User user, Post post) {
-        return post.getUser().getOauthProviderId().equals(user.getOauthProviderId());
+        return post.getUser().getProviderId().equals(user.getProviderId());
     }
 
     private String uploadImage(MultipartFile imageFile) throws IOException {

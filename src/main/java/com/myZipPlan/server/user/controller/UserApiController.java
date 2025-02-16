@@ -21,8 +21,6 @@ public class UserApiController {
         userService.transferTempUserToLoginUser(request.getTempUserId());
 
         return ApiResponse.success();
-
-
     }
 
     @PostMapping("/logout")
@@ -30,10 +28,9 @@ public class UserApiController {
         userService.logout();
 
     }
-        //회원탈퇴
+    //회원탈퇴
     @PostMapping("/withdraw")
     public void withdraw() {
         userService.withdraw();
-
     }
 }

@@ -52,7 +52,7 @@ public class Oauth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         String provider = kakaoUserInfo.getProvider();
         String providerId = kakaoUserInfo.getProviderId();
 
-        User user = userRepository.findByOauthProviderAndOauthProviderId(provider, providerId)
+        User user = userRepository.findByProviderAndProviderId(provider, providerId)
             .orElseThrow(ServletException::new);
 
 
@@ -85,7 +85,7 @@ public class Oauth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         authorities.add(new SimpleGrantedAuthority(user.getRoleType().getCode()));
 
         refreshTokenRedisRepository.save(RefreshToken.builder()
-            .providerId(user.getOauthProviderId())
+            .providerId(user.getProviderId())
             .authorities(authorities)
             .refreshToken(tokenDto.getRefreshToken())
             .build());

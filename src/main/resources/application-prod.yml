@@ -71,8 +71,8 @@ logging:
 
 jwt:
   secret-key: ${jwt.secret-key} # TODO: change to UUID
-  access-token-validity-in-seconds: 36000
-  refresh-token-validity-in-seconds: 86400
+  access-token-validity-in-seconds: 60 * 60 * 24 * 7
+  refresh-token-validity-in-seconds:  60 * 60 * 24 * 7
 
 cloud:
   aws:

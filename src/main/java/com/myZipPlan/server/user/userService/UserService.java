@@ -27,7 +27,7 @@ public class UserService {
 
     public User findUser(String providerId) {
 
-        return userRepository.findByOauthProviderId(providerId)
+        return userRepository.findByProviderId(providerId)
             .orElseThrow(() -> new AuthException("사용자 정보가 없습니다."));
     }
 

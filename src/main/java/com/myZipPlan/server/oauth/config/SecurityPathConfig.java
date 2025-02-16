@@ -14,8 +14,8 @@ public class SecurityPathConfig {
         "/error",
         "/favicon.ico",
         "/exception/**",
-        "/login/oauth2/*",
-        "/login/oauth2/kakao/reissue",
+        "/api/v1/guest/**",
+        "/login/oauth2/**",
         "/docs/**",
         "/api/v1/exception/**",
 
@@ -23,13 +23,16 @@ public class SecurityPathConfig {
         "/api/v1/dtiCalc",
         "/api/v1/ltvCalc",
         "/api/v1/repaymentCalc",
+
+        "/api/v1/loanAdvice/simple",
         "/api/v1/housing-info/**",
         "/api/v1/addressSearch",
-        "/api/v1/loanAdvice/simple",
+
         "/api/v1/rentTransactionInquiry",
         "/api/v1/rentTransaction",
         "/api/v1/housingTypeAndExclusiveArea",
         "/api/v1/housingInfo",
+
         "/api/v1/post",
         "/api/v1/post/sorted",
         "api/v1/webhook/github-actions/health-check",
