@@ -72,7 +72,7 @@ logging:
 jwt:
   secret-key: ${jwt.secret-key} # TODO: change to UUID
   access-token-validity-in-seconds: 60 * 60 * 24 * 7
-  refresh-token-validity-in-seconds:  60 * 60 * 24 * 7
+  refresh-token-validity-in-seconds: 60 * 60 * 24 * 7
 
 cloud:
   aws:
@@ -85,7 +85,9 @@ cloud:
       bucket: ${AWS_S3_BUCKET:myzipplan-service-storage-dev}
 
 app:
-  redirect-uri-base: ${REDIRECT_URI_BASE:http://localhost:5173}
+  redirect-uri-base:
+    prod: ${PROD_REDIRECT_URI_BASE:http://localhost:5173}
+    dev: ${DEV_REDIRECT_URI_BASE:http://localhost:5173}
 
 
 discord:
