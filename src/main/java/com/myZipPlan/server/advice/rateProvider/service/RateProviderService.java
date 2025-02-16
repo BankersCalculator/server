@@ -11,7 +11,7 @@ public class RateProviderService {
     /**
      * TODO: 실제 금리를 조회하는 로직 구현할 것.
      *  고시된 금리를 자체 DB 적재하는 방법 고려
-     *  우선 240826 기준 고시 금리로 세팅함.
+     *  우선 250205 기준 고시 금리로 세팅함.
      */
 
 
@@ -20,21 +20,21 @@ public class RateProviderService {
         BigDecimal rate = BigDecimal.ZERO;
 
         if (baseRate == BaseRate.COFIX_NEW_DEAL) {
-            rate = new BigDecimal("3.42");
+            rate = new BigDecimal("3.22");
         }
         if (baseRate == BaseRate.COFIX_NEW_BALANCE) {
-            rate = new BigDecimal("3.15");
+            rate = new BigDecimal("2.98");
         }
         if (baseRate == BaseRate.COFIX_BALANCE) {
-            rate = new BigDecimal("3.69");
+            rate = new BigDecimal("3.47");
         }
 
         if (baseRate == BaseRate.FINANCIAL_BOND_6M) {
-            rate = new BigDecimal("3.44");
+            rate = new BigDecimal("2.99");
         }
 
         if (baseRate == BaseRate.FINANCIAL_BOND_24M) {
-            rate = new BigDecimal("3.11");
+            rate = new BigDecimal("2.8");
         }
 
         return rate;
