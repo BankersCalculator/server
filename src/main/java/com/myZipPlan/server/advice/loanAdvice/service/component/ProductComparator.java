@@ -1,7 +1,7 @@
 package com.myZipPlan.server.advice.loanAdvice.service.component;
 
 import com.myZipPlan.server.advice.loanAdvice.dto.internal.BestLoanProductResult;
-import com.myZipPlan.server.advice.loanAdvice.dto.internal.LoanLimitAndRateResultDto;
+import com.myZipPlan.server.advice.loanAdvice.dto.internal.LoanTermsResultDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -29,21 +29,21 @@ public class ProductComparator {
     private static final BigDecimal MAX_LOAN_LIMIT = new BigDecimal("1000000000"); // 십억원
 
     public BestLoanProductResult compareProducts(BigDecimal rentalDeposit, String specificRequestProductCode,
-                                                 List<LoanLimitAndRateResultDto> loanLimitAndRateResultDto) {
-        if (loanLimitAndRateResultDto == null || loanLimitAndRateResultDto.isEmpty()) {
+                                                 List<LoanTermsResultDto> loanTermsResultDto) {
+        if (loanTermsResultDto == null || loanTermsResultDto.isEmpty()) {
             return null;
         }
-        if (loanLimitAndRateResultDto.size() == 1) {
-            return buildOptimalResult(loanLimitAndRateResultDto.get(0));
+        if (loanTermsResultDto.size() == 1) {
+            return buildOptimalResult(loanTermsResultDto.get(0));
         }
 
-        LoanLimitAndRateResultDto bestProduct = LoanLimitAndRateResultDto.builder()
+        LoanTermsResultDto bestProduct = LoanTermsResultDto.builder()
             .possibleLoanLimit(BigDecimal.ZERO)
             .expectedLoanRate(BigDecimal.ZERO)
             .build();
         BigDecimal bestScore = BigDecimal.ZERO;
 
-        for (LoanLimitAndRateResultDto product : loanLimitAndRateResultDto) {
+        for (LoanTermsResultDto product : loanTermsResultDto) {
 
             if (!product.isEligible()) continue;
 
@@ -57,7 +57,7 @@ public class ProductComparator {
         return buildOptimalResult(bestProduct);
     }
 
-    private BigDecimal calculateScore(LoanLimitAndRateResultDto product, BigDecimal neededAmount, String specificRequestProductCode) {
+    private BigDecimal calculateScore(LoanTermsResultDto product, BigDecimal neededAmount, String specificRequestProductCode) {
         /*
          * 대출상품의 점수 계산식
          * 점수 = 대출한도 점수 + 금리 점수 + 필요금액과 보유금액 간 차이 점수
@@ -107,7 +107,7 @@ public class ProductComparator {
         return normalizedGap.multiply(NEED_GAP_WEIGHT);
     }
 
-    private BestLoanProductResult buildOptimalResult(LoanLimitAndRateResultDto product) {
+    private BestLoanProductResult buildOptimalResult(LoanTermsResultDto product) {
         return BestLoanProductResult.builder()
             .productType(product.getProductType())
             .possibleLoanLimit(product.getPossibleLoanLimit())

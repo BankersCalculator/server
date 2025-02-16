@@ -1,6 +1,6 @@
 package com.myZipPlan.server;
 
-import com.myZipPlan.server.advice.aiReportGenerator.service.AiReportGeneratorService;
+import com.myZipPlan.server.advice.aiReportGenerator.service.AiReportService;
 import com.myZipPlan.server.advice.aiReportGenerator.service.OpenAiApiService;
 import com.myZipPlan.server.advice.loanAdvice.controller.LoanAdviceApiController;
 import com.myZipPlan.server.advice.loanAdvice.service.LoanAdviceQueryService;
@@ -59,7 +59,7 @@ public abstract class ControllerTestSupport {
     @MockBean
     protected LoanAdviceQueryService loanAdviceQueryService;
     @MockBean
-    protected AiReportGeneratorService aiReportGeneratorService;
+    protected AiReportService aiReportService;
     @MockBean
     protected OpenAiApiService openAiApiService;
     @MockBean

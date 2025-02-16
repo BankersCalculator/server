@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 @Getter
 @Builder
 @ToString
-public class LoanLimitAndRateResultDto {
+public class LoanTermsResultDto {
 
     private JeonseLoanProductType productType;
     private boolean isEligible;
