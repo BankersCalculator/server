@@ -14,8 +14,8 @@ public class SecurityPathConfig {
         "/error",
         "/favicon.ico",
         "/exception/**",
+        "/login/oauth2/*",
         "/api/v1/guest/**",
-        "/login/oauth2/**",
         "/docs/**",
         "/api/v1/exception/**",
 

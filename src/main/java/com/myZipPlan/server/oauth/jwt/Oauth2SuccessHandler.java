@@ -46,7 +46,6 @@ public class Oauth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
 
-
         String redirectUri = getRedirectUri(request);
 
         OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
@@ -72,8 +71,8 @@ public class Oauth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     }
 
     private String getRedirectUri(HttpServletRequest request) {
-        String env = request.getHeader("Env");
-        if (env.equals("prod")) {
+        String profile = request.getHeader("Profile");
+        if ("prod".equals(profile)) {
             return prodRedirectUriBase + "/login-result?accessToken=%s&refreshToken=%s";
         } else {
             return devRedirectUriBase + "/login-result?accessToken=%s&refreshToken=%s";

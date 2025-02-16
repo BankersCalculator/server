@@ -17,8 +17,8 @@ public interface LoanAdviceResultRepository extends JpaRepository<LoanAdviceResu
 
 
     @Modifying
-    @Query("UPDATE LoanAdviceResult u SET u.user = :newUser WHERE u.user = :tempUser")
-    void updateUserFromTempUser(@Param("tempUser") User tempUser, @Param("newUser") User newUser);
+    @Query("UPDATE LoanAdviceResult u SET u.user = :newUser WHERE u.user = :guest")
+    void updateUserFromGuest(@Param("guest") User guest, @Param("newUser") User newUser);
 
 }
 
