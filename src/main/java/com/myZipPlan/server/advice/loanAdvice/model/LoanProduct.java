@@ -1,7 +1,7 @@
 package com.myZipPlan.server.advice.loanAdvice.model;
 
 import com.myZipPlan.server.advice.loanAdvice.dto.internal.FilterProductResultDto;
-import com.myZipPlan.server.advice.loanAdvice.dto.internal.LoanLimitAndRateResultDto;
+import com.myZipPlan.server.advice.loanAdvice.dto.internal.LoanTermsResultDto;
 import com.myZipPlan.server.advice.loanAdvice.dto.request.LoanAdviceServiceRequest;
 import com.myZipPlan.server.common.enums.Bank;
 import com.myZipPlan.server.common.enums.loanAdvice.JeonseLoanProductType;
@@ -40,9 +40,9 @@ public interface LoanProduct {
 
     FilterProductResultDto filtering(LoanAdviceServiceRequest request);
 
-    LoanLimitAndRateResultDto calculateLoanLimitAndRate(LoanAdviceServiceRequest request);
+    LoanTermsResultDto calculateLoanTerms(LoanAdviceServiceRequest request);
 
-    LoanLimitAndRateResultDto calculateMaxLoanLimitAndMinRate(BigDecimal rentalAmount);
+    LoanTermsResultDto calculateMaxLoanLimitAndMinRate(BigDecimal rentalAmount);
 
     BigDecimal getGuaranteeInsuranceFee(BigDecimal loanAmount);
 

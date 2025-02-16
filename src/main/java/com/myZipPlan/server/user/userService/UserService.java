@@ -32,6 +32,11 @@ public class UserService {
             .orElseThrow(() -> new AuthException("사용자 정보가 없습니다."));
     }
 
+    public User getCurrentUser() {
+        String providerId = SecurityUtils.getProviderId();
+        return findUser(providerId);
+    }
+
 
     @Transactional
     public void transferGuestToUser(String guestToken) {

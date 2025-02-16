@@ -1,5 +1,6 @@
 package com.myZipPlan.server.advice.userInputInfo.service;
 
+import com.myZipPlan.server.advice.loanAdvice.dto.request.LoanAdviceServiceRequest;
 import com.myZipPlan.server.advice.userInputInfo.dto.UserInputInfoResponse;
 import com.myZipPlan.server.advice.userInputInfo.dto.UserInputSummaryResponse;
 import com.myZipPlan.server.advice.userInputInfo.entity.UserInputInfo;
@@ -24,6 +25,11 @@ public class UserInputInfoService {
 
     public UserInputInfo findById(Long id) {
         return userInputInfoRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("입력된 유저투입정보가 유효하지 않습니다."));
+    }
+
+    public UserInputInfo recordUserInput(LoanAdviceServiceRequest request, User user) {
+        UserInputInfo userInputInfo = UserInputInfo.create(user, request);
+        return save(userInputInfo);
     }
 
     public UserInputInfo save(UserInputInfo userInputInfo) {

@@ -46,26 +46,24 @@ public class LoanAdviceApiController {
     @PostMapping("/simple")
     public ApiResponse<List<LoanAdviceSummaryResponse>> getSimpleLoanConditions(@RequestBody @Valid SimpleLoanAdviceRequest request) {
         BigDecimal rentalDeposit = request.getRentalDeposit();
-        List<LoanAdviceSummaryResponse> recentLoanAdvices = loanAdviceService.getSimpleLoanConditions(rentalDeposit);
+        List<LoanAdviceSummaryResponse> simpleLoanConditions = loanAdviceService.getSimpleLoanConditions(rentalDeposit);
 
-        return ApiResponse.ok(recentLoanAdvices);
+        return ApiResponse.ok(simpleLoanConditions);
     }
 
     @PostMapping
     public ApiResponse<LoanAdviceResponse> generateLoanAdvice(@RequestBody @Valid LoanAdviceRequest request) {
 
-        LoanAdviceResponse loanAdviceResponse = loanAdviceService.createLoanAdvice(request.toServiceRequest());
-
-        if (!loanAdviceResponse.getHasEligibleProduct()) {
-            return ApiResponse.noContent(loanAdviceResponse);
+        LoanAdviceResponse loanAdvice = loanAdviceService.createLoanAdvice(request.toServiceRequest());
+        if (!loanAdvice.getHasEligibleProduct()) {
+            return ApiResponse.noContent(loanAdvice);
         }
-        return ApiResponse.ok(loanAdviceResponse);
+        return ApiResponse.ok(loanAdvice);
     }
 
     @PostMapping("/specific")
     public ApiResponse<LoanAdviceResponse> generateLoanAdviceOnSpecificLoan(@RequestBody SpecificLoanAdviceRequest request) {
         LoanAdviceResponse loanAdviceResponse = loanAdviceService.generateLoanAdviceOnSpecificLoan(request.getUserInputInfoId(), request.getProductCode());
-
         return ApiResponse.ok(loanAdviceResponse);
     }
 }

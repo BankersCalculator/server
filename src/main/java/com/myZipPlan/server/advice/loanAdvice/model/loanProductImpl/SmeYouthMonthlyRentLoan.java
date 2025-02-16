@@ -1,12 +1,11 @@
 package com.myZipPlan.server.advice.loanAdvice.model.loanProductImpl;
 
 import com.myZipPlan.server.advice.loanAdvice.dto.internal.FilterProductResultDto;
-import com.myZipPlan.server.advice.loanAdvice.dto.internal.LoanLimitAndRateResultDto;
+import com.myZipPlan.server.advice.loanAdvice.dto.internal.LoanTermsResultDto;
 import com.myZipPlan.server.advice.loanAdvice.dto.request.LoanAdviceServiceRequest;
 import com.myZipPlan.server.advice.loanAdvice.model.LoanProduct;
 import com.myZipPlan.server.advice.rateProvider.service.RateProviderService;
 import com.myZipPlan.server.common.enums.Bank;
-import com.myZipPlan.server.common.enums.calculator.HouseOwnershipType;
 import com.myZipPlan.server.common.enums.loanAdvice.JeonseHouseOwnershipType;
 import com.myZipPlan.server.common.enums.loanAdvice.JeonseLoanProductType;
 import com.myZipPlan.server.common.enums.loanAdvice.MaritalStatus;
@@ -36,11 +35,11 @@ public class SmeYouthMonthlyRentLoan implements LoanProduct {
 
 
     @Override
-    public LoanLimitAndRateResultDto calculateMaxLoanLimitAndMinRate(BigDecimal rentalAmount) {
+    public LoanTermsResultDto calculateMaxLoanLimitAndMinRate(BigDecimal rentalAmount) {
 
         BigDecimal minRate = calculateFinalRate();
 
-        return LoanLimitAndRateResultDto.builder()
+        return LoanTermsResultDto.builder()
             .productType(getProductType())
             .possibleLoanLimit(LOAN_LIMIT)
             .expectedLoanRate(minRate)
@@ -131,13 +130,13 @@ public class SmeYouthMonthlyRentLoan implements LoanProduct {
     }
 
     @Override
-    public LoanLimitAndRateResultDto calculateLoanLimitAndRate(LoanAdviceServiceRequest request) {
+    public LoanTermsResultDto calculateLoanTerms(LoanAdviceServiceRequest request) {
         // 한도산출
         BigDecimal possibleLoanLimit = calculateLoanLimit(request);
         // 금리산출
         BigDecimal finalRate = calculateFinalRate();
 
-        return LoanLimitAndRateResultDto.builder()
+        return LoanTermsResultDto.builder()
             .productType(getProductType())
             .possibleLoanLimit(possibleLoanLimit)
             .expectedLoanRate(finalRate)
