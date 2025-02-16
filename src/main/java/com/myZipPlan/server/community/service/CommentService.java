@@ -89,7 +89,7 @@ public class CommentService {
 
     @Transactional
     public void unlikeComment(String oauthProviderId, Long commentId) {
-        User user = userRepository.findByOauthProviderId(oauthProviderId)
+        User user = userRepository.findByProviderId(oauthProviderId)
                 .orElseThrow(() -> new IllegalArgumentException("세션에 연결된 oauthProviderId를 찾을 수 없습니다."));
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new IllegalArgumentException("댓글을 찾을 수 없습니다."));
@@ -107,7 +107,7 @@ public class CommentService {
     @Transactional
     public List<CommentResponse> getComments(String oauthProviderId, Long postId) {
         Optional<User> optionalUser = (oauthProviderId != null)
-                ? userRepository.findByOauthProviderId(oauthProviderId)
+                ? userRepository.findByProviderId(oauthProviderId)
                 : Optional.empty(); // 비로그인 상태일 경우 Optional.empty()
 
         List<Comment> comments = commentRepository.findByPostId(postId);
@@ -138,7 +138,7 @@ public class CommentService {
     }
 
     private User getUserByOauthProviderId(String oauthProviderId) {
-        return userRepository.findByOauthProviderId(oauthProviderId)
+        return userRepository.findByProviderId(oauthProviderId)
                 .orElseThrow(() -> new IllegalArgumentException("세션에 연결된 oauthProviderId를 찾을 수 없습니다."));
     }
 
@@ -153,7 +153,7 @@ public class CommentService {
     }
 
     private boolean isCommentOwner(User user, Comment comment) {
-        return comment.getUser().getOauthProviderId().equals(user.getOauthProviderId());
+        return comment.getUser().getProviderId().equals(user.getProviderId());
     }
 
     private void validateUserAuthority(User user, Comment comment, String authority) {

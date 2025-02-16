@@ -4,19 +4,14 @@ import com.myZipPlan.server.advice.userInputInfo.dto.UserInputInfoResponse;
 import com.myZipPlan.server.advice.userInputInfo.dto.UserInputSummaryResponse;
 import com.myZipPlan.server.advice.userInputInfo.entity.UserInputInfo;
 import com.myZipPlan.server.advice.userInputInfo.repository.UserInputInfoRepository;
-import com.myZipPlan.server.common.enums.loanAdvice.ChildStatus;
-import com.myZipPlan.server.common.enums.loanAdvice.MaritalStatus;
 import com.myZipPlan.server.common.exception.customException.AuthException;
-import com.myZipPlan.server.housingInfo.buildingInfo.common.RentHousingType;
 import com.myZipPlan.server.oauth.userInfo.SecurityUtils;
 import com.myZipPlan.server.user.entity.User;
 import com.myZipPlan.server.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -76,7 +71,7 @@ public class UserInputInfoService {
     private User fetchCurrentUser() {
         String providerId = SecurityUtils.getProviderId();
 
-        User user = userRepository.findByOauthProviderId(providerId)
+        User user = userRepository.findByProviderId(providerId)
             .orElseThrow(() -> new AuthException("사용자 정보가 없습니다."));
 
         return user;

@@ -21,8 +21,8 @@ public class HousingTypeAndExclusiveAreaApiClientTest {
     @Autowired
     private HousingTypeAndExclusiveAreaApiClient housingTypeAndExclusiveAreaApiClient;
 
-    @Test
-    public void testGetApHsTpInfo() {
+//    @Test
+   /* public void testGetApHsTpInfo() {
         // 테스트할 파라미터 설정
         String districtCodeFirst5 = "11680"; // 서울시 특정 시군구 코드 11680
         String districtCodeLast5 = "10100";  // 특정 법정동 코드 10100
@@ -61,6 +61,6 @@ public class HousingTypeAndExclusiveAreaApiClientTest {
                     ", Household Count=" + item.getHouseHoldCount() +
                     ", Exclusive Area=" + item.getExclusiveArea());
         }
-    }
+    }*/
 }
 

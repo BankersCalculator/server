@@ -49,7 +49,7 @@ public class KakaoUserDetailsService extends DefaultOAuth2UserService {
         String animalProfileImageUrl = generateRandomAnimalProfileImageUrl();
         String animalUserName = generateRandomAnimalUsername();
 
-        User user = userRepository.findByOauthProviderAndOauthProviderId(PROVIDER, providerId)
+        User user = userRepository.findByProviderAndProviderId(PROVIDER, providerId)
             .orElseGet(() -> userRepository.save(
                 User.create("KAKAO", providerId, kakaoNickName, email, thumbnailImage, RoleType.USER, animalProfileImageUrl, animalUserName )
             ));

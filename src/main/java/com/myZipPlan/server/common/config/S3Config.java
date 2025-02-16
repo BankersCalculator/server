@@ -1,4 +1,4 @@
-package com.myZipPlan.server.community.config;
+package com.myZipPlan.server.common.config;
 
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;

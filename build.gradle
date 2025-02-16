@@ -78,6 +78,11 @@ dependencies {
     configurations.all {
         exclude group: 'com.vaadin.external.google', module: 'android-json'
     }
+    // JMH 마이크로벤치
+    implementation("org.openjdk.jmh:jmh-core:1.35")
+    annotationProcessor("org.openjdk.jmh:jmh-generator-annprocess:1.35")
+    testImplementation("org.openjdk.jmh:jmh-core:1.35")
+    testAnnotationProcessor("org.openjdk.jmh:jmh-generator-annprocess:1.35")
 
 
 }

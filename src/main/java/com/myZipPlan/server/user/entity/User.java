@@ -5,6 +5,8 @@ import com.myZipPlan.server.common.enums.RoleType;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.UUID;
+
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
@@ -20,33 +22,26 @@ public class User extends BaseTimeEntity {
 
     @Column
     private String name;
-
     @Column
-    private String oauthProvider;
-
+    private String provider;
     @Column
-    private String oauthProviderId;
-
+    private String providerId;
     @Column
     private String email;
-
     @Column
     private String profileImageUrl;
-
     @Column
     private RoleType roleType;
-
     @Column
     private String animalProfileImageUrl;
-
     @Column
     private String animalUserName;
 
-    public static User create(String oauthProvider, String oauthProviderId, String nickname, String email,
+    public static User create(String provider, String providerId, String nickname, String email,
                               String thumbnailImage, RoleType roleType, String animalProfileImageUrl, String animalUserName) {
         return User.builder()
-            .oauthProvider(oauthProvider)
-            .oauthProviderId(oauthProviderId)
+            .provider(provider)
+            .providerId(providerId)
             .name(nickname)
             .email(email)
             .profileImageUrl(thumbnailImage)
@@ -56,13 +51,12 @@ public class User extends BaseTimeEntity {
             .build();
     }
 
-    public static User createTempUser(String tempUserId) {
+    public static User createGuestUser() {
         return User.builder()
-            .oauthProvider("temp")
-            .oauthProviderId(tempUserId)
-            .name("temp")
-            .email(tempUserId)
-            .roleType(RoleType.USER)
+            .provider("GUEST")
+            .providerId(UUID.randomUUID().toString())
+            .name("guest_" + System.currentTimeMillis())
+            .roleType(RoleType.GUEST)
             .build();
     }
 }

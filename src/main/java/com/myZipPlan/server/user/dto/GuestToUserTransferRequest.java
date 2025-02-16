@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class TempUserTransferRequest {
-    private String tempUserId;
+public class GuestToUserTransferRequest {
+    private String guestToken;
 }

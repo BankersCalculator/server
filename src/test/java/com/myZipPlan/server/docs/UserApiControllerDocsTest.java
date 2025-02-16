@@ -1,6 +1,7 @@
 package com.myZipPlan.server.docs;
 
 import com.myZipPlan.server.RestDocsSupport;
+import com.myZipPlan.server.user.dto.GuestToUserTransferRequest;
 import com.myZipPlan.server.user.userService.UserService;
 import com.myZipPlan.server.user.controller.UserApiController;
 import org.junit.jupiter.api.DisplayName;
@@ -32,15 +33,13 @@ public class UserApiControllerDocsTest extends RestDocsSupport {
     @Test
     void transferTempUserToLoginUser() throws Exception {
         // given
-        String tempUserId = "tempUserId";
-        String content = String.format("{\"tempUserId\": \"%s\"}", tempUserId);
-
+        GuestToUserTransferRequest content = new GuestToUserTransferRequest("guest");
 
         mockMvc.perform(post(BASE_URL + "/transfer")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .content(content)
-            .header("AccessToken", "액세스 토큰"))
+                .content(objectMapper.writeValueAsString(content))
+                .header("AccessToken", "액세스 토큰"))
             .andExpect(status().isOk())
             .andDo(document("user/transfer-temp-user-to-login-user",
                 preprocessRequest(prettyPrint()),
@@ -50,7 +49,7 @@ public class UserApiControllerDocsTest extends RestDocsSupport {
                         .description("액세스 토큰")
                 ),
                 requestFields(
-                    fieldWithPath("tempUserId").type(JsonFieldType.STRING).description("일회성 고객의 아이디")
+                    fieldWithPath("guestToken").type(JsonFieldType.STRING).description("게스트유저의 토큰")
                 )
             ));
     }
@@ -76,7 +75,7 @@ public class UserApiControllerDocsTest extends RestDocsSupport {
     @Test
     void withdraw() throws Exception {
         mockMvc.perform(post(BASE_URL + "/withdraw")
-            .header("AccessToken", "액세스 토큰"))
+                .header("AccessToken", "액세스 토큰"))
             .andExpect(status().isOk())
             .andDo(document("user/withdraw",
                 preprocessRequest(prettyPrint()),

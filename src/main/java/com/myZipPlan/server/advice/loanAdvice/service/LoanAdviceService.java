@@ -215,15 +215,7 @@ public class LoanAdviceService {
 
     private User fetchCurrentUser() {
         String providerId = SecurityUtils.getProviderId();
-
-        User user;
-        if (providerId.startsWith("temp")) {
-            user = userService.save(User.createTempUser(providerId));
-        } else {
-
-            user = userService.findUser(providerId);
-        }
-        return user;
+        return userService.findUser(providerId);
     }
 
     private UserInputInfo createUserInputInfo(LoanAdviceServiceRequest request, User user) {
