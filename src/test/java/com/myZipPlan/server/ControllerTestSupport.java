@@ -17,6 +17,7 @@ import com.myZipPlan.server.oauth.token.TokenProvider;
 import com.myZipPlan.server.oauth.token.TokenValidator;
 import com.myZipPlan.server.oauth.userInfo.KakaoUserDetailsService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.myZipPlan.server.user.userService.GuestService;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -61,6 +62,8 @@ public abstract class ControllerTestSupport {
     protected AiReportGeneratorService aiReportGeneratorService;
     @MockBean
     protected OpenAiApiService openAiApiService;
+    @MockBean
+    protected GuestService guestService;
 
     @MockBean
     protected JwtAuthenticationFilter jwtAuthenticationFilter;

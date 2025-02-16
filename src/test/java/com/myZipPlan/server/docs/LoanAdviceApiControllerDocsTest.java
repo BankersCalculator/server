@@ -116,7 +116,6 @@ public class LoanAdviceApiControllerDocsTest extends RestDocsSupport {
                 .accept(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request))
                 .header("AccessToken", "액세스 토큰")
-                .header("tempUserId", "일회성 유저 ID: \"temp\"로 시작하는 String")
             )
             .andExpect(status().isOk())
             .andDo(document("loan-advice/generate-loan-advice",
@@ -124,9 +123,7 @@ public class LoanAdviceApiControllerDocsTest extends RestDocsSupport {
                 preprocessResponse(prettyPrint()),
                 requestHeaders(
                     headerWithName("AccessToken")
-                        .description("액세스 토큰"),
-                    headerWithName("tempUserId")
-                        .description("일회성 유저 ID")
+                        .description("액세스 토큰")
                 ),
                 requestFields(
                     fieldWithPath("rentalDeposit").type(JsonFieldType.NUMBER).description("임차보증금"),

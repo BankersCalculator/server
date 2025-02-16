@@ -1,0 +1,8 @@
+[[login-guest]]
+=== 게스트 유저
+
+==== HTTP Response
+include::{snippets}/guest/login-guest/http-response.adoc[]
+
+==== Response Fields
+include::{snippets}/guest/login-guest/response-fields.adoc[]
