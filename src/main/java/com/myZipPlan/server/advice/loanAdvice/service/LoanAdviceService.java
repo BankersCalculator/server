@@ -1,35 +1,17 @@
 package com.myZipPlan.server.advice.loanAdvice.service;
 
-import com.myZipPlan.server.advice.aiReportGenerator.service.AiReportService;
-import com.myZipPlan.server.advice.loanAdvice.dto.internal.AdditionalInformation;
-import com.myZipPlan.server.advice.loanAdvice.dto.internal.BestLoanProductResult;
-import com.myZipPlan.server.advice.loanAdvice.dto.internal.FilterProductResultDto;
-import com.myZipPlan.server.advice.loanAdvice.dto.internal.LoanTermsResultDto;
 import com.myZipPlan.server.advice.loanAdvice.dto.request.LoanAdviceServiceRequest;
 import com.myZipPlan.server.advice.loanAdvice.dto.response.LoanAdviceResponse;
 import com.myZipPlan.server.advice.loanAdvice.dto.response.LoanAdviceSummaryResponse;
-import com.myZipPlan.server.advice.loanAdvice.dto.response.RecommendedProductDto;
-import com.myZipPlan.server.advice.loanAdvice.entity.LoanAdviceResult;
-import com.myZipPlan.server.advice.loanAdvice.repository.LoanAdviceResultRepository;
+import com.myZipPlan.server.advice.loanAdvice.dto.response.PreLoanTermsResponse;
 import com.myZipPlan.server.advice.loanAdvice.service.component.*;
-import com.myZipPlan.server.advice.userInputInfo.entity.UserInputInfo;
-import com.myZipPlan.server.advice.userInputInfo.service.UserInputInfoService;
-import com.myZipPlan.server.common.enums.Bank;
-import com.myZipPlan.server.common.enums.loanAdvice.JeonseLoanProductType;
-import com.myZipPlan.server.oauth.userInfo.SecurityUtils;
-import com.myZipPlan.server.user.entity.User;
-import com.myZipPlan.server.user.userService.UserService;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -50,6 +32,10 @@ public class LoanAdviceService {
     // 특정 상품 요청 처리
     public LoanAdviceResponse generateLoanAdviceOnSpecificLoan(Long userInputInfoId, String productCode) {
         return loanAdviceOrchestrator.processSpecificLoanAdvice(userInputInfoId, productCode);
+    }
+
+    public PreLoanTermsResponse preCalculateLoanTerms(LoanAdviceServiceRequest request) {
+        return loanAdviceOrchestrator.preCalculateLoanTerms(request);
     }
 
     // 간편조회: 최대한도/최저금리 리스트 반환

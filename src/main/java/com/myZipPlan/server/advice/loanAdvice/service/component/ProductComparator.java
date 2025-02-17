@@ -3,6 +3,7 @@ package com.myZipPlan.server.advice.loanAdvice.service.component;
 import com.myZipPlan.server.advice.loanAdvice.dto.internal.BestLoanProductResult;
 import com.myZipPlan.server.advice.loanAdvice.dto.internal.LoanTermsResultDto;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -11,6 +12,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Component
+@Slf4j
 public class ProductComparator {
 
     /**
@@ -48,6 +50,10 @@ public class ProductComparator {
             if (!product.isEligible()) continue;
 
             BigDecimal currentScore = calculateScore(product, rentalDeposit, specificRequestProductCode);
+
+            log.info("product: {}", product.getProductType().getProductName());
+            log.info("currentScore: {}", currentScore);
+
             if (currentScore.compareTo(bestScore) > 0) {
                 bestScore = currentScore;
                 bestProduct = product;
