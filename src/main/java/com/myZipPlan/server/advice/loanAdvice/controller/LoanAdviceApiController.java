@@ -1,7 +1,7 @@
 package com.myZipPlan.server.advice.loanAdvice.controller;
 
 import com.myZipPlan.server.advice.loanAdvice.dto.request.LoanAdviceRequest;
-import com.myZipPlan.server.advice.loanAdvice.dto.request.PreTermsRequest;
+import com.myZipPlan.server.advice.loanAdvice.dto.request.PreLoanTermsRequest;
 import com.myZipPlan.server.advice.loanAdvice.dto.request.SimpleLoanAdviceRequest;
 import com.myZipPlan.server.advice.loanAdvice.dto.request.SpecificLoanAdviceRequest;
 import com.myZipPlan.server.advice.loanAdvice.dto.response.LoanAdviceResponse;
@@ -54,7 +54,7 @@ public class LoanAdviceApiController {
     }
 
     @PostMapping("/pre-terms")
-    public ApiResponse<PreLoanTermsResponse> preCalculateLoanTerms(@RequestBody PreTermsRequest request) {
+    public ApiResponse<PreLoanTermsResponse> preCalculateLoanTerms(@RequestBody PreLoanTermsRequest request) {
 
         log.info("hello? {}", request.toString());
         PreLoanTermsResponse preLoanTermsResponse = loanAdviceService.preCalculateLoanTerms(request.toServiceRequestWithDefaultValue());

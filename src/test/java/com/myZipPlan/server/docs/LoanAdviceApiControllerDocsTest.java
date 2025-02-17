@@ -2,10 +2,12 @@ package com.myZipPlan.server.docs;
 import com.myZipPlan.server.RestDocsSupport;
 import com.myZipPlan.server.advice.loanAdvice.controller.LoanAdviceApiController;
 import com.myZipPlan.server.advice.loanAdvice.dto.request.LoanAdviceRequest;
+import com.myZipPlan.server.advice.loanAdvice.dto.request.PreLoanTermsRequest;
 import com.myZipPlan.server.advice.loanAdvice.dto.request.SimpleLoanAdviceRequest;
 import com.myZipPlan.server.advice.loanAdvice.dto.request.SpecificLoanAdviceRequest;
 import com.myZipPlan.server.advice.loanAdvice.dto.response.LoanAdviceResponse;
 import com.myZipPlan.server.advice.loanAdvice.dto.response.LoanAdviceSummaryResponse;
+import com.myZipPlan.server.advice.loanAdvice.dto.response.PreLoanTermsResponse;
 import com.myZipPlan.server.advice.loanAdvice.dto.response.RecommendedProductDto;
 import com.myZipPlan.server.advice.loanAdvice.service.LoanAdviceQueryService;
 import com.myZipPlan.server.advice.loanAdvice.service.LoanAdviceService;
@@ -13,7 +15,6 @@ import com.myZipPlan.server.common.enums.Bank;
 import com.myZipPlan.server.common.enums.loanAdvice.ChildStatus;
 import com.myZipPlan.server.common.enums.loanAdvice.JeonseHouseOwnershipType;
 import com.myZipPlan.server.common.enums.loanAdvice.MaritalStatus;
-import com.myZipPlan.server.common.enums.calculator.HouseOwnershipType;
 import com.myZipPlan.server.housingInfo.buildingInfo.common.RentHousingType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -34,7 +35,6 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class LoanAdviceApiControllerDocsTest extends RestDocsSupport {
@@ -98,6 +98,65 @@ public class LoanAdviceApiControllerDocsTest extends RestDocsSupport {
                     fieldWithPath("data[].loanProductCode").type(JsonFieldType.STRING).description("대출 상품 코드"),
                     fieldWithPath("data[].possibleLoanLimit").type(JsonFieldType.NUMBER).description("가능한 대출 한도"),
                     fieldWithPath("data[].expectedLoanRate").type(JsonFieldType.NUMBER).description("예상 대출 금리")
+                )
+            ));
+    }
+
+
+
+    @DisplayName("대출조건 사전 조회")
+    @Test
+    void preCalculateTerms() throws Exception {
+
+        PreLoanTermsRequest request = createPreLoanTermsRequest();
+        PreLoanTermsResponse response = PreLoanTermsResponse.builder()
+            .loanProductName("신생아특레버팀목전세자금대출")
+            .loanProductCode("NHUF-01")
+            .possibleLoanLimit(BigDecimal.valueOf(200000000))
+            .expectedLoanRate(BigDecimal.valueOf(1.2))
+            .build();
+
+
+        when(loanAdviceService.preCalculateLoanTerms(any())).thenReturn(response);
+
+        mockMvc.perform(post(BASE_URL +"/pre-terms")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request))
+                .header("AccessToken", "액세스 토큰")
+            )
+            .andExpect(status().isOk())
+            .andDo(document("loan-advice/pre-calculate-terms",
+                preprocessRequest(prettyPrint()),
+                preprocessResponse(prettyPrint()),
+                requestHeaders(
+                    headerWithName("AccessToken")
+                        .description("액세스 토큰")
+                ),
+                requestFields(
+                    fieldWithPath("rentalDeposit").type(JsonFieldType.NUMBER).description("임차보증금"),
+                    fieldWithPath("monthlyRent").type(JsonFieldType.NUMBER).description("월세"),
+                    fieldWithPath("cashOnHand").type(JsonFieldType.NUMBER).description("보유현금"),
+                    fieldWithPath("age").type(JsonFieldType.NUMBER).description("만나이"),
+                    fieldWithPath("maritalStatus").type(JsonFieldType.STRING).description("혼인 상태 (SINGLE, ENGAGED, NEWLY_MARRIED, MARRIED)"),
+                    fieldWithPath("annualIncome").type(JsonFieldType.NUMBER).description("연소득"),
+                    fieldWithPath("spouseAnnualIncome").type(JsonFieldType.NUMBER).description("배우자연소득"),
+                    fieldWithPath("childStatus").type(JsonFieldType.STRING).description("자녀 상태 (NO_CHILD, ONE_CHILD, TWO_CHILD, THREE_OR_MORE_CHILDREN)"),
+                    fieldWithPath("hasNewborn").type(JsonFieldType.BOOLEAN).description("신생아여부"),
+                    fieldWithPath("houseOwnershipType").type(JsonFieldType.STRING)
+                        .description("주택 소유 형태 (NO_HOUSE: 무주택, SINGLE_HOUSE: 1주택, MULTI_HOUSE: 다주택"),
+                    fieldWithPath("isSMEEmployee").type(JsonFieldType.BOOLEAN).description("중소기업재직여부"),
+                    fieldWithPath("isNetAssetOver345M").type(JsonFieldType.BOOLEAN).description("순자산 3.45억 초과 여부")
+                ),
+                responseFields(
+                    fieldWithPath("code").type(JsonFieldType.NUMBER).description("응답 코드"),
+                    fieldWithPath("status").type(JsonFieldType.STRING).description("응답 상태"),
+                    fieldWithPath("message").type(JsonFieldType.STRING).description("응답 메시지"),
+                    fieldWithPath("data").type(JsonFieldType.OBJECT).description("응답 데이터"),
+                    fieldWithPath("data.loanProductName").type(JsonFieldType.STRING).description("대출 상품명"),
+                    fieldWithPath("data.loanProductCode").type(JsonFieldType.STRING).description("대출 상품 코드"),
+                    fieldWithPath("data.possibleLoanLimit").type(JsonFieldType.NUMBER).description("가능한 대출 한도"),
+                    fieldWithPath("data.expectedLoanRate").type(JsonFieldType.NUMBER).description("예상 대출 금리")
                 )
             ));
     }
@@ -182,6 +241,7 @@ public class LoanAdviceApiControllerDocsTest extends RestDocsSupport {
                 )
             ));
     }
+
 
     @DisplayName("특정 대출상품에 대한 보고서 생성")
     @Test
@@ -272,6 +332,23 @@ public class LoanAdviceApiControllerDocsTest extends RestDocsSupport {
             .districtCode("1168010100")
             .dongName("삼성동")
             .jibun("79-1")
+            .build();
+    }
+
+    private PreLoanTermsRequest createPreLoanTermsRequest() {
+        return PreLoanTermsRequest.builder()
+            .rentalDeposit(BigDecimal.valueOf(200000000))
+            .monthlyRent(BigDecimal.valueOf(0))
+            .cashOnHand(BigDecimal.valueOf(20000000))
+            .age(30)
+            .maritalStatus(MaritalStatus.MARRIED)
+            .annualIncome(BigDecimal.valueOf(50000000))
+            .spouseAnnualIncome(BigDecimal.valueOf(40000000))
+            .childStatus(ChildStatus.ONE_CHILD)
+            .hasNewborn(true)
+            .houseOwnershipType(JeonseHouseOwnershipType.NO_HOUSE)
+            .isSMEEmployee(false)
+            .isNetAssetOver345M(false)
             .build();
     }
 

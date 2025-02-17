@@ -17,7 +17,7 @@ include::overview.adoc[]
 
 [[User-API]]
 == User API
-
+include::api/guest/login-guest.adoc[]
 include::api/user/oauth2.adoc[]
 include::api/user/transfer-temp-user-to-login-user.adoc[]
 include::api/user/logout.adoc[]
@@ -25,7 +25,7 @@ include::api/user/withdraw.adoc[]
 
 [[Loanadvice-API]]
 == LoanAdvice API
-
+include::api/loan-advice/pre-calculate-terms.adoc[]
 include::api/loan-advice/get-simple-loan-conditions.adoc[]
 include::api/loan-advice/get-recent-loan-advices.adoc[]
 include::api/loan-advice/get-specific-loan-advice.adoc[]

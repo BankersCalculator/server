@@ -4,13 +4,9 @@ import com.myZipPlan.server.common.enums.loanAdvice.ChildStatus;
 import com.myZipPlan.server.common.enums.loanAdvice.JeonseHouseOwnershipType;
 import com.myZipPlan.server.common.enums.loanAdvice.MaritalStatus;
 import com.myZipPlan.server.housingInfo.buildingInfo.common.RentHousingType;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.PositiveOrZero;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
-import org.hibernate.validator.constraints.Range;
 
 import java.math.BigDecimal;
 
@@ -18,7 +14,7 @@ import java.math.BigDecimal;
 @Getter
 @Builder
 @ToString
-public class PreTermsRequest {
+public class PreLoanTermsRequest {
 
     private BigDecimal rentalDeposit; // 임차보증금
     private BigDecimal monthlyRent;   // 월세
