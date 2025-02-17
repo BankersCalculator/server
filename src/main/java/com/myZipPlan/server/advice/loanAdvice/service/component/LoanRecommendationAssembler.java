@@ -1,4 +1,4 @@
-package com.myZipPlan.server.advice.loanAdvice.service;
+package com.myZipPlan.server.advice.loanAdvice.service.component;
 
 import com.myZipPlan.server.advice.loanAdvice.dto.internal.BestLoanProductResult;
 import com.myZipPlan.server.advice.loanAdvice.dto.internal.FilterProductResultDto;

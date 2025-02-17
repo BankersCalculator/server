@@ -8,14 +8,14 @@ import com.myZipPlan.server.common.enums.loanAdvice.MaritalStatus;
 import com.myZipPlan.server.housingInfo.buildingInfo.common.RentHousingType;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.ToString;
 
 import java.math.BigDecimal;
 
 @Getter
 @Builder
+@ToString
 public class LoanAdviceServiceRequest {
-
-
     // 고객 정보
     private BigDecimal rentalDeposit; // 임차보증금
     private BigDecimal monthlyRent;   // 월세

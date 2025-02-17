@@ -1,4 +1,4 @@
-package com.myZipPlan.server.advice.loanAdvice.service;
+package com.myZipPlan.server.advice.loanAdvice.service.component;
 
 import com.myZipPlan.server.advice.aiReportGenerator.service.AiReportService;
 import com.myZipPlan.server.advice.loanAdvice.dto.internal.AdditionalInformation;
@@ -7,24 +7,23 @@ import com.myZipPlan.server.advice.loanAdvice.dto.internal.FilterProductResultDt
 import com.myZipPlan.server.advice.loanAdvice.dto.internal.LoanTermsResultDto;
 import com.myZipPlan.server.advice.loanAdvice.dto.request.LoanAdviceServiceRequest;
 import com.myZipPlan.server.advice.loanAdvice.dto.response.LoanAdviceResponse;
+import com.myZipPlan.server.advice.loanAdvice.dto.response.PreLoanTermsResponse;
 import com.myZipPlan.server.advice.loanAdvice.dto.response.RecommendedProductDto;
 import com.myZipPlan.server.advice.loanAdvice.entity.LoanAdviceResult;
 import com.myZipPlan.server.advice.loanAdvice.repository.LoanAdviceResultRepository;
-import com.myZipPlan.server.advice.loanAdvice.service.component.AdditionalInfoGenerator;
-import com.myZipPlan.server.advice.loanAdvice.service.component.LoanTermCalculator;
-import com.myZipPlan.server.advice.loanAdvice.service.component.ProductComparator;
-import com.myZipPlan.server.advice.loanAdvice.service.component.ProductFilter;
 import com.myZipPlan.server.advice.userInputInfo.entity.UserInputInfo;
 import com.myZipPlan.server.advice.userInputInfo.service.UserInputInfoService;
 import com.myZipPlan.server.user.entity.User;
 import com.myZipPlan.server.user.userService.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @RequiredArgsConstructor
 @Component
+@Slf4j
 public class LoanAdviceOrchestrator {
 
     private final ProductFilter productFilter;
@@ -37,6 +36,34 @@ public class LoanAdviceOrchestrator {
     private final UserService userService;
     private final UserInputInfoService userInputInfoService;
     private final LoanAdviceResultRepository loanAdviceResultRepository;
+
+
+    public PreLoanTermsResponse preCalculateLoanTerms(LoanAdviceServiceRequest request) {
+        // 1. 상품 필터링
+        List<FilterProductResultDto> filterResults = productFilter.filterProduct(request);
+        if (!hasEligibleProducts(filterResults)) {
+            return null;
+        }
+
+        log.info("request= {}", request.toString());
+
+        // 2. 한도 및 금리 계산
+        List<LoanTermsResultDto> loanTerms = loanTermCalculator.calculateLoanTerms(request, filterResults);
+        log.info("loanTerms : {}", loanTerms.toString());
+
+        // 3. 최적 상품 선정
+        BestLoanProductResult bestProduct = productComparator.compareProducts(
+            request.getRentalDeposit(),
+            null,
+            loanTerms);
+
+        return PreLoanTermsResponse.builder()
+            .loanProductName(bestProduct.getProductName())
+            .loanProductCode(bestProduct.getProductType().getProductCode())
+            .possibleLoanLimit(bestProduct.getPossibleLoanLimit())
+            .expectedLoanRate(bestProduct.getExpectedLoanRate())
+            .build();
+    }
 
     public LoanAdviceResponse processLoanAdvice(LoanAdviceServiceRequest request) {
         // 1. 상품 필터링

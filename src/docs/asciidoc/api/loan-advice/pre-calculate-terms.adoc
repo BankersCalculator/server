@@ -1,0 +1,16 @@
+[[pre-calculate-terms]]
+=== 대출조건 사전 조회
+
+==== HTTP Request
+
+include::{snippets}/loan-advice/pre-calculate-terms/http-request.adoc[]
+==== Request Headers
+include::{snippets}/loan-advice/pre-calculate-terms/request-headers.adoc[]
+==== Request Fields
+include::{snippets}/loan-advice/pre-calculate-terms/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/loan-advice/pre-calculate-terms/http-response.adoc[]
+==== Response Fields
+include::{snippets}/loan-advice/pre-calculate-terms/response-fields.adoc[]
