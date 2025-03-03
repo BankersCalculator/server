@@ -39,12 +39,12 @@ public class PostService {
     private final CommentService commentService;
 
     @Transactional
-    public PostResponse createPost(PostCreateRequest postCreateRequest, String oauthProviderId) throws IOException {
+    public PostResponse createPost(PostCreateRequest postCreateRequest, String providerId) throws IOException {
         // 1. 유효성 검증
         postCreateRequest.validate();
 
         // 2. 유저 확인
-        User user = getUserByOauthProviderId(oauthProviderId);
+        User user = getUserByProviderId(providerId);
 
         // 3. 보고서
         LoanAdviceResult loanAdviceResult = getLoanAdviceResult(postCreateRequest.getLoanAdviceResultId());
@@ -55,13 +55,13 @@ public class PostService {
         Post post = postCreateRequest.toEntity(user, imageUrl, loanAdviceResult);
         postRepository.save(post);
 
-        List<CommentResponse> comments = commentService.getComments(oauthProviderId, post.getId());
+        List<CommentResponse> comments = commentService.getComments(providerId, post.getId());
         return PostResponse.fromEntity(post, comments, loanAdviceSummaryReport, false, "N");
     }
 
     @Transactional
-    public PostResponse updatePost(String oauthProviderId, Long postId, PostUpdateRequest postUpdateRequest) throws IOException {
-        User user = getUserByOauthProviderId(oauthProviderId);
+    public PostResponse updatePost(String providerId, Long postId, PostUpdateRequest postUpdateRequest) throws IOException {
+        User user = getUserByProviderId(providerId);
         Post post = getPostById(postId);
 
         String authority = determineAuthority(user, post);
@@ -75,14 +75,14 @@ public class PostService {
         postRepository.save(post);
 
         boolean like = postLikeRepository.findByPostAndUser(post, user).isPresent();
-        List<CommentResponse> comments = commentService.getComments(oauthProviderId, post.getId());
+        List<CommentResponse> comments = commentService.getComments(providerId, post.getId());
 
         return PostResponse.fromEntity(post, comments, loanAdviceSummaryReport, like, authority);
     }
 
     @Transactional
-    public void deletePost(String oauthProviderId, Long postId) {
-        User user = getUserByOauthProviderId(oauthProviderId);
+    public void deletePost(String providerId, Long postId) {
+        User user = getUserByProviderId(providerId);
         Post post = getPostById(postId);
 
         String authority = determineAuthority(user, post);
@@ -93,14 +93,14 @@ public class PostService {
     }
 
     @Transactional
-    public List<PostResponse> getAllPosts(String oauthProviderId, int page, int size) {
-        Optional<User> optionalUser = getOptionalUserByOauthProviderId(oauthProviderId);
+    public List<PostResponse> getAllPosts(String providerId, int page, int size) {
+        Optional<User> optionalUser = getOptionalUserByProviderId(providerId);
         Pageable pageable = PageRequest.of(page, size);
         Page<Post> postsPage = postRepository.findAllWithComments(pageable);
 
         return postsPage.stream()
                 .map(post -> {
-                    List<CommentResponse> comments = commentService.getComments(oauthProviderId, post.getId());
+                    List<CommentResponse> comments = commentService.getComments(providerId, post.getId());
                     LoanAdviceSummaryResponse loanAdviceSummaryResponse = LoanAdviceSummaryResponse.fromEntity(post.getLoanAdviceResult());
 
                     boolean like = false;
@@ -117,14 +117,14 @@ public class PostService {
     }
 
     @Transactional
-    public List<PostResponse> getPostsBySortType(String oauthProviderId, PostSortType sortType, int page, int size) {
-        Optional<User> optionalUser = getOptionalUserByOauthProviderId(oauthProviderId);
+    public List<PostResponse> getPostsBySortType(String providerId, PostSortType sortType, int page, int size) {
+        Optional<User> optionalUser = getOptionalUserByProviderId(providerId);
         Pageable pageable = PageRequest.of(page, size);
         Page<Post> postsPage = getPostsSortedByType(sortType, pageable);
 
         return postsPage.stream()
                 .map(post -> {
-                    List<CommentResponse> comments = commentService.getComments(oauthProviderId, post.getId());
+                    List<CommentResponse> comments = commentService.getComments(providerId, post.getId());
                     LoanAdviceSummaryResponse loanAdviceSummaryResponse = LoanAdviceSummaryResponse.fromEntity(post.getLoanAdviceResult());
 
                     boolean like = false;
@@ -142,13 +142,13 @@ public class PostService {
     }
 
     @Transactional
-    public PostResponse getPostById(String oauthProviderId, Long id) {
-        User user = getUserByOauthProviderId(oauthProviderId);
+    public PostResponse getPostById(String providerId, Long id) {
+        User user = getUserByProviderId(providerId);
         Post post = getPostById(id);
         LoanAdviceSummaryResponse loanAdviceSummaryResponse = LoanAdviceSummaryResponse.fromEntity(post.getLoanAdviceResult());
 
         boolean like = postLikeRepository.findByPostAndUser(post, user).isPresent();
-        List<CommentResponse> comments = commentService.getComments(oauthProviderId, post.getId());
+        List<CommentResponse> comments = commentService.getComments(providerId, post.getId());
         String authority = determineAuthority(user, post);
 
         return PostResponse.fromEntity(user, post, comments, loanAdviceSummaryResponse, like, authority);
@@ -157,8 +157,8 @@ public class PostService {
 
 
     @Transactional
-    public void likePost(String oauthProviderId, Long postId) {
-        User user = getUserByOauthProviderId(oauthProviderId);
+    public void likePost(String providerId, Long postId) {
+        User user = getUserByProviderId(providerId);
         Post post = getPostById(postId);
 
         if (postLikeRepository.findByPostAndUser(post, user).isPresent()) {
@@ -171,8 +171,8 @@ public class PostService {
     }
 
     @Transactional
-    public void unlikePost(String oauthProviderId, Long postId) {
-        User user = getUserByOauthProviderId(oauthProviderId);
+    public void unlikePost(String providerId, Long postId) {
+        User user = getUserByProviderId(providerId);
         Post post = getPostById(postId);
 
         PostLike postLike = postLikeRepository.findByPostAndUser(post, user)
@@ -183,9 +183,9 @@ public class PostService {
         postRepository.save(post);
     }
 
-    private User getUserByOauthProviderId(String oauthProviderId) {
-        return userRepository.findByProviderId(oauthProviderId)
-                .orElseThrow(() -> new IllegalArgumentException("세션에 연결된 oauthProviderId를 찾을 수 없습니다."));
+    private User getUserByProviderId(String providerId) {
+        return userRepository.findByProviderId(providerId)
+                .orElseThrow(() -> new IllegalArgumentException("세션에 연결된 providerId를 찾을 수 없습니다."));
     }
 
     private Post getPostById(Long postId) {
@@ -193,8 +193,8 @@ public class PostService {
                 .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다."));
     }
 
-    private Optional<User> getOptionalUserByOauthProviderId(String oauthProviderId) {
-        return (oauthProviderId != null) ? userRepository.findByProviderId(oauthProviderId) : Optional.empty();
+    private Optional<User> getOptionalUserByProviderId(String providerId) {
+        return (providerId != null) ? userRepository.findByProviderId(providerId) : Optional.empty();
     }
 
     private LoanAdviceResult getLoanAdviceResult(Long loanAdviceResultId) {
