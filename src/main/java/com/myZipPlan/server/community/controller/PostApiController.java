@@ -10,6 +10,7 @@ import com.myZipPlan.server.community.service.PostService;
 import com.myZipPlan.server.oauth.userInfo.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -40,6 +41,7 @@ public class PostApiController {
         }
     }
 
+    @PreAuthorize("hasRole('USER')")
     @PostMapping
     public ApiResponse<PostResponse> createPost(@ModelAttribute PostCreateRequest postCreateRequest) throws IOException {
         String providerId = validateAndGetProviderId();
@@ -47,6 +49,7 @@ public class PostApiController {
         return ApiResponse.ok(postResponse);
     }
 
+    @PreAuthorize("hasRole('USER')")
     @PutMapping("/{postId}")
     public ApiResponse<PostResponse> updatePost(@PathVariable Long postId, @ModelAttribute PostUpdateRequest postUpdateRequest) throws IOException {
         String providerId = validateAndGetProviderId();
@@ -54,6 +57,7 @@ public class PostApiController {
         return ApiResponse.ok(postResponse);
     }
 
+    @PreAuthorize("hasRole('USER')")
     @DeleteMapping("/{postId}")
     public ApiResponse<String> deletePost(@PathVariable Long postId) {
         String providerId = validateAndGetProviderId();
@@ -68,6 +72,7 @@ public class PostApiController {
         return ApiResponse.ok(post);
     }
 
+    @PreAuthorize("hasRole('USER')")
     @PostMapping("/{postId}/like")
     public ApiResponse<String> likePost(@PathVariable Long postId) {
         String providerId = validateAndGetProviderId();
@@ -75,6 +80,7 @@ public class PostApiController {
         return ApiResponse.ok("좋아요를 눌렀습니다.");
     }
 
+    @PreAuthorize("hasRole('USER')")
     @PostMapping("/{postId}/unlike")
     public ApiResponse<String> unlikePost(@PathVariable Long postId) {
         String providerId = validateAndGetProviderId();
