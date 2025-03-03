@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Slf4j
 @RequestMapping("/api/v1/dsrCalc")
@@ -22,6 +24,14 @@ public class DsrCalcApiController {
 
     @PostMapping
     public ApiResponse<DsrCalcResponse> calculateDsr(@Valid @RequestBody DsrCalcRequest request) {
+
+        List<DsrCalcRequest.LoanStatus> loanStatuses = request.getLoanStatuses();
+
+        for (DsrCalcRequest.LoanStatus loanStatus : loanStatuses) {
+            if (loanStatus.getTerm().compareTo( loanStatus.getGracePeriod()) <= 0) {
+                throw new IllegalArgumentException("거치기간은 대출기간보다 작아야 합니다.");
+            }
+        }
         DsrCalcResponse dsrCalcResponse = dsrCalcService.dsrCalculate(request.toServiceRequest());
 
         return ApiResponse.ok(dsrCalcResponse);
