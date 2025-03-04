@@ -1,11 +1,20 @@
 package com.myZipPlan.server.user.userService;
 
+import com.myZipPlan.server.common.enums.RoleType;
 import com.myZipPlan.server.oauth.token.TokenDto;
 import com.myZipPlan.server.oauth.token.TokenProvider;
+import com.myZipPlan.server.oauth.userInfo.KakaoUserDetails;
 import com.myZipPlan.server.user.entity.User;
 import com.myZipPlan.server.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -17,6 +26,15 @@ public class GuestService {
     public TokenDto registerGuest() {
         User guest = User.createGuestUser();
         userRepository.save(guest);
-        return tokenProvider.createToken(guest.getProviderId(), guest.getRoleType().name());
+
+        TokenDto token = tokenProvider.createToken(guest.getProviderId(), guest.getRoleType().name());
+        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(RoleType.GUEST.getCode());
+        KakaoUserDetails principal = new KakaoUserDetails((String) guest.getProviderId(), Collections.singletonList(authority), Map.of());
+
+        UsernamePasswordAuthenticationToken authentication =
+            new UsernamePasswordAuthenticationToken(principal, token, Collections.singletonList(authority));
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        return token;
     }
 }

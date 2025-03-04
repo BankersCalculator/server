@@ -4,6 +4,7 @@ import com.myZipPlan.server.common.api.ApiResponse;
 import com.myZipPlan.server.oauth.token.TokenDto;
 import com.myZipPlan.server.user.userService.GuestService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -18,5 +19,11 @@ public class GuestApiController {
     public ApiResponse<TokenDto> loginGuest() {
         TokenDto tokenDto = guestService.registerGuest();
         return ApiResponse.ok(tokenDto);
+    }
+
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @GetMapping("/pre-authorize")
+    public ApiResponse<String> preAuthorize() {
+        return ApiResponse.ok("USER 인증 완료");
     }
 }

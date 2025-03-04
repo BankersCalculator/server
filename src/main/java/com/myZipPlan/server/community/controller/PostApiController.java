@@ -41,7 +41,7 @@ public class PostApiController {
         }
     }
 
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('ROLE_USER')")
     @PostMapping
     public ApiResponse<PostResponse> createPost(@ModelAttribute PostCreateRequest postCreateRequest) throws IOException {
         String providerId = validateAndGetProviderId();
@@ -49,7 +49,7 @@ public class PostApiController {
         return ApiResponse.ok(postResponse);
     }
 
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('ROLE_USER')")
     @PutMapping("/{postId}")
     public ApiResponse<PostResponse> updatePost(@PathVariable Long postId, @ModelAttribute PostUpdateRequest postUpdateRequest) throws IOException {
         String providerId = validateAndGetProviderId();
@@ -57,7 +57,7 @@ public class PostApiController {
         return ApiResponse.ok(postResponse);
     }
 
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('ROLE_USER')")
     @DeleteMapping("/{postId}")
     public ApiResponse<String> deletePost(@PathVariable Long postId) {
         String providerId = validateAndGetProviderId();
@@ -72,7 +72,7 @@ public class PostApiController {
         return ApiResponse.ok(post);
     }
 
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('ROLE_USER')")
     @PostMapping("/{postId}/like")
     public ApiResponse<String> likePost(@PathVariable Long postId) {
         String providerId = validateAndGetProviderId();
@@ -80,7 +80,7 @@ public class PostApiController {
         return ApiResponse.ok("좋아요를 눌렀습니다.");
     }
 
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('ROLE_USER')")
     @PostMapping("/{postId}/unlike")
     public ApiResponse<String> unlikePost(@PathVariable Long postId) {
         String providerId = validateAndGetProviderId();

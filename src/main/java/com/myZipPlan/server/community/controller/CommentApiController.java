@@ -30,7 +30,7 @@ public class CommentApiController {
     }
 
     // 댓글 수정
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('ROLE_USER')")
     @PutMapping("/{commentId}")
     public ApiResponse<CommentResponse> updateComment(@PathVariable Long commentId, @RequestBody CommentUpdateRequest commentUpdateRequest) {
         String oauthProviderId = SecurityUtils.getProviderId();
@@ -39,7 +39,7 @@ public class CommentApiController {
     }
 
     // 댓글 삭제
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('ROLE_USER')")
     @DeleteMapping("/{commentId}")
     public ApiResponse<String> deleteComment(@PathVariable Long commentId) {
         String oauthProviderId = SecurityUtils.getProviderId();
@@ -47,7 +47,7 @@ public class CommentApiController {
         return ApiResponse.ok("댓글을 성공적으로 삭제하였습니다.");
     }
 
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('ROLE_USER')")
     @PostMapping("/{commentId}/like")
     public ApiResponse<String> likeComment(@PathVariable Long commentId) {
         String oauthProviderId = SecurityUtils.getProviderId();
@@ -55,7 +55,7 @@ public class CommentApiController {
         return ApiResponse.ok("좋아요를 성공적으로 눌렀습니다.");
     }
 
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('ROLE_USER')")
     @PostMapping("/{commentId}/unlike")
     public ApiResponse<String> unlikeComment(@PathVariable Long commentId) {
         String oauthProviderId = SecurityUtils.getProviderId();
