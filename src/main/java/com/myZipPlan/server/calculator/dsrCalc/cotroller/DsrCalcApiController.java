@@ -4,6 +4,7 @@ import com.myZipPlan.server.calculator.dsrCalc.dto.DsrCalcRequest;
 import com.myZipPlan.server.calculator.dsrCalc.dto.DsrCalcResponse;
 import com.myZipPlan.server.calculator.dsrCalc.service.DsrCalcService;
 import com.myZipPlan.server.common.api.ApiResponse;
+import com.myZipPlan.server.common.enums.calculator.RepaymentType;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +29,8 @@ public class DsrCalcApiController {
         List<DsrCalcRequest.LoanStatus> loanStatuses = request.getLoanStatuses();
 
         for (DsrCalcRequest.LoanStatus loanStatus : loanStatuses) {
-            if (loanStatus.getTerm().compareTo( loanStatus.getGracePeriod()) <= 0) {
+            if (loanStatus.getRepaymentType() != RepaymentType.BULLET
+                && loanStatus.getTerm().compareTo(loanStatus.getGracePeriod()) <= 0) {
                 throw new IllegalArgumentException("거치기간은 대출기간보다 작아야 합니다.");
             }
         }
