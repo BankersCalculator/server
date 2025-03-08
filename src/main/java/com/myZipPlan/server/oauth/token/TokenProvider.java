@@ -1,5 +1,6 @@
 package com.myZipPlan.server.oauth.token;
 
+import com.myZipPlan.server.common.enums.RoleType;
 import com.myZipPlan.server.common.exception.customException.AuthException;
 import com.myZipPlan.server.oauth.repository.RefreshTokenRedisRepository;
 import com.myZipPlan.server.oauth.repository.TempUserTokenRedisRepository;
@@ -79,6 +80,7 @@ public class TokenProvider {
         return TokenDto.builder()
             .accessToken(accessToken)
             .refreshToken(refreshToken)
+            .roleType(RoleType.of(role))
             .build();
     }
 
@@ -118,7 +120,7 @@ public class TokenProvider {
         return new UsernamePasswordAuthenticationToken(principal, token, simpleGrantedAuthorities);
     }
 
-    public Authentication getTempUserAuthentication(String tempUserId) {
+    public Authentication getGuestAuthentication(String tempUserId) {
 
         TempUserToken byTempUserId = tempUserTokenRedisRepository.findByTempUserId(tempUserId);
         if (byTempUserId != null) {

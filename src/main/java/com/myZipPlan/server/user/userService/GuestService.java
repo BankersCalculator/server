@@ -9,6 +9,7 @@ import com.myZipPlan.server.user.repository.GuestUsageRedisRepository;
 import com.myZipPlan.server.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -29,14 +30,7 @@ public class GuestService {
         User guest = User.createGuestUser();
         userRepository.save(guest);
 
-        TokenDto token = tokenProvider.createToken(guest.getProviderId(), guest.getRoleType().name());
-        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(RoleType.GUEST.getCode());
-        KakaoUserDetails principal = new KakaoUserDetails((String) guest.getProviderId(), Collections.singletonList(authority), Map.of());
-
-        UsernamePasswordAuthenticationToken authentication =
-            new UsernamePasswordAuthenticationToken(principal, token, Collections.singletonList(authority));
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
+        TokenDto token = tokenProvider.createToken(guest.getProviderId(), guest.getRoleType().getCode());
         return token;
     }
 

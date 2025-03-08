@@ -40,7 +40,7 @@ public class TokenValidator {
         } catch (ExpiredJwtException e) {
             return true;
         } catch (Exception e) {
-            log.warn("Token validation failed: {}", e.getMessage());
+            log.warn("validateToken failed: {}", e.getMessage());
             return false;
         }
     }
@@ -55,7 +55,7 @@ public class TokenValidator {
         } catch (ExpiredJwtException e) {
             return false;
         } catch (Exception e) {
-            log.warn("Token validation failed: {}", e.getMessage());
+            log.warn("validateExpire failed: {}", e.getMessage());
             return false;
         }
     }
