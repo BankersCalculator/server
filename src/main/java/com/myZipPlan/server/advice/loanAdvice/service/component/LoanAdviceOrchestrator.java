@@ -103,9 +103,6 @@ public class LoanAdviceOrchestrator {
             user, userInputInfo, bestProduct, additionalInfo, recommendedProducts, aiReport);
         loanAdviceResultRepository.save(result);
 
-        //TODO: Guest Redis 저장 필요
-//        SecurityUtils.getGuestProviderId();
-
         return LoanAdviceResponse.of(result,
             userInputInfo.getId(),
             additionalInfo.getAvailableBanks(),

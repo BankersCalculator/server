@@ -42,7 +42,7 @@ public class UserService {
     public void transferGuestToUser(String guestToken) {
 
         Authentication authentication = tokenProvider.getAuthentication(guestToken);
-        String guestProviderId = SecurityUtils.getGuestProviderId(authentication);
+        String guestProviderId = SecurityUtils.getGuestProviderIdForTransfer(authentication);
 
         User guest = findUser(guestProviderId);
         User user = fetchCurrentUser();

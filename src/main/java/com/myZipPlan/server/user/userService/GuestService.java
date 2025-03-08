@@ -5,9 +5,11 @@ import com.myZipPlan.server.oauth.token.TokenDto;
 import com.myZipPlan.server.oauth.token.TokenProvider;
 import com.myZipPlan.server.oauth.userInfo.KakaoUserDetails;
 import com.myZipPlan.server.user.entity.User;
+import com.myZipPlan.server.user.repository.GuestUsage;
 import com.myZipPlan.server.user.repository.GuestUsageRedisRepository;
 import com.myZipPlan.server.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -34,7 +36,10 @@ public class GuestService {
         return token;
     }
 
-    public void increaseCount(String guestId) {
-        guestUsageRedisRepository.incrementCount(guestId);
+    public void canUseGuestFeature(String guestId) {
+        GuestUsage guestUsage = guestUsageRedisRepository.incrementCount(guestId);
+        if (guestUsage.getCount() > 10) {
+            throw new AccessDeniedException("게스트 유저는 10회까지만 이용 가능합니다");
+        }
     }
 }
