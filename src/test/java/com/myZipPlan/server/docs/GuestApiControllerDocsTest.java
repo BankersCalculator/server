@@ -1,6 +1,7 @@
 package com.myZipPlan.server.docs;
 
 import com.myZipPlan.server.RestDocsSupport;
+import com.myZipPlan.server.common.enums.RoleType;
 import com.myZipPlan.server.oauth.token.TokenDto;
 import com.myZipPlan.server.user.controller.GuestApiController;
 import com.myZipPlan.server.user.userService.GuestService;
@@ -34,7 +35,7 @@ public class GuestApiControllerDocsTest extends RestDocsSupport {
     @Test
     void loginGuest() throws Exception {
 
-        TokenDto response = TokenDto.builder().accessToken("hi").refreshToken("bye").build();
+        TokenDto response = TokenDto.builder().accessToken("hi").refreshToken("bye").roleType(RoleType.GUEST).build();
         when(guestService.registerGuest()).thenReturn(response);
 
         mockMvc.perform(get(BASE_URL + "/login")

@@ -13,8 +13,10 @@ public enum RoleType {
     private final String code;
 
     public static RoleType of(String type) {
+
+        String normalizedType = type.replace("ROLE_", "").toUpperCase();
         try {
-            return RoleType.valueOf(type.toUpperCase());
+            return RoleType.valueOf(normalizedType);
         } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException("유효하지 않은 RoleType: " + type);
         }
