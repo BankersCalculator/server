@@ -26,6 +26,7 @@ public class SecurityUtils {
         if (authentication == null) {
             throw new IllegalStateException("Security Context에 인증 정보가 없습니다.");
         }
+
         OAuth2User principal = (KakaoUserDetails) authentication.getPrincipal();
         return principal.getName();
     }
