@@ -27,7 +27,7 @@ public class UserApiController {
         TokenDto accessToken = extractAccessToken(httpServletRequest);
         TokenDto tokenDto = userService.transferGuestToUser(request.getGuestToken(), accessToken);
 
-        return ApiResponse.success(tokenDto);
+        return ApiResponse.ok(tokenDto);
     }
 
     @PostMapping("/logout")

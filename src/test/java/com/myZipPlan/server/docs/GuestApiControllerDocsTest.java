@@ -1,6 +1,7 @@
 package com.myZipPlan.server.docs;
 
 import com.myZipPlan.server.RestDocsSupport;
+import com.myZipPlan.server.common.enums.ABTestType;
 import com.myZipPlan.server.common.enums.RoleType;
 import com.myZipPlan.server.oauth.token.TokenDto;
 import com.myZipPlan.server.user.controller.GuestApiController;
@@ -35,7 +36,7 @@ public class GuestApiControllerDocsTest extends RestDocsSupport {
     @Test
     void loginGuest() throws Exception {
 
-        TokenDto response = TokenDto.builder().accessToken("hi").refreshToken("bye").roleType(RoleType.GUEST).build();
+        TokenDto response = TokenDto.builder().accessToken("hi").refreshToken("bye").roleType(RoleType.GUEST).abTestType(ABTestType.A).build();
         when(guestService.registerGuest()).thenReturn(response);
 
         mockMvc.perform(get(BASE_URL + "/login")
@@ -52,7 +53,9 @@ public class GuestApiControllerDocsTest extends RestDocsSupport {
                     fieldWithPath("data").type(JsonFieldType.OBJECT).description("응답 데이터"),
                     fieldWithPath("data.accessToken").type(JsonFieldType.STRING).description("게스트유저의 토큰"),
                     fieldWithPath("data.refreshToken").type(JsonFieldType.STRING).description("게스트유저의 리프레시 토큰(미사용)"),
-                    fieldWithPath("data.roleType").type(JsonFieldType.STRING).description("유저의 권한")
+                    fieldWithPath("data.roleType").type(JsonFieldType.STRING).description("유저의 권한(GUEST, USER)"),
+                    fieldWithPath("data.abTestType").type(JsonFieldType.STRING).description("ABTestType(A/B 두종류 존재)")
+
                 )
             ));
     }
