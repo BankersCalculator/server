@@ -10,6 +10,7 @@ import com.myZipPlan.server.community.service.PostService;
 import com.myZipPlan.server.oauth.userInfo.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -23,15 +24,15 @@ public class PostApiController {
     private final PostService postService;
     private static final Logger log = LoggerFactory.getLogger(PostApiController.class);
 
-    private String validateAndGetOauthProviderId() {
-        String oauthProviderId = getOauthProviderId();
-        if (oauthProviderId == null) {
+    private String validateAndGetProviderId() {
+        String providerId = getProviderId();
+        if (providerId == null) {
             throw new IllegalArgumentException("로그인이 필요합니다.");
         }
-        return oauthProviderId;
+        return providerId;
     }
 
-    private String getOauthProviderId() {
+    private String getProviderId() {
         try {
             return SecurityUtils.getProviderId();
         } catch (IllegalStateException e) {
@@ -40,45 +41,50 @@ public class PostApiController {
         }
     }
 
+    @PreAuthorize("hasRole('ROLE_USER')")
     @PostMapping
     public ApiResponse<PostResponse> createPost(@ModelAttribute PostCreateRequest postCreateRequest) throws IOException {
-        String oauthProviderId = validateAndGetOauthProviderId();
-        PostResponse postResponse = postService.createPost(postCreateRequest, oauthProviderId);
+        String providerId = validateAndGetProviderId();
+        PostResponse postResponse = postService.createPost(postCreateRequest, providerId);
         return ApiResponse.ok(postResponse);
     }
 
+    @PreAuthorize("hasRole('ROLE_USER')")
     @PutMapping("/{postId}")
     public ApiResponse<PostResponse> updatePost(@PathVariable Long postId, @ModelAttribute PostUpdateRequest postUpdateRequest) throws IOException {
-        String oauthProviderId = validateAndGetOauthProviderId();
-        PostResponse postResponse = postService.updatePost(oauthProviderId, postId, postUpdateRequest);
+        String providerId = validateAndGetProviderId();
+        PostResponse postResponse = postService.updatePost(providerId, postId, postUpdateRequest);
         return ApiResponse.ok(postResponse);
     }
 
+    @PreAuthorize("hasRole('ROLE_USER')")
     @DeleteMapping("/{postId}")
     public ApiResponse<String> deletePost(@PathVariable Long postId) {
-        String oauthProviderId = validateAndGetOauthProviderId();
-        postService.deletePost(oauthProviderId, postId);
+        String providerId = validateAndGetProviderId();
+        postService.deletePost(providerId, postId);
         return ApiResponse.ok("게시글이 성공적으로 삭제되었습니다.");
     }
 
     @GetMapping("/{postId}")
     public ApiResponse<PostResponse> getPostById(@PathVariable Long postId) {
-        String oauthProviderId = validateAndGetOauthProviderId();
-        PostResponse post = postService.getPostById(oauthProviderId, postId);
+        String providerId = validateAndGetProviderId();
+        PostResponse post = postService.getPostById(providerId, postId);
         return ApiResponse.ok(post);
     }
 
+    @PreAuthorize("hasRole('ROLE_USER')")
     @PostMapping("/{postId}/like")
     public ApiResponse<String> likePost(@PathVariable Long postId) {
-        String oauthProviderId = validateAndGetOauthProviderId();
-        postService.likePost(oauthProviderId, postId);
+        String providerId = validateAndGetProviderId();
+        postService.likePost(providerId, postId);
         return ApiResponse.ok("좋아요를 눌렀습니다.");
     }
 
+    @PreAuthorize("hasRole('ROLE_USER')")
     @PostMapping("/{postId}/unlike")
     public ApiResponse<String> unlikePost(@PathVariable Long postId) {
-        String oauthProviderId = validateAndGetOauthProviderId();
-        postService.unlikePost(oauthProviderId, postId);
+        String providerId = validateAndGetProviderId();
+        postService.unlikePost(providerId, postId);
         return ApiResponse.ok("좋아요를 취소했습니다.");
     }
 
@@ -87,8 +93,8 @@ public class PostApiController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size
     ) {
-        String oauthProviderId = getOauthProviderId();
-        List<PostResponse> posts = postService.getAllPosts(oauthProviderId, page, size);
+        String providerId = getProviderId();
+        List<PostResponse> posts = postService.getAllPosts(providerId, page, size);
         return ApiResponse.ok(posts);
     }
 
@@ -97,8 +103,8 @@ public class PostApiController {
             @RequestParam(defaultValue = "LATEST") PostSortType sortType,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
-        String oauthProviderId = getOauthProviderId();
-        List<PostResponse> posts = postService.getPostsBySortType(oauthProviderId, sortType, page, size);
+        String providerId = getProviderId();
+        List<PostResponse> posts = postService.getPostsBySortType(providerId, sortType, page, size);
         return ApiResponse.ok(posts);
     }
 }

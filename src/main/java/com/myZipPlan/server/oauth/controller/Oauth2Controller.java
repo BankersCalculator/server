@@ -1,6 +1,7 @@
 package com.myZipPlan.server.oauth.controller;
 
 import com.myZipPlan.server.common.api.ApiResponse;
+import com.myZipPlan.server.common.enums.RoleType;
 import com.myZipPlan.server.oauth.token.TokenDto;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -21,6 +22,7 @@ public class Oauth2Controller {
         return ApiResponse.ok(TokenDto.builder()
             .accessToken(accessToken)
             .refreshToken(refreshToken)
+            .roleType(RoleType.USER)
             .build());
     }
 
@@ -33,6 +35,7 @@ public class Oauth2Controller {
         return ApiResponse.ok(TokenDto.builder()
             .accessToken(accessToken)
             .refreshToken(refreshToken)
+            .roleType(RoleType.USER)
             .build());
     }
     @GetMapping("/health-check")

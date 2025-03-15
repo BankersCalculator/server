@@ -5,6 +5,9 @@ import com.myZipPlan.server.advice.loanAdvice.dto.response.LoanAdviceResponse;
 import com.myZipPlan.server.advice.loanAdvice.dto.response.LoanAdviceSummaryResponse;
 import com.myZipPlan.server.advice.loanAdvice.dto.response.PreLoanTermsResponse;
 import com.myZipPlan.server.advice.loanAdvice.service.component.*;
+import com.myZipPlan.server.common.enums.RoleType;
+import com.myZipPlan.server.oauth.userInfo.SecurityUtils;
+import com.myZipPlan.server.user.userService.GuestService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -23,14 +26,17 @@ public class LoanAdviceService {
 
     private final LoanAdviceOrchestrator loanAdviceOrchestrator;
     private final LoanTermCalculator loanTermCalculator;
+    private final GuestService guestService;
 
     // 전체 대출추천 요청 처리
     public LoanAdviceResponse createLoanAdvice(LoanAdviceServiceRequest request) {
+        checkGuestUsage();
         return loanAdviceOrchestrator.processLoanAdvice(request);
     }
 
     // 특정 상품 요청 처리
     public LoanAdviceResponse generateLoanAdviceOnSpecificLoan(Long userInputInfoId, String productCode) {
+        checkGuestUsage();
         return loanAdviceOrchestrator.processSpecificLoanAdvice(userInputInfoId, productCode);
     }
 
@@ -48,5 +54,11 @@ public class LoanAdviceService {
                 .expectedLoanRate(dto.getExpectedLoanRate())
                 .build())
             .collect(Collectors.toList());
+    }
+
+    private void checkGuestUsage() {
+        if (RoleType.GUEST == SecurityUtils.getRoleType()) {
+            guestService.canUseGuestFeature(SecurityUtils.getProviderId());
+        }
     }
 }

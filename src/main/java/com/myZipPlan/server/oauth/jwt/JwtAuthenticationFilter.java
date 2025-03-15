@@ -64,15 +64,21 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String accessToken = request.getHeader(ACCESS_HEADER);
         String refreshToken = request.getHeader(REFRESH_HEADER);
 
+        log.warn("AuthenticationFilter hello0");
+
+        log.warn("accessToken : {}", accessToken);
+
         if (isTokenValidAndNotExpired(accessToken)) {
-            Authentication authentication = tokenProvider.getAuthentication(accessToken);
+            log.warn("AuthenticationFilter hello1");
             SecurityContextHolder.getContext().setAuthentication(tokenProvider.getAuthentication(accessToken));
             filterChain.doFilter(request, response);
             return;
         }
 
         if (isTokenValidButExpired(accessToken)) {
+            log.warn("AuthenticationFilter hello2");
             if (isTokenValidAndNotExpired(refreshToken)) {
+                log.warn("AuthenticationFilter hello3");
                 TokenDto newTokenDto = tokenProvider.reissueAccessToken(refreshToken);
                 SecurityContextHolder.getContext().setAuthentication(tokenProvider.getAuthentication(newTokenDto.getAccessToken()));
                 redirectReissueURI(request, response, newTokenDto);

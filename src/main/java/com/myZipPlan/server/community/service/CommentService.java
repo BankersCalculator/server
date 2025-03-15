@@ -32,8 +32,8 @@ public class CommentService {
 
     // 댓글 작성
     @Transactional
-    public CommentResponse createComment(String oauthProviderId, Long postId, CommentCreateRequest commentCreateRequest) {
-        User user = getUserByOauthProviderId(oauthProviderId);
+    public CommentResponse createComment(String providerId, Long postId, CommentCreateRequest commentCreateRequest) {
+        User user = getUserByProviderId(providerId);
         Post post = getPostById(postId);
 
         Comment comment = new Comment(post, user, commentCreateRequest.getContent());
@@ -43,8 +43,8 @@ public class CommentService {
 
     // 댓글 수정
     @Transactional
-    public CommentResponse updateComment(String oauthProviderId, Long commentId, CommentUpdateRequest commentUpdateRequest) {
-        User user = getUserByOauthProviderId(oauthProviderId);
+    public CommentResponse updateComment(String providerId, Long commentId, CommentUpdateRequest commentUpdateRequest) {
+        User user = getUserByProviderId(providerId);
         Comment comment = getCommentById(commentId);
 
         String authority = determineAuthority(user, comment);
@@ -59,8 +59,8 @@ public class CommentService {
 
     //댓글 삭제
     @Transactional
-    public void deleteComment(String oauthProviderId, Long commentId) {
-        User user = getUserByOauthProviderId(oauthProviderId);
+    public void deleteComment(String providerId, Long commentId) {
+        User user = getUserByProviderId(providerId);
         Comment comment = getCommentById(commentId);
 
         String authority = determineAuthority(user, comment);
@@ -70,8 +70,8 @@ public class CommentService {
     }
 
     @Transactional
-    public void likeComment(String oauthProviderId, Long commentId) {
-        User user = getUserByOauthProviderId(oauthProviderId);
+    public void likeComment(String providerId, Long commentId) {
+        User user = getUserByProviderId(providerId);
         Comment comment = getCommentById(commentId);
 
         // 이미 좋아요를 눌렀는지 확인
@@ -88,9 +88,9 @@ public class CommentService {
 
 
     @Transactional
-    public void unlikeComment(String oauthProviderId, Long commentId) {
-        User user = userRepository.findByProviderId(oauthProviderId)
-                .orElseThrow(() -> new IllegalArgumentException("세션에 연결된 oauthProviderId를 찾을 수 없습니다."));
+    public void unlikeComment(String providerId, Long commentId) {
+        User user = userRepository.findByProviderId(providerId)
+                .orElseThrow(() -> new IllegalArgumentException("세션에 연결된 providerId를 찾을 수 없습니다."));
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new IllegalArgumentException("댓글을 찾을 수 없습니다."));
 
@@ -105,9 +105,9 @@ public class CommentService {
     }
 
     @Transactional
-    public List<CommentResponse> getComments(String oauthProviderId, Long postId) {
-        Optional<User> optionalUser = (oauthProviderId != null)
-                ? userRepository.findByProviderId(oauthProviderId)
+    public List<CommentResponse> getComments(String providerId, Long postId) {
+        Optional<User> optionalUser = (providerId != null)
+                ? userRepository.findByProviderId(providerId)
                 : Optional.empty(); // 비로그인 상태일 경우 Optional.empty()
 
         List<Comment> comments = commentRepository.findByPostId(postId);
@@ -137,9 +137,9 @@ public class CommentService {
         }
     }
 
-    private User getUserByOauthProviderId(String oauthProviderId) {
-        return userRepository.findByProviderId(oauthProviderId)
-                .orElseThrow(() -> new IllegalArgumentException("세션에 연결된 oauthProviderId를 찾을 수 없습니다."));
+    private User getUserByProviderId(String providerId) {
+        return userRepository.findByProviderId(providerId)
+                .orElseThrow(() -> new IllegalArgumentException("세션에 연결된 providerId를 찾을 수 없습니다."));
     }
 
     private Comment getCommentById(Long commentId) {

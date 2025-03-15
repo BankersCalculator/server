@@ -1,6 +1,9 @@
 package com.myZipPlan.server.docs;
 
 import com.myZipPlan.server.RestDocsSupport;
+import com.myZipPlan.server.common.enums.ABTestType;
+import com.myZipPlan.server.common.enums.RoleType;
+import com.myZipPlan.server.oauth.token.TokenDto;
 import com.myZipPlan.server.user.dto.GuestToUserTransferRequest;
 import com.myZipPlan.server.user.userService.UserService;
 import com.myZipPlan.server.user.controller.UserApiController;
@@ -9,14 +12,16 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class UserApiControllerDocsTest extends RestDocsSupport {
@@ -35,12 +40,27 @@ public class UserApiControllerDocsTest extends RestDocsSupport {
         // given
         GuestToUserTransferRequest content = new GuestToUserTransferRequest("guest");
 
+        TokenDto tokenDto = TokenDto.builder()
+            .accessToken("hi")
+            .refreshToken("bye")
+            .roleType(RoleType.USER)
+            .build();
+        TokenDto response = TokenDto.builder()
+            .accessToken("hi")
+            .refreshToken("bye")
+            .roleType(RoleType.USER)
+            .abTestType(ABTestType.A)
+            .build();
+
+        when(userService.transferGuestToUser(any(String.class), any(TokenDto.class))).thenReturn(response);
+
         mockMvc.perform(post(BASE_URL + "/transfer")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(content))
                 .header("AccessToken", "액세스 토큰"))
             .andExpect(status().isOk())
+            .andDo(print())
             .andDo(document("user/transfer-temp-user-to-login-user",
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint()),
@@ -50,6 +70,16 @@ public class UserApiControllerDocsTest extends RestDocsSupport {
                 ),
                 requestFields(
                     fieldWithPath("guestToken").type(JsonFieldType.STRING).description("게스트유저의 토큰")
+                ),
+                responseFields(
+                    fieldWithPath("code").type(JsonFieldType.NUMBER).description("응답 코드"),
+                    fieldWithPath("status").type(JsonFieldType.STRING).description("응답 상태"),
+                    fieldWithPath("message").type(JsonFieldType.STRING).description("응답 메시지"),
+                    fieldWithPath("data").type(JsonFieldType.OBJECT).description("응답 데이터"),
+                    fieldWithPath("data.accessToken").type(JsonFieldType.STRING).description("유저의 토큰"),
+                    fieldWithPath("data.refreshToken").type(JsonFieldType.STRING).description("유저의 리프레시 토큰"),
+                    fieldWithPath("data.roleType").type(JsonFieldType.STRING).description("유저의 권한(GUEST, USER)"),
+                    fieldWithPath("data.abTestType").type(JsonFieldType.STRING).description("ABTestType(A/B 두종류 존재)")
                 )
             ));
     }

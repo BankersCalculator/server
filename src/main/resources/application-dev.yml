@@ -86,9 +86,7 @@ cloud:
       bucket: ${AWS_S3_BUCKET:myzipplan-service-storage-dev}
 
 app:
-  redirect-uri-base:
-    prod: ${PROD_REDIRECT_URI_BASE:http://localhost:5173}
-    dev: ${DEV_REDIRECT_URI_BASE:http://localhost:5173}
+  redirect-uri-base: ${http://localhost:5173}
 
 
 discord:

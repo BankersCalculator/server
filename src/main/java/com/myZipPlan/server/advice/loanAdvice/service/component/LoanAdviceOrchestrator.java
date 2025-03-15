@@ -13,7 +13,9 @@ import com.myZipPlan.server.advice.loanAdvice.entity.LoanAdviceResult;
 import com.myZipPlan.server.advice.loanAdvice.repository.LoanAdviceResultRepository;
 import com.myZipPlan.server.advice.userInputInfo.entity.UserInputInfo;
 import com.myZipPlan.server.advice.userInputInfo.service.UserInputInfoService;
+import com.myZipPlan.server.oauth.userInfo.SecurityUtils;
 import com.myZipPlan.server.user.entity.User;
+import com.myZipPlan.server.user.repository.GuestUsageRedisRepository;
 import com.myZipPlan.server.user.userService.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,6 +38,7 @@ public class LoanAdviceOrchestrator {
     private final UserService userService;
     private final UserInputInfoService userInputInfoService;
     private final LoanAdviceResultRepository loanAdviceResultRepository;
+    private final GuestUsageRedisRepository guestUsageRedisRepository;
 
 
     public PreLoanTermsResponse preCalculateLoanTerms(LoanAdviceServiceRequest request) {

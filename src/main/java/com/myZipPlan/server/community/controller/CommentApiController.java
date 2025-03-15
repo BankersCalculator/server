@@ -7,6 +7,7 @@ import com.myZipPlan.server.community.service.CommentService;
 import com.myZipPlan.server.oauth.userInfo.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,6 +21,7 @@ public class CommentApiController {
 
 
     // 댓글 작성
+    @PreAuthorize("hasRole('USER')")
     @PostMapping("/{postId}")
     public ApiResponse<CommentResponse> createComment(@PathVariable Long postId, @RequestBody CommentCreateRequest commentCreateRequest) {
         String oauthProviderId = SecurityUtils.getProviderId();
@@ -28,6 +30,7 @@ public class CommentApiController {
     }
 
     // 댓글 수정
+    @PreAuthorize("hasRole('ROLE_USER')")
     @PutMapping("/{commentId}")
     public ApiResponse<CommentResponse> updateComment(@PathVariable Long commentId, @RequestBody CommentUpdateRequest commentUpdateRequest) {
         String oauthProviderId = SecurityUtils.getProviderId();
@@ -36,6 +39,7 @@ public class CommentApiController {
     }
 
     // 댓글 삭제
+    @PreAuthorize("hasRole('ROLE_USER')")
     @DeleteMapping("/{commentId}")
     public ApiResponse<String> deleteComment(@PathVariable Long commentId) {
         String oauthProviderId = SecurityUtils.getProviderId();
@@ -43,6 +47,7 @@ public class CommentApiController {
         return ApiResponse.ok("댓글을 성공적으로 삭제하였습니다.");
     }
 
+    @PreAuthorize("hasRole('ROLE_USER')")
     @PostMapping("/{commentId}/like")
     public ApiResponse<String> likeComment(@PathVariable Long commentId) {
         String oauthProviderId = SecurityUtils.getProviderId();
@@ -50,6 +55,7 @@ public class CommentApiController {
         return ApiResponse.ok("좋아요를 성공적으로 눌렀습니다.");
     }
 
+    @PreAuthorize("hasRole('ROLE_USER')")
     @PostMapping("/{commentId}/unlike")
     public ApiResponse<String> unlikeComment(@PathVariable Long commentId) {
         String oauthProviderId = SecurityUtils.getProviderId();

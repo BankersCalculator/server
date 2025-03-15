@@ -33,16 +33,16 @@ public class PreLoanTermsRequest {
         return LoanAdviceServiceRequest.builder()
             .rentalDeposit(rentalDeposit != null ? rentalDeposit : BigDecimal.valueOf(300000000))
             .monthlyRent(monthlyRent != null ? monthlyRent : BigDecimal.ZERO)
-            .cashOnHand(cashOnHand != null ? cashOnHand : BigDecimal.valueOf(100000000)) //TODO 수정 필요
-            .age(age != null ? age : 30)
+            .cashOnHand(cashOnHand != null ? cashOnHand : BigDecimal.valueOf(1000000))
+            .age(age != null ? age : 88)
             .maritalStatus(maritalStatus != null ? maritalStatus : MaritalStatus.SINGLE)
-            .annualIncome(annualIncome != null ? annualIncome : BigDecimal.valueOf(100000000))
+            .annualIncome(annualIncome != null ? annualIncome : BigDecimal.valueOf(1000000000))
             .spouseAnnualIncome(spouseAnnualIncome != null ? spouseAnnualIncome : BigDecimal.ZERO)
-            .childStatus(childStatus != null ? childStatus : ChildStatus.ONE_CHILD)
-            .hasNewborn(hasNewborn != null ? hasNewborn : true)
-            .houseOwnershipType(houseOwnershipType != null ? houseOwnershipType : JeonseHouseOwnershipType.NO_HOUSE)
-            .isSMEEmployee(isSMEEmployee != null ? isSMEEmployee : true)
-            .isNetAssetOver345M(isNetAssetOver345M != null ? isNetAssetOver345M : false)
+            .childStatus(childStatus != null ? childStatus : ChildStatus.NO_CHILD)
+            .hasNewborn(hasNewborn != null ? hasNewborn : false)
+            .houseOwnershipType(houseOwnershipType != null ? houseOwnershipType : JeonseHouseOwnershipType.MULTI_HOUSE)
+            .isSMEEmployee(isSMEEmployee != null ? isSMEEmployee : false)
+            .isNetAssetOver345M(isNetAssetOver345M != null ? isNetAssetOver345M : true)
             .rentHousingType(RentHousingType.APARTMENT)
             .exclusiveArea( BigDecimal.valueOf(50))
             .buildingName( "행복아파트")
@@ -51,4 +51,27 @@ public class PreLoanTermsRequest {
             .jibun("649-5")
             .build();
     }
+
+//    public LoanAdviceServiceRequest toServiceRequestWithDefaultValue() {
+//        return LoanAdviceServiceRequest.builder()
+//            .rentalDeposit(rentalDeposit != null ? rentalDeposit : BigDecimal.valueOf(300000000))
+//            .monthlyRent(monthlyRent != null ? monthlyRent : BigDecimal.ZERO)
+//            .cashOnHand(cashOnHand != null ? cashOnHand : BigDecimal.valueOf(100000000))
+//            .age(age != null ? age : 30)
+//            .maritalStatus(maritalStatus != null ? maritalStatus : MaritalStatus.SINGLE)
+//            .annualIncome(annualIncome != null ? annualIncome : BigDecimal.valueOf(100000000))
+//            .spouseAnnualIncome(spouseAnnualIncome != null ? spouseAnnualIncome : BigDecimal.ZERO)
+//            .childStatus(childStatus != null ? childStatus : ChildStatus.ONE_CHILD)
+//            .hasNewborn(hasNewborn != null ? hasNewborn : true)
+//            .houseOwnershipType(houseOwnershipType != null ? houseOwnershipType : JeonseHouseOwnershipType.NO_HOUSE)
+//            .isSMEEmployee(isSMEEmployee != null ? isSMEEmployee : true)
+//            .isNetAssetOver345M(isNetAssetOver345M != null ? isNetAssetOver345M : false)
+//            .rentHousingType(RentHousingType.APARTMENT)
+//            .exclusiveArea( BigDecimal.valueOf(50))
+//            .buildingName( "행복아파트")
+//            .districtCode("1111011700")
+//            .dongName("역삼동")
+//            .jibun("649-5")
+//            .build();
+//    }
 }
