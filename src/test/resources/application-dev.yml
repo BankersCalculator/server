@@ -74,9 +74,7 @@ cloud:
 
 
 app:
-  redirect-uri-base:
-    prod: ${https://myzipplan.com}
-    dev: ${http://localhost:5173}
+  redirect-uri-base: ${http://localhost:5173}
 
 discord:
   webhook:

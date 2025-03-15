@@ -1,5 +1,6 @@
 package com.myZipPlan.server.user.userService;
 
+import com.myZipPlan.server.common.enums.ABTestType;
 import com.myZipPlan.server.common.enums.RoleType;
 import com.myZipPlan.server.oauth.token.TokenDto;
 import com.myZipPlan.server.oauth.token.TokenProvider;
@@ -27,12 +28,15 @@ public class GuestService {
     private final UserRepository userRepository;
     private final GuestUsageRedisRepository guestUsageRedisRepository;
     private final TokenProvider tokenProvider;
+    private final ABTestService abTestService;
 
     public TokenDto registerGuest() {
-        User guest = User.createGuestUser();
+        ABTestType abTestType = abTestService.assignABGroup();
+        User guest = User.createGuestUser(abTestType);
         userRepository.save(guest);
 
         TokenDto token = tokenProvider.createToken(guest.getProviderId(), guest.getRoleType().getCode());
+        token.setAbTestType(abTestType);
         return token;
     }
 

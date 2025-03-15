@@ -1,6 +1,7 @@
 package com.myZipPlan.server.user.entity;
 
 import com.myZipPlan.server.common.domain.BaseTimeEntity;
+import com.myZipPlan.server.common.enums.ABTestType;
 import com.myZipPlan.server.common.enums.RoleType;
 import jakarta.persistence.*;
 import lombok.*;
@@ -37,6 +38,8 @@ public class User extends BaseTimeEntity {
     private String animalProfileImageUrl;
     @Column
     private String animalUserName;
+    @Column
+    private ABTestType abTestType;
 
     public static User create(String provider, String providerId, String nickname, String email,
                               String thumbnailImage, RoleType roleType, String animalProfileImageUrl) {
@@ -55,7 +58,7 @@ public class User extends BaseTimeEntity {
             .build();
     }
 
-    public static User createGuestUser() {
+    public static User createGuestUser(ABTestType abTestType) {
 
         String animalName = generateRandomAnimalUsername();
 
@@ -65,7 +68,12 @@ public class User extends BaseTimeEntity {
             .name("guest_" + System.currentTimeMillis())
             .roleType(RoleType.GUEST)
             .animalUserName(animalName)
+            .abTestType(abTestType)
             .build();
+    }
+
+    public void setABTestType(ABTestType abTestType) {
+        this.abTestType = abTestType;
     }
 
     private static String generateRandomAnimalUsername() {
